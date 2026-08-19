@@ -1,0 +1,20 @@
+# Local QA, exports, and archived Canva captures
+tmp/
+publish-*/
+*_files/
+_assets/
+*.pdf
+home.png
+.DS_Store
+.vscode/
+
+# Archived prototypes; the maintained source is index-gpt.html + assets/gpt/
+HOME.html
+ENVELOPE.html
+INVITATION.html
+INFORMATION.html
+INFORMACIÓN.html
+INFORMACIÓN.html
+RSVP.html
+index.html
+index-canva.html
