@@ -43,7 +43,12 @@ openEnvelope.addEventListener('click', () => {
 });
 enterSite.addEventListener('click', enterCelebration);
 introClose.addEventListener('click', enterCelebration);
-invitationReplay.addEventListener('click', () => revealInvitation(true));
+invitationReplay.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+  body.classList.remove('menu-open');
+  menuToggle.setAttribute('aria-expanded', 'false');
+  revealInvitation(false);
+});
 
 menuToggle.addEventListener('click', () => {
   const open = body.classList.toggle('menu-open');
