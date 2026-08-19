@@ -4,6 +4,46 @@ const menuToggle = document.getElementById('menu-toggle');
 const navLinks = [...document.querySelectorAll('.nav-link')];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const languageToggle = document.getElementById('language-toggle');
+const invitationIntro = document.getElementById('invitation-intro');
+const openEnvelope = document.getElementById('open-envelope');
+const enterSite = document.getElementById('enter-site');
+const introClose = document.getElementById('intro-close');
+const invitationReplay = document.getElementById('invitation-replay');
+
+const revealInvitation = (directlyOpen = false) => {
+  invitationIntro.hidden = false;
+  body.classList.add('invitation-active');
+  invitationIntro.classList.toggle('is-open', directlyOpen);
+  invitationIntro.setAttribute('aria-hidden', 'false');
+  if (directlyOpen) setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 480);
+  else setTimeout(() => openEnvelope.focus(), reducedMotion ? 0 : 80);
+};
+
+const enterCelebration = () => {
+  invitationIntro.classList.add('is-leaving');
+  body.classList.remove('invitation-active');
+  localStorage.setItem('wedding-invitation-seen', 'true');
+  setTimeout(() => {
+    invitationIntro.hidden = true;
+    invitationIntro.classList.remove('is-leaving', 'is-open');
+    invitationIntro.setAttribute('aria-hidden', 'true');
+  }, reducedMotion ? 0 : 640);
+};
+
+if (localStorage.getItem('wedding-invitation-seen') === 'true') {
+  invitationIntro.hidden = true;
+  invitationIntro.setAttribute('aria-hidden', 'true');
+} else {
+  revealInvitation();
+}
+
+openEnvelope.addEventListener('click', () => {
+  invitationIntro.classList.add('is-open');
+  setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 560);
+});
+enterSite.addEventListener('click', enterCelebration);
+introClose.addEventListener('click', enterCelebration);
+invitationReplay.addEventListener('click', () => revealInvitation(true));
 
 menuToggle.addEventListener('click', () => {
   const open = body.classList.toggle('menu-open');
@@ -18,6 +58,10 @@ document.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && body.classList.contains('invitation-active')) {
+    enterCelebration();
+    return;
+  }
   if (event.key === 'Escape' && body.classList.contains('menu-open')) {
     body.classList.remove('menu-open');
     menuToggle.setAttribute('aria-expanded', 'false');
@@ -82,6 +126,7 @@ document.querySelectorAll('.schedule-card').forEach((card) => {
 
 const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'],
+  introKicker: ['The wedding of', 'La boda de'], openEnvelope: ['Open your invitation', 'Abrir la invitación'], inviteEyebrow: ['You are invited', 'Están cordialmente invitados'], inviteCopy: ['Together with their families, request the honour of your presence at their wedding.', 'Junto con sus familias, solicitan el honor de su presencia en su boda.'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar a la celebración <span aria-hidden="true">→</span>'], viewInvitation: ['Invitation', 'Invitación'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],

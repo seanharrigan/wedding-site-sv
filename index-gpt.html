@@ -31,11 +31,25 @@
 <body>
   <a class="skip-link" href="#story">Skip to content</a>
   <div class="progress" aria-hidden="true"></div>
+  <section class="invitation-intro" id="invitation-intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+    <div class="intro-atmosphere" aria-hidden="true"></div>
+    <div class="intro-cover">
+      <img class="intro-mark" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt="">
+      <p class="intro-kicker" id="intro-title" data-i18n="introKicker">The wedding of</p>
+      <h1>Sean <em>&amp;</em> Valeria</h1>
+      <p class="intro-date">03 · 11 · 2026</p>
+      <button class="open-envelope" id="open-envelope" type="button" data-i18n="openEnvelope">Open your invitation</button>
+    </div>
+    <div class="envelope-stage" aria-hidden="true">
+      <div class="envelope-shadow"></div><div class="envelope-back"></div><div class="envelope-letter"><p class="eyebrow" data-i18n="inviteEyebrow">You are invited</p><h2>Sean Harrigan<br><em>&amp;</em> Valeria Alarcón</h2><div class="invite-rule"></div><p class="invite-copy" data-i18n="inviteCopy">Together with their families, request the honour of your presence at their wedding.</p><p class="invite-date">Tuesday · November 3, 2026<br>Hotel Piedra Viva · Tepoztlán, México</p><button class="enter-site button button--clay" id="enter-site" type="button" data-i18n="enterSite">Enter our celebration <span aria-hidden="true">→</span></button></div><div class="envelope-flap"></div><div class="envelope-front"></div>
+    </div>
+    <button class="intro-close" id="intro-close" type="button" aria-label="Close invitation" data-i18n-aria="closeInvitation">×</button>
+  </section>
   <header class="site-header" id="site-header">
     <a class="brand" href="#home" aria-label="Sean and Valeria, back to top"><img class="brand-logo brand-logo--dark" src="assets/gpt/sv-logo-variants/solid/sv-logo-black-solid.png" alt=""><img class="brand-logo brand-logo--light" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt=""></a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><span></span><span></span></button>
     <nav class="nav-links" id="nav-links" aria-label="Primary navigation">
-      <a class="nav-link active" href="#story" data-i18n="navStory">Our story</a><a class="nav-link" href="#celebration" data-i18n="navSchedule">Schedule</a><a class="nav-link" href="#destination">Tepoztlán</a><a class="nav-link" href="#travel" data-i18n="navTravel">Travel</a><a class="nav-link" href="#faq">FAQ</a><a class="nav-link nav-cta" href="#rsvp">RSVP</a><button class="language-toggle" id="language-toggle" type="button" aria-label="Cambiar a español"><span class="language-current">EN</span><span class="language-divider">/</span><span class="language-next">ES</span></button>
+      <button class="invitation-replay" id="invitation-replay" type="button" data-i18n="viewInvitation">Invitation</button><a class="nav-link active" href="#story" data-i18n="navStory">Our story</a><a class="nav-link" href="#celebration" data-i18n="navSchedule">Schedule</a><a class="nav-link" href="#destination">Tepoztlán</a><a class="nav-link" href="#travel" data-i18n="navTravel">Travel</a><a class="nav-link" href="#faq">FAQ</a><a class="nav-link nav-cta" href="#rsvp">RSVP</a><button class="language-toggle" id="language-toggle" type="button" aria-label="Cambiar a español"><span class="language-current">EN</span><span class="language-divider">/</span><span class="language-next">ES</span></button>
     </nav>
   </header>
 
