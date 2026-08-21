@@ -9,12 +9,15 @@ const openEnvelope = document.getElementById('open-envelope');
 const enterSite = document.getElementById('enter-site');
 const introClose = document.getElementById('intro-close');
 const invitationReplay = document.getElementById('invitation-replay');
+const envelopeStage = document.querySelector('.envelope-stage');
+const suiteCards = [...document.querySelectorAll('.suite-card[href]')];
 
 const revealInvitation = () => {
   invitationIntro.hidden = false;
   body.classList.add('invitation-active');
   invitationIntro.classList.remove('is-open', 'is-leaving');
   invitationIntro.setAttribute('aria-hidden', 'false');
+  envelopeStage.setAttribute('aria-hidden', 'true');
   setTimeout(() => openEnvelope.focus(), reducedMotion ? 0 : 180);
 };
 
@@ -38,10 +41,17 @@ if (localStorage.getItem('wedding-invitation-seen') === 'true') {
 
 openEnvelope.addEventListener('click', () => {
   invitationIntro.classList.add('is-open');
+  envelopeStage.setAttribute('aria-hidden', 'false');
   setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 860);
 });
 enterSite.addEventListener('click', enterCelebration);
 introClose.addEventListener('click', enterCelebration);
+suiteCards.forEach((card) => card.addEventListener('click', (event) => {
+  event.preventDefault();
+  const target = document.querySelector(card.getAttribute('href'));
+  enterCelebration();
+  setTimeout(() => target?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' }), reducedMotion ? 0 : 650);
+}));
 invitationReplay.addEventListener('click', (event) => {
   event.preventDefault();
   event.stopPropagation();

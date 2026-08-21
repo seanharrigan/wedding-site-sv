@@ -41,21 +41,34 @@
       <button class="open-envelope" id="open-envelope" type="button" data-i18n="openEnvelope">Click to open</button>
     </div>
     <div class="envelope-stage" aria-hidden="true">
-      <div class="envelope-shadow"></div>
-      <div class="envelope-back"></div>
-      <article class="envelope-letter" aria-label="Formal wedding invitation">
-        <div class="invite-border" aria-hidden="true"></div>
-        <img class="invite-mark" src="assets/gpt/sv-logo-variants/solid/sv-logo-brown-solid.png" alt="">
-        <p class="invite-overline" data-i18n="inviteEyebrow">With joy</p>
-        <p class="invite-family" data-i18n="inviteFamily">Together with their families</p>
-        <h2><span>Sean Harrigan</span><i>&amp;</i><span>Valeria Alarcón</span></h2>
-        <div class="invite-ornament" aria-hidden="true"><i></i><b></b><i></i></div>
-        <p class="invite-copy" data-i18n="inviteCopy">request the pleasure of your company as they celebrate their marriage.</p>
-        <div class="invite-dateblock"><span>Tuesday</span><strong>03</strong><span>November<br>2026</span></div>
-        <p class="invite-venue" data-i18n="inviteVenue">Hotel Piedra Viva<br>Tepoztlán, Morelos · México</p>
-        <button class="enter-site button button--clay" id="enter-site" type="button" data-i18n="enterSite">Enter our celebration <span aria-hidden="true">→</span></button>
-      </article>
-      <div class="envelope-flap"></div><div class="envelope-front"></div>
+      <div class="suite-pocket" aria-hidden="true"></div>
+      <div class="suite-scatter" aria-label="Wedding invitation suite">
+        <a class="suite-card suite-card--main" href="#celebration" aria-label="View the wedding itinerary">
+          <img src="assets/gpt/suite-card-main-ivory.png" alt="">
+          <span class="suite-copy suite-copy--main">
+            <span class="suite-script">The</span>
+            <strong>The Night before<br>the Forever</strong>
+            <span class="suite-body">Please join us as we gather before God to celebrate the wedding of</span>
+            <span class="suite-names">Sean <i>Harrigan</i><b>and</b> Valeria <i>Alarcón</i></span>
+            <span class="suite-body">Hand in hand, we step into a new chapter<br>at</span>
+            <span class="suite-venue">Hotel Piedra Viva</span>
+            <span class="suite-address">Ocotitlán 4, 62525 Tepoztlán,<br>Morelos, México</span>
+          </span>
+        </a>
+        <a class="suite-card suite-card--details" href="#destination" aria-label="View Tepoztlán details">
+          <img src="assets/gpt/suite-card-details-olive.png" alt="">
+          <span class="suite-copy suite-copy--details"><span>Haz clic para</span><strong>Detalles</strong><small>Click for the details</small></span>
+        </a>
+        <a class="suite-card suite-card--save" href="#story" aria-label="View save the date details">
+          <img src="assets/gpt/suite-card-save-mocha.png" alt="">
+          <span class="suite-copy suite-copy--save"><strong>Save<br>the<br>Date</strong><span>03 · 11 · 26</span><small>2:00 pm</small></span>
+        </a>
+        <a class="suite-card suite-card--rsvp" href="#rsvp" aria-label="Open RSVP">
+          <img src="assets/gpt/suite-card-rsvp-ivory.png" alt="">
+          <span class="suite-copy suite-copy--rsvp"><strong>RSVP</strong><span>Click to respond</span></span>
+        </a>
+      </div>
+      <button class="enter-site button button--clay" id="enter-site" type="button" data-i18n="enterSite">Enter our celebration <span aria-hidden="true">→</span></button>
     </div>
     <button class="intro-close" id="intro-close" type="button" aria-label="Close invitation" data-i18n-aria="closeInvitation">×</button>
   </section>
