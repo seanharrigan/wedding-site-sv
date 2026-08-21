@@ -6,7 +6,6 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const languageToggle = document.getElementById('language-toggle');
 const invitationIntro = document.getElementById('invitation-intro');
 const openEnvelope = document.getElementById('open-envelope');
-const sealedOpen = document.getElementById('sealed-open');
 const enterSite = document.getElementById('enter-site');
 const introClose = document.getElementById('intro-close');
 const invitationReplay = document.getElementById('invitation-replay');
@@ -14,7 +13,7 @@ const invitationReplay = document.getElementById('invitation-replay');
 const revealInvitation = () => {
   invitationIntro.hidden = false;
   body.classList.add('invitation-active');
-  invitationIntro.classList.remove('is-open', 'is-envelope', 'is-leaving');
+  invitationIntro.classList.remove('is-open', 'is-leaving');
   invitationIntro.setAttribute('aria-hidden', 'false');
   setTimeout(() => openEnvelope.focus(), reducedMotion ? 0 : 180);
 };
@@ -38,10 +37,6 @@ if (localStorage.getItem('wedding-invitation-seen') === 'true') {
 }
 
 openEnvelope.addEventListener('click', () => {
-  invitationIntro.classList.add('is-envelope');
-  setTimeout(() => sealedOpen.focus(), reducedMotion ? 0 : 720);
-});
-sealedOpen.addEventListener('click', () => {
   invitationIntro.classList.add('is-open');
   setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 860);
 });
