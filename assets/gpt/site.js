@@ -6,17 +6,17 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const languageToggle = document.getElementById('language-toggle');
 const invitationIntro = document.getElementById('invitation-intro');
 const openEnvelope = document.getElementById('open-envelope');
+const sealedOpen = document.getElementById('sealed-open');
 const enterSite = document.getElementById('enter-site');
 const introClose = document.getElementById('intro-close');
 const invitationReplay = document.getElementById('invitation-replay');
 
-const revealInvitation = (directlyOpen = false) => {
+const revealInvitation = () => {
   invitationIntro.hidden = false;
   body.classList.add('invitation-active');
-  invitationIntro.classList.toggle('is-open', directlyOpen);
+  invitationIntro.classList.remove('is-open', 'is-envelope', 'is-leaving');
   invitationIntro.setAttribute('aria-hidden', 'false');
-  if (directlyOpen) setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 480);
-  else setTimeout(() => openEnvelope.focus(), reducedMotion ? 0 : 80);
+  setTimeout(() => openEnvelope.focus(), reducedMotion ? 0 : 180);
 };
 
 const enterCelebration = () => {
@@ -38,8 +38,12 @@ if (localStorage.getItem('wedding-invitation-seen') === 'true') {
 }
 
 openEnvelope.addEventListener('click', () => {
+  invitationIntro.classList.add('is-envelope');
+  setTimeout(() => sealedOpen.focus(), reducedMotion ? 0 : 720);
+});
+sealedOpen.addEventListener('click', () => {
   invitationIntro.classList.add('is-open');
-  setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 560);
+  setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 860);
 });
 enterSite.addEventListener('click', enterCelebration);
 introClose.addEventListener('click', enterCelebration);
@@ -49,7 +53,7 @@ invitationReplay.addEventListener('click', () => {
   document.getElementById('home').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
   setTimeout(() => {
     invitationIntro.classList.add('is-replaying');
-    revealInvitation(false);
+    revealInvitation();
     setTimeout(() => invitationIntro.classList.remove('is-replaying'), reducedMotion ? 0 : 760);
   }, reducedMotion ? 0 : 520);
 });
@@ -135,7 +139,7 @@ document.querySelectorAll('.schedule-card').forEach((card) => {
 
 const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'],
-  introKicker: ['The wedding of', 'La boda de'], openEnvelope: ['Open your invitation', 'Abrir la invitación'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Junto con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'solicitan el placer de su compañía para celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar a la celebración <span aria-hidden="true">→</span>'], viewInvitation: ['Invitation', 'Invitación'],
+  introKicker: ['The Wedding Of', 'La Boda De'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Junto con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'solicitan el placer de su compañía para celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar a la celebración <span aria-hidden="true">→</span>'], viewInvitation: ['Invitation', 'Invitación'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],
