@@ -42,7 +42,9 @@ openEnvelope.addEventListener('click', () => {
 });
 enterSite.addEventListener('click', enterCelebration);
 introClose.addEventListener('click', enterCelebration);
-invitationReplay.addEventListener('click', () => {
+invitationReplay.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
   body.classList.remove('menu-open');
   menuToggle.setAttribute('aria-expanded', 'false');
   document.getElementById('home').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
@@ -50,7 +52,7 @@ invitationReplay.addEventListener('click', () => {
     invitationIntro.classList.add('is-replaying');
     revealInvitation();
     setTimeout(() => invitationIntro.classList.remove('is-replaying'), reducedMotion ? 0 : 760);
-  }, reducedMotion ? 0 : 520);
+  }, reducedMotion ? 0 : 180);
 });
 
 menuToggle.addEventListener('click', () => {
