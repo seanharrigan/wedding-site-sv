@@ -57,12 +57,10 @@ invitationReplay.addEventListener('click', (event) => {
   event.stopPropagation();
   body.classList.remove('menu-open');
   menuToggle.setAttribute('aria-expanded', 'false');
+  invitationIntro.classList.add('is-replaying');
+  revealInvitation();
   document.getElementById('home').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
-  setTimeout(() => {
-    invitationIntro.classList.add('is-replaying');
-    revealInvitation();
-    setTimeout(() => invitationIntro.classList.remove('is-replaying'), reducedMotion ? 0 : 760);
-  }, reducedMotion ? 0 : 180);
+  setTimeout(() => invitationIntro.classList.remove('is-replaying'), reducedMotion ? 0 : 760);
 });
 
 menuToggle.addEventListener('click', () => {
