@@ -44,10 +44,14 @@ openEnvelope.addEventListener('click', () => {
 enterSite.addEventListener('click', enterCelebration);
 introClose.addEventListener('click', enterCelebration);
 invitationReplay.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
   body.classList.remove('menu-open');
   menuToggle.setAttribute('aria-expanded', 'false');
-  revealInvitation(false);
+  document.getElementById('home').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+  setTimeout(() => {
+    invitationIntro.classList.add('is-replaying');
+    revealInvitation(false);
+    setTimeout(() => invitationIntro.classList.remove('is-replaying'), reducedMotion ? 0 : 760);
+  }, reducedMotion ? 0 : 520);
 });
 
 menuToggle.addEventListener('click', () => {
@@ -131,7 +135,7 @@ document.querySelectorAll('.schedule-card').forEach((card) => {
 
 const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'],
-  introKicker: ['The wedding of', 'La boda de'], openEnvelope: ['Open your invitation', 'Abrir la invitación'], inviteEyebrow: ['You are invited', 'Están cordialmente invitados'], inviteFamily: ['Together with their families', 'Junto con sus familias'], inviteCopy: ['request the honour of your presence at the celebration of their marriage.', 'solicitan el honor de su presencia para celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar a la celebración <span aria-hidden="true">→</span>'], viewInvitation: ['Invitation', 'Invitación'],
+  introKicker: ['The wedding of', 'La boda de'], openEnvelope: ['Open your invitation', 'Abrir la invitación'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Junto con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'solicitan el placer de su compañía para celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar a la celebración <span aria-hidden="true">→</span>'], viewInvitation: ['Invitation', 'Invitación'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],

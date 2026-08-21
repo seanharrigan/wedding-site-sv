@@ -202,6 +202,21 @@ body.invitation-active{overflow:hidden}.invitation-intro{position:fixed;inset:0;
   .envelope-stage{height:min(70vh,470px)!important}.envelope-letter{height:min(66vh,440px)!important;padding:20px 22px 17px!important}.invite-mark{width:56px!important;height:36px!important;max-width:56px!important}.invite-overline,.invite-family{font-size:.46rem!important}.envelope-letter h2{font-size:clamp(2rem,9.5vw,2.6rem)!important}.invite-ornament{margin:.5rem 0!important}.invite-copy{font-size:.82rem!important;line-height:1.3!important}.invite-dateblock{margin:.45rem 0!important}.invite-dateblock strong{font-size:2.18rem!important}.invite-venue{margin-bottom:.56rem!important;font-size:.45rem!important}.enter-site{min-height:37px!important}
 }
 
+/* Old-money Mexican suite: tobacco ink, cotton stock, clay envelope and brass restraint. */
+.invitation-intro{background:radial-gradient(circle at 70% 18%,rgba(192,136,70,.22),transparent 33%),linear-gradient(135deg,#242017,#12110d)}
+.intro-atmosphere{filter:saturate(.7) brightness(.48) sepia(.15)}
+.envelope-stage{filter:drop-shadow(0 30px 34px rgba(0,0,0,.33))}
+.envelope-back{background:linear-gradient(145deg,#9d623a,#c99864 48%,#81502f);border-color:rgba(73,38,19,.72)}
+.envelope-front{background:linear-gradient(145deg,#c59a68,#9b6239 54%,#704127);border-color:rgba(73,38,19,.72)}
+.envelope-flap{background:linear-gradient(145deg,#d3ad7e,#96603a);border-color:rgba(73,38,19,.72);box-shadow:inset 0 -2px rgba(255,245,222,.16)}
+.envelope-letter{border-radius:5px!important;background:linear-gradient(100deg,#f5ebd9,#eadcc5 55%,#f8efdf)!important;box-shadow:0 34px 74px rgba(18,10,5,.42),inset 0 0 0 1px rgba(83,45,25,.1)!important}
+.envelope-letter::before{opacity:.18!important;background-image:repeating-linear-gradient(0deg,rgba(87,56,31,.13) 0 .5px,transparent .5px 4px)!important;background-size:auto!important;mix-blend-mode:multiply}
+.invite-border{inset:15px!important;border-color:rgba(86,47,27,.5)!important}.invite-border::before,.invite-border::after{width:36px!important;height:36px!important;border-color:rgba(86,47,27,.72)!important}
+.invite-mark{filter:sepia(.2) saturate(.82)!important}.invite-overline{color:#6d3821!important}.invite-family{color:#775e4d!important}.envelope-letter h2{color:#34251c!important}.envelope-letter h2>span{display:block}.envelope-letter h2 i{display:block;margin:.04em 0 -.02em;color:#9c5630;font-family:var(--serif);font-size:.68em;font-style:italic;font-weight:400;line-height:.75}.invite-ornament{color:#a5663e!important}.invite-ornament b{display:block;width:5px;height:5px;border:1px solid currentColor;transform:rotate(45deg)}.invite-copy{color:#553927!important}.invite-dateblock,.invite-venue{color:#623c27!important}.enter-site{border:1px solid rgba(248,230,204,.5);background:#4f2b19!important;box-shadow:inset 0 1px rgba(255,242,220,.16),0 10px 22px rgba(66,32,16,.27)!important}.enter-site:hover{background:#674029!important;transform:translateY(-2px)}
+.invitation-intro.is-open .envelope-front{z-index:2}.invitation-intro.is-open .envelope-letter{z-index:4}.invitation-intro.is-open .envelope-flap{z-index:1;opacity:.78;transform:rotateX(-154deg) translateY(-5px);transition:transform .95s cubic-bezier(.22,.88,.23,1),opacity .45s ease .25s}
+.invitation-intro.is-replaying{animation:intro-return .74s cubic-bezier(.16,1,.3,1) both}.invitation-intro.is-replaying .intro-cover{animation:cover-return .7s cubic-bezier(.16,1,.3,1) .1s both}@keyframes intro-return{0%{opacity:0;clip-path:inset(0 0 100% 0)}100%{opacity:1;clip-path:inset(0)}}@keyframes cover-return{0%{opacity:0;transform:translateY(18px) scale(.98)}100%{opacity:1;transform:none}}
+@media(max-width:720px){.invite-border{inset:10px!important}.envelope-letter h2 i{margin:.06em 0}.invitation-intro.is-open .envelope-flap{transform:rotateX(-150deg)}.intro-cover h1{letter-spacing:-.07em}}
+
 /* Laptop presentation: each snap landing is fully visible, with a clearer framed-canvas shadow. */
 @media(min-width:721px){
   .site{width:min(calc(100% - 88px),1180px);margin:24px auto;box-shadow:0 42px 110px rgba(0,0,0,.56),28px 18px 70px rgba(0,0,0,.32),-28px 18px 70px rgba(0,0,0,.32),0 0 0 1px rgba(255,248,238,.16)}
