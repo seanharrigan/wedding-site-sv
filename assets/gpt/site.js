@@ -10,7 +10,7 @@ const enterSite = document.getElementById('enter-site');
 const introClose = document.getElementById('intro-close');
 const invitationReplay = document.getElementById('invitation-replay');
 const envelopeStage = document.querySelector('.envelope-stage');
-const suiteCards = [...document.querySelectorAll('.suite-card[href]')];
+const suiteCards = [...document.querySelectorAll('.suite-card[href], .suite-hotspot[href]')];
 
 const revealInvitation = () => {
   invitationIntro.hidden = false;
