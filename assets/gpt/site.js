@@ -44,6 +44,11 @@ openEnvelope.addEventListener('click', () => {
   envelopeStage.setAttribute('aria-hidden', 'false');
   setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 860);
 });
+openEnvelope.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  event.preventDefault();
+  openEnvelope.click();
+});
 enterSite.addEventListener('click', enterCelebration);
 introClose.addEventListener('click', enterCelebration);
 suiteCards.forEach((card) => card.addEventListener('click', (event) => {
