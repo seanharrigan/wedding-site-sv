@@ -296,6 +296,42 @@ body.language-transition .site{opacity:.35;filter:blur(3px)}
   .dress-gallery figure{border-width:4px}
 }
 
+/* Keep the paper treatment materially quiet. No contour lines, grids, rings,
+   faux-embossed circles, or decorative geometry across the content sections. */
+.celebration{
+  background:linear-gradient(135deg,#29291b,#3a3822 52%,#24251a);
+}
+.celebration::before,
+.celebration-head::after,
+.destination::before,
+.itinerary::before,
+.faq::before,
+.special-card::after{display:none!important}
+.destination{
+  background:linear-gradient(135deg,#f8f1e6,#eee0cd);
+}
+.details{
+  background:linear-gradient(135deg,#efe3d0,#e7d6be);
+}
+.itinerary{
+  background:linear-gradient(135deg,#f8f1e6,#ead8be);
+}
+.dress{
+  background:#f4ecdf;
+}
+.special{
+  background:#eadcc7;
+}
+.faq{
+  background:linear-gradient(135deg,#f9f2e8,#ead8bf);
+}
+.special-card{
+  background:linear-gradient(135deg,#fffaf0,#ebddca)!important;
+}
+.special-card.tribute{
+  background:#31311f url("ofrenda-tepoztlan-hq.png") center/cover no-repeat!important;
+}
+
 /* Source-copy disclosure: the complete Canva wording remains available without turning the page into a wall of copy. */
 .source-accordion .accordion-panel p + p{margin-top:-8px}.source-accordion .accordion-panel strong{color:var(--clay-dark);font-family:var(--sans);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase}.copy-disclosure{margin:19px 0 18px;border-top:1px solid rgba(82,49,31,.18);border-bottom:1px solid rgba(82,49,31,.18)}.copy-disclosure summary{display:flex;align-items:center;justify-content:space-between;padding:13px 0;color:var(--clay-dark);font-family:var(--sans);font-size:.66rem;font-weight:650;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;list-style:none}.copy-disclosure summary::-webkit-details-marker{display:none}.copy-disclosure summary::after{content:"+";display:grid;width:25px;height:25px;place-items:center;border:1px solid rgba(82,49,31,.25);border-radius:50%;font-size:1rem;transition:transform .3s ease,background .3s ease,color .3s ease}.copy-disclosure[open] summary::after{color:var(--cream);background:var(--clay-dark);transform:rotate(45deg)}.copy-disclosure p{margin:0;padding:0 0 16px;line-height:1.55}.map-note{margin-top:13px!important;color:var(--muted);font-size:.9rem;font-style:italic}.rsvp-copy>p{max-width:31rem}.meal-choice .choice label{min-height:58px}
 
