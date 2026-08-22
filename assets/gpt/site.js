@@ -159,6 +159,32 @@ document.querySelectorAll('.schedule').forEach((schedule) => {
   });
 });
 
+document.querySelectorAll('.timeline').forEach((timeline) => {
+  timeline.querySelectorAll('.timeline-row').forEach((row) => {
+    row.setAttribute('tabindex', '0');
+    row.setAttribute('role', 'button');
+    row.setAttribute('aria-expanded', 'false');
+    const toggle = () => {
+      const willOpen = !row.classList.contains('active');
+      timeline.querySelectorAll('.timeline-row.active').forEach((openRow) => {
+        openRow.classList.remove('active');
+        openRow.setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) {
+        row.classList.add('active');
+        row.setAttribute('aria-expanded', 'true');
+      }
+    };
+    row.addEventListener('click', toggle);
+    row.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggle();
+      }
+    });
+  });
+});
+
 const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'],
   introKicker: ['The Wedding Of', 'La Boda De'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Junto con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'solicitan el placer de su compañía para celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar a la celebración <span aria-hidden="true">→</span>'], viewInvitation: ['Invitation', 'Invitación'],
