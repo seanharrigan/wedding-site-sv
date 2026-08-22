@@ -293,7 +293,12 @@ const headerToneObserver = new IntersectionObserver((entries) => {
 }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, .2, .5] });
 document.querySelectorAll('[data-header-tone]').forEach((section) => headerToneObserver.observe(section));
 
-document.getElementById('rsvp-form').addEventListener('submit', (event) => {
+const rsvpForm = document.getElementById('rsvp-form');
+const rsvpMore = document.querySelector('.rsvp-more');
+rsvpForm.addEventListener('invalid', (event) => {
+  if (event.target.name === 'meal') rsvpMore.open = true;
+}, true);
+rsvpForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
   const name = data.get('name');
