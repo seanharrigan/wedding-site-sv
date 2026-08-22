@@ -143,8 +143,20 @@ document.querySelectorAll('.accordion').forEach((accordion) => {
   });
 });
 
-document.querySelectorAll('.schedule-card').forEach((card) => {
-  card.addEventListener('click', () => card.blur());
+document.querySelectorAll('.schedule').forEach((schedule) => {
+  schedule.querySelectorAll('.schedule-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const willOpen = !card.classList.contains('active');
+      schedule.querySelectorAll('.schedule-card.active').forEach((openCard) => {
+        openCard.classList.remove('active');
+        openCard.setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) {
+        card.classList.add('active');
+        card.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
 });
 
 const uiTranslations = {
@@ -160,7 +172,37 @@ const uiTranslations = {
   dinnerTitle: ['Dinner', 'Cena'], dinnerDesc: ['A candlelit meal inspired by the flavours of Mexico.', 'Una cena a la luz de las velas inspirada en los sabores de México.'],
   partyTitle: ['Party', 'Fiesta'], partyDesc: ['Meet us on the dance floor and stay as long as you can.', 'Nos vemos en la pista de baile; quédate todo lo que puedas.'],
   antojitosDesc: ['A late-night Mexican snack before one last dance.', 'Antojitos mexicanos de medianoche antes del último baile.'],
-  finDesc: ['Carriages, hugs and a very happy goodnight.', 'Despedidas, abrazos y muy buenas noches.']
+  finDesc: ['Carriages, hugs and a very happy goodnight.', 'Despedidas, abrazos y muy buenas noches.'],
+  travelWeddingDay: ['Wedding day', 'Día de la boda'],
+  travelWeddingDayCopy: ['Our ceremony will begin at 2:45 pm and will take place at El Gran Jardin. Please arrive at 2:00pm. After we say I do we’ll celebrate with drinks &amp; canapés at cocktail hour, before moving inside for dinner, speeches, and dancing the night away!', 'Nuestra ceremonia comenzará a las 2:45pm y se realizará en El Gran Jardin. Favor de llegar a las 2:00pm. Después de dar el sí, celebraremos con cocteles y canapés durante la hora de coctel, antes de pasar al interior para la cena, los discursos y bailar toda la noche!'],
+  travelAccommodation: ['Accommodation', 'Estancia'],
+  travelAccommodationCopy: ['Hotel Piedra Viva is approximately a 1.5-hour drive from Mexico City. For convenience, we recommend accommodation at the hotel. Due to limited capacity, priority will be given to close family members.', 'Hotel Piedra Viva se encuentra a 1.5 horas de la ciudad. Por conveniencia, recomendamos estancia en el hotel. Debido al límite de cupo, se dará prioridad a familia inmediata.'],
+  travelAccommodationMore: ['Pricing per night is $2,250 MXN for 2 guests (approximately $180 CAD). For double suites, a 3rd and 4th guest are an additional $850 MXN per person. Tepoztlán is also home to many wonderful nearby boutique hotels, and we’ve listed several recommended options below for your convenience.', 'Gracias por tu comprensión. Hotel Piedra Viva precio por noche $2,250 MXN. Tepoztlán tiene otras alternativas cercanas enlistadas.'],
+  travelTransport: ['Transport', 'Transporte'],
+  travelTransportAirport: ['<strong>Airport</strong><br>Benito Juárez International Airport in Mexico City.', '<strong>Aeropuerto</strong><br>Aeropuerto Internacional Benito Juárez'],
+  travelTransportCity: ['<strong>Mexico City to Tepoztlán</strong><br>Tepoztlán is approximately a 1.5-hour drive from the city, making it easily accessible by private transfer, taxi, Uber or car rental. Shuttle services will be available closer to the date. Please stay tuned.', '<strong>CDMX a Tepoztlán</strong><br>Tepoztlán se encuentra a una hora y media de la Ciudad con medios de transporte como Taxi, Uber o Autobús. El servicio de traslado del Hotel estará disponible acercada la fecha.'],
+  travelTransportLocal: ['<strong>Tepoztlán to venue</strong><br>Tepoztlán is a small town, with all accommodation being close to the venue. The best method of transport will be via shuttle, Uber or taxi.', '<strong>Tepoztlán centro a Hotel Piedra Viva</strong><br>El mejor medio de transporte es Uber, Taxi o Servicio de traslado del Hotel. Más información por venir.'],
+  travelTransportParking: ['<strong>Parking</strong><br>Hotel Piedra Viva offers complimentary parking.', '<strong>Estacionamiento</strong><br>Hotel Piedra Viva ofrecerá servicio gratuito de estacionamiento.'],
+  travelWeather: ['November weather', 'Clima'],
+  travelWeatherCopy: ['November in México is typically comfortable and pleasant, with warm days, cool nights, and minimal rain. Please bring a coat as night temperatures can drop.<br><strong>Day: 20–25° &nbsp; Night: 8–12°</strong>', 'En Noviembre, México es típicamente cómodo y agradable, con días calurosos, noches frías y lluvia mínima. Por favor, trae un abrigo o chamarra ya que la temperatura puede bajar.<br><strong>Día: 20–25° &nbsp; Noche: 8–12°</strong>'],
+  cityIntro: ['We’ve chosen our wedding dates to fall just after Día de los Muertos (November 1st), one of Mexico’s most meaningful and beautiful celebrations. If you are able, we would love for you to celebrate this day with us in Mexico City.', 'Para nuestros invitados del extranjero, escogimos la fecha cerca del Día de Muertos, una de las celebraciones más especiales de México. Si te es posible, nos encantaría que celebres este día con nosotros.'],
+  cityStay: ["For accommodation, we recommend staying in Roma Norte, Condesa, Reforma, or Centro Histórico, all well-located and easy to explore. Don't hesitate to contact us for more tips.", 'Para el alojamiento, recomendamos estancia en Colonia Roma, Condesa, Reforma o Centro Histórico, todas fáciles de recorrer y transportarse. Para más consejos, mándanos correo o mensaje.'],
+  cityMap: ['View our city map', 'Ver nuestro mapa'],
+  ofrendaCopy: ['We kindly invite you to bring a small framed photo of a loved one who is no longer with us. In keeping with tradition, we will be preparing an <em>ofrenda</em> to honour and remember those who remain in our hearts.', 'Te invitamos a traer una foto enmarcada de alguien que ya no está con nosotros. Para seguir con la tradición, prepararemos una <em>ofrenda</em> para honrar y recordar a los que permanecen en nuestros corazones.'],
+  giftSummary: ['Your presence is the greatest gift we could receive.', 'Tu presencia es el mayor regalo que podríamos recibir. Por favor, no te sientas obligado a traer un obsequio.'],
+  giftDetails: ['Gift details', 'Detalles del regalo'],
+  giftCopy: ['If you wish to give one, a monetary contribution toward our future would be deeply appreciated. For our Canadian guests, e-transfers may be sent to valeriaandseanharrigan@gmail.com. We kindly ask that any gifts be made via electronic transfer only, rather than cash. Thank you for your kindness and generosity.', 'Si deseas hacer un regalo, una contribución monetaria para nuestro futuro será profundamente apreciada. Para nuestros invitados en México, el regalo puede realizarse mediante transferencia electrónica. Te pedimos amablemente que sea únicamente por transferencia electrónica (no efectivo). Agradecemos mucho tu amabilidad y generosidad. Información de transferencia acercada la fecha.'],
+  alcoholQuestion: ['Can I bring my own alcohol?', '¿Puedo traer mi propio alcohol?'],
+  alcoholAnswer: ['No need! We’ll have an open bar throughout the celebration. Please note that the hotel does not allow outside alcohol. Just bring your best energy and get ready to celebrate!', '¡No es necesario! Tendremos barra libre durante toda la celebración. Ten en cuenta que el hotel no permite alcohol externo. ¡Solo trae tu mejor energía y prepárate para celebrar!'],
+  welcomeCopy: ['We are delighted to welcome you to our wedding website. Here, you will find all the essential details for our special day.', 'Estamos super emocionados por recibirte en nuestro sitio web. Aquí encontrarás todos los detalles de nuestro día especial.'],
+  cityMapNote: ['Please click on the map below to explore some of our favourite places in the City.', 'Dale click al mapa para explorar algunos de nuestros lugares favoritos en la Ciudad.'],
+  dressCopy: ['Formal attire encouraged, fall colours welcomed. Feel free to wear whatever makes you feel comfortable.', 'Vestimenta formal. Colores otoñales bienvenidos. Asiste como te sientas más cómodo.'],
+  rsvpIntro: ['To help us plan accommodations and events, we kindly ask that you RSVP by March 30, 2026. Please don’t hesitate to reach out if you have any questions, we’re happy to help.', 'Para ayudarnos a organizar el alojamiento y las celebraciones, les pedimos amablemente que confirmen su asistencia antes del 30 de marzo de 2026. Si tienen alguna pregunta, no duden en contactarnos; con gusto les ayudaremos.'],
+  faqGuestAnswer: ['Please refer to the names listed on your invitation. Reach out to Sean or Valeria if anything is unclear.', 'Por favor, consulta los nombres indicados en tu invitación. Comunícate con Sean o Valeria si tienes alguna duda.'],
+  faqChildrenAnswer: ['Please follow the names on your invitation, or contact us directly with any questions.', 'Por favor, sigue los nombres indicados en tu invitación o contáctanos directamente si tienes alguna duda.'],
+  faqArrivalAnswer: ['We recommend arriving in Mexico City by October 31 and travelling to Tepoztlán on November 2. Guest arrival at the venue begins at 2:00 PM on November 3.', 'Recomendamos llegar a Ciudad de México antes del 31 de octubre y viajar a Tepoztlán el 2 de noviembre. La llegada de invitados al lugar comienza a las 2:00 PM el 3 de noviembre.'],
+  faqIndoorsAnswer: ['The ceremony begins outdoors. Dinner and dancing follow inside; bring a light layer for the cool evening.', 'La ceremonia comienza al aire libre. La cena y el baile serán en el interior; trae una capa ligera para la noche fresca.'],
+  faqTransportAnswer: ['Shuttle details will be shared closer to the date. Taxis and rideshare options are also available locally.', 'Los detalles del servicio de traslado se compartirán más cerca de la fecha. También hay taxis y opciones de transporte por aplicación en la zona.']
 };
 
 const phraseTranslations = new Map(Object.entries({
@@ -231,9 +273,11 @@ document.getElementById('rsvp-form').addEventListener('submit', (event) => {
   const name = data.get('name');
   const email = data.get('email');
   const attending = data.get('attending');
+  const phone = data.get('phone');
+  const meal = data.get('meal');
   const notes = data.get('notes') || 'None';
   const subject = encodeURIComponent(`Wedding RSVP — ${name}`);
-  const message = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nResponse: ${attending}\nMeal, allergy or notes: ${notes}`);
+  const message = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nResponse: ${attending}\nMeal: ${meal}\nFood allergy or dietary restriction: ${notes}`);
   document.getElementById('form-status').textContent = 'Thank you — your email app is opening with your response prepared.';
   window.location.href = `mailto:valeriaandseanharrigan@gmail.com?subject=${subject}&body=${message}`;
 });
