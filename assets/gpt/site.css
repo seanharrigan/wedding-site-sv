@@ -1733,3 +1733,34 @@ body::before{opacity:.035}
 .practical-item .accordion-trigger:focus:not(:focus-visible){outline:0}
 @media(max-width:720px){.travel-chapter--city .practical--city{display:block;margin-top:34px}.travel-chapter--city .neighbourhoods{grid-template-columns:1fr;gap:12px}.travel-chapter--city .practical-body{padding:14px 0 18px}}
 .practical-item p[data-i18n="cityStay"]{display:none}
+
+/* Ofrenda card and FAQ share the Travel paper so the sections read as one sheet. */
+.special{background:var(--paper)!important}
+.faq{background:var(--paper)!important}
+
+/* Deep, warm surround with a pronounced lift for the site window. */
+body{background:radial-gradient(circle at 18% 0%,rgba(122,92,72,.55),transparent 46rem),radial-gradient(circle at 85% 100%,rgba(90,66,50,.5),transparent 40rem),linear-gradient(160deg,#3b2d24,#1d1612 70%)}
+body::before{opacity:.05}
+.site{border:1px solid rgba(255,249,239,.22);box-shadow:0 70px 160px rgba(0,0,0,.6),0 30px 60px rgba(0,0,0,.4),0 8px 18px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.35)}
+@media(max-width:720px){.site{box-shadow:0 40px 90px rgba(0,0,0,.6),0 14px 34px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.06)}}
+
+/* FAQ: chevron affordance, underline draw-in, answers that fade into place. */
+.faq .accordion{border-top:0!important}
+.faq .accordion-item{position:relative;border-bottom:1px solid rgba(73,54,44,.16)}
+.faq .accordion-item::after{content:"";position:absolute;right:0;bottom:-1px;left:0;height:1px;background:var(--mocha);transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.16,1,.3,1)}
+.faq .accordion-item:hover::after,.faq .accordion-item.open::after{transform:scaleX(1)}
+.faq .accordion-trigger{grid-template-columns:1fr auto;padding:20px 2px}
+.faq .accordion-label{transition:transform .45s cubic-bezier(.16,1,.3,1),color .3s ease}
+.faq .accordion-item.open .accordion-label{color:var(--mocha-deep)}
+.faq .accordion-plus,.faq .accordion-item.open .accordion-plus,.faq .accordion-trigger:hover .accordion-plus{width:auto;height:auto;border:0!important;border-radius:0;background:transparent!important;color:var(--mocha)!important;font-size:0;transform:none}
+.faq .accordion-plus::after{content:"↓";display:inline-block;color:var(--mocha);font-family:var(--sans);font-size:.85rem;line-height:1;opacity:.7;transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .3s ease}
+.faq .accordion-trigger:hover .accordion-plus::after{opacity:1;transform:translateY(3px)}
+.faq .accordion-item.open .accordion-plus::after{opacity:1;transform:rotate(180deg)}
+.faq .accordion-panel{transition:grid-template-rows .55s cubic-bezier(.16,1,.3,1)}
+.faq .accordion-panel p{max-width:560px;padding:0 2px 24px;opacity:0;transform:translateY(-8px);transition:opacity .35s ease,transform .45s cubic-bezier(.16,1,.3,1)}
+.faq .accordion-item.open .accordion-panel p{opacity:1;transform:none;transition-delay:.12s}
+.faq .accordion-trigger:focus:not(:focus-visible){outline:0}
+.copy-disclosure summary .accordion-plus,.copy-disclosure[open] summary .accordion-plus{width:auto;height:auto;border:0;border-radius:0;background:transparent;color:var(--off-white);font-size:0;transform:none}
+.copy-disclosure summary .accordion-plus::after{content:"↓";display:inline-block;font-family:var(--sans);font-size:.85rem;line-height:1;opacity:.75;transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .3s ease}
+.copy-disclosure summary:hover .accordion-plus::after{opacity:1;transform:translateY(3px)}
+.copy-disclosure[open] summary .accordion-plus::after{opacity:1;transform:rotate(180deg)}
