@@ -1447,3 +1447,13 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
 .city-copy .neighbourhoods li{font-size:.95rem}
 .city-copy .neighbourhoods li+li::before{margin-right:.45rem}
 @media(max-width:720px){.city-copy .practical--city{grid-template-columns:1fr;gap:16px;margin-top:22px}}
+
+/* City notes: a small label with a couple-word answer beneath. */
+.city-copy .practical--city{grid-template-columns:auto 1fr;gap:34px;padding-top:18px}
+.city-copy .practical-item h4{margin:0 0 .45rem;color:var(--mocha);font-family:var(--sans);font-size:.56rem;font-weight:650;letter-spacing:.2em;text-transform:uppercase}
+.city-copy .practical-item p{font-family:var(--serif);font-size:1.05rem;line-height:1.3;color:var(--mocha-deep)}
+.city-copy .practical-item p strong{display:none}
+.city-copy .practical-item p[data-i18n="cityStay"]{display:none}
+.city-copy .neighbourhoods{margin:0}
+.city-copy .neighbourhoods li{font-size:1.05rem}
+@media(max-width:720px){.city-copy .practical--city{grid-template-columns:1fr;gap:16px}}
