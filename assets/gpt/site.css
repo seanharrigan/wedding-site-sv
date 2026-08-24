@@ -1558,3 +1558,33 @@ details.practical-item summary .accordion-plus{font-size:1.1rem;border-color:rgb
 .copy-disclosure summary::after,.copy-disclosure summary::before{content:none!important;display:none!important}
 .special-col .eyebrow{margin-bottom:.8rem;font-size:.6rem;letter-spacing:.24em}
 .special::before{background:radial-gradient(circle at 42% 40%,rgba(255,249,239,.075),rgba(255,249,239,.025) 58%,transparent 72%)}
+
+/* Practical notes as soft tiles that open with the site's accordion motion. */
+.practical{gap:14px;margin-top:clamp(28px,3.5vw,44px);padding-top:0;border-top:0}
+.practical-item{position:relative;border:1px solid rgba(73,54,44,.14);border-radius:20px;background:rgba(255,249,239,.42);transition:background .4s ease,border-color .4s ease,box-shadow .5s ease,transform .5s cubic-bezier(.16,1,.3,1)}
+.practical-item:hover{border-color:rgba(73,54,44,.26);background:rgba(255,249,239,.7);box-shadow:0 14px 30px rgba(52,38,31,.08);transform:translateY(-2px)}
+.practical-item.open{border-color:rgba(73,54,44,.3);background:rgba(255,249,239,.85);box-shadow:0 20px 44px rgba(52,38,31,.11);transform:none}
+.practical-item h4{margin:0}
+.practical-item .accordion-trigger{display:flex;width:100%;grid-template-columns:none;align-items:center;justify-content:space-between;gap:14px;padding:15px 16px 15px 20px;border:0;color:var(--mocha-deep);background:transparent;font:inherit;text-align:left;cursor:pointer}
+.practical-item .accordion-trigger>span:first-child{font-family:var(--serif);font-size:clamp(1.25rem,1.7vw,1.55rem);font-weight:400;line-height:1.05;letter-spacing:-.01em;transition:transform .4s cubic-bezier(.16,1,.3,1),color .3s ease}
+.practical-item .accordion-trigger:hover>span:first-child{color:var(--mocha);transform:translateX(3px)}
+.practical-item .accordion-plus{flex:0 0 auto;width:28px;height:28px;border:1px solid rgba(73,54,44,.32);border-radius:50%;color:var(--mocha-deep);background:transparent;font-size:1.05rem;line-height:1;transition:transform .5s cubic-bezier(.16,1,.3,1),background .35s ease,color .35s ease,border-color .35s ease}
+.practical-item .accordion-trigger:hover .accordion-plus{border-color:rgba(73,54,44,.5);background:rgba(73,54,44,.06)}
+.practical-item.open .accordion-plus{border-color:var(--mocha);color:var(--off-white);background:var(--mocha);transform:rotate(135deg)}
+.practical-item .accordion-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.16,1,.3,1)}
+.practical-item.open .accordion-panel{grid-template-rows:1fr}
+.practical-item .accordion-panel>div{overflow:hidden;min-height:0}
+.practical-body{padding:0 20px 20px;opacity:0;transform:translateY(-8px);animation:none;transition:opacity .35s ease,transform .45s cubic-bezier(.16,1,.3,1)}
+.practical-item.open .practical-body{opacity:1;transform:none;transition-delay:.12s}
+.practical-body p{padding:0;margin:0 0 .6rem;color:#5f4c3f;font-size:.88rem;line-height:1.45}
+.practical-body p:last-child{margin-bottom:0}
+.practical-body .practical-image{margin:.1rem 0 .9rem}
+.practical-body .text-link{margin-top:.5rem}
+.city-copy .practical--city{gap:10px;margin-top:22px;padding-top:0;border-top:0}
+.city-copy .practical-item{border-radius:14px}
+.city-copy .practical-item .accordion-trigger{padding:11px 10px 11px 14px}
+.city-copy .practical-item .accordion-trigger>span:first-child{color:var(--mocha);font-family:var(--sans);font-size:.5rem;font-weight:650;letter-spacing:.18em;text-transform:uppercase}
+.city-copy .practical-item .accordion-plus{width:22px;height:22px;font-size:.85rem}
+.city-copy .practical-body{padding:0 14px 12px}
+.city-copy .practical-body p,.city-copy .neighbourhoods li{font-family:var(--serif);font-size:.84rem;line-height:1.35;color:var(--mocha-deep)}
+@media(max-width:720px){.practical{gap:10px}.practical-item .accordion-trigger{padding:13px 12px 13px 16px}}
