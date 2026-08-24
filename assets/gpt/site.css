@@ -1764,3 +1764,20 @@ body::before{opacity:.05}
 .copy-disclosure summary .accordion-plus::after{content:"↓";display:inline-block;font-family:var(--sans);font-size:.85rem;line-height:1;opacity:.75;transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .3s ease}
 .copy-disclosure summary:hover .accordion-plus::after{opacity:1;transform:translateY(3px)}
 .copy-disclosure[open] summary .accordion-plus::after{opacity:1;transform:rotate(180deg)}
+/* Menu choices as quiet serif radio rows instead of pills. */
+.check-in-card .menu-field{align-content:start}
+.check-in-card .attendance,.check-in-card .meal-choice{display:flex;flex-wrap:wrap;gap:6px 26px;margin-top:4px}
+.check-in-card .choice label,.check-in-card .choice label:hover,.check-in-card .choice input:checked+label{display:flex;align-items:center;gap:.55rem;min-height:0;padding:.35rem 0;border:0;border-radius:0;background:transparent;color:var(--mocha-deep);font-family:var(--serif);font-size:1rem;white-space:nowrap;transform:none;box-shadow:none}
+.check-in-card .choice label::before{content:"";flex:0 0 auto;width:13px;height:13px;border:1px solid rgba(73,54,44,.5);border-radius:50%;background:transparent;transition:background .25s ease,border-color .25s ease,box-shadow .25s ease}
+.check-in-card .choice label:hover::before{border-color:var(--mocha)}
+.check-in-card .choice input:checked+label::before{border-color:var(--mocha);background:var(--mocha);box-shadow:inset 0 0 0 3px #f7efe4}
+.check-in-card .choice input:focus-visible+label{outline:0}
+.check-in-card .choice input:focus-visible+label::before{outline:2px solid #756055;outline-offset:3px}
+.menu-note{margin-bottom:2px}
+@media(max-width:720px){.check-in-card .attendance,.check-in-card .meal-choice{gap:4px 20px}}
+
+/* Tighter gap above the City notes; shorter accommodation photo. */
+.city-photos{padding-bottom:clamp(30px,4vw,44px)}
+.travel-chapter--city .practical--city{margin-top:clamp(14px,2vw,24px)}
+.practical-body .practical-image{align-self:start;height:150px;min-height:0;max-height:150px}
+.practical-item--stay .practical-body{align-items:start}
