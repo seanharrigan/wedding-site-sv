@@ -1781,3 +1781,6 @@ body::before{opacity:.05}
 .travel-chapter--city .practical--city{margin-top:clamp(14px,2vw,24px)}
 .practical-body .practical-image{align-self:start;height:150px;min-height:0;max-height:150px}
 .practical-item--stay .practical-body{align-items:start}
+.check-in-card .choice input:checked+label,.check-in-card .choice label:hover{border-color:transparent!important;background:transparent!important;color:var(--mocha-deep)!important}
+.check-in-card .attendance,.check-in-card .meal-choice{gap:6px 18px}
+.check-in-card .choice label{font-size:.95rem}
