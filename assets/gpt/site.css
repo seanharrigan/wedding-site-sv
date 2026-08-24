@@ -1750,3 +1750,8 @@ body::before{opacity:.035}
 /* FAQ contact links: no underline, a touch heavier, and a small lift on hover. */
 .faq .accordion-panel a{display:inline-block;color:var(--mocha-deep);font-weight:500;text-decoration:none;transition:transform .3s cubic-bezier(.16,1,.3,1),color .25s ease}
 .faq .accordion-panel a:hover{color:var(--mocha);transform:translateY(-2px)}
+/* Closing photo pulled back; cactus glass lighter so the garden reads through. */
+.closing-photo{height:clamp(560px,60vw,780px)}
+.closing-photo img{object-position:center 50%!important}
+@media(max-width:720px){.closing-photo{height:600px}}
+.special-inner::before{background:linear-gradient(135deg,rgba(52,38,31,.5),rgba(38,27,21,.36) 55%,rgba(52,38,31,.46));-webkit-backdrop-filter:blur(5px) saturate(110%);backdrop-filter:blur(5px) saturate(110%)}
