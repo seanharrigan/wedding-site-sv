@@ -7,6 +7,7 @@ _assets/
 home.png
 .DS_Store
 .vscode/
+.herenow/
 
 # Archived prototypes; the maintained source is index-gpt.html + assets/gpt/
 HOME.html

@@ -1,10 +1,12 @@
+@font-face{font-family:"Pinyon Script";src:url("PinyonScript-Regular.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
+
 :root {
   --paper:#eee4d6;--paper-light:#f7f0e7;--ink:#2f261f;--muted:#75665a;
   --clay:#67351f;--clay-dark:#4b2719;--olive:#353622;--cream:#fff8ee;
   --line:rgba(62,43,29,.18);--serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
   --body:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
   --sans:"Montserrat",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --script:"Great Vibes","Snell Roundhand",cursive;
+  --script:"Pinyon Script","Snell Roundhand",cursive;
   --radius-xl:clamp(30px,4vw,54px);--radius-lg:32px;--shadow:0 50px 130px rgba(7,6,4,.58),0 14px 38px rgba(7,6,4,.36),0 0 0 1px rgba(255,255,255,.1)
 }
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:105px}
@@ -153,6 +155,84 @@ body.language-transition .site{opacity:.35;filter:blur(3px)}
 
 /* The compact header carries only the monogram—never a surrounding tile. */
 .brand{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}.brand-logo--dark{filter:none}
+
+/* Opened invitation suite: full-screen AI stationery with crisp localized live type. */
+.invitation-intro.is-open{background:#eadbc7!important}
+.invitation-intro.is-open .intro-cover{transition:opacity .82s ease,transform 1.15s cubic-bezier(.16,1,.3,1)!important}
+.invitation-intro.is-open .envelope-stage{inset:0!important;width:100vw!important;height:100svh!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important;border-radius:0!important;filter:none!important}
+.suite-composite{transform:translateY(28px) scale(.945)!important;transition:opacity .88s ease .28s,transform 1.45s cubic-bezier(.16,1,.3,1) .2s!important}
+.invitation-intro.is-open .suite-composite{opacity:1!important;transform:none!important}
+.suite-composite picture,.suite-composite img{width:100%!important;height:100%!important}
+.suite-composite img{object-fit:cover!important;object-position:center bottom!important}
+.suite-live-copy{position:absolute;top:14%;left:50%;z-index:5;display:flex;width:min(27vw,430px);height:62%;box-sizing:border-box;align-items:center;flex-direction:column;justify-content:center;padding:clamp(18px,3vw,42px);color:#4c3021;text-align:center;text-shadow:0 1px rgba(255,255,255,.55);transform:translateX(-50%) rotate(1deg);pointer-events:none}
+.suite-live-eyebrow{margin:0 0 .55rem;font-family:var(--sans);font-size:clamp(.46rem,.62vw,.66rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+.suite-live-copy h2{margin:0;color:#5b3422;font-family:var(--script);font-size:clamp(4.3rem,6.4vw,7rem);font-weight:400;letter-spacing:-.035em;line-height:.68;text-transform:none}
+.suite-live-date{max-width:15rem;margin:1.45rem 0 .9rem;font-family:var(--serif);font-size:clamp(.85rem,1.25vw,1.3rem);font-style:italic;line-height:1.1}
+.suite-live-venue{margin:0;font-family:var(--sans);font-size:clamp(.43rem,.58vw,.62rem);font-weight:600;letter-spacing:.14em;line-height:1.65;text-transform:uppercase}
+.intro-language-toggle{position:absolute;top:22px;left:50%;z-index:16;display:flex;min-height:42px;align-items:center;gap:6px;padding:0 16px;border:1px solid rgba(86,51,31,.25);border-radius:999px;color:#553522;background:rgba(255,249,239,.72);box-shadow:0 8px 22px rgba(71,43,25,.12);font-family:var(--sans);font-size:.58rem;font-weight:650;letter-spacing:.13em;opacity:0;pointer-events:none;cursor:pointer;transform:translate(-50%,-10px);backdrop-filter:blur(9px);transition:opacity .45s ease .7s,transform .55s cubic-bezier(.16,1,.3,1) .7s,background .25s ease}
+.intro-language-toggle:hover{background:rgba(255,250,242,.94)}
+.invitation-intro.is-open .intro-language-toggle{opacity:1;pointer-events:auto;transform:translateX(-50%)}
+.intro-language-toggle .language-next{opacity:.48}.intro-language-toggle .language-divider{opacity:.32}
+.invitation-intro.is-open .enter-site{bottom:clamp(17px,2.4vh,30px)!important;min-height:48px!important;padding:0 1.65rem!important;border:1px solid rgba(255,245,231,.22)!important;color:#fff8ee!important;background:#4b291c!important;box-shadow:0 12px 28px rgba(57,29,17,.28)!important;font-size:.53rem!important;letter-spacing:.16em!important}
+.invitation-intro.is-open .enter-site:hover{background:#311a12!important;transform:translateX(-50%) translateY(-3px)!important}
+
+@media(max-width:720px){
+  .suite-composite img{object-position:center bottom!important}
+  .suite-live-copy{top:15.5%;left:49.5%;width:52%;height:46%;padding:14px 10px;transform:translateX(-50%) rotate(-1deg)}
+  .suite-live-eyebrow{margin-bottom:.4rem;font-size:clamp(.38rem,1.65vw,.52rem);letter-spacing:.16em}
+  .suite-live-copy h2{font-size:clamp(3.25rem,14vw,4.8rem);line-height:.66}
+  .suite-live-date{max-width:10rem;margin:1rem 0 .62rem;font-size:clamp(.72rem,3.2vw,1rem)}
+  .suite-live-venue{font-size:clamp(.34rem,1.45vw,.46rem);letter-spacing:.1em;line-height:1.55}
+  .intro-language-toggle{top:14px;min-height:38px;padding-inline:13px;font-size:.53rem}
+  .intro-close{top:14px!important;right:14px!important;width:38px!important;height:38px!important}
+  .invitation-intro.is-open .enter-site{bottom:14px!important;min-height:44px!important;padding-inline:1.3rem!important;font-size:.45rem!important}
+}
+
+/* 2026 editorial flow: concise sections, progressive disclosure, and no sideways scrolling. */
+html{scroll-snap-type:none!important;overflow-x:hidden}.section,.footer{scroll-snap-align:none!important;scroll-snap-stop:normal!important}body{overflow-x:hidden}.site{overflow:hidden}
+.hero--image-only{height:calc(100svh - 48px);min-height:560px;place-items:stretch}.hero--image-only::before{background-position:center 58%;transform:scale(calc(1.012 + var(--hero-shift,0)*.000025))}.hero--image-only::after{background:linear-gradient(180deg,rgba(18,13,9,.24),transparent 35%,rgba(21,15,10,.14))}
+.welcome-section{display:grid;min-height:430px;place-items:center;padding:clamp(70px,9vw,120px) clamp(24px,8vw,110px);background:linear-gradient(145deg,#fbf5ec,#eee1d1)}.welcome-inner{width:min(100%,900px);text-align:center}.welcome-title{margin:0;color:#573827;font-family:var(--serif);font-size:clamp(5rem,14vw,10.5rem);font-weight:400;letter-spacing:-.075em;line-height:.7;text-transform:uppercase}.welcome-inner p{max-width:610px;margin:clamp(35px,5vw,58px) auto 0;color:#5a4031;font-size:clamp(1.12rem,2vw,1.5rem);line-height:1.4}
+.save-date{display:grid;min-height:620px;place-items:center;padding:clamp(72px,9vw,120px) clamp(24px,8vw,100px);color:var(--cream);background:linear-gradient(180deg,rgba(28,19,12,.38),rgba(27,18,11,.7)),url("calla-drapery-hq.webp") center 48%/cover no-repeat}.save-date-inner{width:min(100%,780px);text-align:center}.save-date .eyebrow{color:#efbd95}.save-date-title{margin:0;font-family:var(--serif);font-size:clamp(4rem,9vw,8rem);font-weight:400;letter-spacing:-.06em;line-height:.75;text-transform:uppercase}.save-date-title span,.save-date-title em{display:block}.save-date-title em{margin-top:1.5rem;font-size:clamp(1.65rem,3.4vw,3rem);font-weight:300;letter-spacing:-.035em;text-transform:none}.save-date-place{display:grid;gap:.1rem;margin:2rem 0 1.2rem;font-family:var(--sans);letter-spacing:.13em;text-transform:uppercase}.save-date-place strong{font-size:.78rem}.save-date-place span{font-size:.65rem}.save-date-inner>p:last-child{max-width:650px;margin:0 auto;font-size:clamp(1rem,1.55vw,1.18rem);line-height:1.5}
+.wedding-details{padding:clamp(72px,9vw,112px) clamp(22px,6vw,76px);background:linear-gradient(145deg,#f8f0e5,#eadbc7)}.details-heading{margin-bottom:35px}.detail-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}.detail-card{position:relative;min-height:250px;padding:30px;border:1px solid rgba(88,54,33,.14);border-radius:32px;background:rgba(255,255,255,.45);box-shadow:0 18px 45px rgba(70,43,25,.07)}.detail-number{color:var(--clay);font-family:var(--sans);font-size:.6rem;letter-spacing:.2em}.detail-card h3,.program-heading h3{margin:.8rem 0 .5rem;font-family:var(--serif);font-size:clamp(2rem,4vw,3.5rem);font-weight:400;line-height:.9}.detail-card p{max-width:470px;margin:.7rem 0 1rem;line-height:1.45}.detail-swatches{justify-content:flex-start;margin-top:1rem}.detail-swatches span{width:27px;height:27px;border-color:#f5eadc}.program-heading{margin:58px 0 25px;text-align:center}.program-heading .eyebrow{margin-bottom:.65rem}.program-heading h3{margin:0;font-size:clamp(3rem,6vw,5.5rem)}.wedding-details .schedule{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.wedding-details .schedule-card{min-height:165px;padding:20px 17px;border-color:rgba(64,48,34,.13);color:var(--ink);background:rgba(255,255,255,.4)}.wedding-details .schedule-card time{color:var(--clay-dark)}.wedding-details .schedule-number{margin-bottom:1.15rem;color:var(--clay)}.wedding-details .schedule-card h3{font-size:clamp(1.45rem,2vw,1.85rem)}.wedding-details .schedule-description{color:var(--muted)}
+.closing{padding-top:72px}.closing-photo{min-height:430px}.countdown{padding-block:58px}.countdown-grid{margin-top:28px}.footer{margin-top:0}
+
+@media(max-width:980px){.nav-links{gap:1px}.nav-link{font-size:.56rem;letter-spacing:.09em}.invitation-replay{padding-inline:.58rem}.city-section,.week-plan{grid-template-columns:1fr}.week-intro{position:static}.city-images{max-width:720px}.travel-section{grid-template-columns:1fr}.travel-section .details-aside{min-height:360px}.travel-section .details-panel{padding:34px 24px}}
+@media(max-width:720px){
+  .site{width:calc(100% - 14px)}.hero--image-only{height:calc(100svh - 14px);min-height:500px}.hero--image-only::before{background-position:58% center}.hero--image-only::after{background:linear-gradient(180deg,rgba(18,13,9,.34),transparent 36%,rgba(21,15,10,.1))}
+  .welcome-section{min-height:360px;padding:76px 22px}.welcome-title{font-size:clamp(4.5rem,23vw,7rem);line-height:.72}.welcome-inner p{margin-top:34px;font-size:1.08rem}
+  .save-date{min-height:560px;padding:76px 22px;background-position:58% center}.save-date-title{font-size:clamp(3.5rem,17vw,5.3rem)}.save-date-title em{margin-top:1.3rem;font-size:clamp(1.5rem,7.5vw,2.2rem)}.save-date-place{margin-block:1.6rem 1rem}.save-date-inner>p:last-child{font-size:.98rem;line-height:1.45}
+  .wedding-details{padding:68px 14px}.detail-cards{grid-template-columns:1fr}.detail-card{min-height:0;padding:25px 21px}.program-heading{margin-top:45px}.wedding-details .schedule{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0;padding:0;overflow:visible;scroll-snap-type:none}.wedding-details .schedule-card{min-width:0;min-height:132px;padding:16px 13px;scroll-snap-align:none}.wedding-details .schedule-number{margin-bottom:.65rem}.wedding-details .schedule-description{display:none}.wedding-details .schedule-card.active .schedule-description{display:block;max-height:none}.wedding-details .schedule-card.active{grid-column:1/-1}
+  .special{display:grid;grid-template-columns:1fr;gap:9px;padding:7px;overflow:visible;scroll-snap-type:none}.special-card{min-width:0;min-height:0;padding:48px 24px;scroll-snap-align:none}
+  .faq{grid-template-columns:1fr;padding:68px 18px}.faq-head{position:static}.closing{padding:68px 7px 7px}.closing-photo{height:340px;min-height:0}.countdown{padding-block:52px}.countdown-grid{grid-template-columns:repeat(4,1fr);gap:6px}.countdown-unit{padding:18px 4px}.countdown-value{font-size:2.2rem}.countdown-label{font-size:.48rem}
+}
+@media(max-width:430px){.wedding-details .schedule{grid-template-columns:1fr 1fr}.week-item summary{grid-template-columns:62px 1fr auto}.week-item p{padding-left:86px}.countdown-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* Softer section handoffs, a script welcome, and calmer mobile interactions. */
+.hero-mobile-mark{display:none}.welcome-section{z-index:2;margin-top:-32px;border-radius:52px 52px 0 0;background:linear-gradient(145deg,#f5e9da,#ead9c6)}.welcome-title{font-family:var(--script);font-size:clamp(6.5rem,15vw,11rem);letter-spacing:-.02em;line-height:.75;text-transform:none}.save-date,.wedding-details,.travel-section,.city-section,.special,.week-plan,.faq,.rsvp,.closing,.countdown{position:relative;margin-top:-22px;border-radius:44px 44px 0 0}.save-date{z-index:3}.wedding-details{z-index:4}.travel-section{z-index:5}.city-section{z-index:6;background:linear-gradient(145deg,#f8f0e5,#eadbc8)}.special{z-index:7;background:var(--paper)}.week-plan{z-index:8}.faq{z-index:9;background:var(--paper)}.rsvp{z-index:10}.closing{z-index:11;background:var(--paper)}.countdown{z-index:12;background:var(--paper)}
+@media(max-width:720px){
+  .hero-mobile-mark{position:absolute;top:15%;left:50%;z-index:2;display:block;width:112px;height:75px;object-fit:contain;filter:drop-shadow(0 4px 13px rgba(255,244,230,.36));transform:translateX(-50%)}
+  .welcome-section{margin-top:-25px;border-radius:34px 34px 0 0;padding-top:84px;background:linear-gradient(145deg,#f3e5d4,#ead8c2)}.welcome-title{font-size:clamp(5.8rem,29vw,8.1rem);line-height:.72}.welcome-inner p{margin-top:24px}
+  .save-date,.wedding-details,.travel-section,.city-section,.special,.week-plan,.faq,.rsvp,.closing,.countdown{margin-top:-16px;border-radius:30px 30px 0 0}
+  .wedding-details .schedule{grid-template-columns:1fr;gap:8px}.wedding-details .schedule-card{display:grid;min-height:82px;grid-template-columns:42px 1fr;grid-template-rows:auto auto;align-content:center;column-gap:10px;padding:14px 16px;border-radius:20px!important;text-align:left}.wedding-details .schedule-number{grid-row:1/3;align-self:center;margin:0}.wedding-details .schedule-card time{margin:0;font-size:.58rem}.wedding-details .schedule-card h3{font-size:1.35rem}.wedding-details .schedule-description{grid-column:2;display:block;max-height:0;margin:0;overflow:hidden;opacity:0}.wedding-details .schedule-card.active{grid-column:auto;background:rgba(255,255,255,.72);box-shadow:0 12px 24px rgba(70,43,25,.1)}.wedding-details .schedule-card.active .schedule-description{max-height:8em;margin-top:.45rem;opacity:1}.wedding-details .schedule-card::after{content:"+";position:absolute;right:14px;bottom:auto;top:50%;width:auto;height:auto;border:0;background:none;color:var(--clay);font-size:1.05rem;opacity:.7;transform:translateY(-50%)}.wedding-details .schedule-card.active::after{content:"−"}
+}
+@media(max-width:430px){.hero-mobile-mark{top:14%;width:102px;height:68px}.welcome-title{font-size:clamp(5.2rem,28vw,7rem)}}
+
+/* The hero owns the rounded handoff; Welcome is a flatter editorial pause. */
+.welcome-section{min-height:500px;margin-top:0;border-radius:0;overflow:hidden;background:linear-gradient(118deg,#f6eadb 0%,#ecdbc7 58%,#f4e8d9 100%)}
+.welcome-section::before{content:"";position:absolute;top:50%;left:-8%;width:38vw;max-width:520px;aspect-ratio:1;border:1px solid rgba(103,53,31,.12);border-radius:50%;transform:translateY(-50%)}
+.welcome-section::after{content:"";position:absolute;right:7%;bottom:15%;width:min(22vw,280px);height:1px;background:linear-gradient(90deg,rgba(103,53,31,.42),transparent)}
+.welcome-inner{position:relative;z-index:1;display:grid;width:min(100%,1050px);grid-template-columns:1.18fr .82fr;align-items:center;gap:clamp(45px,8vw,110px);text-align:left}
+.welcome-title{font-family:var(--script);font-size:clamp(8.5rem,15vw,13.5rem);font-weight:400;letter-spacing:-.035em;line-height:.72;text-align:left}
+.welcome-inner p{max-width:440px;margin:0;padding:16px 0 16px clamp(25px,4vw,48px);border-left:1px solid rgba(103,53,31,.3);font-size:clamp(1.1rem,1.7vw,1.38rem);text-align:left}
+
+@media(max-width:720px){
+  .welcome-section{min-height:410px;margin-top:0;border-radius:0;padding:76px 24px 70px}
+  .welcome-section::before{top:34%;left:-28%;width:86vw}
+  .welcome-section::after{right:auto;bottom:62px;left:50%;width:86px;transform:translateX(-50%)}
+  .welcome-inner{display:block;text-align:center}
+  .welcome-title{font-size:clamp(6.9rem,31vw,9.4rem);line-height:.7;text-align:center}
+  .welcome-inner p{max-width:390px;margin:34px auto 0;padding:0;border:0;font-size:1.08rem;text-align:center}
+}
 
 /* Final paper-suite direction: every chapter is a complete object, never a
    clipped decorative strip. The retired rip is kept hidden defensively. */
@@ -377,15 +457,15 @@ html{scroll-snap-type:y mandatory;scroll-behavior:smooth}.section,.footer{scroll
 
 /* Refined envelope face: the complete letter is the invitation control, with the monogram at its seal. */
 .invitation-intro:not(.is-open) .intro-cover{position:absolute!important;inset:0!important;display:grid!important;width:100%!important;max-width:none!important;height:100%!important;padding:0!important;place-content:center!important;cursor:pointer;transition:filter .4s ease,transform .55s cubic-bezier(.16,1,.3,1)!important}
-.invitation-intro:not(.is-open) .intro-cover:hover,.invitation-intro:not(.is-open) .intro-cover:focus-visible{filter:brightness(1.035);transform:scale(1.008)!important;outline:0}.invitation-intro:not(.is-open) .intro-cover::after{content:"";position:absolute;top:64%;left:50%;width:clamp(68px,7vw,104px);height:clamp(68px,7vw,104px);border:1px solid rgba(112,67,41,.18);border-radius:50%;box-shadow:0 0 0 9px rgba(255,249,239,.12);opacity:0;transform:translate(-50%,-50%) scale(.84);transition:opacity .35s ease,transform .5s cubic-bezier(.16,1,.3,1);pointer-events:none}.invitation-intro:not(.is-open) .intro-cover:hover::after,.invitation-intro:not(.is-open) .intro-cover:focus-visible::after{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
-.invitation-intro:not(.is-open) .intro-kicker{margin:0 0 .7rem!important;font-size:clamp(.52rem,.68vw,.68rem)!important}.invitation-intro:not(.is-open) .intro-cover h1{display:flex;align-items:center;justify-content:center;gap:.12em;margin:0!important;font-family:'Great Vibes',var(--script)!important;font-size:clamp(4.8rem,8.5vw,8.7rem)!important;font-weight:400!important;letter-spacing:-.06em!important;line-height:.72!important}.invitation-intro:not(.is-open) .intro-cover h1 em{margin-top:.12em;color:#a56442!important;font-family:var(--serif)!important;font-size:.48em;font-style:italic}.invitation-intro:not(.is-open) .intro-date{margin:1.35rem 0 0!important;font-size:clamp(.5rem,.65vw,.68rem)!important}.intro-seal{position:absolute!important;top:64%!important;left:50%!important;z-index:2;width:clamp(53px,5vw,74px)!important;height:clamp(53px,5vw,74px)!important;margin:0!important;object-fit:contain;transform:translate(-50%,-50%);filter:drop-shadow(0 2px 2px rgba(83,48,27,.14))!important;transition:transform .45s cubic-bezier(.16,1,.3,1),filter .35s ease}.intro-cover:hover .intro-seal,.intro-cover:focus-visible .intro-seal{transform:translate(-50%,-50%) scale(1.09);filter:drop-shadow(0 7px 10px rgba(83,48,27,.22))!important}
+.invitation-intro:not(.is-open) .intro-cover:hover,.invitation-intro:not(.is-open) .intro-cover:focus-visible{filter:brightness(1.035);transform:scale(1.008)!important;outline:0}
+.invitation-intro:not(.is-open) .intro-kicker{margin:0 0 .7rem!important;font-size:clamp(.52rem,.68vw,.68rem)!important}.invitation-intro:not(.is-open) .intro-cover h1{display:flex;align-items:center;justify-content:center;gap:.12em;margin:0!important;font-family:'Great Vibes',var(--script)!important;font-size:clamp(4.8rem,8.5vw,8.7rem)!important;font-weight:400!important;letter-spacing:-.06em!important;line-height:.72!important}.invitation-intro:not(.is-open) .intro-cover h1 em{margin-top:.12em;color:#a56442!important;font-family:var(--serif)!important;font-size:.48em;font-style:italic}.invitation-intro:not(.is-open) .intro-date{margin:1.35rem 0 0!important;font-size:clamp(.5rem,.65vw,.68rem)!important}
 
 /* A composed stationery still life: quiet pop-in, restrained rotations, readable proximity. */
 .suite-card{--rest-r:0deg!important;--scatter-x:0px!important;--scatter-y:0px!important;--scatter-r:0deg!important;opacity:0!important;transform:rotate(var(--rest-r)) scale(.76)!important;transition:transform .5s cubic-bezier(.16,1,.3,1),filter .35s ease!important}
 .suite-card--main{top:5.5%!important;left:36.5%!important;width:clamp(270px,27vw,410px)!important;--rest-r:0deg!important}.suite-card--details{top:30%!important;left:14%!important;width:clamp(135px,14vw,205px)!important;--rest-r:5deg!important}.suite-card--save{top:30%!important;right:14%!important;width:clamp(140px,14.5vw,210px)!important;--rest-r:-5deg!important}.suite-card--rsvp{right:auto!important;bottom:4%!important;left:42.5%!important;width:clamp(140px,14vw,205px)!important;z-index:3!important;--rest-r:0deg!important}
 .invitation-intro.is-open .suite-card{opacity:1!important;transform:rotate(var(--rest-r)) scale(1)!important;animation:suite-card-pop .68s cubic-bezier(.16,1,.3,1) both!important;pointer-events:auto!important}.invitation-intro.is-open .suite-card--main{animation-delay:120ms!important}.invitation-intro.is-open .suite-card--details{animation-delay:250ms!important}.invitation-intro.is-open .suite-card--save{animation-delay:360ms!important}.invitation-intro.is-open .suite-card--rsvp{animation-delay:470ms!important}@keyframes suite-card-pop{0%{opacity:0;transform:rotate(var(--rest-r)) scale(.64)}72%{opacity:1;transform:rotate(var(--rest-r)) scale(1.025)}100%{opacity:1;transform:rotate(var(--rest-r)) scale(1)}}
 .suite-card:hover{transform:rotate(var(--rest-r)) scale(1.045)!important}.suite-card:active{transform:rotate(var(--rest-r)) scale(1.018)!important}.invitation-intro.is-open .enter-site{bottom:1.4vh!important}
-@media(max-width:720px){.invitation-intro:not(.is-open) .intro-cover h1{font-size:clamp(4.2rem,18vw,6.2rem)!important}.invitation-intro:not(.is-open) .intro-cover h1 em{font-size:.42em}.invitation-intro:not(.is-open) .intro-kicker{margin-bottom:.45rem!important}.invitation-intro:not(.is-open) .intro-date{margin-top:1rem!important}.intro-seal,.invitation-intro:not(.is-open) .intro-cover::after{top:69%!important}.intro-seal{width:60px!important;height:60px!important}.suite-card--main{top:7%!important;left:21.5%!important;width:57vw!important}.suite-card--details{top:37%!important;left:3%!important;width:33vw!important}.suite-card--save{top:37%!important;right:3%!important;width:33vw!important}.suite-card--rsvp{bottom:5%!important;left:33%!important;width:34vw!important}.suite-pocket{bottom:1%!important;height:35vh!important}.invitation-intro.is-open .enter-site{bottom:.7vh!important}}
+@media(max-width:720px){.invitation-intro:not(.is-open) .intro-cover h1{font-size:clamp(4.2rem,18vw,6.2rem)!important}.invitation-intro:not(.is-open) .intro-cover h1 em{font-size:.42em}.invitation-intro:not(.is-open) .intro-kicker{margin-bottom:.45rem!important}.invitation-intro:not(.is-open) .intro-date{margin-top:1rem!important}.suite-card--main{top:7%!important;left:21.5%!important;width:57vw!important}.suite-card--details{top:37%!important;left:3%!important;width:33vw!important}.suite-card--save{top:37%!important;right:3%!important;width:33vw!important}.suite-card--rsvp{bottom:5%!important;left:33%!important;width:34vw!important}.suite-pocket{bottom:1%!important;height:35vh!important}.invitation-intro.is-open .enter-site{bottom:.7vh!important}}
 
 /* Final opened invitation: one composed desktop image and one phone-first image, not a CSS collage. */
 .suite-composite{position:absolute;inset:0;z-index:2;display:grid;place-items:center;opacity:0;transform:scale(.965);transition:opacity .46s ease,transform .7s cubic-bezier(.16,1,.3,1)}
@@ -507,6 +587,16 @@ body.invitation-active{overflow:hidden}.invitation-intro{position:fixed;inset:0;
   .destination-grid{grid-template-rows:200px 200px}
 }
 
+/* Keep the hero calls to action inside shorter laptop viewports. */
+@media(min-width:721px) and (max-height:850px){
+  .hero-content{padding:5.65rem 1rem 1.5rem}
+  .hero-logo-wrap{width:clamp(185px,25vh,215px);height:clamp(123px,16.7vh,143px);margin-bottom:-.4rem}
+  .hero h1{font-size:clamp(4.25rem,13vh,6.65rem)}
+  .hero-meta{margin-top:1.1rem}
+  .hero-place{margin-bottom:.7rem}
+  .hero-quote{margin:.8rem auto 1.1rem;font-size:1.05rem;line-height:1.35}
+}
+
 /* Rich, quiet discovery states for the destination and Mexico-week details. */
 .brand{padding:3px 7px;border:1px solid rgba(73,36,22,.22);border-radius:17px;background:rgba(58,29,17,.24);box-shadow:inset 0 1px rgba(255,248,238,.1),0 6px 16px rgba(35,16,8,.1)}
 .brand-logo--dark{filter:drop-shadow(0 1px 0 rgba(255,248,238,.16))}
@@ -526,8 +616,808 @@ body{background:radial-gradient(ellipse at 50% 28%,rgba(182,139,89,.18),transpar
 .site{box-shadow:0 66px 150px rgba(0,0,0,.62),0 18px 44px rgba(0,0,0,.42),0 0 0 1px rgba(255,248,238,.16)}
 .brand{position:relative;isolation:isolate}.brand-logo{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:contain;transition:opacity .38s ease,transform .38s cubic-bezier(.2,.8,.2,1)}.brand-logo--light{opacity:0;transform:scale(.92)}.site-header.header-on-dark .brand-logo--dark{opacity:0;transform:scale(.92)}.site-header.header-on-dark .brand-logo--light{opacity:1;transform:none}
 .hero-logo--solid{filter:drop-shadow(0 2px 2px rgba(45,20,10,.18))}.hero-eyebrow{color:#71341f!important;text-shadow:0 1px 12px rgba(255,248,238,.86);font-weight:750}
+
+/* Clean surfaces: no contour decoration and no curved section-overlap line. */
+.welcome-section::before,.welcome-section::after{display:none}
+.details-panel{background:rgba(255,250,242,.76)}
+.wedding-details{margin-top:0;border-radius:0}
+
+@media(max-width:720px){
+  .wedding-details .schedule{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .wedding-details .schedule-card{display:block;min-height:142px;padding:18px 15px 16px;border-radius:20px!important;text-align:left}
+  .wedding-details .schedule-number{display:block;margin:0 0 1rem}
+  .wedding-details .schedule-card time{display:block;margin:0 0 .38rem;padding-right:18px;font-size:.54rem;line-height:1.25}
+  .wedding-details .schedule-card h3{font-size:1.35rem;line-height:.95}
+  .wedding-details .schedule-description{display:block;max-height:0;margin:.5rem 0 0;overflow:hidden;font-size:.78rem;line-height:1.3;opacity:0}
+  .wedding-details .schedule-card.active{grid-column:auto;min-height:142px}
+  .wedding-details .schedule-card.active .schedule-description{max-height:7em;margin-top:.55rem;opacity:1}
+  .wedding-details .schedule-card::after{top:15px;right:14px;bottom:auto;transform:none}
+}
+
+/* Full-screen invitation envelope with the SV seal baked into the artwork. */
+.invitation-intro:not(.is-open){background:#eadbc7 url("opening-envelope-exact-logo-desktop-v7.png") center/cover no-repeat!important}
+.invitation-intro:not(.is-open) .intro-cover{position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;height:100%!important;padding:7svh 16px 0!important;place-content:start center!important;transform:none!important;text-shadow:none!important}
+.invitation-intro:not(.is-open) .intro-cover:hover,.invitation-intro:not(.is-open) .intro-cover:focus-visible{transform:scale(1.008)!important}
+.invitation-intro:not(.is-open) .intro-kicker{margin:0 0 .1em!important;color:#75442c!important;font-family:var(--script)!important;font-size:clamp(2rem,3.2vw,3.7rem)!important;font-weight:400!important;letter-spacing:0!important;line-height:1!important;text-transform:none!important}
+.invitation-intro:not(.is-open) .intro-cover h1{display:flex!important;align-items:center;justify-content:center;gap:.1em;margin:0!important;color:#55311f!important;font-family:var(--script)!important;font-size:clamp(5.4rem,8.6vw,9.2rem)!important;font-weight:400!important;letter-spacing:-.035em!important;line-height:.72!important;white-space:nowrap}
+.invitation-intro:not(.is-open) .intro-cover h1 em{margin:0!important;color:#8e4d2d!important;font-family:var(--script)!important;font-size:.6em!important;font-style:normal!important}
+.invitation-intro:not(.is-open) .intro-date{margin:1.1rem 0 0!important;color:#70432d!important;font-size:clamp(.55rem,.72vw,.72rem)!important;letter-spacing:.3em!important}
+.invitation-intro:not(.is-open) .intro-kicker,.invitation-intro:not(.is-open) .intro-cover h1,.invitation-intro:not(.is-open) .intro-date{display:none!important}
+.invitation-intro:not(.is-open) .intro-cover::after{display:none!important}
+.envelope-letter h2{font-family:var(--script)!important;font-weight:400!important;letter-spacing:-.025em!important}
+
+@media(max-width:720px){
+  .invitation-intro:not(.is-open){background-image:url("opening-envelope-exact-logo-mobile-v7.png")!important;background-position:center top!important}
+  .invitation-intro:not(.is-open) .intro-cover{padding:5.5svh 10px 0!important}
+  .invitation-intro:not(.is-open) .intro-kicker{font-size:clamp(2rem,9vw,3.2rem)!important}
+  .invitation-intro:not(.is-open) .intro-cover h1{font-size:clamp(4.2rem,18vw,6.2rem)!important;line-height:.7!important}
+  .invitation-intro:not(.is-open) .intro-date{margin-top:.85rem!important;font-size:.55rem!important;letter-spacing:.25em!important}
+}
 .portrait-card img{filter:sepia(.075) saturate(1.09) contrast(1.015)}.portrait-card:hover img{filter:sepia(.075) saturate(1.13) contrast(1.02)}
 @media(min-width:721px){.dress{min-height:calc(100svh - 64px);display:grid;align-content:center;padding-block:clamp(42px,5vh,64px)}.dress-copy{margin-bottom:24px}.dress-copy .rule{margin-block:1rem}.dress-gallery{gap:10px}.dress-gallery img{height:clamp(150px,15vw,190px);aspect-ratio:auto;object-position:center}.dress-gallery figcaption{padding:24px 12px 11px}.swatches{margin-top:18px}.swatches span{width:28px;height:28px}}
 
 /* The compact header carries only the monogram—never a surrounding tile. */
 .brand{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}.brand-logo--dark{filter:none}
+
+/* Final invitation-suite overrides sit last so older experiments cannot win the cascade. */
+.invitation-intro.is-open .envelope-stage{inset:0!important;width:100vw!important;height:100svh!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important;border-radius:0!important;filter:none!important}
+.suite-composite{transform:translateY(28px) scale(.945)!important;transition:opacity .88s ease .28s,transform 1.45s cubic-bezier(.16,1,.3,1) .2s!important}
+.invitation-intro.is-open .suite-composite{opacity:1!important;transform:none!important}
+.suite-composite picture,.suite-composite img{width:100%!important;height:100%!important}.suite-composite img{object-fit:cover!important;object-position:center bottom!important}
+.invitation-intro.is-open .enter-site{bottom:clamp(17px,2.4vh,30px)!important;min-height:48px!important;padding:0 1.65rem!important;font-size:.53rem!important}
+@media(max-width:720px){.suite-live-copy{top:15.5%;left:49.5%;width:52%;height:46%;padding:14px 10px;transform:translateX(-50%) rotate(-1deg)}.suite-composite img{object-position:center bottom!important}.invitation-intro.is-open .enter-site{bottom:14px!important;min-height:44px!important;padding-inline:1.3rem!important;font-size:.45rem!important}}
+
+/* Printed bilingual suite and restrained liquid-glass invitation controls. */
+.invitation-intro.is-open{background:#eadbc7 url("opening-envelope-exact-logo-desktop-v7.png") center/cover no-repeat!important}
+.suite-composite{transform:translateY(18px) scale(.972)!important;filter:blur(1.5px);transition:opacity 1.15s ease .34s,transform 1.75s cubic-bezier(.16,1,.3,1) .24s,filter 1.25s ease .28s!important}
+.invitation-intro.is-open .suite-composite{opacity:1!important;transform:none!important;filter:none}
+body.language-transition .suite-composite{opacity:.42!important;filter:blur(2px)}
+.intro-language-toggle{top:24px!important;right:auto!important;left:26px!important;min-height:40px!important;padding:0 15px!important;border:1px solid rgba(255,255,255,.28)!important;color:rgba(69,43,28,.78)!important;background:linear-gradient(135deg,rgba(255,255,255,.32),rgba(255,249,239,.12))!important;box-shadow:inset 0 1px rgba(255,255,255,.62),0 7px 24px rgba(67,42,25,.09)!important;opacity:0;transform:translateY(-8px)!important;backdrop-filter:blur(18px) saturate(1.2)!important}
+.invitation-intro.is-open .intro-language-toggle{opacity:.82;transform:none!important}
+.invitation-intro.is-open .intro-language-toggle:hover,.invitation-intro.is-open .intro-language-toggle:focus-visible{opacity:1;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,249,239,.2))!important;box-shadow:inset 0 1px rgba(255,255,255,.78),0 10px 30px rgba(67,42,25,.14)!important;transform:translateY(-2px)!important}
+.intro-close{top:23px!important;right:26px!important;width:40px!important;height:40px!important;border:1px solid rgba(255,255,255,.24)!important;color:rgba(70,43,27,.64)!important;background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,249,239,.1))!important;box-shadow:inset 0 1px rgba(255,255,255,.58),0 7px 24px rgba(67,42,25,.08)!important;font-family:var(--serif)!important;font-size:1.35rem!important;opacity:0;backdrop-filter:blur(18px) saturate(1.2)!important;transition:opacity .35s ease .78s,transform .32s cubic-bezier(.16,1,.3,1),background .25s ease!important}
+.invitation-intro.is-open .intro-close{opacity:.72!important}
+.invitation-intro.is-open .intro-close:hover,.invitation-intro.is-open .intro-close:focus-visible{opacity:1!important;color:#4a2d1d!important;background:linear-gradient(135deg,rgba(255,255,255,.48),rgba(255,249,239,.18))!important;transform:rotate(7deg) scale(1.06)}
+.invitation-intro.is-replaying{animation-duration:1.35s!important}.invitation-intro.is-replaying .intro-cover{animation-duration:1.15s!important;animation-delay:.12s!important}
+
+@media(max-width:720px){
+  .invitation-intro.is-open{background-image:url("opening-envelope-exact-logo-mobile-v7.png")!important;background-position:center top!important}
+  .intro-language-toggle{top:14px!important;left:14px!important;min-height:37px!important;padding-inline:12px!important}
+  .intro-close{top:14px!important;right:14px!important;width:37px!important;height:37px!important}
+}
+
+/* Identical bilingual stationery layers keep the scene fixed while only printed words dissolve. */
+.suite-composite{isolation:isolate}
+.suite-composite .suite-art{position:absolute;inset:0;display:block!important;opacity:0;transition:opacity .68s cubic-bezier(.22,.61,.36,1);will-change:opacity}
+html[lang="en"] .suite-art--en,html[lang="es"] .suite-art--es{opacity:1}
+body.language-transition .suite-composite{opacity:1!important;filter:none!important}
+
+/* The closed-envelope artwork already contains the complete visual; never reveal the legacy title during its fade-out. */
+.invitation-intro .intro-cover > *{display:none!important}
+
+/* 2026 full revision: cohesive destination-editorial art direction. */
+:root{--espresso:#351f16;--espresso-deep:#24150f;--ivory:#fbf5ec;--warm-cream:#f3e7d7;--sand:#ddcbb7;--cacao:#64422f;--sage:#5c604d}
+body{background:radial-gradient(circle at 12% 15%,rgba(103,53,31,.2),transparent 29rem),radial-gradient(circle at 88% 82%,rgba(76,83,62,.22),transparent 32rem),linear-gradient(145deg,#18130f,#090806)}
+.progress{background:linear-gradient(90deg,#67402c,#b5866d);box-shadow:0 0 14px rgba(181,134,109,.36)}
+.nav-cta,.nav-cta:hover,.nav-cta.active{background:#70452f}
+
+/* Blank photographic hero and a more generous Welcome pause. */
+.hero-mobile-mark{display:none!important}
+.hero--image-only::after{background:linear-gradient(180deg,rgba(20,14,10,.18),transparent 40%,rgba(27,18,12,.12))}
+.welcome-section{min-height:560px;padding:clamp(94px,10vw,142px) clamp(24px,8vw,110px);background:linear-gradient(120deg,#f7ecdf 0%,#ead8c4 56%,#f5e9dc 100%)}
+.welcome-inner{display:block;text-align:center}
+.welcome-title{color:#513224;font-size:clamp(7.5rem,14vw,12rem);text-align:center}
+.welcome-inner p{max-width:540px;margin:52px auto 0;padding:0;border:0;color:#5a4031;text-align:center}
+
+/* Save the Date: drapery only, with one restrained script accent. */
+.save-date{min-height:680px;margin-top:0;border-radius:0;padding:clamp(90px,10vw,132px) clamp(20px,8vw,100px);background-color:#6a4938;background-image:linear-gradient(180deg,rgba(44,27,18,.28),rgba(39,23,15,.65)),url("hero-drapery-clean-v2.png");background-position:center;background-size:cover;background-repeat:no-repeat;background-blend-mode:multiply,normal}
+.save-date::before{content:"";position:absolute;inset:auto 0 -1px;height:72px;background:var(--ivory);clip-path:ellipse(62% 40% at 50% 100%)}
+.save-date-inner{position:relative;z-index:1;width:min(100%,900px)}
+.save-date-inner{text-shadow:0 2px 16px rgba(35,20,13,.42)}
+.save-date-title{display:flex;align-items:baseline;justify-content:center;gap:.12em;white-space:nowrap;font-size:clamp(3.6rem,8vw,7.6rem);line-height:.85;text-transform:uppercase}
+.save-date-title span,.save-date-title em{display:inline;margin:0}
+.save-date-title em{font-family:var(--script);font-size:.72em;font-style:normal;font-weight:400;letter-spacing:-.04em;text-transform:none}
+.save-date-day{margin:2rem 0 .7rem;font-family:var(--sans);font-size:.68rem;font-weight:650;letter-spacing:.22em;text-transform:uppercase}
+.save-date-place{margin:0 0 1.7rem}
+
+/* Wedding details: centered, label-led, and free of numerical furniture. */
+.wedding-details{padding:clamp(100px,11vw,145px) clamp(22px,7vw,90px);background:var(--ivory)}
+.details-heading{margin:0 auto 52px;text-align:center}
+.details-heading .section-title{font-size:clamp(4rem,8vw,8rem)}
+.detail-cards{width:min(100%,1000px);margin-inline:auto;gap:18px}
+.detail-card{display:grid;min-height:310px;align-content:center;justify-items:center;padding:44px 32px;border:1px solid rgba(77,45,28,.14);border-radius:160px 160px 30px 30px;background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(231,214,194,.45));box-shadow:0 22px 52px rgba(72,43,25,.07);text-align:center}
+.detail-label{margin:0 0 1.1rem;color:var(--cacao);font-family:var(--sans);font-size:.61rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase}
+.detail-card h3{margin:0 0 .8rem;font-family:var(--serif);font-size:clamp(2.4rem,4.6vw,4.3rem);font-weight:400;line-height:.9}
+.venue-link{text-decoration-thickness:1px;text-decoration-color:rgba(81,48,31,.28);text-underline-offset:8px}
+.detail-card p{max-width:520px;margin:.4rem auto 1rem}
+.detail-meta{font-family:var(--sans);font-size:.68rem;letter-spacing:.11em;line-height:1.8;text-transform:uppercase}
+.detail-swatches{justify-content:center}
+
+/* Celebration: espresso rectangle and a vertical procession. */
+.celebration-section{padding:0 clamp(12px,2vw,24px);background:var(--ivory)}
+.celebration-shell{position:relative;overflow:hidden;padding:clamp(88px,10vw,132px) clamp(22px,8vw,105px);color:#f4e8da;background:linear-gradient(145deg,#3d2419,#271710 72%)}
+.celebration-shell::before{content:"";position:absolute;top:-180px;right:-120px;width:420px;height:420px;border:1px solid rgba(244,232,218,.09);border-radius:50%}
+.celebration-heading{position:relative;max-width:760px;margin:0 auto 58px;text-align:center}
+.celebration-heading .eyebrow{color:#cfa98f}
+.celebration-heading .section-title{font-size:clamp(4.6rem,9vw,9rem)}
+.celebration-list{position:relative;width:min(100%,920px);margin:auto}
+.celebration-event{display:grid;grid-template-columns:60px 105px 1fr;align-items:center;gap:22px;padding:27px 6px;border-bottom:1px solid rgba(244,232,218,.17)}
+.celebration-event:first-child{border-top:1px solid rgba(244,232,218,.17)}
+.event-icon{display:grid;width:44px;height:44px;place-items:center;border:1px solid rgba(244,232,218,.25);border-radius:50%;color:#d7b49d;font-size:1.25rem}
+.celebration-event time{color:#d6b49c;font-family:var(--sans);font-size:.62rem;font-weight:650;letter-spacing:.15em;text-transform:uppercase}
+.celebration-event h3{margin:0;font-family:var(--serif);font-size:clamp(2rem,4vw,3.25rem);font-weight:400;line-height:.9}
+.celebration-event p{margin:.45rem 0 0;color:rgba(244,232,218,.68);font-size:.97rem;line-height:1.4}
+
+/* Ofrenda and Gifts each keep a distinct identity. */
+.special{margin-top:0!important;padding:18px;background:#f7efe5!important}
+.special-card{border-radius:34px}
+.special-card.tribute{background:#303322 url("ofrenda-tepoztlan-hq.png") center/cover no-repeat!important}
+.gifts-card{position:relative;isolation:isolate;overflow:hidden;color:#fff8ee;background:#4a3022 url("candle-pottery-hq.webp") center/cover no-repeat!important}
+.gifts-card::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(44,26,18,.93),rgba(54,31,20,.68) 62%,rgba(55,33,22,.46))}
+.gifts-card::after{content:"";position:absolute;inset:18px;border:1px solid rgba(255,248,238,.18);border-radius:25px;pointer-events:none}
+.gifts-card .eyebrow{color:#d4b09a}
+.gifts-content{position:relative;z-index:1;max-width:570px}
+
+/* FAQ feels bespoke but remains highly scannable. */
+.faq{margin-top:0!important;padding:clamp(110px,12vw,160px) clamp(24px,8vw,105px);background:#f8f1e7!important}
+.faq-head .section-title{font-size:clamp(3.8rem,7vw,7rem)}
+.faq .accordion{border:1px solid rgba(77,45,28,.16);border-radius:34px;background:rgba(255,255,255,.36);box-shadow:0 20px 52px rgba(70,43,25,.06)}
+.faq .accordion-trigger{grid-template-columns:1fr 34px;min-height:78px;padding:22px 25px}
+.faq .accordion-label{font-size:clamp(1.2rem,2vw,1.55rem)}
+.faq .accordion-item.open{background:#eadccc}
+
+/* Check-In replaces RSVP with a light, integrated travel card. */
+.check-in{position:relative;overflow:hidden;padding:clamp(100px,11vw,150px) clamp(22px,7vw,90px);color:#f9eee2;background:linear-gradient(140deg,#342017,#24140f 70%)}
+.check-in::before{content:"";position:absolute;top:-230px;left:-170px;width:520px;height:520px;border:1px solid rgba(255,248,238,.1);border-radius:50%}
+.check-in-grid{position:relative;display:grid;grid-template-columns:.75fr 1.25fr;align-items:center;gap:clamp(50px,8vw,110px)}
+.check-in-copy .eyebrow{color:#d2aa91}
+.check-in-copy .section-title{font-size:clamp(4rem,7vw,7rem)}
+.check-in-copy p{max-width:480px}
+.check-in-card{padding:clamp(28px,4vw,48px);border:1px solid rgba(255,248,238,.3);border-radius:38px;color:var(--ink);background:linear-gradient(145deg,rgba(255,252,247,.96),rgba(235,220,202,.94));box-shadow:0 30px 80px rgba(0,0,0,.28)}
+.check-in-card .form-grid{gap:18px}
+.check-in-card .field{gap:8px}
+.check-in-card .field input,.check-in-card .field textarea{border-color:rgba(82,49,31,.2);background:rgba(255,255,255,.62)}
+.check-in-card .field textarea{min-height:76px}
+.menu-field{min-width:0;margin:0;padding:0;border:0}
+.menu-field legend{margin-bottom:8px;font-family:var(--sans);font-size:.61rem;font-weight:650;letter-spacing:.11em;text-transform:uppercase}
+.menu-note{margin:0 0 10px;color:var(--muted);font-size:.85rem}
+.check-in-card .choice label{min-height:62px;background:rgba(255,255,255,.28)}
+.check-in-card .button{width:100%;min-height:56px;margin-top:20px;border:0;background:#67402c;box-shadow:0 12px 24px rgba(75,39,25,.2)}
+
+/* Warm, legible closing image with a restrained overlay. */
+.closing{margin-top:0!important;padding-top:90px;background:#f4e9dc!important}
+.closing-photo::after{background:linear-gradient(180deg,transparent 38%,rgba(35,21,14,.36))}
+.closing-photo img{filter:brightness(1.12) saturate(.98) sepia(.04)}
+.closing-copy .eyebrow{color:#f7e9da}
+.countdown{margin-top:0!important;background:#f4e9dc!important}
+
+@media(max-width:980px){
+  .check-in-grid{grid-template-columns:1fr}
+  .check-in-copy{max-width:650px;text-align:center;margin-inline:auto}.check-in-copy .rule{margin-inline:auto}.check-in-copy p{margin-inline:auto}
+}
+
+@media(max-width:720px){
+  .site-header:not(.scrolled) .brand{visibility:hidden;opacity:0;pointer-events:none;transform:translateY(-5px)}
+  .site-header.scrolled .brand{visibility:visible}
+  .site-header .brand{transition:opacity .3s ease,transform .38s cubic-bezier(.16,1,.3,1)}
+  .hero--image-only{height:calc(100svh - 14px);min-height:520px}.hero--image-only::before{background-position:58% center}
+  .welcome-section{min-height:480px;padding:94px 22px 88px}.welcome-title{font-size:clamp(6.7rem,31vw,8.8rem)}.welcome-inner p{max-width:360px;margin-top:38px;font-size:1.16rem;line-height:1.48}
+  .save-date{min-height:610px;padding:92px 16px 112px}.save-date::before{height:45px}.save-date-title{gap:.08em;font-size:clamp(2.8rem,14vw,4.2rem)}.save-date-title em{font-size:.76em}.save-date-day{font-size:.57rem;letter-spacing:.16em}.save-date-inner>p:last-child{max-width:350px;font-size:1rem}
+  .wedding-details{padding:92px 14px}.details-heading{margin-bottom:38px}.details-heading .section-title{font-size:clamp(3.6rem,17vw,5.6rem)}.detail-cards{grid-template-columns:1fr}.detail-card{min-height:285px;padding:40px 22px;border-radius:140px 140px 26px 26px}.detail-card h3{font-size:2.65rem}
+  .celebration-section{padding:0 7px}.celebration-shell{padding:82px 18px}.celebration-heading{margin-bottom:42px}.celebration-heading .section-title{font-size:clamp(4rem,19vw,6rem)}.celebration-event{grid-template-columns:44px 70px 1fr;gap:10px;padding:23px 0}.event-icon{width:36px;height:36px;font-size:1rem}.celebration-event time{font-size:.5rem;letter-spacing:.08em}.celebration-event h3{font-size:1.65rem}.celebration-event p{font-size:.82rem}
+  .special{grid-template-columns:1fr;padding:7px}.special-card{padding:58px 28px;border-radius:28px}.gifts-card::after{inset:12px;border-radius:20px}
+  .faq{padding:92px 14px}.faq-head{top:auto;text-align:center;margin-bottom:36px}.faq .accordion{border-radius:25px}.faq .accordion-trigger{min-height:72px;padding:20px 16px}.faq .accordion-label{font-size:1.12rem}
+  .check-in{padding:92px 14px}.check-in-grid{gap:38px}.check-in-copy .section-title{font-size:clamp(4rem,19vw,5.8rem)}.check-in-card{padding:28px 16px;border-radius:28px}.check-in-card .form-grid{grid-template-columns:1fr}.check-in-card .field.full{grid-column:auto}.check-in-card .attendance{grid-template-columns:1fr 1fr}.check-in-card .choice label{padding:.7rem .4rem;font-size:.56rem}.check-in-card .button{font-size:.56rem}
+  .closing{padding-top:72px}.closing-photo{height:540px}.closing-photo img{object-position:center 42%;filter:brightness(1.16) saturate(.96)}
+}
+
+@media(max-width:430px){
+  .save-date-title{font-size:clamp(2.5rem,13.2vw,3.55rem)}
+  .celebration-event{grid-template-columns:38px 62px 1fr}.event-icon{width:32px;height:32px}.celebration-event h3{font-size:1.48rem}
+  .check-in-card .attendance{grid-template-columns:1fr}
+}
+
+/* Final mocha-and-cream identity, responsive Welcome stationery, and editorial navigation. */
+:root{
+  --paper:#eee5da;--paper-light:#faf5ee;--ink:#30251f;--muted:#74675f;
+  --clay:#49362c;--clay-dark:#34261f;--brown:#49362c;--cacao:#49362c;
+  --espresso:#30231c;--espresso-deep:#211813;--cream:#fff9ef;
+  --mocha:#49362c;--mocha-deep:#34261f;--off-white:#f7efe4;
+  --line:rgba(73,54,44,.18)
+}
+body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 29rem),radial-gradient(circle at 88% 84%,rgba(67,69,57,.2),transparent 32rem),linear-gradient(145deg,#18130f,#090806)}
+:focus-visible{outline-color:#756055}
+.progress{background:linear-gradient(90deg,var(--mocha-deep),#ab9587);box-shadow:0 0 14px rgba(90,69,58,.32)}
+
+/* Desktop navigation uses one moving underline, never individual pills. */
+.mobile-nav-controls{display:contents}.mobile-current{display:none}
+.nav-links{position:relative}
+.nav-links::after{content:"";position:absolute;bottom:2px;left:var(--nav-indicator-left,0);width:var(--nav-indicator-width,0);height:1px;background:var(--off-white);opacity:.9;transform:scaleX(.58);transform-origin:center;transition:left .48s cubic-bezier(.16,1,.3,1),width .48s cubic-bezier(.16,1,.3,1),transform .38s ease}
+.nav-links:focus-within::after,.nav-links:hover::after{transform:scaleX(.72)}
+.nav-link,.nav-link:hover,.nav-link.active,.nav-cta,.nav-cta:hover,.nav-cta.active{border-radius:0;background:transparent!important;box-shadow:none}
+.nav-link{position:relative;color:rgba(255,249,239,.68)}
+.nav-link:hover,.nav-link.active{color:var(--off-white)}
+.invitation-replay{min-height:36px;padding:.72rem .82rem;border:0!important;border-radius:0!important;color:rgba(255,249,239,.68);background:transparent!important;box-shadow:none!important}
+.invitation-replay:hover,.invitation-replay:focus-visible{color:var(--off-white);transform:translateY(-1px)}
+
+/* Every interactive accent resolves to a neutral true mocha. */
+.button--clay,.check-in-card .button,.enter-site{border-color:var(--mocha)!important;background:var(--mocha)!important;color:var(--off-white)!important}
+.button--clay:hover,.check-in-card .button:hover,.enter-site:hover{border-color:var(--mocha-deep)!important;background:var(--mocha-deep)!important}
+.destination-tab.active,.choice input:checked+label,.accordion-item.open .accordion-plus,.week-item--highlight{border-color:var(--mocha)!important;background:var(--mocha)!important;color:var(--off-white)!important}
+.text-link,.accordion-item.open .accordion-label{color:var(--mocha-deep)}
+.check-in-card .button{box-shadow:0 12px 24px rgba(52,38,31,.22)}
+
+/* Welcome becomes a tactile stationery moment with live bilingual copy. */
+.welcome-section{min-height:auto;padding:clamp(68px,7vw,108px) 0 clamp(104px,9vw,142px);background:var(--paper)}
+.welcome-inner{width:100%}
+.welcome-card{position:relative;width:min(80%,1024px);aspect-ratio:3/2;margin-inline:auto;overflow:visible;transition:transform .55s cubic-bezier(.16,1,.3,1)}
+.welcome-card picture,.welcome-card img{display:block;width:100%;height:100%}
+.welcome-card img{object-fit:contain;filter:drop-shadow(0 28px 27px rgba(52,38,31,.24))}
+.welcome-card::after{display:none}
+.welcome-card .welcome-title{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+.welcome-copy{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+@media(hover:hover) and (pointer:fine){.welcome-card:hover{transform:translateY(-9px)}.welcome-card:hover img{filter:drop-shadow(0 38px 34px rgba(52,38,31,.3))}}
+
+/* Use the new architectural drapery scene without plants. */
+.save-date{--drapery-arch:clamp(118px,12vw,178px);isolation:isolate;background:transparent}
+.save-date::after{content:"";position:absolute;z-index:0;top:calc(var(--drapery-arch) * -1);right:0;bottom:0;left:0;border-radius:50% 50% 0 0 / var(--drapery-arch) var(--drapery-arch) 0 0;background-color:#3c3028;background-image:linear-gradient(180deg,rgba(38,29,24,.16),rgba(38,29,24,.52)),url("save-date-drapery-v2.png");background-position:center 52%;background-size:cover;background-repeat:no-repeat;background-blend-mode:normal;pointer-events:none}
+.save-date::before{z-index:1}
+.save-date-inner{z-index:2}
+.save-date .eyebrow,.save-date-day{color:rgba(255,249,239,.78)}
+
+/* Footer and logo surfaces stay within the same mocha/cream pair. */
+.footer{color:var(--off-white);background:var(--mocha-deep)}
+.footer-signoff{border-left-color:rgba(255,249,239,.18)}
+
+@media(max-width:720px){
+  .site-header{padding-left:13px;background:rgba(52,38,31,.46);border-color:rgba(255,249,239,.18)}
+  .site-header:hover,.site-header:focus-within,.site-header.scrolled,.menu-open .site-header{background:rgba(52,38,31,.9)}
+  .mobile-nav-controls{display:flex;align-items:center;gap:11px;margin-left:auto}
+  .mobile-current{display:block;max-width:150px;overflow:hidden;color:var(--off-white);font-family:var(--sans);font-size:.59rem;font-weight:650;letter-spacing:.13em;text-overflow:ellipsis;text-transform:uppercase;white-space:nowrap;opacity:.82;transform:none;transition:opacity .2s ease,transform .28s cubic-bezier(.16,1,.3,1)}
+  .mobile-current.is-changing{opacity:0;transform:translateY(5px)}
+  .menu-toggle{border:1px solid rgba(255,249,239,.15);background:rgba(255,249,239,.06)}
+  .nav-links{position:fixed;top:78px;right:12px;left:12px;gap:0;padding:12px 18px 14px;border:1px solid rgba(73,54,44,.16);border-radius:24px;color:var(--mocha-deep);background:rgba(248,241,232,.98);box-shadow:0 22px 58px rgba(32,23,18,.3)}
+  .nav-links::after{display:none}
+  .nav-link,.nav-link:hover,.nav-link.active,.nav-cta,.nav-cta:hover,.nav-cta.active,.invitation-replay{position:relative;width:100%;min-height:48px;padding:15px 4px;border-bottom:1px solid rgba(73,54,44,.12)!important;color:rgba(52,38,31,.68);text-align:left;transform:none}
+  .nav-link:hover,.nav-link.active{color:var(--mocha-deep)}
+  .nav-link.active::after{content:"";position:absolute;bottom:9px;left:4px;width:34px;height:1px;background:var(--mocha);animation:mobile-nav-line .42s cubic-bezier(.16,1,.3,1) both}
+  .invitation-replay{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase}
+  .language-toggle{justify-self:start;margin-top:10px;border-color:rgba(73,54,44,.18);color:var(--mocha-deep);background:rgba(73,54,44,.04)}
+  @keyframes mobile-nav-line{from{width:0;opacity:0}to{width:34px;opacity:1}}
+
+  .welcome-section{padding:52px 0 84px}
+  .welcome-card{width:100%;aspect-ratio:1122/1402}
+  .save-date{--drapery-arch:clamp(88px,25vw,124px);background:transparent}
+  .footer{background:var(--mocha-deep)}
+}
+
+/* Sculpted venue and dress cards, followed by one printed celebration card. */
+.wedding-details{background:var(--ivory)}
+.details-heading .section-title{display:flex;align-items:baseline;justify-content:center;gap:.13em;letter-spacing:-.055em;text-transform:none}
+.details-heading .section-title em{color:var(--mocha);font-family:var(--script);font-size:.82em;font-style:normal;font-weight:400;letter-spacing:-.06em}
+.details-heading .section-title span{color:var(--mocha-deep);font-size:.84em;text-transform:uppercase}
+.detail-cards{width:min(100%,1040px);gap:clamp(18px,3vw,34px)}
+.detail-card{position:relative;min-height:370px;overflow:hidden;isolation:isolate;align-content:center;padding:62px 42px 52px;border:0!important;color:var(--off-white);box-shadow:0 26px 42px rgba(52,38,31,.22);transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s ease!important}
+.detail-card::before{content:"";position:absolute;inset:13px;z-index:-1;border:1px solid rgba(255,249,239,.26);border-radius:inherit;opacity:.8}
+.detail-card::after{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(circle at 30% 22%,rgba(255,249,239,.11),transparent 30%),linear-gradient(135deg,rgba(255,249,239,.06),transparent 45%);pointer-events:none}
+.detail-card:hover{transform:translateY(-10px) rotate(-.45deg);box-shadow:0 34px 58px rgba(52,38,31,.29)}
+.detail-card--venue{border-radius:52% 48% 28px 28px / 122px 122px 28px 28px;background:linear-gradient(145deg,#5b4437,#34261f 72%)}
+.detail-card--dress{border-radius:28px 28px 52% 48% / 28px 28px 122px 122px;background:linear-gradient(145deg,#777960,#454937 74%)}
+.detail-card .detail-label{color:rgba(255,249,239,.72)}
+.detail-card h3,.detail-card p,.detail-card .detail-meta{color:var(--off-white)}
+.detail-card h3{font-size:clamp(2.3rem,4vw,3.65rem);line-height:.92}
+.venue-link{color:inherit;text-decoration:none}
+.venue-link:hover{color:#fff}
+.detail-card .text-link{display:inline-flex;align-items:center;gap:.45rem;margin-top:.7rem;padding:.68rem 1rem;border:1px solid rgba(255,249,239,.34);border-radius:999px;color:var(--off-white);font-family:var(--sans);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:background .25s ease,transform .25s ease}
+.detail-card .text-link:hover{background:rgba(255,249,239,.12);transform:translateY(-2px)}
+.detail-swatches{gap:11px;margin-top:1.45rem}
+.detail-swatches span{width:31px;height:31px;border:3px solid rgba(255,249,239,.8);box-shadow:0 3px 0 rgba(0,0,0,.12),0 0 0 1px rgba(35,25,18,.22);transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.detail-swatches span:hover{transform:translateY(-5px) scale(1.1)}
+
+.celebration-section{padding:0;background:var(--paper)}
+.celebration-shell{position:relative;overflow:hidden;padding:clamp(86px,9vw,124px) clamp(24px,8vw,100px) clamp(80px,9vw,118px);color:var(--off-white);background:var(--mocha-deep);isolation:isolate}
+.celebration-shell::before{content:"";position:absolute;z-index:-1;top:0;right:0;left:0;height:clamp(225px,26vw,350px);border-radius:0 0 50% 50% / 0 0 38% 38%;background:linear-gradient(135deg,#624b3d,#4d392e)}
+.celebration-heading{position:relative;margin:0 auto clamp(64px,8vw,100px);text-align:center}
+.celebration-heading .section-title{display:flex;align-items:baseline;justify-content:center;gap:.12em;margin:0;color:var(--off-white);text-transform:uppercase}
+.celebration-heading .section-title span{font-family:var(--serif);font-size:clamp(3rem,6.4vw,6.2rem);letter-spacing:-.045em}
+.celebration-heading .section-title em{font-family:var(--script);font-size:clamp(4.7rem,9.2vw,8.5rem);font-style:normal;font-weight:400;letter-spacing:-.07em;text-transform:none}
+.celebration-list--simple{position:relative;width:min(100%,800px);margin:auto}
+.celebration-list--simple .celebration-event{grid-template-columns:54px 105px 1fr;gap:20px;min-height:124px;padding:26px 6px;border-color:rgba(255,249,239,.22)}
+.celebration-list--simple .event-icon{width:42px;height:42px;border-color:rgba(255,249,239,.28);color:#e6d2bd;font-size:1rem}
+.celebration-list--simple .celebration-event time{color:#dfc9b2}
+.celebration-list--simple .celebration-event h3{color:var(--off-white);font-size:clamp(1.9rem,3.3vw,3rem);text-transform:uppercase}
+.celebration-list--simple .celebration-event p{color:rgba(255,249,239,.72)}
+.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+
+@media(max-width:720px){
+  .details-heading{margin-bottom:34px}
+  .details-heading .section-title{font-size:clamp(3.5rem,17vw,5.2rem)}
+  .detail-cards{gap:18px}
+  .detail-card{min-height:330px;padding:55px 28px 46px}
+  .detail-card--venue{border-radius:52% 48% 25px 25px / 105px 105px 25px 25px}
+  .detail-card--dress{border-radius:25px 25px 52% 48% / 25px 25px 105px 105px}
+  .celebration-shell{padding:78px 20px 66px}
+  .celebration-shell::before{height:230px;border-radius:0 0 50% 50% / 0 0 20% 20%}
+  .celebration-heading{margin-bottom:64px}
+  .celebration-heading .section-title span{font-size:clamp(2.6rem,12vw,3.7rem)}
+  .celebration-heading .section-title em{font-size:clamp(4.2rem,18vw,5.8rem)}
+  .celebration-list--simple .celebration-event{grid-template-columns:40px 70px 1fr;gap:9px;min-height:102px;padding:19px 0}
+  .celebration-list--simple .event-icon{width:33px;height:33px;font-size:.75rem}
+  .celebration-list--simple .celebration-event time{font-size:.49rem;letter-spacing:.1em}
+  .celebration-list--simple .celebration-event h3{font-size:1.42rem}
+  .celebration-list--simple .celebration-event p{font-size:.84rem}
+}
+
+/* Final sculptural pass: the seal bridges the portrait and simple Welcome copy. */
+.hero--image-only{position:relative;overflow:visible;z-index:2}
+.hero-seal{position:absolute;z-index:4;bottom:0;left:50%;width:clamp(132px,13vw,190px);height:auto;filter:drop-shadow(0 12px 10px rgba(27,16,11,.28));transform:translate(-50%,48%);transition:transform .45s cubic-bezier(.16,1,.3,1),filter .45s ease}
+.hero-seal:hover{filter:drop-shadow(0 18px 14px rgba(27,16,11,.33));transform:translate(-50%,43%)}
+.hero::before{background-image:url("sean-valeria-coast-mood-v2.png")}
+.hero-seal:hover{filter:drop-shadow(0 20px 16px rgba(27,16,11,.34));animation:seal-pop .48s cubic-bezier(.16,1,.3,1) both}
+@keyframes seal-pop{0%{transform:translate(-50%,48%) scale(1)}58%{transform:translate(-50%,39%) scale(1.14)}100%{transform:translate(-50%,43%) scale(1.08)}}
+.welcome-section{position:relative;z-index:1;min-height:auto;padding:clamp(150px,14vw,210px) clamp(24px,7vw,96px) clamp(145px,13vw,195px);background:var(--paper)}
+.welcome-inner{display:grid;justify-items:center;width:min(100%,660px);margin-inline:auto;text-align:center}
+.welcome-card{display:none}
+.welcome-title{position:static!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;overflow:visible!important;clip:auto!important;clip-path:none!important;white-space:normal!important;color:var(--mocha);font-family:var(--script);font-size:clamp(5.8rem,12vw,9.6rem);font-weight:400;letter-spacing:-.055em;line-height:.72;text-transform:none}
+.welcome-monogram{display:block;width:clamp(62px,6vw,88px);height:auto;margin:clamp(22px,2.5vw,34px) 0 0;object-fit:contain}
+.welcome-copy{position:static!important;width:auto!important;height:auto!important;max-width:550px;margin:clamp(34px,4vw,50px) auto 0!important;padding:0!important;overflow:visible!important;clip:auto!important;clip-path:none!important;color:var(--mocha-deep);font-size:clamp(1.06rem,1.6vw,1.3rem);line-height:1.55;white-space:normal!important}
+
+/* The two details cards share one top-curved silhouette and overlap as a pair. */
+.detail-cards{display:flex;align-items:center;justify-content:center;gap:0;width:min(100%,900px);padding:12px 30px 40px}
+.detail-card{flex:0 1 530px;border-radius:52% 48% 28px 28px / 122px 122px 28px 28px!important}
+.detail-card--venue{z-index:1;transform:translateX(25px) translateY(-8px);background:linear-gradient(145deg,#5b4437,#34261f 72%)}
+.detail-card--dress{z-index:2;transform:translateX(-25px) translateY(24px);background:linear-gradient(145deg,#777960,#454937 74%)}
+.detail-card:hover,.detail-card--venue:hover,.detail-card--dress:hover{z-index:5;transform:translateY(-16px) scale(1.018);box-shadow:0 38px 62px rgba(52,38,31,.31)}
+
+/* A high-left, low-right sweep replaces the hard division into Celebration. */
+.celebration-section{position:relative;isolation:isolate;padding:150px 0 0;background:var(--ivory)}
+.celebration-swoop{position:absolute;z-index:0;top:0;left:0;display:block;width:100%;height:170px;overflow:visible;pointer-events:none}
+.celebration-swoop path{fill:var(--mocha-deep)}
+.celebration-shell{z-index:1;padding-top:clamp(62px,7vw,94px);background:var(--mocha-deep)}
+.celebration-shell::before{height:clamp(210px,25vw,320px);background:linear-gradient(135deg,#5a4437,#49362c)}
+.celebration-heading .section-title{gap:.13em;text-transform:none}
+.celebration-heading .section-title em{color:#e8d7c6;font-family:var(--script);font-size:clamp(4.8rem,9.2vw,8.4rem);font-style:normal;font-weight:400;letter-spacing:-.07em;text-transform:none}
+.celebration-heading .section-title span{color:var(--off-white);font-family:var(--serif);font-size:clamp(2.8rem,5.5vw,5.5rem);letter-spacing:-.045em;text-transform:uppercase}
+
+/* Gifts inherits the same curved stationery language as the former Welcome card. */
+.gifts-card{color:var(--mocha-deep)!important;background:#e9d8c2 url("gifts-stationery-card-v1.png") center/cover no-repeat!important}
+.gifts-card::before{background:linear-gradient(90deg,rgba(247,238,226,.09),rgba(247,238,226,.04))!important}
+.gifts-card::after{display:none!important}
+.gifts-content{width:min(100%,490px);margin-left:auto;padding:clamp(24px,4vw,54px);border-radius:43% 43% 28px 28px / 92px 92px 28px 28px;background:rgba(255,251,243,.42);box-shadow:0 15px 30px rgba(68,44,27,.12);backdrop-filter:blur(2px)}
+.gifts-card .eyebrow,.gifts-card .section-title,.gifts-card p,.gifts-card summary,.gifts-card .text-link{color:var(--mocha-deep)!important}
+.gifts-card .rule{border-color:rgba(73,54,44,.25)}
+
+@media(max-width:720px){
+  .hero-seal{width:124px;transform:translate(-50%,45%)}
+  .hero-seal:hover{animation-name:seal-pop-mobile}
+  .welcome-section{padding:136px 24px 120px}
+  .welcome-title{font-size:clamp(5.2rem,27vw,7.6rem)}
+  .welcome-copy{max-width:360px;margin-top:32px!important;font-size:1.08rem;line-height:1.52}
+  .detail-cards{display:grid;gap:0;padding:0 6px 30px}
+  .detail-card{width:100%;min-height:310px}
+  .detail-card--venue{z-index:1;transform:translateY(0)}
+  .detail-card--dress{z-index:2;margin-top:-20px;transform:translateY(0)}
+  .detail-card:hover,.detail-card--venue:hover,.detail-card--dress:hover{transform:translateY(-8px) scale(1.01)}
+  .celebration-section{padding-top:110px}
+  .celebration-swoop{height:122px}
+  .celebration-shell{padding:62px 20px 66px}
+  .celebration-heading .section-title em{font-size:clamp(4.3rem,19vw,5.9rem)}
+  .celebration-heading .section-title span{font-size:clamp(2.5rem,11vw,3.55rem)}
+  .gifts-content{margin-inline:auto;padding:32px 25px;background:rgba(255,251,243,.62)}
+}
+@keyframes seal-pop-mobile{0%{transform:translate(-50%,45%) scale(1)}58%{transform:translate(-50%,37%) scale(1.14)}100%{transform:translate(-50%,41%) scale(1.08)}}
+
+/* Details cards: layered double-crest silhouettes with an intentional front/back exchange. */
+.detail-cards{position:relative;width:min(100%,920px);padding:38px 38px 64px}
+.detail-card{overflow:visible;min-height:382px;border-radius:46% 54% 31% 27% / 118px 108px 36px 32px!important;will-change:transform;transition:transform .6s cubic-bezier(.16,1,.3,1),box-shadow .6s ease,z-index 0s linear .18s!important}
+.detail-card>*{position:relative;z-index:2}
+.detail-card::before{z-index:1;inset:14px;border-radius:inherit}
+.detail-card::after{top:-31px;right:14%;bottom:auto;left:auto;z-index:0;width:42%;height:68px;border-radius:70% 60% 16px 16px / 64px 64px 16px 16px;background:inherit;box-shadow:0 -2px 0 rgba(255,249,239,.08);pointer-events:none}
+.detail-card--venue{z-index:3;transform:translateX(40px) translateY(-14px) rotate(-1deg)}
+.detail-card--dress{z-index:2;transform:translateX(-40px) translateY(22px) rotate(1deg);border-radius:54% 46% 27% 31% / 108px 118px 32px 36px!important}
+.detail-card--venue:hover{z-index:5;transform:translateX(32px) translateY(-28px) rotate(-1.6deg) scale(1.018)}
+.detail-card--dress:hover{z-index:6;transform:translateX(-32px) translateY(-20px) rotate(1.6deg) scale(1.025)}
+.detail-cards:has(.detail-card--dress:hover) .detail-card--venue{z-index:1;transform:translateX(48px) translateY(14px) rotate(-2deg) scale(.97);box-shadow:0 17px 31px rgba(52,38,31,.17)}
+
+/* The celebration is a softly contained cocoa panel with a smaller opening sweep. */
+.celebration-section{padding-top:122px;border-radius:0 0 46px 46px;overflow:hidden;background:var(--ivory)}
+.celebration-swoop{height:130px}
+.celebration-shell{padding:clamp(58px,6vw,82px) clamp(22px,6vw,78px) clamp(72px,8vw,104px);border-radius:28px 28px 46px 46px;overflow:hidden}
+.celebration-shell::before{height:clamp(175px,20vw,250px);border-radius:0 0 46% 46% / 0 0 30% 30%}
+.celebration-list--printed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,26px);width:min(100%,1080px);margin:auto}
+.celebration-list--printed .celebration-event{display:block;min-height:0;padding:0;border:0;background:none;box-shadow:none;transform:translateY(0);transition:transform .45s cubic-bezier(.16,1,.3,1),filter .45s ease}
+.celebration-list--printed .celebration-event:nth-child(2){transform:translateY(28px)}
+.celebration-list--printed .celebration-event img{display:block;width:100%;height:auto;border-radius:24px;box-shadow:0 18px 32px rgba(16,10,7,.28)}
+.celebration-list--printed .celebration-event:hover{filter:brightness(1.035);transform:translateY(-10px)}
+.celebration-list--printed .celebration-event:nth-child(2):hover{transform:translateY(18px)}
+
+@media(max-width:720px){
+  .detail-cards{padding:28px 18px 46px}
+  .detail-card{min-height:320px;border-radius:46% 54% 30% 27% / 100px 94px 30px 28px!important}
+  .detail-card::after{top:-24px;width:44%;height:52px}
+  .detail-card--venue{z-index:3;transform:translateY(0) rotate(-.7deg)}
+  .detail-card--dress{z-index:2;margin-top:-48px;transform:translateY(0) rotate(.7deg)}
+  .detail-card--venue:hover{transform:translateY(-12px) rotate(-1.2deg) scale(1.01)}
+  .detail-card--dress:hover{transform:translateY(-16px) rotate(1.2deg) scale(1.012)}
+  .detail-cards:has(.detail-card--dress:hover) .detail-card--venue{transform:translateY(14px) rotate(-1.4deg) scale(.98)}
+  .celebration-section{padding-top:94px;border-radius:0 0 34px 34px}
+  .celebration-swoop{height:100px}
+  .celebration-shell{padding:52px 16px 60px;border-radius:22px 22px 34px 34px}
+  .celebration-shell::before{height:152px}
+  .celebration-list--printed{grid-template-columns:1fr;gap:20px;width:min(100%,410px)}
+  .celebration-list--printed .celebration-event:nth-child(2){transform:none}
+  .celebration-list--printed .celebration-event:hover,.celebration-list--printed .celebration-event:nth-child(2):hover{transform:translateY(-6px)}
+}
+
+/* Final responsive corrections: a centered Welcome, original portrait, and live timeline on paper. */
+.hero--image-only{border-radius:34px;overflow:visible}
+.hero--image-only::before,.hero--image-only::after{border-radius:inherit}
+.hero::before{background-image:url("sean-valeria-coast.webp")}
+.hero-seal{width:clamp(100px,8vw,132px);transform:translate(-50%,50%)}
+@keyframes seal-pop{0%{transform:translate(-50%,50%) scale(1)}58%{transform:translate(-50%,41%) scale(1.14)}100%{transform:translate(-50%,45%) scale(1.08)}}
+.welcome-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.welcome-title{width:100%;text-align:center!important}
+.welcome-copy{text-align:center}
+
+.celebration-list--printed{display:none}
+.celebration-list--live{position:relative;width:min(100%,1080px);margin:auto;aspect-ratio:3/2}
+.timeline-paper{display:block;width:100%;height:100%;border-radius:25px;object-fit:cover;box-shadow:0 18px 32px rgba(16,10,7,.28)}
+.timeline-events{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);align-items:stretch;padding:clamp(28px,4.2vw,70px) clamp(18px,3vw,52px)}
+.timeline-events .celebration-event{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;padding:clamp(18px,2.5vw,38px);border:0;color:var(--mocha-deep);text-align:center;transform:none!important}
+.timeline-events .celebration-event+.celebration-event::before{content:"";position:absolute;top:18%;bottom:18%;left:0;width:1px;background:rgba(73,54,44,.28)}
+.timeline-events time{display:block;margin-bottom:1rem;color:#765d4d;font-family:var(--sans);font-size:clamp(.55rem,.75vw,.7rem);font-weight:700;letter-spacing:.17em;text-transform:uppercase}
+.timeline-events h3{margin:0;color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(1.45rem,2.7vw,3rem);font-weight:400;line-height:.95;text-transform:uppercase}
+.timeline-events p{max-width:230px;margin:1rem 0 0;color:#624d40;font-size:clamp(.77rem,1vw,1rem);line-height:1.42}
+
+@media(max-width:720px){
+  .hero--image-only{border-radius:27px 27px 30px 30px}
+  .hero-seal{width:124px;transform:translate(-50%,50%)}
+  @keyframes seal-pop-mobile{0%{transform:translate(-50%,50%) scale(1)}58%{transform:translate(-50%,41%) scale(1.14)}100%{transform:translate(-50%,45%) scale(1.08)}}
+  .celebration-list--live{aspect-ratio:auto;padding:14px;border-radius:22px;background:#f4eadc url("timeline-paper-panel-v1.png") center/cover no-repeat;box-shadow:0 15px 28px rgba(16,10,7,.25)}
+  .timeline-paper{display:none}
+  .timeline-events{position:static;display:grid;grid-template-columns:1fr;padding:0}
+  .timeline-events .celebration-event{min-height:150px;padding:30px 22px}
+  .timeline-events .celebration-event+.celebration-event::before{top:0;right:16%;bottom:auto;left:16%;width:auto;height:1px}
+  .timeline-events h3{font-size:2rem}
+}
+
+/* Real blank stationery assets now carry the Details cards; live site copy remains above them. */
+.detail-card{display:flex;flex-direction:column;justify-content:center;min-height:clamp(470px,42vw,610px);padding:clamp(72px,7vw,104px) clamp(44px,5vw,70px) clamp(48px,5vw,70px);border-radius:0!important;background:none!important;box-shadow:none!important}
+.detail-card::before,.detail-card::after{display:none}
+.detail-card-art{position:absolute;z-index:0;inset:0;display:block;width:100%;height:100%;object-fit:fill;filter:drop-shadow(0 18px 22px rgba(52,38,31,.17));pointer-events:none}
+.detail-card>*:not(.detail-card-art){position:relative;z-index:1}
+.detail-card--venue,.detail-card--dress{background:none!important}
+.detail-card--venue{transform:translateX(40px) translateY(-14px) rotate(-1deg)}
+.detail-card--dress{transform:translateX(-40px) translateY(22px) rotate(1deg)}
+.detail-card:hover{box-shadow:none!important}
+.welcome-copy{margin-top:clamp(18px,2vw,28px)!important;line-height:1.58}
+
+@media(max-width:720px){
+  .detail-card{min-height:440px;padding:78px 48px 50px}
+  .detail-card-art{filter:drop-shadow(0 13px 17px rgba(52,38,31,.16))}
+  .welcome-copy{margin-top:22px!important;line-height:1.6}
+}
+
+/* Refined details interactions and a clean mobile stack. */
+.detail-card--venue:hover{transform:translateX(40px) translateY(-14px) rotate(-1deg)}
+.detail-card--dress:hover{transform:translateX(-40px) translateY(22px) rotate(1deg)}
+.detail-card--venue:hover,.detail-card--dress:hover{animation:detail-card-pop .34s cubic-bezier(.16,1,.3,1) both}
+@keyframes detail-card-pop{0%{scale:1}60%{scale:1.025}100%{scale:1.012}}
+.detail-card .text-link{display:block;width:max-content;margin:1.15rem auto 0!important;padding:0!important;border:0!important;border-radius:0!important;color:var(--off-white);background:transparent!important;box-shadow:none!important;text-align:center}
+.detail-card .text-link:hover{color:#fff;background:transparent!important;transform:translateY(-3px) scale(1.035)}
+.detail-card .text-link span{display:inline-block;transition:transform .25s ease}
+.detail-card .text-link:hover span{transform:translate(3px,-2px)}
+
+@media(max-width:720px){
+  .detail-cards{gap:20px!important}
+  .detail-card--venue,.detail-card--dress{margin-top:0!important;transform:none!important}
+  .detail-card--venue:hover,.detail-card--dress:hover{transform:none!important}
+}
+
+/* Keep the celebration sweep continuous and show the full eight-part itinerary. */
+.celebration-shell{border-radius:0 0 46px 46px}
+.celebration-shell::before{display:none}
+.celebration-list--live{aspect-ratio:3 / 2}
+.timeline-events{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  padding:clamp(24px,3vw,50px);
+}
+.timeline-events .celebration-event{min-height:0;padding:clamp(12px,1.5vw,24px)}
+.timeline-events .celebration-event::before{display:none!important}
+.timeline-events .celebration-event:not(:nth-child(4n + 1)){border-left:1px solid rgba(73,54,44,.24)}
+.timeline-events .celebration-event:nth-child(-n + 4){border-bottom:1px solid rgba(73,54,44,.24)}
+.timeline-icon{display:grid;width:30px;height:30px;margin-bottom:.55rem;place-items:center;color:#765d4d;font-size:1.3rem;line-height:1}
+.timeline-events time{margin-bottom:.38rem;font-family:var(--serif);font-size:clamp(.76rem,1vw,.98rem);letter-spacing:.05em}
+.timeline-events h3{font-family:var(--script);font-size:clamp(1.45rem,2.35vw,2.5rem);line-height:.9;text-transform:none}
+.timeline-events p{margin-top:.55rem;font-size:clamp(.66rem,.82vw,.86rem);line-height:1.32}
+
+@media(max-width:720px){
+  .celebration-section{padding-top:94px}
+  .celebration-swoop{height:102px}
+  .celebration-shell{border-radius:0 0 34px 34px}
+  .celebration-list--live{aspect-ratio:auto}
+  .timeline-events{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr))}
+  .timeline-events .celebration-event{min-height:168px;padding:22px 12px;border:0}
+  .timeline-events .celebration-event:not(:nth-child(2n + 1)){border-left:1px solid rgba(73,54,44,.24)}
+  .timeline-events .celebration-event:nth-child(-n + 6){border-bottom:1px solid rgba(73,54,44,.24)}
+  .timeline-events h3{font-size:clamp(1.55rem,7.4vw,2rem)}
+  .timeline-events p{font-size:.72rem}
+}
+
+/* A quiet seal response that keeps the portrait-to-Welcome bridge in place. */
+.hero-seal:hover{filter:drop-shadow(0 15px 12px rgba(27,16,11,.3));animation:seal-pop-subtle .36s cubic-bezier(.16,1,.3,1) both}
+@keyframes seal-pop-subtle{
+  0%{transform:translate(-50%,50%) scale(1)}
+  60%{transform:translate(-50%,47%) scale(1.045)}
+  100%{transform:translate(-50%,48%) scale(1.018)}
+}
+@media(max-width:720px){
+  .hero-seal:hover{animation:seal-pop-subtle-mobile .36s cubic-bezier(.16,1,.3,1) both}
+  @keyframes seal-pop-subtle-mobile{
+    0%{transform:translate(-50%,50%) scale(1)}
+    60%{transform:translate(-50%,47%) scale(1.04)}
+    100%{transform:translate(-50%,48%) scale(1.015)}
+  }
+}
+
+/* Details becomes a quiet typographic split; each side reveals its editorial image on hover. */
+.wedding-details{background:var(--ivory)}
+.details-heading{margin-bottom:clamp(48px,6vw,76px)}
+.details-heading .eyebrow{display:none}
+.details-pair{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  width:min(100%,1060px);
+  min-height:clamp(350px,35vw,500px);
+  margin:0 auto;
+  overflow:hidden;
+}
+.details-pair::before{
+  content:"";
+  position:absolute;
+  z-index:5;
+  top:12%;
+  bottom:12%;
+  left:50%;
+  width:1px;
+  background:rgba(73,54,44,.32);
+  transform:translateX(-.5px);
+  transition:opacity .32s ease;
+}
+.detail-panel{
+  position:relative;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:0;
+  padding:clamp(28px,5vw,68px);
+  color:var(--mocha-deep);
+  text-align:center;
+  background:var(--ivory);
+  transition:opacity .45s ease,transform .5s cubic-bezier(.16,1,.3,1);
+}
+.detail-panel:hover,.detail-panel:focus-visible{transform:translateY(-4px)}
+.detail-panel .detail-label{margin:0 0 1rem;color:var(--mocha);font-family:var(--sans);font-size:.66rem;font-weight:650;letter-spacing:.2em;text-transform:uppercase}
+.detail-panel h3,.detail-panel h3 a{margin:0;color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(2rem,3.4vw,3.7rem);font-weight:400;line-height:.94;text-decoration:none}
+.detail-panel p:not(.detail-label){max-width:340px;margin:1.15rem auto 0;color:var(--mocha);font-size:clamp(.9rem,1.2vw,1.05rem);line-height:1.5}
+.detail-panel .detail-meta{font-size:.88rem}
+.detail-panel .text-link{display:block;width:max-content;margin:1.15rem auto 0;padding:0!important;border:0!important;border-radius:0!important;color:var(--mocha-deep);background:transparent!important;box-shadow:none!important;font-family:var(--sans);font-size:.65rem;font-weight:650;letter-spacing:.15em;text-transform:uppercase;transition:transform .28s ease,color .28s ease}
+.detail-panel .text-link:hover{color:var(--mocha);transform:translateY(-2px)}
+.detail-panel .text-link span{display:inline-block;margin-left:.2rem}
+.detail-panel .detail-swatches{justify-content:center;margin-top:1.6rem}
+.details-hover-photo{
+  position:absolute;
+  z-index:4;
+  top:0;
+  bottom:0;
+  width:50%;
+  height:100%;
+  object-fit:cover;
+  border-radius:30px;
+  opacity:0;
+  pointer-events:none;
+  transform:scale(1.06);
+  transition:opacity .48s ease,transform .8s cubic-bezier(.16,1,.3,1);
+}
+.details-hover-photo--venue{right:0;object-position:center}
+.details-hover-photo--attire{left:0;object-position:center}
+@media(hover:hover) and (pointer:fine){
+  .details-pair:has(.detail-panel--venue:hover, .detail-panel--venue:focus-visible) .details-hover-photo--venue,
+  .details-pair:has(.detail-panel--dress:hover, .detail-panel--dress:focus-visible) .details-hover-photo--attire{opacity:1;transform:scale(1)}
+  .details-pair:has(.detail-panel--venue:hover, .detail-panel--venue:focus-visible) .detail-panel--dress,
+  .details-pair:has(.detail-panel--dress:hover, .detail-panel--dress:focus-visible) .detail-panel--venue{z-index:1;opacity:0;pointer-events:none}
+  .details-pair:has(.detail-panel--venue:hover, .detail-panel--venue:focus-visible)::before,
+  .details-pair:has(.detail-panel--dress:hover, .detail-panel--dress:focus-visible)::before{opacity:0}
+}
+@media(max-width:720px){
+  .details-pair{grid-template-columns:1fr;min-height:0}
+  .details-pair::before{top:50%;right:12%;bottom:auto;left:12%;width:auto;height:1px;transform:translateY(-.5px)}
+  .detail-panel{min-height:310px;padding:52px 26px}
+  .detail-panel h3,.detail-panel h3 a{font-size:clamp(2.2rem,11vw,3.2rem)}
+  .details-hover-photo{display:none}
+}
+
+/* Let the Welcome copy sit closer to its heading, then leave a generous quiet exit. */
+.welcome-section{padding-bottom:clamp(220px,18vw,290px)}
+.welcome-copy{margin-top:clamp(10px,1.1vw,16px)!important}
+@media(max-width:720px){
+  .welcome-section{padding-bottom:170px}
+  .welcome-copy{margin-top:12px!important}
+}
+
+/* Celebration timeline: one quiet cocoa column, with light-cream typography and rules only. */
+.celebration-list--live{width:min(100%,760px);aspect-ratio:auto}
+.timeline-paper{display:none}
+.timeline-events{
+  position:static;
+  display:block;
+  padding:0;
+  background:transparent;
+}
+.timeline-events .celebration-event{
+  display:block;
+  min-height:0;
+  padding:clamp(24px,3vw,34px) 0;
+  border:0!important;
+  border-bottom:1px solid rgba(255,249,239,.26)!important;
+  color:var(--off-white);
+  text-align:center;
+}
+.timeline-events .celebration-event:first-child{border-top:1px solid rgba(255,249,239,.26)!important}
+.timeline-icon{display:none}
+.timeline-events time{display:block;margin:0 0 .48rem;color:#ead8c5;font-family:var(--serif);font-size:clamp(1.05rem,1.6vw,1.4rem);font-weight:400;letter-spacing:.03em;text-transform:none}
+.timeline-events h3{margin:0;color:var(--off-white);font-family:var(--script);font-size:clamp(2.2rem,4vw,3.8rem);font-weight:400;line-height:.9;text-transform:none}
+.timeline-events p{max-width:none;margin:.6rem 0 0;color:rgba(255,249,239,.78);font-size:clamp(.78rem,1.05vw,.96rem);line-height:1.35}
+@media(max-width:720px){
+  .celebration-list--live{padding:0;border-radius:0;background:transparent;box-shadow:none}
+  .timeline-events{display:block;padding:0}
+  .timeline-events .celebration-event{min-height:0;padding:25px 14px;border-bottom:1px solid rgba(255,249,239,.26)!important}
+  .timeline-events .celebration-event:first-child{border-top:1px solid rgba(255,249,239,.26)!important}
+  .timeline-events h3{font-size:clamp(2.35rem,12vw,3rem)}
+  .timeline-events p{font-size:.82rem}
+}
+
+
+/* Compact the celebration schedule into paired time/title rows with a short dotted rule. */
+.timeline-events .celebration-event{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto auto;
+  justify-content:center;
+  align-items:center;
+  column-gap:.7rem;
+  padding:clamp(11px,1.5vw,16px) 0 clamp(16px,2vw,22px);
+  border:0!important;
+}
+.timeline-events .celebration-event:first-child{border-top:0!important}
+.timeline-events .celebration-event:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  bottom:5px;
+  left:50%;
+  width:clamp(108px,13vw,150px);
+  height:4px;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(255,249,239,.7) 0 1.5px,transparent 1.8px),
+    linear-gradient(to right,rgba(255,249,239,.38) 0 calc(50% - 8px),transparent calc(50% - 8px) calc(50% + 8px),rgba(255,249,239,.38) calc(50% + 8px) 100%);
+  background-position:center,center;
+  background-size:4px 4px,100% 1px;
+  background-repeat:no-repeat;
+  transform:translateX(-50%);
+}
+.timeline-events time{display:block;margin:0;color:#ead8c5;font-size:clamp(1rem,1.45vw,1.28rem);line-height:1}
+.timeline-events h3{margin:0;font-size:clamp(2rem,3.25vw,3.1rem);line-height:1}
+.timeline-events p{grid-column:1 / -1;margin:.18rem 0 0;font-size:clamp(.74rem,.94vw,.88rem)}
+@media(max-width:720px){
+  .timeline-events .celebration-event{column-gap:.48rem;padding:12px 10px 20px}
+  .timeline-events .celebration-event:not(:last-child)::after{bottom:4px;width:104px}
+  .timeline-events time{font-size:.95rem}
+  .timeline-events h3{font-size:clamp(1.85rem,9.5vw,2.45rem)}
+  .timeline-events p{margin-top:.28rem;font-size:.78rem}
+}
+
+
+/* Travel: one editorial chapter — a week's itinerary, Mexico City, and Tepoztlán — stacked on paper. */
+.travel-section{position:relative;z-index:2;margin:-28px 0 0!important;padding:clamp(72px,7vw,96px) clamp(24px,7vw,96px) clamp(72px,7vw,96px)!important;border-radius:42px 42px 0 0!important;background:var(--paper)!important;overflow:hidden}
+.travel-section::before,.travel-section::after{display:none!important}
+.travel-heading{width:min(100%,1080px);margin:0 auto clamp(32px,4vw,52px);text-align:center}
+.travel-heading .section-title{display:flex;flex-direction:column;align-items:center;gap:.55rem;color:var(--mocha-deep);text-transform:none}
+.travel-heading .section-title em{color:var(--mocha-deep);font-family:var(--script);font-size:clamp(4rem,7.5vw,6.2rem);font-style:normal;font-weight:400;letter-spacing:-.06em;line-height:.85}
+.travel-heading .section-title span{color:var(--mocha);font-family:var(--serif);font-size:clamp(.95rem,1.4vw,1.25rem);letter-spacing:.34em;text-transform:uppercase}
+
+.travel-chapter{position:relative;width:min(100%,1080px);margin:0 auto;scroll-margin-top:112px}
+.travel-chapter+.travel-chapter{margin-top:clamp(52px,6vw,76px);padding-top:clamp(40px,4.5vw,56px);border-top:1px solid rgba(73,54,44,.18)}
+.chapter-title{margin:0;color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(2.4rem,4vw,3.6rem);font-weight:400;letter-spacing:-.04em;line-height:.94;text-transform:uppercase}
+.chapter-title em{color:var(--mocha);font-family:var(--script);font-size:1.18em;font-style:normal;font-weight:400;letter-spacing:-.06em;text-transform:none}
+.chapter-copy{max-width:440px;margin:1rem 0 0;color:#5a4739;font-size:clamp(.94rem,1.1vw,1.02rem);line-height:1.5}
+.chapter-copy p{margin:0 0 .9rem}
+.map-note{color:#7a6557;font-size:.9em;font-style:italic}
+
+/* Chapter 1 — a week in México */
+.travel-chapter--schedule{display:grid;grid-template-columns:minmax(220px,.62fr) minmax(0,1.38fr);gap:clamp(32px,5vw,72px);align-items:start}
+.travel-chapter--schedule>*{position:relative;z-index:1}
+.week-intro{position:sticky;top:120px;align-self:start}
+.week-intro .eyebrow{margin-bottom:1.1rem;color:var(--mocha)}
+.week-intro .chapter-title{font-size:clamp(2.8rem,4.6vw,4.2rem);letter-spacing:-.045em;text-transform:none}
+.week-days{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(20px,3vw,40px);margin:0;padding:0;list-style:none}
+.week-day{display:grid;grid-template-columns:58px 1fr;gap:14px;align-items:start;padding:16px 6px;border-top:1px solid rgba(73,54,44,.2);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.week-day time{display:grid;justify-items:start;color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(1.9rem,2.4vw,2.3rem);letter-spacing:-.04em;line-height:.9}
+.week-day time small{margin-bottom:.25rem;color:var(--mocha);font-family:var(--sans);font-size:.56rem;font-weight:650;letter-spacing:.2em;text-transform:uppercase}
+.week-day h4{margin:.15rem 0 0;color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(1.25rem,1.6vw,1.5rem);font-weight:400;line-height:1.05}
+.week-day p{max-width:360px;margin:.3rem 0 0;color:#5f4c3f;font-size:.86rem;line-height:1.4}
+.week-day:not(.week-day--wedding):hover{transform:translateX(6px)}
+.week-day--wedding{margin:4px -12px;padding:18px 18px;border:0;border-radius:18px;color:var(--off-white);background:var(--mocha);box-shadow:0 22px 44px rgba(52,38,31,.22)}
+.week-day--wedding time,.week-day--wedding time small,.week-day--wedding h4{color:var(--off-white)}
+.week-day--wedding h4{margin-top:0;font-family:var(--script);font-size:clamp(1.7rem,2.4vw,2.2rem);letter-spacing:-.04em}
+.week-day--wedding p{color:rgba(255,249,239,.8)}
+.week-day--wedding .text-link{margin-top:.5rem;font-size:.58rem;color:var(--off-white);text-decoration-color:rgba(255,249,239,.4)}
+
+/* Chapter 2 — Mexico City spread */
+.city-spread{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,5vw,70px);align-items:center}
+.city-copy .button,.tepoz-copy .button{margin-top:1.2rem}
+.city-photos{position:relative;display:grid;padding:0 clamp(80px,12vw,160px) clamp(40px,5vw,60px) 0}
+.city-photo{margin:0;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.city-photo:hover{transform:translateY(-6px)}
+.city-photo img{display:block;width:100%;object-fit:cover}
+.city-photo--wide img{height:clamp(220px,22vw,290px);border-radius:28px;box-shadow:0 24px 50px rgba(52,38,31,.18)}
+.city-photo--arch img{height:clamp(220px,24vw,310px);border-radius:999px 999px 26px 26px;box-shadow:0 26px 54px rgba(52,38,31,.24)}
+.city-photos .city-photo--arch{position:absolute;right:0;bottom:0;width:clamp(160px,18vw,230px)}
+.city-photo--wide figcaption{max-width:52%}
+.city-photo figcaption{display:grid;gap:.2rem;margin-top:.85rem;color:var(--mocha);font-family:var(--sans);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase}
+.city-photo figcaption strong{color:var(--mocha-deep);font-family:var(--serif);font-size:1.08rem;font-weight:400;letter-spacing:.02em;text-transform:none}
+
+/* Practical strips — quiet columns under each city */
+.practical{display:grid;gap:clamp(24px,3vw,44px);margin-top:clamp(36px,4vw,52px);padding-top:clamp(24px,3vw,34px);border-top:1px solid rgba(73,54,44,.2)}
+.practical--city{grid-template-columns:repeat(2,minmax(0,1fr))}
+.practical--tepoz{grid-template-columns:repeat(3,minmax(0,1fr))}
+.practical-item h4{margin:0 0 .7rem;color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(1.4rem,1.9vw,1.8rem);font-weight:400;line-height:1}
+.practical-item p{margin:0 0 .6rem;color:#5f4c3f;font-size:.88rem;line-height:1.45}
+.practical-item p strong{display:block;margin-bottom:.2rem;color:var(--mocha);font-family:var(--sans);font-size:.56rem;font-weight:650;letter-spacing:.16em;text-transform:uppercase}
+.practical-item p strong+br,.practical-item--weather p br{display:none}
+.practical-item--weather p strong{margin-top:.5rem}
+.practical-item .text-link{margin-top:.5rem}
+.neighbourhoods{display:flex;flex-wrap:wrap;gap:.4rem .7rem;margin:0 0 .9rem;padding:0;list-style:none}
+.neighbourhoods li{color:var(--mocha-deep);font-family:var(--serif);font-size:1.3rem;line-height:1.1}
+.neighbourhoods li+li::before{content:"·";margin-right:.7rem;color:var(--mocha);opacity:.55}
+.practical-image{width:100%;height:120px;margin-bottom:1.1rem;border-radius:18px;object-fit:cover;box-shadow:0 14px 28px rgba(52,38,31,.14)}
+.weather-figures{display:flex;gap:clamp(18px,3vw,34px);margin:.2rem 0 1rem}
+.weather-figures span{display:block;color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(2.4rem,3.4vw,3.2rem);letter-spacing:-.04em;line-height:.9}
+.weather-figures small{display:block;margin-top:.4rem;color:var(--mocha);font-family:var(--sans);font-size:.56rem;font-weight:650;letter-spacing:.18em;text-transform:uppercase}
+
+/* Chapter 3 — Tepoztlán */
+.tepoz-panorama{position:relative;height:clamp(240px,26vw,360px);margin:0;overflow:hidden;border-radius:34px;box-shadow:0 30px 60px rgba(52,38,31,.2);isolation:isolate}
+.tepoz-panorama img{width:100%;height:100%;object-fit:cover;object-position:center 45%;transform:scale(1.02);transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+.tepoz-panorama:hover img{transform:scale(1.05)}
+.tepoz-panorama::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(35,21,14,.08),transparent 40%,rgba(35,21,14,.62));pointer-events:none}
+.tepoz-panorama figcaption{position:absolute;bottom:clamp(24px,3.5vw,48px);left:clamp(26px,4vw,56px);z-index:1;color:var(--off-white);text-shadow:0 2px 18px rgba(20,12,8,.45)}
+.tepoz-kicker{display:block;margin-bottom:.4rem;font-family:var(--serif);font-size:clamp(.8rem,1.1vw,1rem);letter-spacing:.3em;text-transform:uppercase}
+.tepoz-title{margin:0;font-family:var(--script);font-size:clamp(3.2rem,6vw,5.2rem);font-weight:400;letter-spacing:-.05em;line-height:.85}
+.tepoz-spread{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(32px,5vw,70px);align-items:center;margin-top:clamp(28px,3.5vw,44px)}
+.tepoz-copy .chapter-copy{margin-top:0}
+.tepoz-photos{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,26px);align-items:start}
+.tepoz-photos .city-photo--arch:last-child{margin-top:clamp(18px,3vw,32px)}
+
+@media(max-width:980px){
+  .practical--tepoz{grid-template-columns:1fr 1fr}
+  .practical-item--stay{grid-column:1/-1}
+}
+@media(max-width:720px){
+  .travel-section{margin-top:-20px!important;padding:60px 18px 64px!important;border-radius:30px 30px 0 0!important}
+  .travel-heading{margin-bottom:30px}.travel-heading .section-title em{font-size:clamp(4rem,21vw,5.6rem)}.travel-heading .section-title span{font-size:.72rem;letter-spacing:.24em}
+  .travel-chapter{scroll-margin-top:90px}.travel-chapter+.travel-chapter{margin-top:48px;padding-top:36px}
+  .chapter-title{font-size:clamp(2.4rem,11vw,3.2rem)}
+  .travel-chapter--schedule{grid-template-columns:1fr;gap:30px}
+  .week-intro{position:static}.week-intro .chapter-title{font-size:clamp(2.8rem,13vw,3.6rem)}
+  .week-days{grid-template-columns:1fr}.week-day{grid-template-columns:52px 1fr;gap:12px;padding:13px 2px}.week-day time{font-size:1.7rem}.week-day:not(.week-day--wedding):hover{transform:none}
+  .week-day--wedding{margin:4px 0;padding:16px 14px;border-radius:16px}.week-day--wedding h4{font-size:1.7rem}
+  .city-spread,.tepoz-spread{grid-template-columns:1fr;gap:26px}
+  .city-photos{gap:14px;padding:0}.city-photos .city-photo--arch{position:static;width:min(72%,260px);margin:14px auto 0}
+  .city-photo--wide img{height:200px}.city-photo--arch img{height:clamp(190px,54vw,250px)}
+  .practical--city,.practical--tepoz{grid-template-columns:1fr;gap:26px}.practical-item--stay{grid-column:auto}
+  .tepoz-panorama{height:260px;border-radius:22px}.tepoz-panorama img{object-position:52% center}.tepoz-title{font-size:clamp(3.4rem,17vw,4.6rem)}
+  .tepoz-photos{gap:12px}.tepoz-photos .city-photo--arch img{height:clamp(200px,52vw,260px)}.tepoz-photos .city-photo--arch:last-child{margin-top:28px}
+}
