@@ -1820,3 +1820,4 @@ body::before{opacity:.035}
 .check-in-card .choice input:focus-visible+label{outline:2px solid #756055;outline-offset:3px}
 .check-in-card .button{min-height:44px;margin-top:14px}
 @media(max-width:720px){.check-in{padding:52px 14px!important}.check-in-card{padding:20px 16px}.check-in-card .attendance,.check-in-card .meal-choice{gap:0 14px}}
+.check-in-card .choice label,.check-in-card .choice input:checked+label{letter-spacing:0!important;text-transform:none!important;font-family:var(--serif)!important}
