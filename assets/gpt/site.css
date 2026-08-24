@@ -1466,3 +1466,6 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
 .travel-chapter--city .chapter-title em,.travel-chapter--tepoztlan .chapter-title em{font-size:1.85em;line-height:.8}
 @media(max-width:720px){.travel-chapter--city .chapter-title,.travel-chapter--tepoztlan .chapter-title{font-size:clamp(1.7rem,7.5vw,2.2rem)}}
 .travel-chapter--city .chapter-title,.travel-chapter--tepoztlan .chapter-title{line-height:1.1}
+.city-copy .practical-item h4{font-size:.5rem;letter-spacing:.18em;margin-bottom:.35rem}
+.city-copy .practical-item p,.city-copy .neighbourhoods li{font-size:.84rem;line-height:1.35}
+.city-copy .neighbourhoods{gap:.05rem .35rem}.city-copy .neighbourhoods li+li::before{margin-right:.35rem}
