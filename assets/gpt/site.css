@@ -1469,3 +1469,6 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
 .city-copy .practical-item h4{font-size:.5rem;letter-spacing:.18em;margin-bottom:.35rem}
 .city-copy .practical-item p,.city-copy .neighbourhoods li{font-size:.84rem;line-height:1.35}
 .city-copy .neighbourhoods{gap:.05rem .35rem}.city-copy .neighbourhoods li+li::before{margin-right:.35rem}
+.city-copy .neighbourhoods{display:grid;grid-template-columns:auto auto;justify-content:start;column-gap:.4rem;row-gap:.1rem}
+.city-copy .neighbourhoods li+li::before{content:none;margin:0}
+.city-copy .neighbourhoods li:nth-child(even)::before{content:"·";margin-right:.4rem;color:var(--mocha);opacity:.55}
