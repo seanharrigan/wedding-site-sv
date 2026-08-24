@@ -1480,3 +1480,23 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
 .week-day--wedding .text-link{text-decoration:none}
 .week-day{padding:10px 6px}.week-day time{font-size:clamp(1.7rem,2.1vw,2rem)}.week-day--wedding{padding:13px 18px}
 @media(max-width:720px){.week-day{padding:9px 2px}}
+
+/* Practical notes are quiet disclosures: heading plus a "+" until opened. */
+.practical{align-items:start}
+details.practical-item summary{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:.2rem 0;list-style:none;cursor:pointer}
+details.practical-item summary::-webkit-details-marker{display:none}
+details.practical-item summary h4{margin:0;flex:1}
+details.practical-item summary .accordion-plus{flex:0 0 auto;width:26px;height:26px;border-color:rgba(73,54,44,.3);color:var(--mocha-deep);background:transparent;font-size:.95rem;line-height:1;transition:transform .35s cubic-bezier(.16,1,.3,1),background .3s ease,color .3s ease}
+details.practical-item summary:hover .accordion-plus{border-color:rgba(73,54,44,.5);background:rgba(73,54,44,.06)}
+details.practical-item[open] summary .accordion-plus{color:var(--off-white);background:var(--mocha);transform:rotate(45deg)}
+details.practical-item summary:focus-visible{outline:2px solid #756055;outline-offset:6px;border-radius:4px}
+.practical-body{padding-top:.75rem;animation:practical-in .35s ease both}
+@keyframes practical-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.practical-body .practical-image{margin:.2rem 0 .9rem}
+.practical-body p:last-child{margin-bottom:0}
+.city-copy details.practical-item summary{padding:.1rem 0}
+.city-copy details.practical-item summary h4{margin:0}
+.city-copy details.practical-item summary .accordion-plus{width:20px;height:20px;font-size:.8rem}
+.city-copy .practical-body{padding-top:.45rem}
+.city-copy .practical--city{gap:22px}
+details.practical-item summary .accordion-plus{font-size:1.1rem;border-color:rgba(73,54,44,.4)}
