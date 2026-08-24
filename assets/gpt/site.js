@@ -400,3 +400,12 @@ const updateCountdown = () => {
 
 updateCountdown();
 setInterval(updateCountdown, 1000);
+
+// Practical notes open on hover for pointer devices; click still works everywhere.
+if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('.practical .accordion-trigger').forEach((trigger) => {
+    trigger.addEventListener('mouseenter', () => {
+      if (!trigger.closest('.accordion-item').classList.contains('open')) trigger.click();
+    });
+  });
+}

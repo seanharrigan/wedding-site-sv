@@ -1712,3 +1712,24 @@ body::before{opacity:.035}
 .timeline-events p{margin-top:-.35rem}
 .check-in-card .choice label{padding:.45rem .5rem;font-size:.9rem;white-space:nowrap}
 @media(max-width:720px){.timeline-events p{margin-top:-.25rem}}
+
+/* City notes sit beneath the spread so an open panel can run the full width. */
+.travel-chapter--city .practical--city{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:clamp(24px,3vw,44px);margin-top:clamp(40px,5vw,64px)}
+.travel-chapter--city .practical-item:nth-child(1) h4{grid-column:1}
+.travel-chapter--city .practical-item:nth-child(2) h4{grid-column:2}
+.travel-chapter--city .practical-body{grid-template-columns:1fr;padding:24px 0 8px}
+.travel-chapter--city .neighbourhoods{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px clamp(20px,3vw,40px)}
+.travel-chapter--city .practical-body>p{max-width:640px;font-size:.95rem}
+
+/* No circles: a light chevron and an underline that draws in on hover. */
+.practical-item h4{position:relative}
+.practical-item h4::after{content:"";position:absolute;right:0;bottom:-1px;left:0;height:1px;background:var(--mocha);transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.16,1,.3,1)}
+.practical-item h4:hover::after,.practical-item.open h4::after{transform:scaleX(1)}
+.practical-item.open h4{border-bottom-color:rgba(73,54,44,.16)}
+.practical-item .accordion-plus,.practical-item .accordion-trigger:hover .accordion-plus,.practical-item.open .accordion-plus{width:auto;height:auto;border:0;border-radius:0;background:transparent!important;color:var(--mocha);font-size:0;transform:none}
+.practical-item .accordion-plus::after{content:"↓";display:inline-block;color:var(--mocha);font-family:var(--sans);font-size:.85rem;line-height:1;opacity:.7;transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .3s ease}
+.practical-item .accordion-trigger:hover .accordion-plus::after{opacity:1;transform:translateY(3px)}
+.practical-item.open .accordion-plus::after{opacity:1;transform:rotate(180deg)}
+.practical-item .accordion-trigger:focus:not(:focus-visible){outline:0}
+@media(max-width:720px){.travel-chapter--city .practical--city{display:block;margin-top:34px}.travel-chapter--city .neighbourhoods{grid-template-columns:1fr;gap:12px}.travel-chapter--city .practical-body{padding:14px 0 18px}}
+.practical-item p[data-i18n="cityStay"]{display:none}
