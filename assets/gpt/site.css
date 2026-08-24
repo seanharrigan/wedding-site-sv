@@ -1738,6 +1738,27 @@ body::before{opacity:.035}
 .special{background:var(--paper)!important}
 .faq{background:var(--paper)!important}
 
+/* One continuous cactus garden sits behind both Special Request and Gifts columns. */
+.special{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(100deg,rgba(24,20,14,.74),rgba(28,22,15,.55) 52%,rgba(31,22,14,.68)),
+    url("special-gifts-cactus-v1.png") center/cover no-repeat!important;
+}
+.special::before,.special::after{display:none!important}
+.special-card,.special-card.tribute,.special-card.gifts-card{
+  position:relative;
+  z-index:1;
+  color:var(--off-white)!important;
+  background:rgba(39,29,21,.16)!important;
+  box-shadow:none!important;
+}
+.special-card::after{display:none!important}
+.special-card :is(.eyebrow,.section-title,p,.text-link,summary){color:var(--off-white)!important}
+.special-card .rule{background:rgba(255,249,239,.55)!important}
+.gifts-card .gifts-content{background:transparent!important;box-shadow:none!important}
+
 /* Deep, warm surround with a pronounced lift for the site window. */
 body{background:radial-gradient(circle at 18% 0%,rgba(122,92,72,.55),transparent 46rem),radial-gradient(circle at 85% 100%,rgba(90,66,50,.5),transparent 40rem),linear-gradient(160deg,#3b2d24,#1d1612 70%)}
 body::before{opacity:.05}
@@ -1784,3 +1805,19 @@ body::before{opacity:.05}
 .check-in-card .choice input:checked+label,.check-in-card .choice label:hover{border-color:transparent!important;background:transparent!important;color:var(--mocha-deep)!important}
 .check-in-card .attendance,.check-in-card .meal-choice{gap:6px 18px}
 .check-in-card .choice label{font-size:.95rem}
+/* Timeline centred: time and event meet at the middle of the column. */
+.celebration-list--live{width:min(100%,820px)}
+.timeline-events .celebration-event{grid-template-columns:1fr 1fr;column-gap:clamp(20px,3vw,36px)}
+.timeline-events time{text-align:right}
+.timeline-events h3{text-align:left}
+.timeline-events p{grid-column:2;text-align:left}
+@media(max-width:720px){.timeline-events .celebration-event{grid-template-columns:88px 1fr;column-gap:14px}}
+
+/* Closing: the sunset embrace, cropped to keep sky and couple, with a soft base for the words. */
+.closing{padding-top:clamp(56px,6vw,80px)}
+.closing-photo{height:clamp(460px,52vw,680px)}
+.closing-photo img{object-position:center 58%!important;filter:none}
+.closing-photo::after{background:linear-gradient(180deg,rgba(35,21,14,.05) 40%,rgba(35,21,14,.55))}
+.closing-copy{bottom:9%}
+.closing-copy .section-title{text-shadow:0 2px 18px rgba(20,12,8,.4)}
+@media(max-width:720px){.closing-photo{height:520px}.closing-photo img{object-position:center 52%!important}}
