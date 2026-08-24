@@ -1437,3 +1437,13 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
 .week-day--wedding{padding:16px 18px}
 .week-day--wedding .text-link{margin-top:.35rem}
 @media(max-width:720px){.travel-swoop{height:76px}.travel-section{padding-top:126px!important}.week-day{padding:11px 2px}}
+
+/* City practicalities tuck under the copy column as a small two-part note. */
+.city-copy .practical--city{grid-template-columns:1fr 1.4fr;gap:22px;max-width:460px;margin-top:30px;padding-top:20px;border-top:1px solid rgba(73,54,44,.2)}
+.city-copy .practical-item h4{margin-bottom:.4rem;font-size:1.05rem;letter-spacing:.01em}
+.city-copy .practical-item p{margin:0;font-size:.8rem;line-height:1.4;color:#6a564a}
+.city-copy .practical-item p strong{font-size:.5rem;margin-bottom:.1rem}
+.city-copy .neighbourhoods{gap:.15rem .45rem;margin:0 0 .45rem}
+.city-copy .neighbourhoods li{font-size:.95rem}
+.city-copy .neighbourhoods li+li::before{margin-right:.45rem}
+@media(max-width:720px){.city-copy .practical--city{grid-template-columns:1fr;gap:16px;margin-top:22px}}
