@@ -1457,3 +1457,12 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
 .city-copy .neighbourhoods{margin:0}
 .city-copy .neighbourhoods li{font-size:1.05rem}
 @media(max-width:720px){.city-copy .practical--city{grid-template-columns:1fr;gap:16px}}
+.city-copy .practical--city{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:26px}
+.city-copy .practical-item p{font-size:1rem}
+.city-copy .neighbourhoods{gap:.1rem .4rem}.city-copy .neighbourhoods li{font-size:1rem}.city-copy .neighbourhoods li+li::before{margin-right:.4rem}
+
+/* City and Tepoztlán titles: quieter serif line, larger script accent. */
+.travel-chapter--city .chapter-title,.travel-chapter--tepoztlan .chapter-title{font-size:clamp(1.9rem,3vw,2.7rem);letter-spacing:-.02em;line-height:1.02}
+.travel-chapter--city .chapter-title em,.travel-chapter--tepoztlan .chapter-title em{font-size:1.85em;line-height:.8}
+@media(max-width:720px){.travel-chapter--city .chapter-title,.travel-chapter--tepoztlan .chapter-title{font-size:clamp(1.7rem,7.5vw,2.2rem)}}
+.travel-chapter--city .chapter-title,.travel-chapter--tepoztlan .chapter-title{line-height:1.1}
