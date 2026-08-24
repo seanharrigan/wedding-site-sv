@@ -1799,3 +1799,24 @@ body::before{opacity:.035}
 .closing-photo{height:clamp(560px,60vw,780px)}
 .closing-photo img{object-position:center 50%!important}
 @media(max-width:720px){.closing-photo{height:600px}}
+/* Check-In: text-only menu choices (selected = darker + hairline) and a tighter card. */
+.check-in{padding:clamp(48px,5.5vw,72px) clamp(22px,7vw,90px)!important}
+.check-in-copy .section-title{font-size:clamp(2.4rem,4.2vw,3.8rem)}
+.check-in-copy .rule{margin:1rem 0}
+.check-in-card{padding:clamp(20px,2.6vw,30px) clamp(22px,3vw,36px)}
+.check-in-card .form-grid{gap:10px 24px}
+.check-in-card .field label,.menu-field legend{font-size:.5rem;letter-spacing:.16em}
+.check-in-card .field input,.check-in-card .field textarea{padding:.4rem 0;font-size:1rem}
+.check-in-card .field textarea{min-height:40px}
+.menu-field legend{margin-bottom:2px}
+.menu-note{margin:0 0 2px;font-size:.8rem}
+.check-in-card .attendance,.check-in-card .meal-choice{flex-direction:row;flex-wrap:wrap;gap:2px 18px;margin-top:2px}
+.check-in-card .choice label,.check-in-card .choice label:hover,.check-in-card .choice input:checked+label{position:relative;display:inline-block;min-height:0;padding:.25rem 0;border:0!important;border-radius:0;background:transparent!important;color:rgba(73,54,44,.55)!important;font-family:var(--serif);font-size:.98rem;font-weight:400;white-space:nowrap;box-shadow:none;transform:none;transition:color .25s ease}
+.check-in-card .choice label::before{display:none!important}
+.check-in-card .choice label::after{content:"";position:absolute;right:0;bottom:0;left:0;height:1px;background:var(--mocha);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.check-in-card .choice label:hover{color:var(--mocha-deep)!important}
+.check-in-card .choice input:checked+label{color:var(--mocha-deep)!important;font-weight:500}
+.check-in-card .choice input:checked+label::after{transform:scaleX(1)}
+.check-in-card .choice input:focus-visible+label{outline:2px solid #756055;outline-offset:3px}
+.check-in-card .button{min-height:44px;margin-top:14px}
+@media(max-width:720px){.check-in{padding:52px 14px!important}.check-in-card{padding:20px 16px}.check-in-card .attendance,.check-in-card .meal-choice{gap:0 14px}}
