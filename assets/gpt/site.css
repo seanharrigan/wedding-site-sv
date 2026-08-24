@@ -1669,3 +1669,46 @@ body::before{opacity:.035}
   .practical-body .practical-image{max-height:170px;min-height:0;height:170px}
   .neighbourhoods,.city-copy .neighbourhoods{grid-template-columns:1fr;gap:10px}
 }
+
+/* Ofrenda & Gifts: one large curved mocha card set into the paper. */
+.special{padding:clamp(28px,4vw,56px) clamp(14px,2.5vw,32px) clamp(48px,6vw,80px)!important;background:var(--ivory)!important;overflow:visible;isolation:auto}
+.special::before,.special::after{content:none}
+.special-inner{position:relative;overflow:hidden;isolation:isolate;width:min(100%,1180px);padding:clamp(64px,8vw,120px) clamp(28px,7vw,110px);border-radius:clamp(120px,15vw,220px) clamp(40px,5vw,64px) clamp(120px,15vw,220px) clamp(40px,5vw,64px) / clamp(90px,11vw,160px) clamp(40px,5vw,64px) clamp(90px,11vw,160px) clamp(40px,5vw,64px);background:var(--mocha-deep);box-shadow:0 34px 80px rgba(52,38,31,.22)}
+.special-inner::before{content:"";position:absolute;z-index:0;top:-12%;right:-8%;width:min(48vw,620px);aspect-ratio:1;border-radius:58% 42% 51% 49%/46% 55% 45% 54%;background:radial-gradient(circle at 42% 40%,rgba(255,249,239,.08),rgba(255,249,239,.025) 58%,transparent 72%);pointer-events:none}
+.special-inner::after{content:"";position:absolute;z-index:0;bottom:-22%;left:-10%;width:min(40vw,520px);aspect-ratio:1;border-radius:46% 54% 42% 58%/55% 44% 56% 45%;background:radial-gradient(circle at 55% 45%,rgba(255,249,239,.06),transparent 68%);pointer-events:none}
+.special-col{position:relative;z-index:1}
+@media(max-width:720px){.special{padding:18px 10px 40px!important}.special-inner{padding:64px 26px 60px;border-radius:70px 28px 70px 28px/56px 28px 56px 28px}}
+
+/* Check-In: editorial underline fields on a soft ivory card. */
+.check-in-card{padding:clamp(26px,3.4vw,40px) clamp(24px,3.4vw,42px);border:1px solid rgba(255,249,239,.35);border-radius:30px;background:linear-gradient(160deg,#fbf6ee,#efe4d5);box-shadow:0 30px 70px rgba(0,0,0,.28)}
+.check-in-card .form-grid{gap:16px 26px}
+.check-in-card .field{gap:2px}
+.check-in-card .field label,.menu-field legend{color:var(--mocha);font-family:var(--sans);font-size:.52rem;font-weight:650;letter-spacing:.18em;text-transform:uppercase}
+.check-in-card .field input,.check-in-card .field textarea{padding:.55rem 0;border:0;border-bottom:1px solid rgba(73,54,44,.3);border-radius:0;background:transparent;color:var(--mocha-deep);font-family:var(--serif);font-size:1.05rem;transition:border-color .3s ease}
+.check-in-card .field input::placeholder{color:rgba(73,54,44,.4);font-style:italic}
+.check-in-card .field input:focus,.check-in-card .field textarea:focus{border-color:var(--mocha);background:transparent;box-shadow:none}
+.check-in-card .field textarea{min-height:52px;resize:vertical}
+.check-in-card .field input[type="date"]{font-family:var(--serif);color:var(--mocha-deep)}
+.check-in-card .field input[type="date"]::-webkit-calendar-picker-indicator{opacity:.55}
+.menu-field legend{margin-bottom:8px}
+.menu-note{margin:0 0 8px;color:#7a6557;font-family:var(--serif);font-size:.85rem;font-style:italic;line-height:1.3}
+.check-in-card .attendance{gap:8px}
+.check-in-card .choice label{min-height:40px;padding:.45rem .6rem;border:1px solid rgba(73,54,44,.28);border-radius:999px;background:transparent;color:var(--mocha-deep);font-family:var(--serif);font-size:.95rem;letter-spacing:.01em;text-transform:none;transition:background .3s ease,color .3s ease,border-color .3s ease,transform .3s ease}
+.check-in-card .choice label:hover{background:rgba(73,54,44,.06);transform:none}
+.check-in-card .choice input:checked+label{border-color:var(--mocha);color:var(--off-white);background:var(--mocha)}
+.check-in-card .choice input:focus-visible+label{outline:2px solid #756055;outline-offset:3px}
+.check-in-card .button{min-height:50px;margin-top:22px;border-radius:999px;box-shadow:0 14px 28px rgba(52,38,31,.22)}
+.form-status{color:var(--mocha);font-style:italic}
+@media(max-width:720px){.check-in-card{padding:26px 20px;border-radius:24px}.check-in-card .form-grid{gap:14px 18px}.check-in-card .choice label{font-size:.88rem}}
+
+/* Celebration timeline: two columns — time on the left, event and note on the right. */
+.celebration-list--live{width:min(100%,640px)}
+.timeline-events .celebration-event{grid-template-columns:118px 1fr;justify-content:start;align-items:baseline;column-gap:clamp(18px,3vw,34px);padding:clamp(14px,1.8vw,20px) 0;border-bottom:1px solid rgba(255,249,239,.16)!important;text-align:left}
+.timeline-events .celebration-event:not(:last-child)::after{content:none}
+.timeline-events time{text-align:right;font-size:clamp(.95rem,1.3vw,1.15rem);letter-spacing:.04em;color:#dcc6b0}
+.timeline-events h3{font-size:clamp(1.9rem,3vw,2.7rem)}
+.timeline-events p{grid-column:2;margin:.1rem 0 0;font-size:clamp(.8rem,.95vw,.9rem);color:rgba(255,249,239,.72)}
+@media(max-width:720px){.timeline-events .celebration-event{grid-template-columns:78px 1fr;column-gap:14px;padding:12px 0}.timeline-events time{font-size:.85rem}.timeline-events h3{font-size:clamp(1.6rem,8vw,2rem)}.timeline-events p{font-size:.78rem}}
+.timeline-events p{margin-top:-.35rem}
+.check-in-card .choice label{padding:.45rem .5rem;font-size:.9rem;white-space:nowrap}
+@media(max-width:720px){.timeline-events p{margin-top:-.25rem}}
