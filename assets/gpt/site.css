@@ -1588,3 +1588,52 @@ details.practical-item summary .accordion-plus{font-size:1.1rem;border-color:rgb
 .city-copy .practical-body{padding:0 14px 12px}
 .city-copy .practical-body p,.city-copy .neighbourhoods li{font-family:var(--serif);font-size:.84rem;line-height:1.35;color:var(--mocha-deep)}
 @media(max-width:720px){.practical{gap:10px}.practical-item .accordion-trigger{padding:13px 12px 13px 16px}}
+
+/* Discreet practical rows: no pills, just a hairline and the plus. */
+.practical-item,.practical-item:hover,.practical-item.open{border:0;border-radius:0;background:transparent;box-shadow:none;transform:none}
+.practical-item{border-bottom:1px solid rgba(73,54,44,.16)}
+.practical-item .accordion-trigger{padding:12px 2px 12px 0}
+.practical-body{padding:0 0 18px}
+.city-copy .practical-item{border-radius:0}
+.city-copy .practical-item .accordion-trigger{padding:9px 0}
+.city-copy .practical-body{padding:0 0 10px}
+
+/* A warm backdrop with soft depth behind the site window, instead of black. */
+body{background:radial-gradient(circle at 12% 8%,rgba(255,246,232,.95),transparent 42rem),radial-gradient(circle at 88% 92%,rgba(196,176,154,.85),transparent 38rem),linear-gradient(150deg,#e4d8c8,#cdbfab)}
+body::before{opacity:.035}
+.site{border:1px solid rgba(255,249,239,.8);box-shadow:0 46px 120px rgba(52,38,31,.28),0 14px 36px rgba(52,38,31,.14),0 0 0 1px rgba(255,255,255,.4)}
+@media(max-width:720px){.site{box-shadow:0 26px 70px rgba(52,38,31,.3),0 8px 24px rgba(52,38,31,.16),0 0 0 1px rgba(255,255,255,.4)}}
+
+/* Countdown: quiet serif numerals divided by hairlines. */
+.countdown{padding:clamp(56px,6vw,84px) 24px clamp(64px,7vw,96px)!important;background:var(--paper)!important}
+.countdown .eyebrow{color:var(--mocha)}
+.countdown .section-title{display:flex;align-items:baseline;justify-content:center;gap:.14em;color:var(--mocha-deep);text-transform:none}
+.countdown .section-title em{color:var(--mocha);font-family:var(--script);font-size:clamp(2.6rem,4.6vw,4rem);font-style:normal;font-weight:400;letter-spacing:-.06em}
+.countdown .section-title span{font-family:var(--serif);font-size:clamp(1.9rem,3.2vw,2.9rem);letter-spacing:-.02em;text-transform:uppercase}
+.countdown-grid{max-width:860px;grid-template-columns:repeat(4,1fr);gap:0;margin-top:clamp(26px,3vw,40px)}
+.countdown-unit,.countdown-unit:hover{padding:14px 8px;border:0;border-left:1px solid rgba(73,54,44,.2);border-radius:0;background:transparent!important;box-shadow:none!important;transform:none!important}
+.countdown-unit:first-child{border-left:0}
+.countdown-value{color:var(--mocha-deep);font-size:clamp(2.8rem,6vw,5.4rem);letter-spacing:-.04em}
+.countdown-label{margin-top:.6rem;color:var(--mocha);font-size:.55rem;letter-spacing:.2em}
+@media(max-width:720px){.countdown{padding:52px 16px 64px!important}.countdown-grid{grid-template-columns:repeat(4,1fr);gap:0}.countdown-unit,.countdown-unit:hover{padding:10px 2px;border-radius:0}.countdown-value{font-size:clamp(1.9rem,10vw,2.6rem)}.countdown-label{font-size:.44rem;letter-spacing:.12em}}
+
+/* Check-In: a compact, airy card. */
+.check-in{padding:clamp(64px,7vw,96px) clamp(22px,7vw,90px)!important}
+.check-in-grid{grid-template-columns:.7fr 1.3fr;gap:clamp(36px,6vw,80px)}
+.check-in-copy .section-title{font-size:clamp(2.8rem,5vw,4.6rem)}
+.check-in-copy p{font-size:clamp(.95rem,1.15vw,1.05rem);line-height:1.5}
+.check-in-card{width:min(100%,640px);padding:clamp(22px,3vw,34px) clamp(22px,3vw,36px);border-radius:28px;box-shadow:0 26px 70px rgba(0,0,0,.24)}
+.check-in-card .form-grid{gap:12px 14px}
+.check-in-card .field{gap:5px}
+.check-in-card .field label,.menu-field legend{font-size:.54rem;letter-spacing:.14em;color:var(--mocha)}
+.check-in-card .field input,.check-in-card .field textarea{padding:.6rem .85rem;border-radius:12px;font-size:.95rem}
+.check-in-card .field textarea{min-height:58px}
+.menu-field legend{margin-bottom:6px}
+.menu-note{margin:0 0 6px;font-size:.78rem;line-height:1.3}
+.check-in-card .attendance{gap:8px}
+.check-in-card .choice label{min-height:42px;padding:.5rem .6rem;border-radius:12px;font-size:.9rem;background:rgba(255,255,255,.4)}
+.check-in-card .button{min-height:48px;margin-top:14px;font-size:.6rem}
+.form-status{margin-top:8px;font-size:.82rem}
+@media(max-width:720px){.check-in{padding:64px 14px!important}.check-in-grid{gap:28px}.check-in-copy .section-title{font-size:clamp(2.6rem,13vw,3.6rem)}.check-in-card{padding:22px 16px;border-radius:22px}.check-in-card .form-grid{grid-template-columns:1fr 1fr}.check-in-card .field.full{grid-column:1/-1}.check-in-card .menu-field{grid-column:1/-1}.check-in-card .attendance{grid-template-columns:1fr 1fr}.check-in-card .choice label{font-size:.8rem}}
+.countdown,.closing{min-height:0!important}
+@media(max-width:980px){.check-in-grid{grid-template-columns:1fr}.check-in-card{width:100%}}
