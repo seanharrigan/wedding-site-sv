@@ -1738,20 +1738,41 @@ body::before{opacity:.035}
 .special{background:var(--paper)!important}
 .faq{background:var(--paper)!important}
 
-/* One continuous cactus garden sits behind both Special Request and Gifts columns. */
+/* One continuous cactus garden sits as a rounded, frosted panel behind both columns. */
 .special{
   position:relative;
-  overflow:hidden;
-  background:
-    linear-gradient(100deg,rgba(24,20,14,.74),rgba(28,22,15,.55) 52%,rgba(31,22,14,.68)),
-    url("special-gifts-cactus-v1.png") center/cover no-repeat!important;
+  overflow:visible;
+  isolation:isolate;
+  background:var(--paper)!important;
 }
-.special::before,.special::after{display:none!important}
+.special::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:clamp(14px,2.5vw,34px);
+  display:block!important;
+  border-radius:clamp(48px,8vw,110px) clamp(24px,4vw,56px) clamp(48px,8vw,110px) clamp(24px,4vw,56px);
+  background:url("special-gifts-cactus-v1.png") center/cover no-repeat;
+  box-shadow:0 28px 60px rgba(52,38,31,.19);
+}
+.special::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:clamp(14px,2.5vw,34px);
+  display:block!important;
+  border:1px solid rgba(255,249,239,.22);
+  border-radius:clamp(48px,8vw,110px) clamp(24px,4vw,56px) clamp(48px,8vw,110px) clamp(24px,4vw,56px);
+  background:linear-gradient(105deg,rgba(37,29,22,.57),rgba(63,50,38,.34) 50%,rgba(37,29,22,.5));
+  backdrop-filter:blur(2px);
+  pointer-events:none;
+}
 .special-card,.special-card.tribute,.special-card.gifts-card{
   position:relative;
   z-index:1;
   color:var(--off-white)!important;
-  background:rgba(39,29,21,.16)!important;
+  background:rgba(255,249,239,.07)!important;
+  backdrop-filter:blur(8px);
   box-shadow:none!important;
 }
 .special-card::after{display:none!important}
@@ -1821,3 +1842,7 @@ body::before{opacity:.05}
 .closing-copy{bottom:9%}
 .closing-copy .section-title{text-shadow:0 2px 18px rgba(20,12,8,.4)}
 @media(max-width:720px){.closing-photo{height:520px}.closing-photo img{object-position:center 52%!important}}
+/* Ofrenda & Gifts: the cactus photograph behind a frosted mocha glass. */
+.special-inner{background:#2a1f18 url("special-gifts-cactus-v1.jpg") center/cover no-repeat;border:1px solid rgba(255,249,239,.16);box-shadow:0 34px 80px rgba(52,38,31,.28),inset 0 1px 0 rgba(255,255,255,.14)}
+.special-inner::before{top:0;right:0;bottom:0;left:0;width:auto;aspect-ratio:auto;border-radius:inherit;background:linear-gradient(135deg,rgba(52,38,31,.66),rgba(38,27,21,.52) 55%,rgba(52,38,31,.6));-webkit-backdrop-filter:blur(16px) saturate(115%);backdrop-filter:blur(16px) saturate(115%)}
+.special-inner::after{top:14px;right:14px;bottom:14px;left:14px;width:auto;aspect-ratio:auto;border:1px solid rgba(255,249,239,.14);border-radius:inherit;background:none}
