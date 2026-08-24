@@ -1478,3 +1478,5 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
 .week-intro .chapter-title em{font-size:1.85em;line-height:.8}
 @media(max-width:720px){.week-intro .chapter-title{font-size:clamp(1.7rem,7.5vw,2.2rem)}}
 .week-day--wedding .text-link{text-decoration:none}
+.week-day{padding:10px 6px}.week-day time{font-size:clamp(1.7rem,2.1vw,2rem)}.week-day--wedding{padding:13px 18px}
+@media(max-width:720px){.week-day{padding:9px 2px}}
