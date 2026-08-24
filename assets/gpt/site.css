@@ -1472,3 +1472,8 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
 .city-copy .neighbourhoods{display:grid;grid-template-columns:auto auto;justify-content:start;column-gap:.4rem;row-gap:.1rem}
 .city-copy .neighbourhoods li+li::before{content:none;margin:0}
 .city-copy .neighbourhoods li:nth-child(even)::before{content:"·";margin-right:.4rem;color:var(--mocha);opacity:.55}
+
+/* The week title matches the city chapters: quiet serif caps with a script accent. */
+.week-intro .chapter-title{font-size:clamp(1.9rem,3vw,2.7rem);letter-spacing:-.02em;line-height:1.1;text-transform:uppercase}
+.week-intro .chapter-title em{font-size:1.85em;line-height:.8}
+@media(max-width:720px){.week-intro .chapter-title{font-size:clamp(1.7rem,7.5vw,2.2rem)}}
