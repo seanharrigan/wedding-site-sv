@@ -10,19 +10,19 @@
   }
 }
 
-/* Closing portrait: preserve the tall source image without artificial side bars. */
+/* Closing photo: paper ground, breathing room under Check-In, a real drop shadow. */
+.closing{background:var(--paper)!important}
 @media(min-width:721px){
-  .closing{overflow:visible;padding:12px 0 18px!important}
+  .closing{overflow:visible;padding:clamp(56px,6vw,88px) 0 clamp(44px,4.5vw,64px)!important}
   .closing-photo{
-    width:min(calc(66.65svh - 32px),calc(100% - 32px),600px);
-    height:auto;
+    width:min(calc(100% - 48px),1280px);
+    height:clamp(440px,42vw,620px);
     min-height:0;
     max-height:none;
-    aspect-ratio:1333/2000;
     margin-inline:auto;
     overflow:hidden;
     background:transparent;
-    box-shadow:0 24px 54px rgba(48,29,19,.18);
+    box-shadow:0 34px 80px rgba(48,29,19,.32),0 12px 30px rgba(48,29,19,.16);
     transition:transform .85s var(--ease-refined),box-shadow .85s ease;
   }
   .closing-photo::before{display:none}
@@ -30,17 +30,25 @@
     width:100%;
     height:100%!important;
     object-fit:cover;
-    object-position:center center!important;
+    object-position:center 42%!important;
     transition:transform 1.15s var(--ease-refined),filter .7s ease;
   }
+  .closing-photo::after{background:linear-gradient(90deg,rgba(35,21,14,.5),rgba(35,21,14,.12) 48%,rgba(35,21,14,.02)),linear-gradient(180deg,rgba(35,21,14,.02) 50%,rgba(35,21,14,.38))}
+  .closing-copy{right:auto;left:clamp(32px,4.5vw,68px);bottom:clamp(30px,4vw,52px);max-width:520px;text-align:left}
+  .closing-copy .eyebrow{margin-inline:0}
+  .closing-copy .rule{margin-inline:0}
   .closing-photo:hover,.closing-photo:focus-within{
     transform:translateY(-4px);
-    box-shadow:0 32px 68px rgba(48,29,19,.23);
+    box-shadow:0 42px 92px rgba(48,29,19,.36),0 16px 36px rgba(48,29,19,.18);
   }
   .closing-photo:hover img,.closing-photo:focus-within img{
     transform:scale(1.012);
     filter:saturate(1.015)!important;
   }
+}
+@media(max-width:720px){
+  .closing{padding-top:26px!important}
+  .closing-photo{box-shadow:0 22px 50px rgba(48,29,19,.28)}
 }
 
 /* Keep the footer hover treatment inside its own bounds at the page edge. */
