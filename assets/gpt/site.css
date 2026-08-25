@@ -2549,3 +2549,13 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 .practical-item:not(.open) .practical-body{padding-top:0;padding-bottom:0}
 .travel-section{padding-bottom:clamp(44px,4.6vw,64px)!important}
 @media(max-width:720px){.travel-section{padding-bottom:44px!important}}
+
+/* Hover pops: the Save-the-Date arch and the hero photo breathe a little. */
+@media(hover:hover) and (pointer:fine){
+  .save-date::after{transition:transform 1.2s var(--ease-refined),filter 1.2s ease;will-change:transform}
+  .save-date-inner{transition:opacity .85s ease,transform 1s var(--ease-refined)}
+  .save-date:hover::after{transform:scale(1.015);filter:brightness(1.04) saturate(1.04)}
+  .save-date:hover .save-date-inner{transform:scale(1.012)}
+  .hero--image-only::before{clip-path:inset(0 round 34px);transition:transform 1.3s var(--ease-refined),clip-path 1.3s var(--ease-refined),filter 1.2s ease;will-change:transform}
+  .hero--image-only:hover::before{transform:scale(calc(1.034 + var(--hero-shift,0)*.000025));clip-path:inset(1.05% round 33px);filter:brightness(1.03) saturate(1.03)}
+}
