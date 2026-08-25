@@ -2511,3 +2511,29 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 @media(hover:hover) and (pointer:fine){
   .practical-item:not(.open) .accordion-panel{pointer-events:none}
 }
+
+/* Wedding day itinerary row: mocha card, beige text, serif title. */
+.week-day--wedding{margin:4px -12px;padding:13px 18px;border:0;border-radius:18px;color:var(--off-white);background:var(--mocha);box-shadow:0 22px 44px rgba(52,38,31,.22)}
+.week-day--wedding time,.week-day--wedding h4{color:var(--off-white)}
+.week-day--wedding time small{color:rgba(255,249,239,.78)}
+.week-day--wedding h4{font-family:var(--serif)}
+.week-day--wedding .text-link{color:var(--off-white);text-decoration-color:rgba(255,249,239,.4)}
+@media(hover:hover) and (pointer:fine){
+  .week-day--wedding .text-link:hover{color:#e8d7c6}
+}
+@media(max-width:720px){
+  .week-day--wedding{margin:2px 0;padding:14px 12px 14px 14px;border:0;border-radius:15px;color:var(--off-white);background:var(--mocha);box-shadow:none}
+  .week-day--wedding time,.week-day--wedding h4,.week-day--wedding .text-link{color:var(--off-white)}
+  .week-day--wedding time small{color:rgba(255,249,239,.78)}
+}
+
+/* "See on map" sits under each chapter's copy as a mocha button. */
+.chapter-map-button{margin-top:clamp(18px,2.2vw,28px);min-height:46px;padding:.8rem 1.35rem;font-size:.62rem;letter-spacing:.16em;box-shadow:0 12px 26px rgba(52,38,31,.18)}
+.chapter-map-button span{font-size:.8rem;line-height:1}
+@media(max-width:720px){.chapter-map-button{margin-top:16px;min-height:44px}}
+
+/* FAQ: capital Q, and closed panels stay out of the pointer's way on hover devices. */
+.faq-head .section-title em{text-transform:capitalize}
+@media(hover:hover) and (pointer:fine){
+  .faq .accordion-item:not(.open) .accordion-panel{pointer-events:none}
+}

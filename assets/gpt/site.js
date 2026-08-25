@@ -216,7 +216,7 @@ document.querySelectorAll('.accordion').forEach((accordion) => {
 // Desktop travel panels follow the pointer; touch and keyboard users retain
 // the explicit button interaction above.
 const travelHoverQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
-document.querySelectorAll('.travel-section .practical.accordion, .faq.accordion').forEach((accordion) => {
+document.querySelectorAll('.travel-section .practical.accordion, .faq .accordion').forEach((accordion) => {
   const closeItem = (item) => {
     item.classList.remove('open');
     item.querySelector('.accordion-trigger')?.setAttribute('aria-expanded', 'false');
@@ -236,7 +236,7 @@ document.querySelectorAll('.travel-section .practical.accordion, .faq.accordion'
 
   accordion.addEventListener('pointerover', (event) => {
     if (!travelHoverQuery.matches) return;
-    const item = event.target.closest('.practical-item');
+    const item = event.target.closest('.accordion-item');
     if (!item || !accordion.contains(item)) return;
     hovered = item;
     clearTimeout(closeTimer);
@@ -245,7 +245,7 @@ document.querySelectorAll('.travel-section .practical.accordion, .faq.accordion'
 
   accordion.addEventListener('pointerout', (event) => {
     if (!travelHoverQuery.matches) return;
-    const item = event.target.closest('.practical-item');
+    const item = event.target.closest('.accordion-item');
     if (!item || !accordion.contains(item) || item.contains(event.relatedTarget)) return;
     if (hovered === item) hovered = null;
     clearTimeout(closeTimer);
@@ -326,12 +326,12 @@ const uiTranslations = {
   cityTab: ['Mexico City', 'Ciudad de México'], tepoztlanTab: ['Tepoztlán', 'Tepoztlán'],
   cityIntro: ['We’ve chosen our wedding dates to fall just after Día de los Muertos (November 1st), one of Mexico’s most meaningful and beautiful celebrations. If you are able, we would love for you to celebrate this day with us in Mexico City.', 'Elegimos una fecha justo después del Día de Muertos, el 1 de noviembre, una de las celebraciones más importantes de México. Si pueden llegar antes, nos encantaría compartir esos días con ustedes en la Ciudad de México.'],
   cityStay: ["For accommodation, we recommend staying in Roma Norte, Condesa, Reforma, or Centro Histórico, all well-located and easy to explore. Don't hesitate to contact us for more tips.", 'Recomendamos hospedarse en Roma Norte, Condesa, Reforma o Centro Histórico. Son zonas bien ubicadas y fáciles de recorrer. Escríbannos si quieren más recomendaciones.'],
-  cityMap: ['View our city map', 'Ver nuestro mapa'],
+  cityMap: ['See on map <span aria-hidden="true">↗</span>', 'Ver en el mapa <span aria-hidden="true">↗</span>'],
   tepoztlanTitle: ['Things to do<br>in <em>Tepoztlán</em>.', 'Qué hacer<br>en <em>Tepoztlán</em>.'],
   tepoztlanIntro: ['Tepoztlán is a colourful mountain town with a relaxed pace, beautiful old buildings and plenty to explore.', 'Tepoztlán es un pueblo de montaña tranquilo, colorido y con mucho por conocer.'],
   tepoztlanStay: ['Spend some time wandering through the market, stop by the Ex-Convento de la Natividad, or hike up El Tepozteco if you’re feeling adventurous. There are also lots of great little cafés and places to eat along the way.', 'Dense una vuelta por el mercado, visiten el Ex Convento de la Natividad o suban al Tepozteco si tienen ganas de caminar. También hay muchos cafés y buenos lugares para comer.'],
   tepoztlanMapNote: ['Use the map to begin exploring the town and the places surrounding our venue.', 'Usen el mapa para explorar el pueblo y los lugares cercanos al hotel.'],
-  tepoztlanMap: ['Explore Tepoztlán', 'Explorar Tepoztlán'],
+  tepoztlanMap: ['See on map <span aria-hidden="true">↗</span>', 'Ver en el mapa <span aria-hidden="true">↗</span>'],
   romaLabel: ['Roma Norte', 'Roma Norte'], romaCaption: ['Leafy streets, galleries and cafés', 'Calles arboladas, galerías y cafés'], bellasLabel: ['Bellas Artes', 'Bellas Artes'], bellasCaption: ['Architecture, murals and golden light', 'Arquitectura, murales y luz dorada'],
   conventLabel: ['The Ex-Convent', 'El Ex Convento'], conventCaption: ['Stone courtyards and centuries of history', 'Patios de piedra y siglos de historia'], ridgeLabel: ['The Tepozteco', 'El Tepozteco'], ridgeCaption: ['Dramatic mountains above the town', 'Montañas imponentes sobre el pueblo'],
   ofrendaCopy: ['We kindly invite you to bring a small framed photo of a loved one who is no longer with us. In keeping with tradition, we will be preparing an <em>ofrenda</em> to honour and remember those who remain in our hearts.', 'Los invitamos a traer una foto pequeña y enmarcada de un ser querido que ya no esté con nosotros. Prepararemos una <em>ofrenda</em> para recordarlos y tenerlos presentes.'],
