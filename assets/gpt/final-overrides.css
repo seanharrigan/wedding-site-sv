@@ -13,10 +13,10 @@
 /* Closing photo: paper ground, breathing room under Check-In, a real drop shadow. */
 .closing{background:var(--paper)!important}
 @media(min-width:721px){
-  .closing{overflow:visible;padding:clamp(56px,6vw,88px) 0 clamp(44px,4.5vw,64px)!important}
+  .closing{overflow:visible;padding:clamp(56px,6vw,88px) 0 0!important}
   .closing-photo{
-    width:min(calc(100% - 48px),1280px);
-    height:clamp(440px,42vw,620px);
+    width:100%;
+    height:clamp(500px,46vw,680px);
     min-height:0;
     max-height:none;
     margin-inline:auto;
@@ -36,7 +36,7 @@
   .closing-copy{transition:transform .9s var(--ease-refined)}
   .closing-photo:hover .closing-copy,.closing-photo:focus-within .closing-copy{transform:translateY(-6px)}
   .closing-photo::after{background:linear-gradient(90deg,rgba(35,21,14,.5),rgba(35,21,14,.12) 48%,rgba(35,21,14,.02)),linear-gradient(180deg,rgba(35,21,14,.02) 50%,rgba(35,21,14,.38))}
-  .closing-copy{right:auto;left:clamp(32px,4.5vw,68px);bottom:clamp(30px,4vw,52px);max-width:520px;text-align:left}
+  .closing-copy{right:auto;left:clamp(32px,4.5vw,68px);bottom:calc(44px + clamp(30px,4vw,52px));max-width:520px;text-align:left}
   .closing-copy .eyebrow{margin-inline:0}
   .closing-copy .rule{margin-inline:0}
   .closing-photo:hover,.closing-photo:focus-within{

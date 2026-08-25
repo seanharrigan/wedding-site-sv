@@ -2443,3 +2443,65 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
   .celebration-heading .section-title em{font-size:.82em}
   .celebration-heading .section-title span{font-size:.84em}
 }
+
+/* ---------------------------------------------------------------------------
+   Travel subline size, Details without the photo swap, countdown card on the
+   closing photo (desktop), touch-safe header, single-column mobile menu,
+   rounded mobile bottom.
+   --------------------------------------------------------------------------- */
+
+.travel-heading .section-title span{font-size:clamp(1.05rem,1.55vw,1.4rem)}
+
+/* Details: panels keep their lift; no photo swap, no fading sibling. */
+.details-hover-photo{display:none}
+@media(hover:hover) and (pointer:fine){
+  .details-pair:has(.detail-panel--venue:hover,.detail-panel--venue:focus-visible) .detail-panel--dress,
+  .details-pair:has(.detail-panel--dress:hover,.detail-panel--dress:focus-visible) .detail-panel--venue{z-index:3;opacity:1;pointer-events:auto}
+  .details-pair:has(.detail-panel--venue:hover,.detail-panel--venue:focus-visible)::before,
+  .details-pair:has(.detail-panel--dress:hover,.detail-panel--dress:focus-visible)::before{opacity:1}
+}
+
+/* Countdown rises over the closing photo as a card, the way it does on mobile. */
+@media(min-width:721px){
+  .countdown{position:relative;z-index:3;margin-top:-44px!important;border-radius:44px 44px 0 0;box-shadow:0 -22px 50px rgba(52,38,31,.16)}
+}
+
+/* Header hover must not stick after a tap on touch screens. */
+@media(hover:none){
+  .site-header:not(.header-on-dark):hover,.site-header:not(.header-on-dark):focus-within{color:var(--mocha-deep);border-color:rgba(73,54,44,.16);background:rgba(244,235,224,.66);box-shadow:0 12px 34px rgba(43,29,20,.12),inset 0 1px rgba(255,255,255,.58)}
+  .site-header:not(.header-on-dark):hover .brand-logo--dark,.site-header:not(.header-on-dark):focus-within .brand-logo--dark{opacity:1;transform:none}
+  .site-header:not(.header-on-dark):hover .brand-logo--light,.site-header:not(.header-on-dark):focus-within .brand-logo--light{opacity:0}
+  .site-header:not(.header-on-dark):hover .mobile-current,.site-header:not(.header-on-dark):hover .menu-toggle,.site-header:not(.header-on-dark):focus-within .mobile-current,.site-header:not(.header-on-dark):focus-within .menu-toggle{color:var(--mocha-deep)}
+  .menu-open .site-header,.menu-open .site-header:hover,.menu-open .site-header:focus-within,.menu-open .site-header.header-on-dark:hover{color:var(--off-white);border-color:rgba(255,249,239,.2);background:rgba(39,28,23,.94);box-shadow:0 18px 48px rgba(20,12,8,.3),inset 0 1px rgba(255,255,255,.13)}
+  .menu-open .site-header .brand-logo--dark{opacity:0}
+  .menu-open .site-header .brand-logo--light{opacity:1;transform:none}
+  .menu-open .site-header .mobile-current,.menu-open .site-header .menu-toggle{color:var(--off-white)}
+}
+
+@media(max-width:720px){
+  /* Mobile menu: a solid single-column dropdown that slides in. */
+  .nav-links{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:8px 8px 10px;border:1px solid rgba(255,249,239,.12);border-radius:22px;color:var(--off-white);background:#2d211b;box-shadow:0 26px 60px rgba(20,12,8,.38),inset 0 1px rgba(255,255,255,.06);-webkit-backdrop-filter:none;backdrop-filter:none;clip-path:none;opacity:0;visibility:hidden;transform:translateY(-12px) scale(.98);transform-origin:top center;transition:opacity .26s ease,transform .5s var(--ease-refined),visibility 0s linear .5s}
+  .menu-open .nav-links{opacity:1;visibility:visible;clip-path:none;transform:none;pointer-events:auto;background:#2d211b;-webkit-backdrop-filter:none;backdrop-filter:none;transition:opacity .26s ease,transform .5s var(--ease-refined),visibility 0s}
+  .nav-links .nav-link,.nav-links .nav-link:hover,.nav-links .nav-link.active,.nav-links .nav-cta,.nav-links .nav-cta:hover,.nav-links .nav-cta.active,.nav-links .invitation-replay{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:52px;margin:0;padding:14px 14px;border:0;border-bottom:1px solid rgba(255,249,239,.09)!important;border-radius:12px;color:rgba(255,249,239,.72);background:transparent;font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;text-align:left;opacity:0;transform:translateX(-10px);transition:color .25s ease,background .25s ease,opacity .3s ease,transform .5s var(--ease-refined)}
+  .nav-links .nav-link.active,.nav-links .nav-link:active,.nav-links .invitation-replay:active{color:var(--off-white)}
+  .nav-links .nav-link:active,.nav-links .invitation-replay:active{background:rgba(255,249,239,.06)}
+  .nav-links .nav-link::after,.nav-links .nav-link.active::after{content:"";position:static;display:block;width:6px;height:6px;margin:0 0 0 12px;border-radius:50%;background:var(--off-white);opacity:0;transform:scale(.4);animation:none;transition:opacity .3s ease,transform .45s var(--ease-refined)}
+  .nav-links .nav-link.active::after{opacity:1;transform:none}
+  .nav-links .language-toggle{align-self:flex-start;margin:12px 6px 6px;opacity:0;transform:translateX(-10px);transition:opacity .3s ease,transform .5s var(--ease-refined),color .25s ease,background .25s ease}
+  .nav-links>*:nth-last-child(2){border-bottom:0!important}
+  .menu-open .nav-links>*,.menu-open .nav-links .nav-link,.menu-open .nav-links .nav-link.active,.menu-open .nav-links .invitation-replay,.menu-open .nav-links .language-toggle{opacity:1;transform:none}
+
+  /* The very bottom of the site is rounded too. */
+  .site{margin-bottom:7px;border-radius:28px}
+  .footer{margin-bottom:7px;border-radius:25px}
+  .travel-heading .section-title span{max-width:320px;font-size:.74rem}
+}
+
+/* Hamburger bars follow the header tone and stay visible as the close cross. */
+@media(max-width:720px){
+  .menu-toggle span,.menu-toggle span+span{background:currentColor}
+  .menu-open .menu-toggle span{opacity:1}
+}
+@media(max-width:720px){
+  .menu-open .site-header .menu-toggle,.menu-open .site-header:hover .menu-toggle,.menu-open .site-header:not(.header-on-dark):hover .menu-toggle,.menu-open .site-header:not(.header-on-dark):focus-within .menu-toggle{color:var(--off-white);border-color:rgba(255,249,239,.16);background:rgba(255,249,239,.07)}
+}
