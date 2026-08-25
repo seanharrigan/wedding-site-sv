@@ -20,6 +20,7 @@ const languageGate = document.getElementById('language-gate');
 const languageGateOptions = [...document.querySelectorAll('.language-gate-option')];
 const envelopeStage = document.querySelector('.envelope-stage');
 const suiteComposite = document.querySelector('.suite-composite');
+const closedWaxSeal = document.querySelector('.closed-wax-seal');
 const suiteCards = [...document.querySelectorAll('.suite-card[href], .suite-hotspot[href]')];
 const nav = document.getElementById('nav-links');
 const mobileCurrent = document.getElementById('mobile-current');
@@ -107,6 +108,24 @@ const syncNavigation = () => {
   requestAnimationFrame(syncNavIndicator);
 };
 
+const placeClosedWaxSeal = () => {
+  if (!closedWaxSeal) return;
+  const mobile = innerWidth <= 720;
+  const naturalWidth = mobile ? 941 : 1672;
+  const naturalHeight = mobile ? 1672 : 941;
+  const spec = mobile
+    ? { cx: 462 / 941, cy: 1102.5 / 1672, width: 336 / 941 }
+    : { cx: 822.5 / 1672, cy: 725.5 / 941, width: 309 / 1672 };
+  const box = invitationIntro.getBoundingClientRect();
+  if (!box.width || !box.height) return;
+  const scale = Math.max(box.width / naturalWidth, box.height / naturalHeight);
+  const offsetX = (box.width - naturalWidth * scale) / 2;
+  const offsetY = mobile ? 0 : (box.height - naturalHeight * scale) / 2;
+  closedWaxSeal.style.left = `${(offsetX + spec.cx * naturalWidth * scale).toFixed(1)}px`;
+  closedWaxSeal.style.top = `${(offsetY + spec.cy * naturalHeight * scale).toFixed(1)}px`;
+  closedWaxSeal.style.width = `${(spec.width * naturalWidth * scale).toFixed(1)}px`;
+};
+
 const revealInvitation = ({ replay = false } = {}) => {
   clearInvitationTimers();
   invitationIntro.hidden = false;
@@ -114,6 +133,7 @@ const revealInvitation = ({ replay = false } = {}) => {
   invitationIntro.classList.remove('is-open', 'is-opening', 'is-closing', 'is-returning', 'is-leaving', 'is-preparing', 'is-replaying');
   invitationIntro.setAttribute('aria-hidden', 'false');
   envelopeStage.setAttribute('aria-hidden', 'true');
+  requestAnimationFrame(placeClosedWaxSeal);
   const gateOpen = languageGate && !languageGate.classList.contains('is-done');
 
   if (replay && !reducedMotion) {
@@ -705,6 +725,9 @@ if (suiteHotspotStage) {
   suiteHotspotStage.querySelectorAll('img').forEach((img) => img.addEventListener('load', placeSuiteHotspots));
   openEnvelope.addEventListener('click', () => requestAnimationFrame(placeSuiteHotspots));
 }
+placeClosedWaxSeal();
+addEventListener('resize', placeClosedWaxSeal, { passive: true });
+addEventListener('orientationchange', placeClosedWaxSeal);
 
 const wedding = new Date('2026-11-03T14:00:00-06:00').getTime();
 const countdownValues = {
