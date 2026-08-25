@@ -1,0 +1,14 @@
+/* Save-the-Date: ochre textile with botanical leaf shadows. */
+.save-date::after{
+  background-color:#a55f22;
+  background-image:linear-gradient(180deg,rgba(42,22,10,.04),rgba(42,22,10,.2)),url("save-date-botanical-shadow-desktop-v1.png");
+  background-position:center;
+  background-size:cover;
+}
+
+@media(max-width:720px){
+  .save-date::after{
+    background-image:linear-gradient(180deg,rgba(42,22,10,.03),rgba(42,22,10,.18)),url("save-date-botanical-shadow-mobile-v1.png");
+    background-position:center 48%;
+  }
+}
