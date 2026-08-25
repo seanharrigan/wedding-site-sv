@@ -3,6 +3,12 @@ const header = document.getElementById('site-header');
 const menuToggle = document.getElementById('menu-toggle');
 const navLinks = [...document.querySelectorAll('.nav-link')];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const readStoredValue = (key) => {
+  try { return localStorage.getItem(key); } catch { return null; }
+};
+const storeValue = (key, value) => {
+  try { localStorage.setItem(key, value); } catch { /* Storage can be unavailable in restricted browsing modes. */ }
+};
 const languageToggle = document.getElementById('language-toggle');
 const introLanguageToggle = document.getElementById('intro-language-toggle');
 const invitationIntro = document.getElementById('invitation-intro');
@@ -95,7 +101,7 @@ const revealInvitation = () => {
 const enterCelebration = () => {
   invitationIntro.classList.add('is-leaving');
   body.classList.remove('invitation-active');
-  localStorage.setItem('wedding-invitation-seen', 'true');
+  storeValue('wedding-invitation-seen', 'true');
   setTimeout(() => {
     invitationIntro.hidden = true;
     invitationIntro.classList.remove('is-leaving', 'is-open');
@@ -103,10 +109,11 @@ const enterCelebration = () => {
   }, reducedMotion ? 0 : 640);
 };
 
-if (localStorage.getItem('wedding-invitation-seen') === 'true') {
+if (readStoredValue('wedding-invitation-seen') === 'true') {
   languageGate?.classList.add('is-done');
   invitationIntro.hidden = true;
   invitationIntro.setAttribute('aria-hidden', 'true');
+  document.documentElement.classList.remove('returning-visitor');
 } else {
   body.classList.add('language-gate-open');
   revealInvitation();
@@ -393,7 +400,7 @@ const translatedElements = [...document.querySelectorAll('p,h2,h3,a,label,figcap
   .map((element) => ({ element, key: normalizeText(element.textContent), english: element.innerHTML }))
   .filter((item) => phraseTranslations.has(item.key));
 
-const storedLanguage = localStorage.getItem('wedding-language');
+const storedLanguage = readStoredValue('wedding-language');
 const browserLocale = `${navigator.language || ''} ${Intl.DateTimeFormat().resolvedOptions().timeZone || ''}`;
 let currentLanguage = storedLanguage === 'es' || storedLanguage === 'en'
   ? storedLanguage
@@ -422,7 +429,7 @@ const renderLanguage = (language) => {
   introLanguageToggle.querySelector('.language-next').textContent = language === 'en' ? 'ES' : 'EN';
   introLanguageToggle.setAttribute('aria-label', language === 'en' ? 'Choose language / Elegir idioma' : 'Elegir idioma / Choose language');
   menuToggle.setAttribute('aria-label', language === 'es' ? 'Abrir menú' : 'Open navigation');
-  localStorage.setItem('wedding-language', language);
+  storeValue('wedding-language', language);
   syncNavigation();
 };
 
