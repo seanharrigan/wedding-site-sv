@@ -2859,3 +2859,62 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
 .intro-cover:focus-visible .closed-wax-seal{filter:drop-shadow(0 7px 9px rgba(61,35,21,.14));transform:translate3d(-50%,-50%,0) scale(1.02)}
 .invitation-intro.is-opening .closed-wax-seal{filter:none;transform:translate3d(-50%,-50%,0) scale(1.018)}
 @media(prefers-reduced-motion:reduce){.closed-wax-seal{transition:none!important}}
+
+/* Card-anchored invitation cues: the light follows the pointer, while each label belongs to its paper piece. */
+.suite-action{
+  left:50%!important;
+  top:0!important;
+  display:flex;
+  min-width:max-content;
+  flex-direction:column;
+  gap:3px;
+  padding:6px 10px 4px;
+  text-align:center;
+  transform:translate(-50%,calc(-100% - 3px)) scale(.94)!important;
+}
+.suite-action-arrow{display:block;font-family:var(--sans);font-size:.72rem;font-weight:400;letter-spacing:0;line-height:.72;opacity:.68;transform:translateY(-1px);transition:transform .45s var(--ease-refined),opacity .3s ease}
+.suite-hotspot--main .suite-action{top:11%!important}
+.suite-hotspot--rsvp .suite-action{top:28%!important}
+.suite-hotspot--photo .suite-action{top:0!important}
+@media(hover:hover) and (pointer:fine){
+  .suite-hotspot:hover .suite-action,.suite-hotspot:focus-visible .suite-action{
+    opacity:.96;
+    transform:translate(-50%,calc(-100% - 12px)) scale(1)!important;
+  }
+  .suite-hotspot:hover .suite-action-arrow,.suite-hotspot:focus-visible .suite-action-arrow{opacity:.92;transform:translateY(2px)}
+}
+
+/* A live, crisp monogram restores the ornamental card and gives it a quiet lift. */
+.suite-monogram-card{
+  position:absolute!important;
+  z-index:6;
+  display:block;
+  border-radius:48% 48% 8% 8%/30% 30% 7% 7%;
+  background:rgba(255,250,242,.015);
+  opacity:0;
+  pointer-events:none;
+  transform:rotate(var(--spot-rotate,0deg)) scale(.99);
+  transform-origin:50% 72%;
+  transition:opacity .38s ease .5s,transform .58s cubic-bezier(.16,1,.3,1),filter .58s ease,background .45s ease;
+  will-change:transform;
+}
+.invitation-intro.is-open .suite-monogram-card{opacity:1;pointer-events:auto}
+.suite-monogram-card img{position:absolute;top:43%;left:50%;display:block;width:46%;height:auto;filter:drop-shadow(0 2px 2px rgba(70,43,28,.08));transform:translate(-50%,-50%);transition:transform .58s cubic-bezier(.16,1,.3,1),filter .58s ease;user-select:none;pointer-events:none}
+@media(hover:hover) and (pointer:fine){
+  .suite-monogram-card:hover{
+    background:rgba(255,250,242,.055);
+    filter:drop-shadow(0 14px 18px rgba(67,42,27,.16));
+    transform:rotate(var(--spot-rotate,0deg)) translateY(-3px) scale(1.055);
+  }
+  .suite-monogram-card:hover img{filter:drop-shadow(0 4px 4px rgba(70,43,28,.12));transform:translate(-50%,-50%) scale(1.035)}
+}
+@media(max-width:720px){
+  .suite-action{padding:5px 8px 3px;font-size:.4rem!important;gap:2px}
+  .suite-action-arrow{font-size:.62rem}
+  .suite-hotspot--main .suite-action{top:12%!important}
+  .suite-hotspot--rsvp .suite-action{top:25%!important}
+}
+@media(hover:none),(pointer:coarse){
+  .suite-action{opacity:.82!important;transform:translate(-50%,calc(-100% - 8px)) scale(1)!important}
+}
+@media(prefers-reduced-motion:reduce){.suite-action,.suite-action-arrow,.suite-monogram-card,.suite-monogram-card img{transition:none!important}}
