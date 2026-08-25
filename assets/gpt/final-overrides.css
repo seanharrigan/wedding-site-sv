@@ -1,0 +1,61 @@
+/* Give the Welcome message a little more quiet space above and below. */
+.welcome-section{
+  padding-top:clamp(170px,15.5vw,232px)!important;
+  padding-bottom:clamp(245px,20vw,318px)!important;
+}
+@media(max-width:720px){
+  .welcome-section{
+    padding-top:154px!important;
+    padding-bottom:192px!important;
+  }
+}
+
+/* Closing portrait: preserve the tall source image without artificial side bars. */
+@media(min-width:721px){
+  .closing{overflow:visible;padding:12px 0 18px!important}
+  .closing-photo{
+    width:min(calc(66.65svh - 32px),calc(100% - 32px),600px);
+    height:auto;
+    min-height:0;
+    max-height:none;
+    aspect-ratio:1333/2000;
+    margin-inline:auto;
+    overflow:hidden;
+    background:transparent;
+    box-shadow:0 24px 54px rgba(48,29,19,.18);
+    transition:transform .85s var(--ease-refined),box-shadow .85s ease;
+  }
+  .closing-photo::before{display:none}
+  .closing-photo img{
+    width:100%;
+    height:100%!important;
+    object-fit:cover;
+    object-position:center center!important;
+    transition:transform 1.15s var(--ease-refined),filter .7s ease;
+  }
+  .closing-photo:hover,.closing-photo:focus-within{
+    transform:translateY(-4px);
+    box-shadow:0 32px 68px rgba(48,29,19,.23);
+  }
+  .closing-photo:hover img,.closing-photo:focus-within img{
+    transform:scale(1.012);
+    filter:saturate(1.015)!important;
+  }
+}
+
+/* Keep the footer hover treatment inside its own bounds at the page edge. */
+.footer{
+  transform:none!important;
+  overflow:hidden;
+  transition:background .55s ease,box-shadow .55s ease!important;
+}
+@media(hover:hover) and (pointer:fine){
+  .footer:hover{
+    transform:none!important;
+    background:linear-gradient(135deg,#3d2b23,var(--mocha-deep));
+    box-shadow:inset 0 1px rgba(255,249,239,.12),0 -12px 34px rgba(47,29,18,.14);
+  }
+  .footer-logo,.footer-signoff{transition:transform .7s var(--ease-refined),opacity .45s ease}
+  .footer:hover .footer-logo{transform:translateY(-2px) scale(1.025)}
+  .footer:hover .footer-signoff{transform:translateY(-1px)}
+}
