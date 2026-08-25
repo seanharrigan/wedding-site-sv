@@ -2993,6 +2993,7 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
 }
 @media(max-width:720px){
   .invitation-intro.is-open .enter-site{min-height:43px!important;padding:0 19px!important;font-size:.69rem!important}
+  .suite-monogram-card{display:none!important}
 }
 @media(prefers-reduced-motion:reduce){
   .invitation-intro.is-leaving,.invitation-intro.is-leaving::after,.invitation-intro.is-leaving .suite-composite{animation:none!important;transition:none!important}
