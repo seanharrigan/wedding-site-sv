@@ -498,8 +498,8 @@ checkInForm.addEventListener('submit', (event) => {
 const attachLens = (lensPanel) => {
   let targetX = 0, targetY = 0, lensX = 0, lensY = 0, lensFrame = 0;
   const settle = () => {
-    lensX += (targetX - lensX) * (reducedMotion ? 1 : .16);
-    lensY += (targetY - lensY) * (reducedMotion ? 1 : .16);
+    lensX += (targetX - lensX) * (reducedMotion ? 1 : .1);
+    lensY += (targetY - lensY) * (reducedMotion ? 1 : .1);
     lensPanel.style.setProperty('--lens-x', `${lensX.toFixed(1)}px`);
     lensPanel.style.setProperty('--lens-y', `${lensY.toFixed(1)}px`);
     lensFrame = (Math.abs(targetX - lensX) > .4 || Math.abs(targetY - lensY) > .4) ? requestAnimationFrame(settle) : 0;

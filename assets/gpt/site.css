@@ -637,7 +637,7 @@ body{background:radial-gradient(ellipse at 50% 28%,rgba(182,139,89,.18),transpar
 /* Full-screen invitation envelope with the SV seal baked into the artwork. */
 .invitation-intro:not(.is-open){background:#eadbc7 url("opening-envelope-exact-logo-desktop-v7.png") center/cover no-repeat!important}
 .invitation-intro:not(.is-open) .intro-cover{position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;height:100%!important;padding:7svh 16px 0!important;place-content:start center!important;transform:none!important;text-shadow:none!important}
-.invitation-intro:not(.is-open) .intro-cover:hover,.invitation-intro:not(.is-open) .intro-cover:focus-visible{transform:scale(1.008)!important}
+.invitation-intro:not(.is-open) .intro-cover:hover,.invitation-intro:not(.is-open) .intro-cover:focus-visible{transform:scale(1.002)!important}
 .invitation-intro:not(.is-open) .intro-kicker{margin:0 0 .1em!important;color:#75442c!important;font-family:var(--script)!important;font-size:clamp(2rem,3.2vw,3.7rem)!important;font-weight:400!important;letter-spacing:0!important;line-height:1!important;text-transform:none!important}
 .invitation-intro:not(.is-open) .intro-cover h1{display:flex!important;align-items:center;justify-content:center;gap:.1em;margin:0!important;color:#55311f!important;font-family:var(--script)!important;font-size:clamp(5.4rem,8.6vw,9.2rem)!important;font-weight:400!important;letter-spacing:-.035em!important;line-height:.72!important;white-space:nowrap}
 .invitation-intro:not(.is-open) .intro-cover h1 em{margin:0!important;color:#8e4d2d!important;font-family:var(--script)!important;font-size:.6em!important;font-style:normal!important}
@@ -669,7 +669,7 @@ body{background:radial-gradient(ellipse at 50% 28%,rgba(182,139,89,.18),transpar
 
 /* Printed bilingual suite and restrained liquid-glass invitation controls. */
 .invitation-intro.is-open{background:#eadbc7 url("opening-envelope-exact-logo-desktop-v7.png") center/cover no-repeat!important}
-.suite-composite{transform:translateY(18px) scale(.972)!important;filter:blur(1.5px);transition:opacity 1.15s ease .34s,transform 1.75s cubic-bezier(.16,1,.3,1) .24s,filter 1.25s ease .28s!important}
+.suite-composite{transform:translateY(8px) scale(.992)!important;filter:blur(.5px);transition:opacity 1.05s ease .24s,transform 1.35s cubic-bezier(.16,1,.3,1) .2s,filter 1s ease .2s!important}
 .invitation-intro.is-open .suite-composite{opacity:1!important;transform:none!important;filter:none}
 body.language-transition .suite-composite{opacity:.42!important;filter:blur(2px)}
 .intro-language-toggle{top:24px!important;right:auto!important;left:26px!important;min-height:40px!important;padding:0 15px!important;border:1px solid rgba(255,255,255,.28)!important;color:rgba(69,43,28,.78)!important;background:linear-gradient(135deg,rgba(255,255,255,.32),rgba(255,249,239,.12))!important;box-shadow:inset 0 1px rgba(255,255,255,.62),0 7px 24px rgba(67,42,25,.09)!important;opacity:0;transform:translateY(-8px)!important;backdrop-filter:blur(18px) saturate(1.2)!important}
@@ -2595,12 +2595,12 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 /* Language gate: frost over the closed invitation, a lens where the pointer is, two simple choices. */
 .returning-visitor .language-gate,.returning-visitor .invitation-intro{display:none!important}
 .language-gate{--lens-x:50%;--lens-y:50%;--lens-r:0px;position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:24px;isolation:isolate;transition:opacity .6s ease,visibility 0s linear .6s}
-.language-gate::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(160deg,rgba(40,30,24,.5),rgba(24,17,13,.6));-webkit-backdrop-filter:blur(16px) saturate(115%);backdrop-filter:blur(16px) saturate(115%);transition:--lens-r .9s var(--ease-refined)}
+.language-gate::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(160deg,rgba(40,30,24,.34),rgba(24,17,13,.42));-webkit-backdrop-filter:blur(11px) saturate(108%);backdrop-filter:blur(11px) saturate(108%);transition:--lens-r 1.15s var(--ease-refined)}
 .language-gate.is-done{opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0s,visibility 0s}
 .language-gate.is-clearing{pointer-events:none}
-.language-gate.is-clearing::before{opacity:0;transition:opacity 1.1s cubic-bezier(.4,0,.2,1) .15s,--lens-r 1.5s cubic-bezier(.45,0,.2,1)}
+.language-gate.is-clearing::before{opacity:0;transition:opacity 1.05s cubic-bezier(.4,0,.2,1),--lens-r 1.1s cubic-bezier(.45,0,.2,1)}
 .language-gate-panel{display:flex;align-items:center;justify-content:center;gap:clamp(30px,6vw,72px);width:min(100%,600px);color:var(--off-white);text-align:center;transition:opacity .55s ease,transform .9s var(--ease-refined)}
-.language-gate.is-clearing .language-gate-panel{opacity:0;transform:translateY(-16px) scale(.98)}
+.language-gate.is-clearing .language-gate-panel{opacity:0;transform:translateY(-6px) scale(.995)}
 .language-gate-panel:focus{outline:0}
 .language-gate-option{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:14px;min-width:210px;padding:15px 18px;border:0;border-radius:0;color:var(--off-white);background:transparent;font-family:var(--serif);font-size:clamp(2rem,3.4vw,2.8rem);font-weight:400;letter-spacing:.01em;line-height:1;cursor:pointer;box-shadow:none;text-shadow:0 2px 18px rgba(24,15,10,.42);transition:color .3s ease,transform .45s var(--ease-refined)}
 .language-gate-option::after{content:"";position:absolute;right:18px;bottom:4px;left:18px;height:1px;background:currentColor;opacity:.28;transform:scaleX(.32);transition:opacity .35s ease,transform .5s var(--ease-refined)}
@@ -2613,14 +2613,14 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
 body.language-gate-open{overflow:hidden}
 @media(hover:hover) and (pointer:fine){
   .language-gate::before{
-    -webkit-mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),transparent 0,transparent calc(var(--lens-r) * .5),#000 var(--lens-r));
-    mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),transparent 0,transparent calc(var(--lens-r) * .5),#000 var(--lens-r));
+    -webkit-mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),rgba(0,0,0,.7) 0,rgba(0,0,0,.7) calc(var(--lens-r) * .42),#000 var(--lens-r));
+    mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),rgba(0,0,0,.7) 0,rgba(0,0,0,.7) calc(var(--lens-r) * .42),#000 var(--lens-r));
   }
-  .language-gate:hover::before{--lens-r:210px}
-  .language-gate.is-clearing::before,.language-gate.is-clearing:hover::before{--lens-r:135vmax;opacity:1;transition:--lens-r 1.5s cubic-bezier(.45,0,.2,1)}
-  .language-gate-option:hover{color:#fff9f0;background:transparent;transform:translateY(-3px);box-shadow:none}
-  .language-gate-option:hover::after{opacity:.72;transform:scaleX(1)}
-  .language-gate-option:hover .language-gate-icon{opacity:1;transform:translateY(-1px) scale(1.06)}
+  .language-gate:hover::before{--lens-r:145px}
+  .language-gate.is-clearing::before,.language-gate.is-clearing:hover::before{--lens-r:230px;opacity:0;transition:opacity 1.05s cubic-bezier(.4,0,.2,1),--lens-r 1.1s cubic-bezier(.45,0,.2,1)}
+  .language-gate-option:hover{color:#fff9f0;background:transparent;transform:translateY(-1px);box-shadow:none}
+  .language-gate-option:hover::after{opacity:.5;transform:scaleX(.82)}
+  .language-gate-option:hover .language-gate-icon{opacity:1;transform:translateY(-.5px) scale(1.02)}
 }
 @media(prefers-reduced-motion:reduce){.language-gate::before{transition:none}}
 @media(max-width:720px){
