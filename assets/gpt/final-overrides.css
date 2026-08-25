@@ -40,7 +40,7 @@
   .closing-copy .eyebrow{margin-inline:0}
   .closing-copy .rule{margin-inline:0}
   .closing-photo:hover,.closing-photo:focus-within{
-    transform:translateY(-4px);
+    transform:translateY(-3px);
     box-shadow:0 42px 92px rgba(48,29,19,.36),0 16px 36px rgba(48,29,19,.18);
   }
   .closing-photo:hover img,.closing-photo:focus-within img{
