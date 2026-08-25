@@ -569,9 +569,17 @@ const attachLens = (lensPanel) => {
   };
   lensPanel.addEventListener('pointerenter', (event) => track(event, true));
   lensPanel.addEventListener('pointermove', (event) => track(event, false));
+  lensPanel.addEventListener('pointerdown', (event) => {
+    track(event, true);
+    lensPanel.classList.add('is-lens-active');
+  });
+  const releaseLens = () => lensPanel.classList.remove('is-lens-active');
+  lensPanel.addEventListener('pointerup', releaseLens);
+  lensPanel.addEventListener('pointercancel', releaseLens);
 };
+if (languageGate) attachLens(languageGate);
 if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  document.querySelectorAll('.special-inner, .language-gate').forEach(attachLens);
+  document.querySelectorAll('.special-inner').forEach(attachLens);
 }
 
 // Language gate: pick a language before the invitation opens.

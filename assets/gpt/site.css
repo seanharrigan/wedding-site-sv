@@ -2689,3 +2689,26 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
   .suite-composite{clip-path:none!important}
   .suite-hotspot,.suite-action,.suite-action-icon{transition:none!important}
 }
+
+/* Mobile invitation viewport: cover the live Safari viewport without revealing the site beneath. */
+@media(max-width:720px){
+  body.invitation-active{overflow:hidden!important;overscroll-behavior:none}
+  .invitation-intro{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;min-width:100%!important;min-height:100dvh!important;overflow:hidden!important;background-color:#eadbc7!important;contain:paint}
+  .invitation-intro.is-open .envelope-stage{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:100%!important;min-height:100%!important;max-width:none!important;max-height:none!important;overflow:hidden!important}
+  .suite-composite{inset:-1px!important;width:calc(100% + 2px)!important;height:calc(100% + 2px)!important;overflow:hidden!important;background:#eadbc7}
+  .suite-composite .suite-art,.suite-composite picture,.suite-composite img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important}
+  .suite-composite img{object-fit:cover!important;object-position:center center!important}
+}
+
+/* The language frost follows a finger as well as a mouse. */
+.language-gate{touch-action:none}
+@media(hover:none),(pointer:coarse){
+  .language-gate{--lens-r:92px}
+  .language-gate::before{
+    -webkit-mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),rgba(0,0,0,.66) 0,rgba(0,0,0,.66) calc(var(--lens-r) * .42),#000 var(--lens-r));
+    mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),rgba(0,0,0,.66) 0,rgba(0,0,0,.66) calc(var(--lens-r) * .42),#000 var(--lens-r));
+    transition:--lens-r .45s var(--ease-refined),opacity .8s ease
+  }
+  .language-gate.is-lens-active::before{--lens-r:126px}
+  .language-gate.is-clearing::before{--lens-r:220px;opacity:0}
+}
