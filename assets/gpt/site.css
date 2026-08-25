@@ -2918,3 +2918,82 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
   .suite-action{opacity:.82!important;transform:translate(-50%,calc(-100% - 8px)) scale(1)!important}
 }
 @media(prefers-reduced-motion:reduce){.suite-action,.suite-action-arrow,.suite-monogram-card,.suite-monogram-card img{transition:none!important}}
+
+/* A quiet engraved invitation control, with a tactile lift instead of a generic button hover. */
+.invitation-intro.is-open .enter-site{
+  isolation:isolate;
+  min-height:46px!important;
+  padding:0 24px!important;
+  gap:.8rem!important;
+  overflow:hidden!important;
+  border:1px solid rgba(73,45,29,.25)!important;
+  border-radius:999px!important;
+  color:rgba(54,34,23,.88)!important;
+  background:linear-gradient(105deg,rgba(255,252,246,.72),rgba(248,237,222,.52))!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.76),0 10px 25px rgba(61,38,24,.09)!important;
+  -webkit-backdrop-filter:blur(10px) saturate(106%)!important;
+  backdrop-filter:blur(10px) saturate(106%)!important;
+  font-size:clamp(.72rem,.79vw,.84rem)!important;
+  letter-spacing:.13em!important;
+  opacity:.94!important;
+  transition:color .42s ease,background .5s ease,border-color .42s ease,box-shadow .62s ease,opacity .35s ease,transform .62s cubic-bezier(.16,1,.3,1)!important;
+}
+.invitation-intro.is-open .enter-site::before{content:"✦";font-size:.5rem;color:rgba(93,57,35,.48);transform:none}
+.invitation-intro.is-open .enter-site::after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  z-index:-1;
+  display:block!important;
+  border:1px solid rgba(105,69,43,.12);
+  border-radius:inherit;
+  opacity:.7;
+  pointer-events:none;
+  transition:border-color .42s ease,opacity .42s ease;
+}
+.invitation-intro.is-open .enter-site:hover,.invitation-intro.is-open .enter-site:focus-visible{
+  border-color:rgba(73,45,29,.42)!important;
+  color:rgba(45,28,19,.98)!important;
+  background:linear-gradient(105deg,rgba(255,253,248,.9),rgba(244,229,210,.72))!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.9),0 17px 34px rgba(61,38,24,.15)!important;
+  opacity:1!important;
+  transform:translateX(-50%) translateY(-4px) scale(1.018)!important;
+}
+.invitation-intro.is-open .enter-site:hover::before,.invitation-intro.is-open .enter-site:focus-visible::before{color:rgba(93,57,35,.76);transform:rotate(45deg) scale(.9)}
+.invitation-intro.is-open .enter-site:hover::after,.invitation-intro.is-open .enter-site:focus-visible::after{border-color:rgba(105,69,43,.22);opacity:1}
+.invitation-intro.is-open .enter-site:hover>span,.invitation-intro.is-open .enter-site:focus-visible>span{transform:translateX(5px)}
+.invitation-intro.is-open .enter-site:active{transform:translateX(-50%) translateY(-1px) scale(.992)!important;transition-duration:.12s!important}
+
+/* Invitation-to-site handoff: a slow paper lift followed by a warm, veiled reveal. */
+.invitation-intro.is-leaving{
+  visibility:visible!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  transition:opacity .54s cubic-bezier(.4,0,.2,1) .76s,visibility 0s linear 1.3s!important;
+}
+.invitation-intro.is-leaving::after{animation:invitation-exit-wash 1.3s cubic-bezier(.4,0,.2,1) both!important}
+.invitation-intro.is-open.is-leaving .suite-composite{
+  clip-path:inset(.8% 1.2% round 12px)!important;
+  opacity:0!important;
+  filter:brightness(1.035) saturate(.96)!important;
+  transform:translate3d(0,-16px,0) scale(1.018)!important;
+  transition:opacity .52s ease .56s,transform 1.18s cubic-bezier(.16,1,.3,1),filter 1.05s ease,clip-path 1.18s cubic-bezier(.16,1,.3,1)!important;
+}
+.invitation-intro.is-leaving .intro-close,.invitation-intro.is-leaving .enter-site,.invitation-intro.is-leaving .suite-hotspot,.invitation-intro.is-leaving .suite-monogram-card{
+  opacity:0!important;
+  pointer-events:none!important;
+  transition:opacity .28s ease,transform .5s cubic-bezier(.4,0,.2,1)!important;
+}
+.invitation-intro.is-leaving .enter-site{transform:translateX(-50%) translateY(8px) scale(.985)!important}
+@keyframes invitation-exit-wash{
+  0%{opacity:0;background:rgba(250,242,231,0)}
+  44%{opacity:.18;background:rgba(250,242,231,.34)}
+  76%{opacity:.46;background:rgba(250,242,231,.7)}
+  100%{opacity:.28;background:rgba(250,242,231,.54)}
+}
+@media(max-width:720px){
+  .invitation-intro.is-open .enter-site{min-height:43px!important;padding:0 19px!important;font-size:.69rem!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .invitation-intro.is-leaving,.invitation-intro.is-leaving::after,.invitation-intro.is-leaving .suite-composite{animation:none!important;transition:none!important}
+}

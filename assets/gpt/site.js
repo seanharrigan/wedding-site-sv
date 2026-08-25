@@ -33,6 +33,8 @@ let invitationFocusTimer = 0;
 let invitationReplayTimer = 0;
 let invitationOpenTimer = 0;
 let invitationCloseTimer = 0;
+const invitationExitDuration = reducedMotion ? 0 : 1320;
+const invitationTargetDelay = reducedMotion ? 0 : 1160;
 
 const clearInvitationTimers = () => {
   clearTimeout(invitationHideTimer);
@@ -169,7 +171,7 @@ const enterCelebration = () => {
     invitationIntro.setAttribute('aria-hidden', 'true');
     body.classList.remove('invitation-active');
     invitationHideTimer = 0;
-  }, reducedMotion ? 0 : 760);
+  }, invitationExitDuration);
 };
 
 const closeInvitation = () => {
@@ -236,7 +238,7 @@ suiteCards.forEach((card) => card.addEventListener('click', (event) => {
   event.preventDefault();
   const target = document.querySelector(card.getAttribute('href'));
   enterCelebration();
-  setTimeout(() => target?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' }), reducedMotion ? 0 : 650);
+  setTimeout(() => target?.scrollIntoView({ behavior: 'auto', block: 'start' }), invitationTargetDelay);
 }));
 suiteHoverPieces.forEach((card) => {
   card.addEventListener('pointerenter', () => suiteComposite?.classList.add('is-action-hovered'));
