@@ -229,18 +229,29 @@ document.querySelectorAll('.travel-section .practical.accordion, .faq.accordion'
     item.querySelector('.accordion-trigger')?.setAttribute('aria-expanded', 'true');
   };
 
+  // Track the item under the pointer and close on a short grace period, so the
+  // overlapping expand/collapse panels can't ping-pong the open state.
+  let hovered = null;
+  let closeTimer = 0;
+
   accordion.addEventListener('pointerover', (event) => {
     if (!travelHoverQuery.matches) return;
     const item = event.target.closest('.practical-item');
-    if (!item || !accordion.contains(item) || item.contains(event.relatedTarget)) return;
-    openItem(item);
+    if (!item || !accordion.contains(item)) return;
+    hovered = item;
+    clearTimeout(closeTimer);
+    if (!item.classList.contains('open')) openItem(item);
   });
 
   accordion.addEventListener('pointerout', (event) => {
     if (!travelHoverQuery.matches) return;
     const item = event.target.closest('.practical-item');
     if (!item || !accordion.contains(item) || item.contains(event.relatedTarget)) return;
-    closeItem(item);
+    if (hovered === item) hovered = null;
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => {
+      if (hovered !== item && item.classList.contains('open')) closeItem(item);
+    }, 180);
   });
 });
 

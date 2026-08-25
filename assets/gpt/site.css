@@ -2505,3 +2505,9 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 @media(max-width:720px){
   .menu-open .site-header .menu-toggle,.menu-open .site-header:hover .menu-toggle,.menu-open .site-header:not(.header-on-dark):hover .menu-toggle,.menu-open .site-header:not(.header-on-dark):focus-within .menu-toggle{color:var(--off-white);border-color:rgba(255,249,239,.16);background:rgba(255,249,239,.07)}
 }
+
+/* Only the open practical panel is hit-testable, so a collapsing sibling
+   sharing the same grid row can't steal the pointer. */
+@media(hover:hover) and (pointer:fine){
+  .practical-item:not(.open) .accordion-panel{pointer-events:none}
+}
