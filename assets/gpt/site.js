@@ -10,6 +10,8 @@ const openEnvelope = document.getElementById('open-envelope');
 const enterSite = document.getElementById('enter-site');
 const introClose = document.getElementById('intro-close');
 const invitationReplay = document.getElementById('invitation-replay');
+const languageGate = document.getElementById('language-gate');
+const languageGateOptions = [...document.querySelectorAll('.language-gate-option')];
 const envelopeStage = document.querySelector('.envelope-stage');
 const suiteCards = [...document.querySelectorAll('.suite-card[href], .suite-hotspot[href]')];
 const nav = document.getElementById('nav-links');
@@ -86,7 +88,8 @@ const revealInvitation = () => {
   invitationIntro.classList.remove('is-open', 'is-leaving');
   invitationIntro.setAttribute('aria-hidden', 'false');
   envelopeStage.setAttribute('aria-hidden', 'true');
-  setTimeout(() => openEnvelope.focus(), reducedMotion ? 0 : 180);
+  const gateOpen = languageGate && !languageGate.classList.contains('is-done');
+  setTimeout(() => (gateOpen ? document.querySelector('.language-gate-panel') : openEnvelope).focus({ preventScroll: true }), reducedMotion ? 0 : 180);
 };
 
 const enterCelebration = () => {
@@ -101,6 +104,7 @@ const enterCelebration = () => {
 };
 
 if (localStorage.getItem('wedding-invitation-seen') === 'true') {
+  languageGate?.classList.add('is-done');
   invitationIntro.hidden = true;
   invitationIntro.setAttribute('aria-hidden', 'true');
 } else {
@@ -467,9 +471,8 @@ checkInForm.addEventListener('submit', (event) => {
   window.location.href = `mailto:valeriaandseanharrigan@gmail.com?subject=${subject}&body=${message}`;
 });
 
-// The cactus panel clears a soft lens wherever the pointer rests (desktop only).
-const lensPanel = document.querySelector('.special-inner');
-if (lensPanel && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+// Frosted panels clear a soft lens wherever the pointer rests (desktop only).
+const attachLens = (lensPanel) => {
   let targetX = 0, targetY = 0, lensX = 0, lensY = 0, lensFrame = 0;
   const settle = () => {
     lensX += (targetX - lensX) * (reducedMotion ? 1 : .16);
@@ -487,7 +490,26 @@ if (lensPanel && matchMedia('(hover: hover) and (pointer: fine)').matches) {
   };
   lensPanel.addEventListener('pointerenter', (event) => track(event, true));
   lensPanel.addEventListener('pointermove', (event) => track(event, false));
+};
+if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('.special-inner, .language-gate').forEach(attachLens);
 }
+
+// Language gate: pick a language before the invitation opens.
+languageGateOptions.forEach((option) => option.addEventListener('click', () => {
+  currentLanguage = option.dataset.language === 'es' ? 'es' : 'en';
+  renderLanguage(currentLanguage);
+  // The frost clears outward from the chosen option, then the gate steps aside.
+  const gateRect = languageGate.getBoundingClientRect();
+  const optionRect = option.getBoundingClientRect();
+  languageGate.style.setProperty('--lens-x', `${(optionRect.left + optionRect.width / 2 - gateRect.left).toFixed(1)}px`);
+  languageGate.style.setProperty('--lens-y', `${(optionRect.top + optionRect.height / 2 - gateRect.top).toFixed(1)}px`);
+  languageGate.classList.add('is-clearing');
+  setTimeout(() => {
+    languageGate.classList.add('is-done');
+    openEnvelope.focus({ preventScroll: true });
+  }, reducedMotion ? 0 : 1550);
+}));
 
 const wedding = new Date('2026-11-03T14:00:00-06:00').getTime();
 const countdownValues = {
