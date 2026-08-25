@@ -2463,7 +2463,7 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 
 /* Countdown rises over the closing photo as a card, the way it does on mobile. */
 @media(min-width:721px){
-  .countdown{position:relative;z-index:3;margin-top:-44px!important;border-radius:44px 44px 0 0;box-shadow:0 -22px 50px rgba(52,38,31,.16)}
+  .countdown{position:relative;z-index:12;margin-top:-44px!important;border-radius:44px 44px 0 0;box-shadow:0 -22px 50px rgba(52,38,31,.16)}
 }
 
 /* Header hover must not stick after a tap on touch screens. */
@@ -2536,4 +2536,10 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 .faq-head .section-title em{text-transform:capitalize}
 @media(hover:hover) and (pointer:fine){
   .faq .accordion-item:not(.open) .accordion-panel{pointer-events:none}
+}
+
+/* Closing ground matches the countdown card; the card rises over the photo like a ticket. */
+.closing,.countdown{background:var(--paper)!important}
+@media(min-width:721px){
+  .countdown{box-shadow:0 -26px 56px rgba(52,38,31,.2)}
 }
