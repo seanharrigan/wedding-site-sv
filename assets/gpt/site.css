@@ -2593,7 +2593,7 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 }
 
 /* Language gate: frost over the closed invitation, a lens where the pointer is, two simple choices. */
-.language-gate{--lens-x:50%;--lens-y:50%;--lens-r:0px;position:absolute;inset:0;z-index:6;display:grid;place-items:center;padding:24px;isolation:isolate;transition:opacity .6s ease,visibility 0s linear .6s}
+.language-gate{--lens-x:50%;--lens-y:50%;--lens-r:0px;position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:24px;isolation:isolate;transition:opacity .6s ease,visibility 0s linear .6s}
 .language-gate::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(160deg,rgba(40,30,24,.5),rgba(24,17,13,.6));-webkit-backdrop-filter:blur(16px) saturate(115%);backdrop-filter:blur(16px) saturate(115%);transition:--lens-r .9s var(--ease-refined)}
 .language-gate.is-done{opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0s,visibility 0s}
 .language-gate.is-clearing{pointer-events:none}
@@ -2609,7 +2609,8 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 .language-gate-option svg{width:26px;height:26px;flex:0 0 26px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:.85;transition:transform .5s var(--ease-refined),opacity .3s ease}
 .language-gate-option:focus-visible{outline:2px solid var(--off-white);outline-offset:3px}
 .language-gate-option:active{transform:translateY(1px)}
-.invitation-intro:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-events:none}
+body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-events:none}
+body.language-gate-open{overflow:hidden}
 @media(hover:hover) and (pointer:fine){
   .language-gate::before{
     -webkit-mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),transparent 0,transparent calc(var(--lens-r) * .5),#000 var(--lens-r));
@@ -2625,12 +2626,13 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
   .language-gate{padding:20px}
   .language-gate-panel{width:min(100%,340px)}
   .language-gate-option{padding:15px 18px;font-size:1.55rem;gap:12px}
+  .language-gate-kicker{padding:8px 13px;font-size:.5rem;letter-spacing:.16em}
 }
 
 /* A discreet language control on the envelope that brings the frosted gate back. */
 .intro-language-toggle,.invitation-intro.is-open .intro-language-toggle{top:22px!important;left:22px!important;right:auto!important;min-height:0!important;height:36px;padding:0 13px!important;gap:5px;border:1px solid rgba(52,38,31,.18)!important;border-radius:999px;color:rgba(52,38,31,.62)!important;background:rgba(255,249,239,.32)!important;box-shadow:none!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:.5rem;letter-spacing:.14em;opacity:.7;transform:none!important;pointer-events:auto;transition:opacity .35s ease,background .3s ease,border-color .3s ease,color .3s ease}
 .intro-language-toggle:hover,.intro-language-toggle:focus-visible,.invitation-intro.is-open .intro-language-toggle:hover,.invitation-intro.is-open .intro-language-toggle:focus-visible{opacity:1;color:var(--mocha-deep)!important;border-color:rgba(52,38,31,.32)!important;background:rgba(255,249,239,.6)!important;box-shadow:none!important}
 .intro-language-toggle .language-next{opacity:.55}
-.invitation-intro:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-events:none}
+body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-events:none}
 .language-gate::before{transition:--lens-r .9s var(--ease-refined),opacity .8s ease}
 @media(max-width:720px){.intro-language-toggle,.invitation-intro.is-open .intro-language-toggle{top:14px!important;left:14px!important;height:34px;padding:0 11px!important}}

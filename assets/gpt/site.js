@@ -108,6 +108,7 @@ if (localStorage.getItem('wedding-invitation-seen') === 'true') {
   invitationIntro.hidden = true;
   invitationIntro.setAttribute('aria-hidden', 'true');
 } else {
+  body.classList.add('language-gate-open');
   revealInvitation();
 }
 
@@ -151,6 +152,10 @@ document.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && languageGate && !languageGate.classList.contains('is-done')) {
+    dismissLanguageGate();
+    return;
+  }
   if (event.key === 'Escape' && body.classList.contains('invitation-active')) {
     enterCelebration();
     return;
@@ -421,21 +426,26 @@ const renderLanguage = (language) => {
   syncNavigation();
 };
 
-languageToggle.addEventListener('click', () => {
-  body.classList.add('language-transition');
-  setTimeout(() => {
-    currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
-    renderLanguage(currentLanguage);
-    body.classList.remove('language-transition');
-  }, reducedMotion ? 0 : 190);
-});
-// The discreet control on the envelope brings the frosted language gate back.
-introLanguageToggle.addEventListener('click', () => {
+// The header's EN/ES and the envelope's discreet control both open the frosted language gate.
+const openLanguageGate = () => {
   if (!languageGate) return;
+  setMenuOpen(false);
   languageGate.classList.remove('is-clearing');
   languageGate.classList.remove('is-done');
+  body.classList.add('language-gate-open');
   setTimeout(() => document.querySelector('.language-gate-panel')?.focus({ preventScroll: true }), reducedMotion ? 0 : 350);
+};
+const dismissLanguageGate = () => {
+  if (!languageGate || languageGate.classList.contains('is-done')) return;
+  languageGate.classList.add('is-done');
+  body.classList.remove('language-gate-open');
+};
+languageToggle.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  openLanguageGate();
 });
+introLanguageToggle.addEventListener('click', openLanguageGate);
 renderLanguage(currentLanguage);
 
 const sectionObserver = new IntersectionObserver((entries) => {
@@ -513,7 +523,8 @@ languageGateOptions.forEach((option) => option.addEventListener('click', () => {
   languageGate.classList.add('is-clearing');
   setTimeout(() => {
     languageGate.classList.add('is-done');
-    openEnvelope.focus({ preventScroll: true });
+    body.classList.remove('language-gate-open');
+    if (body.classList.contains('invitation-active')) openEnvelope.focus({ preventScroll: true });
   }, reducedMotion ? 0 : 1550);
 }));
 
