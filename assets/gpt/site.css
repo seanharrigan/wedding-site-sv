@@ -2580,3 +2580,14 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
   .site-header:not(.header-on-dark):focus-within .nav-link:hover,.site-header:not(.header-on-dark):focus-within .nav-link.active,.site-header:not(.header-on-dark):focus-within .invitation-replay:focus-visible{color:var(--mocha-deep)}
   .site-header:not(.header-on-dark):hover .language-toggle,.site-header:not(.header-on-dark):focus-within .language-toggle{color:var(--mocha-deep);border-color:rgba(73,54,44,.24);background:rgba(73,54,44,.06)}
 }
+
+/* Mobile header: bare logo and a plain two-bar hamburger in the header's tone. */
+@media(max-width:720px){
+  .brand,.header-on-dark .brand,.menu-open .brand,.site-header .brand{width:48px;height:44px;padding:2px;border:0!important;border-radius:0;background:transparent!important;box-shadow:none!important}
+  .menu-toggle,.site-header:not(.header-on-dark) .menu-toggle,.site-header.header-on-dark .menu-toggle,.menu-open .menu-toggle,.menu-open .site-header .menu-toggle,.menu-open .site-header:hover .menu-toggle,.menu-open .site-header:not(.header-on-dark):hover .menu-toggle{width:44px;height:40px;border:0!important;border-radius:12px;background:transparent!important;box-shadow:none!important}
+  .menu-toggle span,.menu-toggle span+span{left:11px;width:22px;height:1.5px;border-radius:2px;background:currentColor}
+  .menu-toggle span{top:15px}
+  .menu-toggle span+span{top:23px}
+  .menu-open .menu-toggle span:first-child,.menu-open .menu-toggle span:last-child{top:19px}
+  .menu-open .menu-toggle{transform:none}
+}
