@@ -2291,3 +2291,59 @@ body{min-height:100%;padding-bottom:0;background-color:var(--mocha-deep)}
   .closing-photo img{object-fit:cover;object-position:center 50%!important}
   .chapter-map-link,.chapter-map-link:hover,.chapter-map-link:focus-visible{width:42px;height:38px;flex-basis:42px}
 }
+
+/* ---------------------------------------------------------------------------
+   August refinements: plain wedding-day row, arch/square Tepoztlán pair,
+   weather under Details, matched Spirit/gift titles, torn-paper Check-In edge.
+   --------------------------------------------------------------------------- */
+
+/* Itinerary: the wedding day reads like every other row. */
+.week-day--wedding{margin:0;padding:10px 6px;border:0;border-top:1px solid rgba(73,54,44,.2);border-radius:0;color:inherit;background:transparent;box-shadow:none}
+.week-day--wedding time,.week-day--wedding h4{color:var(--mocha-deep)}
+.week-day--wedding time small{color:var(--mocha)}
+.week-day--wedding h4{margin:0;font-family:var(--serif);font-size:clamp(1.25rem,1.6vw,1.5rem);letter-spacing:0}
+.week-day--wedding .text-link{margin-top:.25rem;color:var(--mocha-deep);text-decoration-color:rgba(73,54,44,.35)}
+@media(hover:hover) and (pointer:fine){.week-day--wedding:hover{transform:translateX(4px)}}
+
+/* Tepoztlán pair: arch on the left and in front, rounded square on the right. */
+.tepoz-photos .city-photo:first-child,.tepoz-photos .city-photo:first-child:hover{z-index:2}
+.tepoz-photos .city-photo:last-child,.tepoz-photos .city-photo:last-child:hover{z-index:1}
+.tepoz-photos .city-photo:first-child img{height:clamp(240px,25vw,330px)!important;border-radius:999px 999px 28px 28px!important}
+.tepoz-photos .city-photo:last-child img{width:100%;height:auto!important;aspect-ratio:1/1;border-radius:28px!important}
+.tepoz-photos .city-photo:last-child{margin:clamp(28px,3vw,44px) 0 0 -18px}
+.tepoz-photos .city-photo:first-child figcaption{padding-right:34px}
+
+/* Weather closes the Details section beneath a hairline. */
+.details-weather{width:min(100%,1060px);margin:clamp(12px,1.8vw,26px) auto 0;padding-top:clamp(30px,3.5vw,46px);text-align:center;color:var(--mocha-deep)}
+.details-weather::before{content:"";display:block;width:76%;height:1px;margin:0 auto clamp(30px,3.5vw,46px);background:rgba(73,54,44,.32)}
+.details-weather .detail-label{margin:0 0 1rem;color:var(--mocha);font-family:var(--sans);font-size:.66rem;font-weight:650;letter-spacing:.2em;text-transform:uppercase}
+.details-weather .weather-figures{justify-content:center;gap:clamp(28px,4vw,56px);margin:0}
+.details-weather-copy{max-width:420px;margin:1.1rem auto 0;color:var(--mocha);font-size:clamp(.9rem,1.2vw,1.05rem);line-height:1.5}
+
+/* Tepoztlán practical strip is two headings now that Weather has moved. */
+.travel-chapter--tepoztlan .practical--tepoz{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+/* Spirit / gift: caps sit low, the script rides up, like the other titles. */
+.special-col .section-title{line-height:1.08}
+.special-col .section-title span{display:inline;letter-spacing:.035em}
+.special-col .section-title em{display:inline-block;margin:0 .02em 0 .06em;line-height:.8;vertical-align:baseline;transform:translateY(-.07em)}
+
+/* FAQ paper tears away into the Check-In panel. */
+.check-in::after{content:"";position:absolute;z-index:0;top:-1px;right:0;left:0;height:38px;background:var(--paper);pointer-events:none;clip-path:polygon(0 0,100% 0,100% 60%,98.2% 66%,96.5% 52%,94% 58%,92.8% 74%,90% 70%,87.5% 56%,85% 62%,83.2% 84%,81% 78%,78.5% 60%,76% 66%,74.5% 54%,71% 72%,69.2% 88%,67% 76%,64% 62%,61.5% 68%,59.8% 50%,57% 64%,55.2% 80%,52% 74%,49.5% 58%,47% 66%,45.6% 86%,43% 72%,40.5% 56%,38% 62%,36.4% 78%,33% 70%,30.5% 52%,28% 60%,26.6% 82%,24% 76%,21.5% 58%,19% 64%,17.3% 48%,14.5% 66%,12.8% 84%,10% 72%,7.5% 56%,5% 62%,3.6% 80%,1.5% 70%,0 58%);filter:drop-shadow(0 4px 6px rgba(20,12,8,.28))}
+.check-in{padding-top:calc(clamp(48px,5.5vw,72px) + 38px)!important}
+.check-in-grid{position:relative;z-index:1}
+
+@media(max-width:720px){
+  .week-day--wedding{margin:0;padding:11px 12px;border:0;border-radius:15px;background:rgba(255,249,239,.38)}
+  .week-day--wedding h4{font-family:var(--serif);font-size:1.05rem}
+  .tepoz-photos .city-photo:last-child img{border-radius:22px!important}
+  .tepoz-photos .city-photo:last-child{margin:18px 0 0 -12px}
+  .tepoz-photos .city-photo:first-child img{height:clamp(180px,48vw,220px)!important}
+  .tepoz-photos .city-photo:first-child figcaption{padding-right:0}
+  .details-weather{margin-top:28px;padding-top:26px}
+  .details-weather::before{margin-bottom:26px}
+  .travel-chapter--tepoztlan .practical--tepoz{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .travel-chapter--tepoztlan .practical-item .accordion-trigger>span:first-child{font-size:clamp(.82rem,3.7vw,1rem)}
+  .check-in::after{height:26px}
+  .check-in{padding-top:calc(52px + 26px)!important}
+}
