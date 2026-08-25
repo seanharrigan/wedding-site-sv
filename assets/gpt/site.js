@@ -587,12 +587,15 @@ const openLanguageGate = () => {
   setMenuOpen(false);
   languageGate.classList.remove('is-clearing');
   languageGate.classList.remove('is-done');
+  languageGate.classList.add('is-optional');
   body.classList.add('language-gate-open');
   setTimeout(() => document.querySelector('.language-gate-panel')?.focus({ preventScroll: true }), reducedMotion ? 0 : 350);
 };
 const dismissLanguageGate = () => {
   if (!languageGate || languageGate.classList.contains('is-done')) return;
+  if (!languageGate.classList.contains('is-optional')) return;
   languageGate.classList.add('is-done');
+  languageGate.classList.remove('is-optional', 'is-lens-active');
   body.classList.remove('language-gate-open');
 };
 languageToggle.addEventListener('click', (event) => {
@@ -601,6 +604,10 @@ languageToggle.addEventListener('click', (event) => {
   openLanguageGate();
 });
 introLanguageToggle.addEventListener('click', openLanguageGate);
+languageGate?.addEventListener('click', (event) => {
+  if (event.target.closest('.language-gate-option')) return;
+  dismissLanguageGate();
+});
 renderLanguage(currentLanguage);
 
 const sectionObserver = new IntersectionObserver((entries) => {
@@ -686,6 +693,7 @@ languageGateOptions.forEach((option) => option.addEventListener('click', () => {
   languageGate.classList.add('is-clearing');
   setTimeout(() => {
     languageGate.classList.add('is-done');
+    languageGate.classList.remove('is-optional', 'is-lens-active');
     body.classList.remove('language-gate-open');
     if (body.classList.contains('invitation-active')) openEnvelope.focus({ preventScroll: true });
   }, reducedMotion ? 0 : 1550);
