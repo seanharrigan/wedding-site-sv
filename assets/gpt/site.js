@@ -194,6 +194,8 @@ const closeInvitation = () => {
   }, reducedMotion ? 0 : 760);
 };
 
+const keepWebsiteAtTop = () => scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
 if (readStoredValue('wedding-invitation-seen') === 'true') {
   languageGate?.classList.add('is-done');
   invitationIntro.hidden = true;
@@ -206,6 +208,7 @@ if (readStoredValue('wedding-invitation-seen') === 'true') {
 
 openEnvelope.addEventListener('click', () => {
   if (invitationIntro.classList.contains('is-open') || invitationIntro.classList.contains('is-opening')) return;
+  keepWebsiteAtTop();
   clearTimeout(invitationFocusTimer);
   clearTimeout(invitationReplayTimer);
   invitationIntro.classList.remove('is-preparing', 'is-replaying');
@@ -223,7 +226,10 @@ openEnvelope.addEventListener('keydown', (event) => {
   event.preventDefault();
   openEnvelope.click();
 });
-enterSite.addEventListener('click', enterCelebration);
+enterSite.addEventListener('click', () => {
+  keepWebsiteAtTop();
+  enterCelebration();
+});
 introClose.addEventListener('click', closeInvitation);
 suiteCards.forEach((card) => card.addEventListener('click', (event) => {
   event.preventDefault();
