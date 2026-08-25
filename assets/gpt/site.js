@@ -522,6 +522,7 @@ const renderLanguage = (language) => {
   menuToggle.setAttribute('aria-label', language === 'es' ? 'Abrir menú' : 'Open navigation');
   storeValue('wedding-language', language);
   syncNavigation();
+  requestAnimationFrame(() => { if (typeof placeSuiteHotspots === 'function') placeSuiteHotspots(); });
 };
 
 // The header's EN/ES and the envelope's discreet control both open the frosted language gate.
@@ -633,6 +634,46 @@ languageGateOptions.forEach((option) => option.addEventListener('click', () => {
     if (body.classList.contains('invitation-active')) openEnvelope.focus({ preventScroll: true });
   }, reducedMotion ? 0 : 1550);
 }));
+
+// Invitation suite hotspots are authored in artwork coordinates and mapped
+// through the image's object-fit: cover transform, so they track the cards.
+const suiteHotspotStage = document.querySelector('.suite-composite');
+const placeSuiteHotspots = () => {
+  if (!suiteHotspotStage) return;
+  const mobile = innerWidth <= 720;
+  const img = suiteHotspotStage.querySelector(`.suite-art--${currentLanguage === 'es' ? 'es' : 'en'} img`);
+  const naturalWidth = img?.naturalWidth || (mobile ? 795 : 1920);
+  const naturalHeight = img?.naturalHeight || (mobile ? 1414 : 1080);
+  const box = suiteHotspotStage.getBoundingClientRect();
+  if (!box.width || !box.height) return;
+  const scale = Math.max(box.width / naturalWidth, box.height / naturalHeight);
+  // Honour the image's object-position (the artwork is bottom-anchored).
+  const position = (img ? getComputedStyle(img).objectPosition : '50% 50%').split(' ');
+  const anchor = (value, extent) => (value.endsWith('%') ? parseFloat(value) / 100 * extent : parseFloat(value) || 0);
+  const slackX = box.width - naturalWidth * scale;
+  const slackY = box.height - naturalHeight * scale;
+  const offsetX = position[0].endsWith('%') ? slackX * parseFloat(position[0]) / 100 : anchor(position[0], slackX);
+  const offsetY = (position[1] || '50%').endsWith('%') ? slackY * parseFloat(position[1] || '50%') / 100 : anchor(position[1], slackY);
+  suiteHotspotStage.querySelectorAll('.suite-hotspot').forEach((spot) => {
+    const spec = (mobile ? spot.dataset.mobile : spot.dataset.desktop) || spot.dataset.desktop;
+    if (!spec) return;
+    const [cx, cy, w, h, rotate] = spec.split(',').map(Number);
+    const width = w * naturalWidth * scale;
+    const height = h * naturalHeight * scale;
+    spot.style.setProperty('left', `${(offsetX + cx * naturalWidth * scale - width / 2).toFixed(1)}px`, 'important');
+    spot.style.setProperty('top', `${(offsetY + cy * naturalHeight * scale - height / 2).toFixed(1)}px`, 'important');
+    spot.style.setProperty('right', 'auto', 'important');
+    spot.style.setProperty('width', `${width.toFixed(1)}px`, 'important');
+    spot.style.setProperty('height', `${height.toFixed(1)}px`, 'important');
+    spot.style.setProperty('--spot-rotate', `${rotate || 0}deg`);
+  });
+};
+if (suiteHotspotStage) {
+  placeSuiteHotspots();
+  addEventListener('resize', placeSuiteHotspots, { passive: true });
+  suiteHotspotStage.querySelectorAll('img').forEach((img) => img.addEventListener('load', placeSuiteHotspots));
+  openEnvelope.addEventListener('click', () => requestAnimationFrame(placeSuiteHotspots));
+}
 
 const wedding = new Date('2026-11-03T14:00:00-06:00').getTime();
 const countdownValues = {

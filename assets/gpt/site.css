@@ -2722,3 +2722,30 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
 .suite-composite.is-action-hovered .suite-action{box-shadow:inset 0 1px rgba(255,255,255,.72),0 14px 36px rgba(62,40,27,.17)}
 @keyframes invitation-glow-breathe{0%,100%{--invitation-glow-radius:138px}50%{--invitation-glow-radius:166px}}
 @media(prefers-reduced-motion:reduce){.suite-composite::after{display:none}}
+
+/* Invitation suite hotspots: a faint glass film in the exact shape of each piece, with a quiet engraved label. */
+.suite-hotspot,.suite-hotspot--main,.suite-hotspot--photo-left,.suite-hotspot--photo-right{--spot-y:50%;border-radius:5px!important;transform-origin:center;transform:rotate(var(--spot-rotate))!important;transition:opacity .38s ease .5s,transform .55s var(--ease-refined)!important}
+.suite-hotspot--main{--spot-y:86%;border-radius:999px 999px 14px 14px!important}
+.suite-hotspot--photo-left,.suite-hotspot--photo-right{--spot-y:90%}
+.suite-hotspot::before{border:1px solid rgba(255,255,255,.55);border-radius:inherit;background:rgba(255,250,242,.17);box-shadow:inset 0 1px rgba(255,255,255,.6);-webkit-backdrop-filter:blur(5px) saturate(108%);backdrop-filter:blur(5px) saturate(108%);opacity:0;transition:opacity .45s ease}
+.suite-action{left:50%;top:var(--spot-y);min-height:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;color:rgba(52,38,31,.78);font-family:var(--sans);font-size:.56rem;font-weight:650;letter-spacing:.3em;text-transform:uppercase;text-shadow:0 1px 0 rgba(255,255,255,.6);opacity:0;transform:translate(-50%,-50%) translateY(6px);transition:opacity .4s ease,transform .55s var(--ease-refined)}
+.suite-action-icon{display:none}
+@media(hover:hover) and (pointer:fine){
+  .suite-hotspot:hover,.suite-hotspot:focus-visible{outline:0!important;transform:rotate(var(--spot-rotate)) scale(1.012)!important}
+  .suite-hotspot:hover::before,.suite-hotspot:focus-visible::before{opacity:1;border-color:rgba(255,255,255,.55);background:rgba(255,250,242,.17);box-shadow:inset 0 1px rgba(255,255,255,.6)}
+  .suite-hotspot:hover .suite-action,.suite-hotspot:focus-visible .suite-action{opacity:1;transform:translate(-50%,-50%)}
+}
+@media(hover:none){
+  .invitation-intro.is-open .suite-hotspot .suite-action{opacity:.78;transform:translate(-50%,-50%)}
+}
+/* Labels sit at a fixed spot near the base of each piece; the card keeps its text readable under a lighter mist. */
+.suite-hotspot{--label-y:50%}
+.suite-hotspot--main{--label-y:95%}
+.suite-hotspot--photo-left,.suite-hotspot--photo-right{--label-y:90%}
+.suite-action{left:50%!important;top:var(--label-y)!important}
+.suite-hotspot--photo-left::before,.suite-hotspot--photo-right::before{-webkit-backdrop-filter:blur(4px) saturate(108%);backdrop-filter:blur(4px) saturate(108%)}
+.suite-hotspot--main::before{background:rgba(255,250,242,.14);-webkit-backdrop-filter:blur(1.5px) saturate(105%);backdrop-filter:blur(1.5px) saturate(105%)}
+@media(max-width:720px){
+  .suite-hotspot--main{--label-y:74%}
+  .suite-action{font-size:.5rem;letter-spacing:.26em}
+}
