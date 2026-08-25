@@ -456,6 +456,28 @@ checkInForm.addEventListener('submit', (event) => {
   window.location.href = `mailto:valeriaandseanharrigan@gmail.com?subject=${subject}&body=${message}`;
 });
 
+// The cactus panel clears a soft lens wherever the pointer rests (desktop only).
+const lensPanel = document.querySelector('.special-inner');
+if (lensPanel && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  let targetX = 0, targetY = 0, lensX = 0, lensY = 0, lensFrame = 0;
+  const settle = () => {
+    lensX += (targetX - lensX) * (reducedMotion ? 1 : .16);
+    lensY += (targetY - lensY) * (reducedMotion ? 1 : .16);
+    lensPanel.style.setProperty('--lens-x', `${lensX.toFixed(1)}px`);
+    lensPanel.style.setProperty('--lens-y', `${lensY.toFixed(1)}px`);
+    lensFrame = (Math.abs(targetX - lensX) > .4 || Math.abs(targetY - lensY) > .4) ? requestAnimationFrame(settle) : 0;
+  };
+  const track = (event, snap) => {
+    const rect = lensPanel.getBoundingClientRect();
+    targetX = event.clientX - rect.left;
+    targetY = event.clientY - rect.top;
+    if (snap) { lensX = targetX; lensY = targetY; }
+    if (!lensFrame) lensFrame = requestAnimationFrame(settle);
+  };
+  lensPanel.addEventListener('pointerenter', (event) => track(event, true));
+  lensPanel.addEventListener('pointermove', (event) => track(event, false));
+}
+
 const wedding = new Date('2026-11-03T14:00:00-06:00').getTime();
 const countdownValues = {
   days: document.getElementById('days'), hours: document.getElementById('hours'),

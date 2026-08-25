@@ -2356,3 +2356,27 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
   .special-col .section-title{font-size:clamp(1.2rem,9.9cqi,2.15rem)!important}
   html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,1.8rem)!important}
 }
+
+/* Cactus panel: lighter frost, a tighter handoff to the FAQ, and a lens of clarity under the pointer. */
+.special{padding-bottom:clamp(28px,2.9vw,40px)!important}
+.faq{padding-top:clamp(42px,4.3vw,62px)!important}
+.special-inner::before{background:linear-gradient(135deg,rgba(52,38,31,.42),rgba(38,27,21,.3) 55%,rgba(52,38,31,.38));-webkit-backdrop-filter:blur(3px) saturate(108%);backdrop-filter:blur(3px) saturate(108%)}
+@property --lens-r{syntax:"<length>";inherits:true;initial-value:0px}
+.special-inner{--lens-x:50%;--lens-y:50%;--lens-r:0px}
+@media(hover:hover) and (pointer:fine){
+  .special-inner::before{
+    transition:--lens-r .9s var(--ease-refined);
+    -webkit-mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),transparent 0,transparent calc(var(--lens-r) * .55),#000 var(--lens-r));
+    mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),transparent 0,transparent calc(var(--lens-r) * .55),#000 var(--lens-r));
+  }
+  .special-inner::after{
+    transition:--lens-r .9s var(--ease-refined);
+    background:radial-gradient(circle at calc(var(--lens-x) - 14px) calc(var(--lens-y) - 14px),rgba(255,236,214,.2) 0,rgba(255,236,214,.08) calc(var(--lens-r) * .6),transparent calc(var(--lens-r) * 1.25));
+  }
+  .special-inner:hover::before,.special-inner:hover::after{--lens-r:200px}
+}
+@media(prefers-reduced-motion:reduce){.special-inner::before,.special-inner::after{transition:none}}
+@media(max-width:720px){
+  .special{padding-bottom:33px!important}
+  .faq{padding-top:48px!important}
+}
