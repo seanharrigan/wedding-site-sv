@@ -2843,13 +2843,17 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
   cursor:pointer;
   transform:translate3d(-50%,-50%,0) scale(1);
   transform-origin:center;
-  transition:transform .55s var(--ease-refined),filter .55s ease;
+  transition:transform .42s cubic-bezier(.4,0,.2,1),filter .42s ease;
   will-change:transform;
   -webkit-tap-highlight-color:transparent;
 }
 .closed-wax-seal img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
 @media(hover:hover) and (pointer:fine){
-  .closed-wax-seal:hover{filter:drop-shadow(0 7px 9px rgba(61,35,21,.16));transform:translate3d(-50%,-50%,0) scale(1.028)}
+  .invitation-intro .intro-cover>.closed-wax-seal:hover{
+    filter:drop-shadow(0 10px 13px rgba(61,35,21,.2));
+    transform:translate3d(-50%,-50%,0) scale(1.075);
+    transition:transform .62s cubic-bezier(.34,1.56,.64,1),filter .42s ease;
+  }
 }
 .intro-cover:focus-visible .closed-wax-seal{filter:drop-shadow(0 7px 9px rgba(61,35,21,.14));transform:translate3d(-50%,-50%,0) scale(1.02)}
 .invitation-intro.is-opening .closed-wax-seal{filter:none;transform:translate3d(-50%,-50%,0) scale(1.018)}
