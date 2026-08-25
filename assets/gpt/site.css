@@ -2559,3 +2559,24 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
   .hero--image-only::before{clip-path:inset(0 round 34px);transition:transform 1.3s var(--ease-refined),clip-path 1.3s var(--ease-refined),filter 1.2s ease;will-change:transform}
   .hero--image-only:hover::before{transform:scale(calc(1.034 + var(--hero-shift,0)*.000025));clip-path:inset(1.05% round 33px);filter:brightness(1.03) saturate(1.03)}
 }
+
+/* Nav links: a clearer hover — underline draws in from the left with a small lift. */
+@media(min-width:721px){
+  .nav-link{transition:color .3s ease,background-color .3s ease,transform .45s var(--ease-refined)}
+  .nav-link::before{content:"";position:absolute;left:.92rem;right:.92rem;bottom:7px;height:1px;background:currentColor;opacity:.85;transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease-refined),opacity .3s ease}
+  .nav-link:hover{transform:translateY(-2px);background:transparent}
+  .nav-link:hover::before{transform:scaleX(1)}
+  .nav-link.active::before{display:none}
+  .nav-link.active:hover{transform:none}
+}
+
+/* Header hover follows the section tone: dark text on the pale bar over light sections. */
+@media(min-width:721px) and (hover:hover){
+  .site-header:not(.header-on-dark):hover,.site-header:not(.header-on-dark):focus-within,
+  .site-header:not(.header-on-dark):hover .nav-links,.site-header:not(.header-on-dark):focus-within .nav-links{color:var(--mocha-deep)}
+  .site-header:not(.header-on-dark):hover .nav-link,.site-header:not(.header-on-dark):hover .invitation-replay,
+  .site-header:not(.header-on-dark):focus-within .nav-link,.site-header:not(.header-on-dark):focus-within .invitation-replay{color:rgba(52,38,31,.66)}
+  .site-header:not(.header-on-dark):hover .nav-link:hover,.site-header:not(.header-on-dark):hover .nav-link.active,.site-header:not(.header-on-dark):hover .invitation-replay:hover,
+  .site-header:not(.header-on-dark):focus-within .nav-link:hover,.site-header:not(.header-on-dark):focus-within .nav-link.active,.site-header:not(.header-on-dark):focus-within .invitation-replay:focus-visible{color:var(--mocha-deep)}
+  .site-header:not(.header-on-dark):hover .language-toggle,.site-header:not(.header-on-dark):focus-within .language-toggle{color:var(--mocha-deep);border-color:rgba(73,54,44,.24);background:rgba(73,54,44,.06)}
+}
