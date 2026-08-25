@@ -2626,3 +2626,11 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
   .language-gate-panel{width:min(100%,340px)}
   .language-gate-option{padding:15px 18px;font-size:1.55rem;gap:12px}
 }
+
+/* A discreet language control on the envelope that brings the frosted gate back. */
+.intro-language-toggle,.invitation-intro.is-open .intro-language-toggle{top:22px!important;left:22px!important;right:auto!important;min-height:0!important;height:36px;padding:0 13px!important;gap:5px;border:1px solid rgba(52,38,31,.18)!important;border-radius:999px;color:rgba(52,38,31,.62)!important;background:rgba(255,249,239,.32)!important;box-shadow:none!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:.5rem;letter-spacing:.14em;opacity:.7;transform:none!important;pointer-events:auto;transition:opacity .35s ease,background .3s ease,border-color .3s ease,color .3s ease}
+.intro-language-toggle:hover,.intro-language-toggle:focus-visible,.invitation-intro.is-open .intro-language-toggle:hover,.invitation-intro.is-open .intro-language-toggle:focus-visible{opacity:1;color:var(--mocha-deep)!important;border-color:rgba(52,38,31,.32)!important;background:rgba(255,249,239,.6)!important;box-shadow:none!important}
+.intro-language-toggle .language-next{opacity:.55}
+.invitation-intro:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-events:none}
+.language-gate::before{transition:--lens-r .9s var(--ease-refined),opacity .8s ease}
+@media(max-width:720px){.intro-language-toggle,.invitation-intro.is-open .intro-language-toggle{top:14px!important;left:14px!important;height:34px;padding:0 11px!important}}

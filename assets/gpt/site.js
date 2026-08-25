@@ -415,7 +415,7 @@ const renderLanguage = (language) => {
   languageToggle.setAttribute('aria-label', language === 'en' ? 'Cambiar a español' : 'Switch to English');
   introLanguageToggle.querySelector('.language-current').textContent = language.toUpperCase();
   introLanguageToggle.querySelector('.language-next').textContent = language === 'en' ? 'ES' : 'EN';
-  introLanguageToggle.setAttribute('aria-label', language === 'en' ? 'Cambiar a español' : 'Switch to English');
+  introLanguageToggle.setAttribute('aria-label', language === 'en' ? 'Choose language / Elegir idioma' : 'Elegir idioma / Choose language');
   menuToggle.setAttribute('aria-label', language === 'es' ? 'Abrir menú' : 'Open navigation');
   localStorage.setItem('wedding-language', language);
   syncNavigation();
@@ -429,7 +429,13 @@ languageToggle.addEventListener('click', () => {
     body.classList.remove('language-transition');
   }, reducedMotion ? 0 : 190);
 });
-introLanguageToggle.addEventListener('click', () => languageToggle.click());
+// The discreet control on the envelope brings the frosted language gate back.
+introLanguageToggle.addEventListener('click', () => {
+  if (!languageGate) return;
+  languageGate.classList.remove('is-clearing');
+  languageGate.classList.remove('is-done');
+  setTimeout(() => document.querySelector('.language-gate-panel')?.focus({ preventScroll: true }), reducedMotion ? 0 : 350);
+});
 renderLanguage(currentLanguage);
 
 const sectionObserver = new IntersectionObserver((entries) => {
