@@ -25,6 +25,21 @@ const mobileCurrent = document.getElementById('mobile-current');
 const skipLink = document.querySelector('.skip-link');
 const headerToneSections = [...document.querySelectorAll('[data-header-tone]')];
 let headerToneFrame = 0;
+let invitationHideTimer = 0;
+let invitationFocusTimer = 0;
+let invitationReplayTimer = 0;
+let invitationOpenTimer = 0;
+
+const clearInvitationTimers = () => {
+  clearTimeout(invitationHideTimer);
+  clearTimeout(invitationFocusTimer);
+  clearTimeout(invitationReplayTimer);
+  clearTimeout(invitationOpenTimer);
+  invitationHideTimer = 0;
+  invitationFocusTimer = 0;
+  invitationReplayTimer = 0;
+  invitationOpenTimer = 0;
+};
 
 const setMenuOpen = (open) => {
   body.classList.toggle('menu-open', open);
@@ -88,25 +103,47 @@ const syncNavigation = () => {
   requestAnimationFrame(syncNavIndicator);
 };
 
-const revealInvitation = () => {
+const revealInvitation = ({ replay = false } = {}) => {
+  clearInvitationTimers();
   invitationIntro.hidden = false;
   body.classList.add('invitation-active');
-  invitationIntro.classList.remove('is-open', 'is-leaving');
+  invitationIntro.classList.remove('is-open', 'is-opening', 'is-leaving', 'is-preparing', 'is-replaying');
   invitationIntro.setAttribute('aria-hidden', 'false');
   envelopeStage.setAttribute('aria-hidden', 'true');
   const gateOpen = languageGate && !languageGate.classList.contains('is-done');
-  setTimeout(() => (gateOpen ? document.querySelector('.language-gate-panel') : openEnvelope).focus({ preventScroll: true }), reducedMotion ? 0 : 180);
+
+  if (replay && !reducedMotion) {
+    invitationIntro.classList.add('is-preparing');
+    void invitationIntro.offsetWidth;
+    requestAnimationFrame(() => {
+      invitationIntro.classList.remove('is-preparing');
+      invitationIntro.classList.add('is-replaying');
+    });
+    invitationReplayTimer = setTimeout(() => {
+      invitationIntro.classList.remove('is-replaying');
+      invitationReplayTimer = 0;
+    }, 700);
+  }
+
+  invitationFocusTimer = setTimeout(() => {
+    (gateOpen ? document.querySelector('.language-gate-panel') : openEnvelope)?.focus({ preventScroll: true });
+    invitationFocusTimer = 0;
+  }, reducedMotion ? 0 : (replay ? 620 : 180));
 };
 
 const enterCelebration = () => {
+  if (invitationIntro.hidden || invitationIntro.classList.contains('is-leaving')) return;
+  clearInvitationTimers();
+  invitationIntro.classList.remove('is-opening', 'is-preparing', 'is-replaying');
   invitationIntro.classList.add('is-leaving');
-  body.classList.remove('invitation-active');
   storeValue('wedding-invitation-seen', 'true');
-  setTimeout(() => {
+  invitationHideTimer = setTimeout(() => {
     invitationIntro.hidden = true;
-    invitationIntro.classList.remove('is-leaving', 'is-open');
+    invitationIntro.classList.remove('is-leaving', 'is-open', 'is-opening');
     invitationIntro.setAttribute('aria-hidden', 'true');
-  }, reducedMotion ? 0 : 640);
+    body.classList.remove('invitation-active');
+    invitationHideTimer = 0;
+  }, reducedMotion ? 0 : 520);
 };
 
 if (readStoredValue('wedding-invitation-seen') === 'true') {
@@ -120,9 +157,18 @@ if (readStoredValue('wedding-invitation-seen') === 'true') {
 }
 
 openEnvelope.addEventListener('click', () => {
-  invitationIntro.classList.add('is-open');
+  if (invitationIntro.classList.contains('is-open') || invitationIntro.classList.contains('is-opening')) return;
+  clearTimeout(invitationFocusTimer);
+  clearTimeout(invitationReplayTimer);
+  invitationIntro.classList.remove('is-preparing', 'is-replaying');
+  invitationIntro.classList.add('is-opening');
   envelopeStage.setAttribute('aria-hidden', 'false');
-  setTimeout(() => enterSite.focus(), reducedMotion ? 0 : 1550);
+  requestAnimationFrame(() => invitationIntro.classList.add('is-open'));
+  invitationOpenTimer = setTimeout(() => {
+    invitationIntro.classList.remove('is-opening');
+    enterSite.focus({ preventScroll: true });
+    invitationOpenTimer = 0;
+  }, reducedMotion ? 0 : 850);
 });
 openEnvelope.addEventListener('keydown', (event) => {
   if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -140,11 +186,9 @@ suiteCards.forEach((card) => card.addEventListener('click', (event) => {
 invitationReplay.addEventListener('click', (event) => {
   event.preventDefault();
   event.stopPropagation();
+  if (body.classList.contains('invitation-active')) return;
   setMenuOpen(false);
-  invitationIntro.classList.add('is-replaying');
-  revealInvitation();
-  document.getElementById('home').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
-  setTimeout(() => invitationIntro.classList.remove('is-replaying'), reducedMotion ? 0 : 1500);
+  revealInvitation({ replay: true });
 });
 
 menuToggle.addEventListener('click', () => {

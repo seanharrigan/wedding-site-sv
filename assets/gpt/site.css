@@ -2636,3 +2636,20 @@ body.language-gate-open{overflow:hidden}
 body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-events:none}
 .language-gate::before{transition:--lens-r .9s var(--ease-refined),opacity .8s ease}
 @media(max-width:720px){.intro-language-toggle,.invitation-intro.is-open .intro-language-toggle{top:14px!important;left:14px!important;height:34px;padding:0 11px!important}}
+
+/* Deterministic invitation motion: crisp assets, short transitions, and no overlapping state animations. */
+.invitation-intro{backface-visibility:hidden;transform:translateZ(0);will-change:opacity}
+.invitation-intro.is-preparing{visibility:visible!important;opacity:0!important;transition:none!important}
+.invitation-intro.is-replaying{clip-path:none!important;animation:invitation-replay-in .58s cubic-bezier(.22,.61,.36,1) both!important}
+.invitation-intro.is-replaying .intro-cover{animation:none!important}
+.invitation-intro.is-opening .intro-cover{pointer-events:none}
+.invitation-intro.is-leaving{visibility:visible!important;opacity:0!important;pointer-events:none;transition:opacity .46s cubic-bezier(.4,0,.2,1),visibility 0s linear .46s!important}
+.suite-composite{filter:none!important;backface-visibility:hidden;transform:translate3d(0,5px,0)!important;transition:opacity .48s ease-out .08s,transform .68s cubic-bezier(.22,.61,.36,1) .06s!important;will-change:opacity,transform}
+.suite-composite picture,.suite-composite img{backface-visibility:hidden;transform:translateZ(0);image-rendering:auto}
+.invitation-intro.is-open .suite-composite{opacity:1!important;filter:none!important;transform:translate3d(0,0,0)!important}
+.suite-composite .suite-art{transition:opacity .42s cubic-bezier(.22,.61,.36,1)!important}
+@keyframes invitation-replay-in{from{opacity:0}to{opacity:1}}
+
+@media(prefers-reduced-motion:reduce){
+  .invitation-intro,.suite-composite,.suite-composite .suite-art{animation:none!important;transition-duration:.01ms!important;transform:none!important}
+}
