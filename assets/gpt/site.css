@@ -2543,3 +2543,9 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 @media(min-width:721px){
   .countdown{box-shadow:0 -26px 56px rgba(52,38,31,.2)}
 }
+
+/* Collapsed practical panels take no vertical space; padding eases in on open. */
+.practical-body{transition:opacity .35s ease,transform .45s var(--ease-refined),padding .5s var(--ease-refined)}
+.practical-item:not(.open) .practical-body{padding-top:0;padding-bottom:0}
+.travel-section{padding-bottom:clamp(44px,4.6vw,64px)!important}
+@media(max-width:720px){.travel-section{padding-bottom:44px!important}}
