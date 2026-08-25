@@ -2755,3 +2755,80 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
 @media(hover:none),(pointer:coarse){
   .suite-action{left:50%!important;top:50%!important;opacity:.72;transform:translate(-50%,-50%) rotate(var(--spot-counter-rotate))!important}
 }
+
+/* Invitation controls: an engraved action and a composed return to the sealed envelope. */
+.invitation-intro.is-open .enter-site{
+  bottom:clamp(18px,2.5vh,30px)!important;
+  gap:.72rem!important;
+  min-height:42px!important;
+  padding:0 19px!important;
+  overflow:visible!important;
+  border:1px solid rgba(68,42,27,.3)!important;
+  border-radius:3px!important;
+  color:rgba(56,35,23,.84)!important;
+  background:rgba(255,249,239,.48)!important;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.22),0 9px 26px rgba(66,42,27,.08)!important;
+  -webkit-backdrop-filter:blur(9px) saturate(103%)!important;
+  backdrop-filter:blur(9px) saturate(103%)!important;
+  font-family:var(--serif)!important;
+  font-size:clamp(.69rem,.78vw,.82rem)!important;
+  font-weight:500!important;
+  letter-spacing:.105em!important;
+  line-height:1!important;
+  text-transform:none!important;
+  opacity:.88!important;
+  transform:translateX(-50%)!important;
+  transition:color .35s ease,background .4s ease,border-color .4s ease,box-shadow .55s ease,opacity .35s ease,transform .55s var(--ease-refined)!important;
+}
+.invitation-intro.is-open .enter-site::before{
+  content:"◇";
+  color:rgba(82,50,31,.52);
+  font-family:Georgia,serif;
+  font-size:.64rem;
+  line-height:1;
+  transition:color .35s ease,transform .55s var(--ease-refined);
+}
+.invitation-intro.is-open .enter-site::after{display:none!important}
+.invitation-intro.is-open .enter-site>span{
+  display:inline-block;
+  color:rgba(82,50,31,.6);
+  font-family:var(--sans);
+  font-size:.7em;
+  transition:color .35s ease,transform .55s var(--ease-refined);
+}
+.invitation-intro.is-open .enter-site:hover,.invitation-intro.is-open .enter-site:focus-visible{
+  border-color:rgba(68,42,27,.48)!important;
+  color:rgba(49,30,20,.96)!important;
+  background:rgba(255,250,242,.7)!important;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.32),0 13px 32px rgba(66,42,27,.11)!important;
+  opacity:1!important;
+  outline:0;
+  transform:translateX(-50%) translateY(-2px)!important;
+}
+.invitation-intro.is-open .enter-site:hover::before,.invitation-intro.is-open .enter-site:focus-visible::before{color:rgba(82,50,31,.78);transform:rotate(45deg) scale(.85)}
+.invitation-intro.is-open .enter-site:hover>span,.invitation-intro.is-open .enter-site:focus-visible>span{color:rgba(82,50,31,.84);transform:translateX(3px)}
+.invitation-intro.is-open .intro-close:hover,.invitation-intro.is-open .intro-close:focus-visible{transform:scale(1.035)!important}
+
+.invitation-intro.is-closing{visibility:visible!important;opacity:1!important;pointer-events:none}
+.invitation-intro.is-closing::after{animation:invitation-close-veil .76s cubic-bezier(.4,0,.2,1) both}
+.invitation-intro.is-closing .intro-cover{opacity:0!important;pointer-events:none!important;transform:translateY(-8px) scale(.992)!important;transition:none!important}
+.invitation-intro.is-closing.is-returning .intro-cover{opacity:1!important;transform:none!important;transition:opacity .42s ease .28s,transform .65s var(--ease-refined) .22s!important}
+.invitation-intro.is-closing .suite-composite{
+  clip-path:inset(2.5% 4% round 22px)!important;
+  opacity:0!important;
+  transform:translate3d(0,12px,0) scale(.982)!important;
+  transition:opacity .46s ease,transform .72s cubic-bezier(.4,0,.2,1),clip-path .72s cubic-bezier(.4,0,.2,1)!important;
+}
+.invitation-intro.is-closing .intro-close,.invitation-intro.is-closing .enter-site,.invitation-intro.is-closing .suite-hotspot{opacity:0!important;pointer-events:none!important;transition:opacity .2s ease!important}
+.invitation-intro.is-leaving{transition:opacity .72s cubic-bezier(.4,0,.2,1),visibility 0s linear .72s!important}
+.invitation-intro.is-leaving .suite-composite{opacity:0!important;transform:translate3d(0,-5px,0) scale(1.006)!important;transition:opacity .56s ease,transform .9s cubic-bezier(.4,0,.2,1)!important}
+.invitation-intro.is-leaving .enter-site{opacity:0!important;transform:translateX(-50%) translateY(5px)!important;transition:opacity .24s ease,transform .5s ease!important}
+@keyframes invitation-close-veil{0%{opacity:0}42%{opacity:.36}100%{opacity:0}}
+
+@media(max-width:720px){
+  .invitation-intro.is-open .enter-site{bottom:14px!important;min-height:39px!important;padding:0 15px!important;font-size:.68rem!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .invitation-intro.is-closing::after{animation:none}
+  .invitation-intro.is-closing .suite-composite,.invitation-intro.is-leaving .suite-composite{transition:none!important}
+}

@@ -30,16 +30,19 @@ let invitationHideTimer = 0;
 let invitationFocusTimer = 0;
 let invitationReplayTimer = 0;
 let invitationOpenTimer = 0;
+let invitationCloseTimer = 0;
 
 const clearInvitationTimers = () => {
   clearTimeout(invitationHideTimer);
   clearTimeout(invitationFocusTimer);
   clearTimeout(invitationReplayTimer);
   clearTimeout(invitationOpenTimer);
+  clearTimeout(invitationCloseTimer);
   invitationHideTimer = 0;
   invitationFocusTimer = 0;
   invitationReplayTimer = 0;
   invitationOpenTimer = 0;
+  invitationCloseTimer = 0;
 };
 
 const setMenuOpen = (open) => {
@@ -108,7 +111,7 @@ const revealInvitation = ({ replay = false } = {}) => {
   clearInvitationTimers();
   invitationIntro.hidden = false;
   body.classList.add('invitation-active');
-  invitationIntro.classList.remove('is-open', 'is-opening', 'is-leaving', 'is-preparing', 'is-replaying');
+  invitationIntro.classList.remove('is-open', 'is-opening', 'is-closing', 'is-returning', 'is-leaving', 'is-preparing', 'is-replaying');
   invitationIntro.setAttribute('aria-hidden', 'false');
   envelopeStage.setAttribute('aria-hidden', 'true');
   const gateOpen = languageGate && !languageGate.classList.contains('is-done');
@@ -135,16 +138,40 @@ const revealInvitation = ({ replay = false } = {}) => {
 const enterCelebration = () => {
   if (invitationIntro.hidden || invitationIntro.classList.contains('is-leaving')) return;
   clearInvitationTimers();
-  invitationIntro.classList.remove('is-opening', 'is-preparing', 'is-replaying');
+  invitationIntro.classList.remove('is-opening', 'is-closing', 'is-returning', 'is-preparing', 'is-replaying');
   invitationIntro.classList.add('is-leaving');
+  suiteComposite?.classList.remove('is-glow-active', 'is-action-hovered');
   storeValue('wedding-invitation-seen', 'true');
   invitationHideTimer = setTimeout(() => {
     invitationIntro.hidden = true;
-    invitationIntro.classList.remove('is-leaving', 'is-open', 'is-opening');
+    invitationIntro.classList.remove('is-leaving', 'is-open', 'is-opening', 'is-closing', 'is-returning');
     invitationIntro.setAttribute('aria-hidden', 'true');
     body.classList.remove('invitation-active');
     invitationHideTimer = 0;
-  }, reducedMotion ? 0 : 520);
+  }, reducedMotion ? 0 : 760);
+};
+
+const closeInvitation = () => {
+  if (invitationIntro.hidden || invitationIntro.classList.contains('is-closing')) return;
+  if (!invitationIntro.classList.contains('is-open') && !invitationIntro.classList.contains('is-opening')) return;
+  clearInvitationTimers();
+  invitationIntro.classList.remove('is-opening', 'is-preparing', 'is-replaying');
+  invitationIntro.classList.add('is-closing');
+  suiteComposite?.classList.remove('is-glow-active', 'is-action-hovered');
+  if (reducedMotion) {
+    invitationIntro.classList.remove('is-open');
+  } else {
+    requestAnimationFrame(() => {
+      invitationIntro.classList.remove('is-open');
+      requestAnimationFrame(() => invitationIntro.classList.add('is-returning'));
+    });
+  }
+  invitationCloseTimer = setTimeout(() => {
+    invitationIntro.classList.remove('is-closing', 'is-returning');
+    envelopeStage.setAttribute('aria-hidden', 'true');
+    openEnvelope.focus({ preventScroll: true });
+    invitationCloseTimer = 0;
+  }, reducedMotion ? 0 : 760);
 };
 
 if (readStoredValue('wedding-invitation-seen') === 'true') {
@@ -177,7 +204,7 @@ openEnvelope.addEventListener('keydown', (event) => {
   openEnvelope.click();
 });
 enterSite.addEventListener('click', enterCelebration);
-introClose.addEventListener('click', enterCelebration);
+introClose.addEventListener('click', closeInvitation);
 suiteCards.forEach((card) => card.addEventListener('click', (event) => {
   event.preventDefault();
   const target = document.querySelector(card.getAttribute('href'));
@@ -254,7 +281,11 @@ document.addEventListener('keydown', (event) => {
     return;
   }
   if (event.key === 'Escape' && body.classList.contains('invitation-active')) {
-    enterCelebration();
+    if (invitationIntro.classList.contains('is-open') || invitationIntro.classList.contains('is-opening')) {
+      closeInvitation();
+    } else {
+      enterCelebration();
+    }
     return;
   }
   if (event.key === 'Escape' && body.classList.contains('menu-open')) {
@@ -405,7 +436,7 @@ document.querySelectorAll('.timeline').forEach((timeline) => {
 
 const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenida'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'],
-  introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], closeInvitation: ['Close invitation', 'Cerrar invitación'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar al sitio <span aria-hidden="true">→</span>'], invitationEnter: ['Review', 'Revisar'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See Gallery', 'Ver galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
+  introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], closeInvitation: ['Return to the closed invitation', 'Volver a la invitación cerrada'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar al sitio <span aria-hidden="true">→</span>'], invitationEnter: ['Review', 'Revisar'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See Gallery', 'Ver galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],
