@@ -2749,3 +2749,19 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
   .suite-hotspot--main{--label-y:74%}
   .suite-action{font-size:.5rem;letter-spacing:.26em}
 }
+
+/* Closed envelope: a restrained invitation cue beneath the wax seal. */
+.invitation-intro:not(.is-open) .intro-cover>.open-invitation-cue{position:absolute;right:auto;bottom:clamp(22px,3.6vh,42px);left:50%;z-index:8;display:inline-flex!important;align-items:center;gap:12px;min-height:40px;padding:4px 5px 4px 17px;border:1px solid rgba(83,53,35,.16);border-radius:999px;color:rgba(68,43,29,.72);background:rgba(255,250,241,.24);box-shadow:inset 0 1px rgba(255,255,255,.52),0 8px 24px rgba(69,44,28,.055);-webkit-backdrop-filter:blur(8px) saturate(105%);backdrop-filter:blur(8px) saturate(105%);font-family:var(--sans);font-size:.5rem;font-weight:600;letter-spacing:.22em;line-height:1;text-transform:uppercase;text-shadow:0 1px rgba(255,255,255,.42);opacity:.72;transform:translateX(-50%);pointer-events:auto;transition:opacity .35s ease,color .35s ease,border-color .35s ease,background .35s ease,box-shadow .45s ease,transform .55s var(--ease-refined)}
+.open-invitation-cue::before{content:"";position:absolute;inset:-12px -18px;border-radius:999px;background:radial-gradient(ellipse,rgba(255,250,240,.2),transparent 70%);opacity:0;transform:scale(.82);transition:opacity .45s ease,transform .7s var(--ease-refined);pointer-events:none}
+.open-invitation-cue-mark{position:relative;display:grid;width:29px;height:29px;flex:0 0 29px;place-items:center;border:1px solid rgba(83,53,35,.14);border-radius:50%;color:rgba(73,45,29,.7);background:rgba(255,252,246,.3);font-family:var(--sans);font-size:.7rem;font-weight:400;letter-spacing:0;transition:color .35s ease,background .35s ease,transform .55s var(--ease-refined)}
+.open-invitation-cue:hover,.open-invitation-cue:focus-visible{color:rgba(58,36,24,.88);border-color:rgba(83,53,35,.28);background:rgba(255,250,241,.4);box-shadow:inset 0 1px rgba(255,255,255,.68),0 12px 30px rgba(69,44,28,.08);opacity:1;outline:0;transform:translateX(-50%) translateY(-2px)}
+.open-invitation-cue:hover::before,.open-invitation-cue:focus-visible::before{opacity:1;transform:scale(1)}
+.open-invitation-cue:hover .open-invitation-cue-mark,.open-invitation-cue:focus-visible .open-invitation-cue-mark{color:#fffaf1;background:rgba(76,46,29,.72);transform:translateY(2px)}
+.intro-cover:focus-visible{outline:0}
+.intro-cover:focus-visible .open-invitation-cue{color:rgba(58,36,24,.88);border-color:rgba(83,53,35,.28);background:rgba(255,250,241,.4);opacity:1}
+.invitation-intro.is-opening .open-invitation-cue{opacity:0!important;transform:translateX(-50%) translateY(8px) scale(.98)!important;pointer-events:none}
+@media(max-width:720px){
+  .invitation-intro:not(.is-open) .intro-cover>.open-invitation-cue{top:76%;bottom:auto;min-height:38px;padding-left:15px;gap:10px;font-size:.47rem;letter-spacing:.18em;opacity:.78}
+  .open-invitation-cue-mark{width:27px;height:27px;flex-basis:27px}
+}
+@media(prefers-reduced-motion:reduce){.open-invitation-cue,.open-invitation-cue::before,.open-invitation-cue-mark{transition:none!important}}
