@@ -59,3 +59,58 @@
   .footer:hover .footer-logo{transform:translateY(-2px) scale(1.025)}
   .footer:hover .footer-signoff{transform:translateY(-1px)}
 }
+
+/* Keep one crisp SV mark visible at all times. Section tone—not hover—chooses it. */
+.site-header .brand{
+  isolation:isolate;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.site-header .brand-logo{
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+  pointer-events:none;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  transform:translateZ(0) scale(.975)!important;
+  transition:opacity .3s ease,transform .42s cubic-bezier(.16,1,.3,1)!important;
+}
+.site-header:not(.header-on-dark) .brand-logo--dark{
+  z-index:2;
+  opacity:1!important;
+  transform:translateZ(0) scale(1)!important;
+}
+.site-header:not(.header-on-dark) .brand-logo--light{
+  z-index:1;
+  opacity:0!important;
+}
+.site-header.header-on-dark .brand-logo--dark{
+  z-index:1;
+  opacity:0!important;
+}
+.site-header.header-on-dark .brand-logo--light{
+  z-index:2;
+  opacity:1!important;
+  transform:translateZ(0) scale(1)!important;
+}
+@media(max-width:720px){
+  .menu-open .site-header .brand-logo--dark{
+    z-index:1;
+    opacity:0!important;
+    transform:translateZ(0) scale(.975)!important;
+  }
+  .menu-open .site-header .brand-logo--light{
+    z-index:2;
+    opacity:1!important;
+    transform:translateZ(0) scale(1)!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .site-header .brand-logo{transition:none!important}
+}

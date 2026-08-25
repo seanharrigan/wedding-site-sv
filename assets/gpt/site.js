@@ -28,14 +28,33 @@ const setMenuOpen = (open) => {
 };
 
 const syncHeaderTone = () => {
-  cancelAnimationFrame(headerToneFrame);
+  if (headerToneFrame) return;
   headerToneFrame = requestAnimationFrame(() => {
-    const probeY = Math.min(innerHeight - 1, header.getBoundingClientRect().bottom + 2);
-    const current = headerToneSections.find((section) => {
+    headerToneFrame = 0;
+    const headerRect = header.getBoundingClientRect();
+    const probeY = Math.min(innerHeight - 1, Math.max(0, headerRect.top + (headerRect.height / 2)));
+    let current = null;
+    let nearestDistance = Infinity;
+
+    headerToneSections.forEach((section) => {
       const rect = section.getBoundingClientRect();
-      return rect.top <= probeY && rect.bottom > probeY;
+      if (rect.top <= probeY && rect.bottom > probeY) {
+        current = section;
+        nearestDistance = 0;
+        return;
+      }
+      if (nearestDistance === 0) return;
+      const distance = probeY < rect.top ? rect.top - probeY : probeY - rect.bottom;
+      if (distance < nearestDistance) {
+        current = section;
+        nearestDistance = distance;
+      }
     });
-    if (current) header.classList.toggle('header-on-dark', current.dataset.headerTone === 'dark');
+
+    if (!current) return;
+    const tone = current.dataset.headerTone === 'dark' ? 'dark' : 'light';
+    header.dataset.tone = tone;
+    header.classList.toggle('header-on-dark', tone === 'dark');
   });
 };
 
@@ -158,6 +177,11 @@ const updateScroll = () => {
   syncHeaderTone();
 };
 addEventListener('scroll', updateScroll, { passive: true });
+addEventListener('resize', syncHeaderTone, { passive: true });
+addEventListener('orientationchange', syncHeaderTone);
+addEventListener('pageshow', syncHeaderTone);
+window.visualViewport?.addEventListener('resize', syncHeaderTone, { passive: true });
+document.fonts?.ready.then(syncHeaderTone);
 updateScroll();
 
 const revealObserver = new IntersectionObserver((entries) => {
