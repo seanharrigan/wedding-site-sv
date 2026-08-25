@@ -19,6 +19,7 @@ const invitationReplay = document.getElementById('invitation-replay');
 const languageGate = document.getElementById('language-gate');
 const languageGateOptions = [...document.querySelectorAll('.language-gate-option')];
 const envelopeStage = document.querySelector('.envelope-stage');
+const suiteComposite = document.querySelector('.suite-composite');
 const suiteCards = [...document.querySelectorAll('.suite-card[href], .suite-hotspot[href]')];
 const nav = document.getElementById('nav-links');
 const mobileCurrent = document.getElementById('mobile-current');
@@ -184,6 +185,7 @@ suiteCards.forEach((card) => card.addEventListener('click', (event) => {
   setTimeout(() => target?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' }), reducedMotion ? 0 : 650);
 }));
 suiteCards.forEach((card) => {
+  card.addEventListener('pointerenter', () => suiteComposite?.classList.add('is-action-hovered'));
   card.addEventListener('pointermove', (event) => {
     if (reducedMotion || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     const bounds = card.getBoundingClientRect();
@@ -193,8 +195,41 @@ suiteCards.forEach((card) => {
   card.addEventListener('pointerleave', () => {
     card.style.removeProperty('--spot-x');
     card.style.removeProperty('--spot-y');
+    suiteComposite?.classList.remove('is-action-hovered');
   });
 });
+
+const attachInvitationGlow = (panel) => {
+  let targetX = innerWidth / 2, targetY = innerHeight / 2;
+  let glowX = targetX, glowY = targetY, glowFrame = 0;
+  const settleGlow = () => {
+    glowX += (targetX - glowX) * .14;
+    glowY += (targetY - glowY) * .14;
+    panel.style.setProperty('--invitation-glow-x', `${glowX.toFixed(1)}px`);
+    panel.style.setProperty('--invitation-glow-y', `${glowY.toFixed(1)}px`);
+    glowFrame = (Math.abs(targetX - glowX) > .35 || Math.abs(targetY - glowY) > .35)
+      ? requestAnimationFrame(settleGlow)
+      : 0;
+  };
+  const trackGlow = (event, snap = false) => {
+    const bounds = panel.getBoundingClientRect();
+    targetX = event.clientX - bounds.left;
+    targetY = event.clientY - bounds.top;
+    if (snap) { glowX = targetX; glowY = targetY; }
+    if (!glowFrame) glowFrame = requestAnimationFrame(settleGlow);
+  };
+  panel.addEventListener('pointerenter', (event) => {
+    trackGlow(event, true);
+    panel.classList.add('is-glow-active');
+  });
+  panel.addEventListener('pointermove', (event) => trackGlow(event));
+  panel.addEventListener('pointerleave', () => {
+    panel.classList.remove('is-glow-active', 'is-action-hovered');
+  });
+};
+if (suiteComposite && matchMedia('(hover: hover) and (pointer: fine)').matches && !reducedMotion) {
+  attachInvitationGlow(suiteComposite);
+}
 invitationReplay.addEventListener('click', (event) => {
   event.preventDefault();
   event.stopPropagation();
