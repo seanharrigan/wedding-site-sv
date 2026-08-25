@@ -188,9 +188,8 @@ suiteCards.forEach((card) => {
   card.addEventListener('pointerenter', () => suiteComposite?.classList.add('is-action-hovered'));
   card.addEventListener('pointermove', (event) => {
     if (reducedMotion || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    const bounds = card.getBoundingClientRect();
-    card.style.setProperty('--spot-x', `${event.clientX - bounds.left}px`);
-    card.style.setProperty('--spot-y', `${event.clientY - bounds.top}px`);
+    card.style.setProperty('--spot-x', `${event.offsetX}px`);
+    card.style.setProperty('--spot-y', `${event.offsetY}px`);
   });
   card.addEventListener('pointerleave', () => {
     card.style.removeProperty('--spot-x');
@@ -406,7 +405,7 @@ document.querySelectorAll('.timeline').forEach((timeline) => {
 
 const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenida'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'],
-  introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], closeInvitation: ['Close invitation', 'Cerrar invitación'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar al sitio <span aria-hidden="true">→</span>'], invitationEnter: ['Enter', 'Entrar'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['View Gallery', 'Ver galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
+  introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], closeInvitation: ['Close invitation', 'Cerrar invitación'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar al sitio <span aria-hidden="true">→</span>'], invitationEnter: ['Review', 'Revisar'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See Gallery', 'Ver galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],
@@ -666,6 +665,7 @@ const placeSuiteHotspots = () => {
     spot.style.setProperty('width', `${width.toFixed(1)}px`, 'important');
     spot.style.setProperty('height', `${height.toFixed(1)}px`, 'important');
     spot.style.setProperty('--spot-rotate', `${rotate || 0}deg`);
+    spot.style.setProperty('--spot-counter-rotate', `${-(rotate || 0)}deg`);
   });
 };
 if (suiteHotspotStage) {

@@ -2723,33 +2723,6 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
 @keyframes invitation-glow-breathe{0%,100%{--invitation-glow-radius:138px}50%{--invitation-glow-radius:166px}}
 @media(prefers-reduced-motion:reduce){.suite-composite::after{display:none}}
 
-/* Invitation suite hotspots: a faint glass film in the exact shape of each piece, with a quiet engraved label. */
-.suite-hotspot,.suite-hotspot--main,.suite-hotspot--photo-left,.suite-hotspot--photo-right{--spot-y:50%;border-radius:5px!important;transform-origin:center;transform:rotate(var(--spot-rotate))!important;transition:opacity .38s ease .5s,transform .55s var(--ease-refined)!important}
-.suite-hotspot--main{--spot-y:86%;border-radius:999px 999px 14px 14px!important}
-.suite-hotspot--photo-left,.suite-hotspot--photo-right{--spot-y:90%}
-.suite-hotspot::before{border:1px solid rgba(255,255,255,.55);border-radius:inherit;background:rgba(255,250,242,.17);box-shadow:inset 0 1px rgba(255,255,255,.6);-webkit-backdrop-filter:blur(5px) saturate(108%);backdrop-filter:blur(5px) saturate(108%);opacity:0;transition:opacity .45s ease}
-.suite-action{left:50%;top:var(--spot-y);min-height:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;color:rgba(52,38,31,.78);font-family:var(--sans);font-size:.56rem;font-weight:650;letter-spacing:.3em;text-transform:uppercase;text-shadow:0 1px 0 rgba(255,255,255,.6);opacity:0;transform:translate(-50%,-50%) translateY(6px);transition:opacity .4s ease,transform .55s var(--ease-refined)}
-.suite-action-icon{display:none}
-@media(hover:hover) and (pointer:fine){
-  .suite-hotspot:hover,.suite-hotspot:focus-visible{outline:0!important;transform:rotate(var(--spot-rotate)) scale(1.012)!important}
-  .suite-hotspot:hover::before,.suite-hotspot:focus-visible::before{opacity:1;border-color:rgba(255,255,255,.55);background:rgba(255,250,242,.17);box-shadow:inset 0 1px rgba(255,255,255,.6)}
-  .suite-hotspot:hover .suite-action,.suite-hotspot:focus-visible .suite-action{opacity:1;transform:translate(-50%,-50%)}
-}
-@media(hover:none){
-  .invitation-intro.is-open .suite-hotspot .suite-action{opacity:.78;transform:translate(-50%,-50%)}
-}
-/* Labels sit at a fixed spot near the base of each piece; the card keeps its text readable under a lighter mist. */
-.suite-hotspot{--label-y:50%}
-.suite-hotspot--main{--label-y:95%}
-.suite-hotspot--photo-left,.suite-hotspot--photo-right{--label-y:90%}
-.suite-action{left:50%!important;top:var(--label-y)!important}
-.suite-hotspot--photo-left::before,.suite-hotspot--photo-right::before{-webkit-backdrop-filter:blur(4px) saturate(108%);backdrop-filter:blur(4px) saturate(108%)}
-.suite-hotspot--main::before{background:rgba(255,250,242,.14);-webkit-backdrop-filter:blur(1.5px) saturate(105%);backdrop-filter:blur(1.5px) saturate(105%)}
-@media(max-width:720px){
-  .suite-hotspot--main{--label-y:74%}
-  .suite-action{font-size:.5rem;letter-spacing:.26em}
-}
-
 /* Closed envelope: a restrained invitation cue beneath the wax seal. */
 .invitation-intro:not(.is-open) .intro-cover>.open-invitation-cue{position:absolute;right:auto;bottom:clamp(22px,3.6vh,42px);left:50%;z-index:8;display:inline-flex!important;align-items:center;gap:12px;min-height:40px;padding:4px 5px 4px 17px;border:1px solid rgba(83,53,35,.16);border-radius:999px;color:rgba(68,43,29,.72);background:rgba(255,250,241,.24);box-shadow:inset 0 1px rgba(255,255,255,.52),0 8px 24px rgba(69,44,28,.055);-webkit-backdrop-filter:blur(8px) saturate(105%);backdrop-filter:blur(8px) saturate(105%);font-family:var(--sans);font-size:.5rem;font-weight:600;letter-spacing:.22em;line-height:1;text-transform:uppercase;text-shadow:0 1px rgba(255,255,255,.42);opacity:.72;transform:translateX(-50%);pointer-events:auto;transition:opacity .35s ease,color .35s ease,border-color .35s ease,background .35s ease,box-shadow .45s ease,transform .55s var(--ease-refined)}
 .open-invitation-cue::before{content:"";position:absolute;inset:-12px -18px;border-radius:999px;background:radial-gradient(ellipse,rgba(255,250,240,.2),transparent 70%);opacity:0;transform:scale(.82);transition:opacity .45s ease,transform .7s var(--ease-refined);pointer-events:none}
@@ -2765,3 +2738,20 @@ body:has(.language-gate:not(.is-done)) .intro-language-toggle{opacity:0;pointer-
   .open-invitation-cue-mark{width:27px;height:27px;flex-basis:27px}
 }
 @media(prefers-reduced-motion:reduce){.open-invitation-cue,.open-invitation-cue::before,.open-invitation-cue-mark{transition:none!important}}
+
+/* Cursor-only invitation affordances: no card-sized films or fixed labels. */
+.suite-hotspot::before{display:none!important}
+.suite-hotspot,.suite-hotspot--main,.suite-hotspot--photo-left,.suite-hotspot--photo-right{--spot-counter-rotate:0deg;transform:rotate(var(--spot-rotate))!important}
+.suite-action{left:var(--spot-x)!important;top:var(--spot-y)!important;min-height:0;padding:5px 8px;border:0;border-radius:5px;color:rgba(52,38,31,.8);background:rgba(255,250,242,.34);box-shadow:0 4px 13px rgba(61,39,25,.08);-webkit-backdrop-filter:blur(6px) saturate(104%);backdrop-filter:blur(6px) saturate(104%);font-size:.49rem;letter-spacing:.2em;text-shadow:0 1px rgba(255,255,255,.58);opacity:0;transform:translate(-50%,calc(-100% - 11px)) rotate(var(--spot-counter-rotate))!important;transition:opacity .24s ease,transform .34s var(--ease-refined)}
+@media(hover:hover) and (pointer:fine){
+  .suite-hotspot:hover,.suite-hotspot:focus-visible{transform:rotate(var(--spot-rotate))!important}
+  .suite-hotspot:hover .suite-action,.suite-hotspot:focus-visible .suite-action{opacity:.92;transform:translate(-50%,calc(-100% - 11px)) rotate(var(--spot-counter-rotate))!important}
+}
+.suite-composite{--invitation-glow-radius:60px}
+.suite-composite::after{-webkit-backdrop-filter:blur(.8px) brightness(1.04) saturate(1.025);backdrop-filter:blur(.8px) brightness(1.04) saturate(1.025)}
+.invitation-intro.is-open .suite-composite.is-glow-active::after{opacity:.34}
+.invitation-intro.is-open .suite-composite.is-action-hovered::after{opacity:.66}
+@keyframes invitation-glow-breathe{0%,100%{--invitation-glow-radius:54px}50%{--invitation-glow-radius:66px}}
+@media(hover:none),(pointer:coarse){
+  .suite-action{left:50%!important;top:50%!important;opacity:.72;transform:translate(-50%,-50%) rotate(var(--spot-counter-rotate))!important}
+}
