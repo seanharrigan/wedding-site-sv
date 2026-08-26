@@ -137,3 +137,11 @@
 @media(prefers-reduced-motion:reduce){
   .site-header .brand-logo{transition:none!important}
 }
+
+/* Keep the Celebration heading comfortably inside narrow phone viewports. */
+@media(max-width:720px){
+  .celebration-heading .section-title{
+    max-width:100%;
+    font-size:clamp(2.7rem,13vw,4rem);
+  }
+}
