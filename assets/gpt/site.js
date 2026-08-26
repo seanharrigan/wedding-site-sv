@@ -217,12 +217,18 @@ openEnvelope.addEventListener('click', () => {
   invitationIntro.classList.remove('is-preparing', 'is-replaying');
   invitationIntro.classList.add('is-opening');
   envelopeStage.setAttribute('aria-hidden', 'false');
-  requestAnimationFrame(() => invitationIntro.classList.add('is-open'));
+  if (reducedMotion) {
+    invitationIntro.classList.add('is-open');
+  } else {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => invitationIntro.classList.add('is-open'));
+    });
+  }
   invitationOpenTimer = setTimeout(() => {
     invitationIntro.classList.remove('is-opening');
     enterSite.focus({ preventScroll: true });
     invitationOpenTimer = 0;
-  }, reducedMotion ? 0 : 850);
+  }, reducedMotion ? 0 : (innerWidth <= 720 ? 1120 : 850));
 });
 openEnvelope.addEventListener('keydown', (event) => {
   if (event.key !== 'Enter' && event.key !== ' ') return;

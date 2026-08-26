@@ -225,6 +225,18 @@
     transform:translate3d(0,-2px,0) scale(1.006)!important;
     pointer-events:none!important;
   }
+  .invitation-intro::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:6;
+    background:url("opening-envelope-exact-logo-mobile-v7.png") center center/cover no-repeat;
+    opacity:0;
+    pointer-events:none;
+  }
+  .invitation-intro.is-opening::before{
+    animation:mobile-envelope-away 1s cubic-bezier(.4,0,.2,1) both;
+  }
   .invitation-intro .suite-composite{
     clip-path:none!important;
     opacity:0!important;
@@ -237,11 +249,30 @@
     opacity:1!important;
     transform:translate3d(0,0,0) scale(1)!important;
   }
+  .invitation-intro.is-opening.is-open .envelope-stage{
+    animation:mobile-letter-arrive 1.06s cubic-bezier(.22,.61,.36,1) .04s both!important;
+  }
   .invitation-intro::after{
+    z-index:7;
     background:rgba(248,239,226,.34);
   }
   .invitation-intro.is-opening::after{
     animation:mobile-invitation-veil .9s cubic-bezier(.4,0,.2,1) both!important;
+  }
+  .invitation-intro.is-open.is-leaving .suite-composite{
+    clip-path:none!important;
+    filter:none!important;
+    transition:opacity .52s ease .46s!important;
+  }
+  .invitation-intro.is-leaving .envelope-stage{
+    animation:mobile-letter-away 1.16s cubic-bezier(.4,0,.2,1) both!important;
+  }
+  .invitation-intro.is-leaving::after{
+    animation:mobile-site-veil 1.3s cubic-bezier(.4,0,.2,1) both!important;
+  }
+  .invitation-intro.is-leaving~.site-header,
+  .invitation-intro.is-leaving~main.site{
+    animation:mobile-site-arrive 1.3s cubic-bezier(.22,.61,.36,1) both;
   }
   .invitation-intro .suite-composite .suite-art,
   .invitation-intro .suite-composite picture,
@@ -273,11 +304,43 @@
   42%{opacity:.3}
 }
 
+@keyframes mobile-envelope-away{
+  0%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+  38%{opacity:.78}
+  100%{opacity:0;transform:translate3d(0,-2px,0) scale(1.006)}
+}
+@keyframes mobile-letter-arrive{
+  0%,12%{opacity:0;transform:translate3d(0,7px,0) scale(.993)}
+  100%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
+@keyframes mobile-letter-away{
+  0%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+  34%{opacity:1;transform:translate3d(0,-3px,0) scale(1.002)}
+  100%{opacity:0;transform:translate3d(0,-9px,0) scale(1.008)}
+}
+@keyframes mobile-site-veil{
+  0%,28%{opacity:0;background:rgba(248,239,226,0)}
+  58%{opacity:.26;background:rgba(248,239,226,.46)}
+  100%{opacity:0;background:rgba(248,239,226,0)}
+}
+@keyframes mobile-site-arrive{
+  0%,34%{opacity:.45;transform:translate3d(0,8px,0) scale(.996)}
+  100%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
+
 @media(max-width:720px) and (prefers-reduced-motion:reduce){
   .invitation-intro .intro-cover,
-  .invitation-intro .suite-composite{
+  .invitation-intro .suite-composite,
+  .invitation-intro.is-opening.is-open .envelope-stage,
+  .invitation-intro.is-open.is-leaving .suite-composite,
+  .invitation-intro.is-leaving .envelope-stage,
+  .invitation-intro.is-leaving~.site-header,
+  .invitation-intro.is-leaving~main.site{
+    animation:none!important;
     transition:none!important;
     transform:none!important;
   }
-  .invitation-intro.is-opening::after{animation:none!important}
+  .invitation-intro.is-opening::after,
+  .invitation-intro.is-opening::before,
+  .invitation-intro.is-leaving::after{animation:none!important}
 }
