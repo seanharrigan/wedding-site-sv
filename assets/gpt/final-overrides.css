@@ -148,6 +148,19 @@
 
 /* Mobile invitation is a true viewport layer: no page peeking, scrolling, hover
    labels, or wax-seal motion. The artwork itself remains fully clickable. */
+.suite-hotspot,
+.suite-hotspot:hover,
+.suite-hotspot:focus,
+.suite-hotspot:focus-visible,
+.suite-hotspot:active{
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+.suite-hotspot::before,.suite-hotspot::after{display:none!important}
+
 @media(max-width:720px){
   html:has(body.invitation-active){
     width:100%;
@@ -166,15 +179,15 @@
   }
   .invitation-intro{
     position:fixed!important;
-    inset:0!important;
-    width:100vw!important;
-    height:100vh!important;
-    height:100svh!important;
-    height:100dvh!important;
-    min-width:100vw!important;
-    min-height:100vh!important;
-    min-height:100svh!important;
-    min-height:100dvh!important;
+    inset:-2px!important;
+    width:calc(100vw + 4px)!important;
+    height:calc(100vh + 4px)!important;
+    height:calc(100svh + 4px)!important;
+    height:calc(100dvh + 4px)!important;
+    min-width:calc(100vw + 4px)!important;
+    min-height:calc(100vh + 4px)!important;
+    min-height:calc(100svh + 4px)!important;
+    min-height:calc(100dvh + 4px)!important;
     max-width:none!important;
     max-height:none!important;
     overflow:hidden!important;
