@@ -162,6 +162,9 @@
 .suite-hotspot::before,.suite-hotspot::after{display:none!important}
 
 @media(max-width:720px){
+  .invitation-intro .intro-close{
+    display:none!important;
+  }
   html:has(body.invitation-active){
     width:100%;
     height:100%;
