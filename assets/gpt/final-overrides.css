@@ -197,7 +197,7 @@
     overscroll-behavior:none!important;
     touch-action:manipulation;
   }
-  .invitation-intro:not(.is-open) .intro-cover,
+  .invitation-intro .intro-cover,
   .invitation-intro.is-open .envelope-stage,
   .invitation-intro .suite-composite{
     position:absolute!important;
@@ -209,6 +209,39 @@
     max-width:none!important;
     max-height:none!important;
     overflow:hidden!important;
+  }
+  .invitation-intro .intro-cover{
+    z-index:4;
+    background:url("opening-envelope-exact-logo-mobile-v7.png") center center/cover no-repeat;
+    opacity:1;
+    transform:translate3d(0,0,0) scale(1);
+    backface-visibility:hidden;
+    will-change:opacity,transform;
+    transition:opacity .9s cubic-bezier(.4,0,.2,1),transform 1.15s cubic-bezier(.22,.61,.36,1)!important;
+  }
+  .invitation-intro.is-opening .intro-cover,
+  .invitation-intro.is-open .intro-cover{
+    opacity:0!important;
+    transform:translate3d(0,-2px,0) scale(1.006)!important;
+    pointer-events:none!important;
+  }
+  .invitation-intro .suite-composite{
+    clip-path:none!important;
+    opacity:0!important;
+    transform:translate3d(0,5px,0) scale(.994)!important;
+    backface-visibility:hidden;
+    will-change:opacity,transform;
+    transition:opacity .82s ease .1s,transform 1.05s cubic-bezier(.22,.61,.36,1) .06s!important;
+  }
+  .invitation-intro.is-open .suite-composite{
+    opacity:1!important;
+    transform:translate3d(0,0,0) scale(1)!important;
+  }
+  .invitation-intro::after{
+    background:rgba(248,239,226,.34);
+  }
+  .invitation-intro.is-opening::after{
+    animation:mobile-invitation-veil .9s cubic-bezier(.4,0,.2,1) both!important;
   }
   .invitation-intro .suite-composite .suite-art,
   .invitation-intro .suite-composite picture,
@@ -233,4 +266,18 @@
     transform:translate3d(-50%,-50%,0) scale(1)!important;
     transition:none!important;
   }
+}
+
+@keyframes mobile-invitation-veil{
+  0%,100%{opacity:0}
+  42%{opacity:.3}
+}
+
+@media(max-width:720px) and (prefers-reduced-motion:reduce){
+  .invitation-intro .intro-cover,
+  .invitation-intro .suite-composite{
+    transition:none!important;
+    transform:none!important;
+  }
+  .invitation-intro.is-opening::after{animation:none!important}
 }
