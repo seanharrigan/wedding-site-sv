@@ -145,3 +145,76 @@
     font-size:clamp(2.7rem,13vw,4rem);
   }
 }
+
+/* Mobile invitation is a true viewport layer: no page peeking, scrolling, hover
+   labels, or wax-seal motion. The artwork itself remains fully clickable. */
+@media(max-width:720px){
+  html:has(body.invitation-active){
+    width:100%;
+    height:100%;
+    overflow:hidden!important;
+    overscroll-behavior:none;
+  }
+  body.invitation-active{
+    position:fixed!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+    touch-action:none;
+  }
+  .invitation-intro{
+    position:fixed!important;
+    inset:0!important;
+    width:100vw!important;
+    height:100vh!important;
+    height:100svh!important;
+    height:100dvh!important;
+    min-width:100vw!important;
+    min-height:100vh!important;
+    min-height:100svh!important;
+    min-height:100dvh!important;
+    max-width:none!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+    touch-action:manipulation;
+  }
+  .invitation-intro:not(.is-open) .intro-cover,
+  .invitation-intro.is-open .envelope-stage,
+  .invitation-intro .suite-composite{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    min-width:100%!important;
+    min-height:100%!important;
+    max-width:none!important;
+    max-height:none!important;
+    overflow:hidden!important;
+  }
+  .invitation-intro .suite-composite .suite-art,
+  .invitation-intro .suite-composite picture,
+  .invitation-intro .suite-composite img{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    max-width:none!important;
+    max-height:none!important;
+  }
+  .invitation-intro .suite-composite img{
+    object-fit:cover!important;
+    object-position:center center!important;
+  }
+  .suite-action{display:none!important}
+  .invitation-intro .intro-cover>.closed-wax-seal,
+  .invitation-intro .intro-cover>.closed-wax-seal:hover,
+  .intro-cover:focus-visible .closed-wax-seal,
+  .invitation-intro.is-opening .closed-wax-seal{
+    filter:drop-shadow(0 3px 4px rgba(61,35,21,.08))!important;
+    transform:translate3d(-50%,-50%,0) scale(1)!important;
+    transition:none!important;
+  }
+}
