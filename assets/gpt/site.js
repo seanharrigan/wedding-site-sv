@@ -11,6 +11,10 @@ const storeValue = (key, value) => {
 };
 const languageToggle = document.getElementById('language-toggle');
 const introLanguageToggle = document.getElementById('intro-language-toggle');
+const passwordGate = document.getElementById('password-gate');
+const passwordGateForm = document.getElementById('password-gate-form');
+const passwordInput = document.getElementById('invitation-password');
+const passwordGateStatus = document.getElementById('password-gate-status');
 const invitationIntro = document.getElementById('invitation-intro');
 const openEnvelope = document.getElementById('open-envelope');
 const enterSite = document.getElementById('enter-site');
@@ -27,6 +31,8 @@ const nav = document.getElementById('nav-links');
 const mobileCurrent = document.getElementById('mobile-current');
 const skipLink = document.querySelector('.skip-link');
 const headerToneSections = [...document.querySelectorAll('[data-header-tone]')];
+const mainSite = document.getElementById('main');
+const accessHash = '3cc91c46c1cd593603b9aa6cd2aecb9c2ab67142d2b42656136a55be53881a52';
 let headerToneFrame = 0;
 let invitationHideTimer = 0;
 let invitationFocusTimer = 0;
@@ -153,6 +159,10 @@ const revealInvitation = ({ replay = false } = {}) => {
   }
 
   invitationFocusTimer = setTimeout(() => {
+    if (passwordGate && !passwordGate.hidden && passwordGate.classList.contains('is-clearing')) {
+      invitationFocusTimer = 0;
+      return;
+    }
     (gateOpen ? document.querySelector('.language-gate-panel') : openEnvelope)?.focus({ preventScroll: true });
     invitationFocusTimer = 0;
   }, reducedMotion ? 0 : (replay ? 620 : 180));
@@ -199,14 +209,30 @@ const closeInvitation = () => {
 
 const keepWebsiteAtTop = () => scrollTo({ top: 0, left: 0, behavior: 'auto' });
 
-if (readStoredValue('wedding-invitation-seen') === 'true') {
+const accessGranted = readStoredValue('wedding-access-granted-v1') === 'true';
+
+if (!accessGranted) {
   languageGate?.classList.add('is-done');
-  invitationIntro.hidden = true;
+  invitationIntro.hidden = false;
+  invitationIntro.inert = true;
   invitationIntro.setAttribute('aria-hidden', 'true');
-  document.documentElement.classList.remove('returning-visitor');
+  header.inert = true;
+  mainSite.inert = true;
+  body.classList.add('invitation-active', 'password-gate-open');
+  requestAnimationFrame(placeClosedWaxSeal);
+  setTimeout(() => passwordInput?.focus({ preventScroll: true }), reducedMotion ? 0 : 420);
 } else {
-  body.classList.add('language-gate-open');
-  revealInvitation();
+  passwordGate.hidden = true;
+  passwordGate.classList.add('is-done');
+  if (readStoredValue('wedding-invitation-seen') === 'true') {
+    languageGate?.classList.add('is-done');
+    invitationIntro.hidden = true;
+    invitationIntro.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('returning-visitor');
+  } else {
+    body.classList.add('language-gate-open');
+    revealInvitation();
+  }
 }
 
 openEnvelope.addEventListener('click', () => {
@@ -304,6 +330,10 @@ document.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
+  if (passwordGate && !passwordGate.hidden && !passwordGate.classList.contains('is-done')) {
+    if (event.key === 'Escape') passwordInput?.focus({ preventScroll: true });
+    return;
+  }
   if (event.key === 'Escape' && languageGate && !languageGate.classList.contains('is-done')) {
     dismissLanguageGate();
     return;
@@ -679,6 +709,7 @@ const attachLens = (lensPanel) => {
   lensPanel.addEventListener('pointercancel', releaseLens);
 };
 if (languageGate) attachLens(languageGate);
+if (passwordGate) attachLens(passwordGate);
 if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
   document.querySelectorAll('.special-inner').forEach(attachLens);
 }
@@ -700,6 +731,62 @@ languageGateOptions.forEach((option) => option.addEventListener('click', () => {
     if (body.classList.contains('invitation-active')) openEnvelope.focus({ preventScroll: true });
   }, reducedMotion ? 0 : 1550);
 }));
+
+const hashAccessAttempt = async (value) => {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+};
+
+passwordGateForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (passwordGate.classList.contains('is-clearing')) return;
+  const submitButton = passwordGateForm.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  passwordGate.classList.remove('is-error');
+  passwordGateStatus.textContent = '';
+
+  let matches = false;
+  try {
+    matches = await hashAccessAttempt(passwordInput.value) === accessHash;
+  } catch {
+    passwordGateStatus.textContent = 'Unable to check the password. Please refresh and try again.';
+  }
+
+  if (!matches) {
+    passwordGate.classList.add('is-error');
+    passwordGateStatus.textContent ||= 'That password does not match. Please try again. / La contraseña no coincide.';
+    passwordInput.select();
+    submitButton.disabled = false;
+    setTimeout(() => passwordGate.classList.remove('is-error'), reducedMotion ? 0 : 520);
+    return;
+  }
+
+  storeValue('wedding-access-granted-v1', 'true');
+  passwordGate.classList.add('is-clearing');
+  document.documentElement.classList.add('access-transitioning');
+  passwordInput.blur();
+
+  setTimeout(() => {
+    languageGate.classList.remove('is-done', 'is-clearing', 'is-optional');
+    languageGate.classList.add('is-arriving');
+    body.classList.add('language-gate-open');
+    invitationIntro.inert = false;
+    header.inert = false;
+    mainSite.inert = false;
+    revealInvitation();
+  }, reducedMotion ? 0 : 360);
+
+  setTimeout(() => {
+    passwordGate.classList.add('is-done');
+    passwordGate.hidden = true;
+    body.classList.remove('password-gate-open');
+    document.documentElement.classList.remove('access-required', 'access-transitioning');
+    document.documentElement.classList.add('access-granted');
+    languageGate.classList.remove('is-arriving');
+    document.querySelector('.language-gate-panel')?.focus({ preventScroll: true });
+  }, reducedMotion ? 0 : 1180);
+});
 
 // Invitation suite hotspots are authored in artwork coordinates and mapped
 // through the image's object-fit: cover transform, so they track the cards.

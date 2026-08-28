@@ -2592,6 +2592,51 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
   .menu-open .menu-toggle{transform:none}
 }
 
+/* Private entrance: the same frost as the language chooser, clearing into it after access. */
+.password-gate{--lens-x:50%;--lens-y:50%;--lens-r:0px;position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:24px;isolation:isolate;color:var(--off-white);touch-action:none;transition:opacity .8s ease,visibility 0s linear .8s}
+.password-gate::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(160deg,rgba(40,30,24,.36),rgba(24,17,13,.46));-webkit-backdrop-filter:blur(12px) saturate(108%);backdrop-filter:blur(12px) saturate(108%);transition:opacity .9s cubic-bezier(.4,0,.2,1),--lens-r .9s var(--ease-refined)}
+.password-gate-panel{display:grid;width:min(100%,460px);justify-items:center;text-align:center;text-shadow:0 2px 18px rgba(24,15,10,.3);transition:opacity .6s ease,transform .95s var(--ease-refined)}
+.password-gate-logo{width:clamp(92px,11vw,132px);height:auto;margin:0 0 22px;object-fit:contain;opacity:.92}
+.password-gate-eyebrow{margin:0 0 18px;font-family:var(--sans);font-size:.54rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;opacity:.76}
+.password-gate h1{margin:0;font-family:var(--script);font-size:clamp(4.8rem,9vw,7.2rem);font-weight:400;letter-spacing:-.045em;line-height:.72}
+.password-gate-copy{max-width:420px;margin:24px auto 28px;font-family:var(--serif);font-size:1.05rem;line-height:1.45;opacity:.86}
+.password-gate-copy span{font-size:.93em;opacity:.72}
+.password-gate-form{display:grid;width:min(100%,410px);justify-items:center}
+.password-gate-control{display:grid;width:100%;grid-template-columns:1fr auto;align-items:center;padding:5px;border:1px solid rgba(255,249,239,.3);border-radius:999px;background:rgba(255,249,239,.1);box-shadow:inset 0 1px rgba(255,255,255,.2),0 16px 42px rgba(24,15,10,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:border-color .35s ease,background .35s ease,box-shadow .45s ease,transform .45s var(--ease-refined)}
+.password-gate-control:focus-within{border-color:rgba(255,249,239,.62);background:rgba(255,249,239,.16);box-shadow:inset 0 1px rgba(255,255,255,.3),0 18px 46px rgba(24,15,10,.17)}
+.password-gate-control input{min-width:0;height:46px;padding:0 17px;border:0;outline:0;color:var(--off-white);background:transparent;font-family:var(--sans);font-size:.78rem;letter-spacing:.08em}
+.password-gate-control input::placeholder{color:rgba(255,249,239,.62);letter-spacing:.06em}
+.password-gate-control button{display:inline-flex;min-height:46px;align-items:center;gap:13px;padding:0 18px;border:1px solid rgba(255,249,239,.28);border-radius:999px;color:#4b3022;background:rgba(255,249,239,.88);font-family:var(--sans);font-size:.56rem;font-weight:650;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:color .3s ease,background .3s ease,transform .45s var(--ease-refined),box-shadow .4s ease}
+.password-gate-control button:hover,.password-gate-control button:focus-visible{outline:0;background:#fff9ef;box-shadow:0 8px 24px rgba(23,14,9,.16);transform:translateY(-1px)}
+.password-gate-control button:disabled{cursor:wait;opacity:.65}
+.password-gate-status{min-height:1.5em;margin:12px 0 0;color:#f5d9c9;font-family:var(--sans);font-size:.62rem;line-height:1.4}
+.password-gate.is-clearing{pointer-events:none}
+.password-gate.is-clearing::before{opacity:0;--lens-r:240px}
+.password-gate.is-clearing .password-gate-panel{opacity:0;transform:translateY(-8px) scale(.988)}
+.password-gate.is-error .password-gate-control{border-color:rgba(211,137,119,.72);animation:password-gate-nudge .42s ease both}
+.password-gate.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.password-gate[hidden]{display:none!important}
+html.access-granted .password-gate{display:none}
+html.access-required:not(.access-transitioning) .language-gate{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+body.password-gate-open{overflow:hidden}
+@keyframes password-gate-nudge{25%{transform:translateX(-5px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+@keyframes language-gate-arrive{from{opacity:0;transform:translateY(8px) scale(.992)}to{opacity:1;transform:none}}
+.language-gate.is-arriving .language-gate-panel{animation:language-gate-arrive .9s var(--ease-refined) both}
+@media(hover:hover) and (pointer:fine){
+  .password-gate::before{-webkit-mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),rgba(0,0,0,.72) 0,rgba(0,0,0,.72) calc(var(--lens-r) * .42),#000 var(--lens-r));mask-image:radial-gradient(circle at var(--lens-x) var(--lens-y),rgba(0,0,0,.72) 0,rgba(0,0,0,.72) calc(var(--lens-r) * .42),#000 var(--lens-r))}
+  .password-gate:hover::before{--lens-r:145px}
+}
+@media(max-width:720px){
+  .password-gate{padding:22px}
+  .password-gate-logo{width:92px;margin-bottom:18px}
+  .password-gate h1{font-size:clamp(4.5rem,23vw,6.2rem)}
+  .password-gate-copy{margin:20px auto 24px;font-size:.98rem}
+  .password-gate-control{grid-template-columns:1fr}
+  .password-gate-control input{height:48px;text-align:center}
+  .password-gate-control button{width:100%;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){.password-gate,.password-gate::before,.password-gate-panel,.language-gate.is-arriving .language-gate-panel{animation:none!important;transition:none!important}}
+
 /* Language gate: frost over the closed invitation, a lens where the pointer is, two simple choices. */
 .returning-visitor .language-gate,.returning-visitor .invitation-intro{display:none!important}
 .language-gate{--lens-x:50%;--lens-y:50%;--lens-r:0px;position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:24px;isolation:isolate;transition:opacity .6s ease,visibility 0s linear .6s}

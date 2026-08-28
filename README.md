@@ -1,5 +1,5 @@
 # Sean & Valeria Wedding Site
 
-The maintained site source is [index-gpt.html](index-gpt.html), with styles, behavior, and image assets under `assets/gpt/`.
+The maintained site source is [index.html](index.html), with styles, behavior, and image assets under `assets/gpt/`.
 
-The current live preview is published separately through here.now.
+The production site is published through GitHub Pages at [seanandvaleria.com](https://seanandvaleria.com/).

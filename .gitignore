@@ -9,7 +9,7 @@ home.png
 .vscode/
 .herenow/
 
-# Archived prototypes; the maintained source is index-gpt.html + assets/gpt/
+# Archived prototypes; the maintained source is index.html + assets/gpt/
 HOME.html
 ENVELOPE.html
 INVITATION.html
@@ -17,5 +17,4 @@ INFORMATION.html
 INFORMACIÓN.html
 INFORMACIÓN.html
 RSVP.html
-index.html
 index-canva.html
