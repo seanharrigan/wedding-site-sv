@@ -1071,3 +1071,46 @@ html:lang(es) .special-col .section-title{
   .construction-message p{font-size:1.06rem}
   .construction-message .construction-message-es{font-size:.92rem}
 }
+
+/* Check-In thank-you: a small paper-and-clay Catrina gives the confirmation a warm, celebratory beat. */
+.check-in-form-content[hidden],.check-in-thanks[hidden]{display:none!important}
+.check-in-card.is-confirmed{display:grid;min-height:500px;place-items:center}
+.check-in-thanks{width:100%;max-width:390px;margin:auto;text-align:center;opacity:0;transform:translateY(10px)}
+.check-in-thanks.is-visible{animation:check-in-thanks-in .7s var(--ease-refined) both}
+@keyframes check-in-thanks-in{to{opacity:1;transform:none}}
+.check-in-thanks .eyebrow{margin:0 0 .45rem;color:var(--mocha);font-size:.58rem}
+.check-in-thanks h3{margin:0;color:var(--mocha-deep);font-family:var(--script);font-size:clamp(3.1rem,5vw,4.3rem);font-weight:400;letter-spacing:-.055em;line-height:.82}
+.check-in-thanks>p:not(.eyebrow){max-width:330px;margin:1.2rem auto 0;color:#5d493a;font-family:var(--serif);font-size:var(--regular-copy-size);line-height:1.48}
+.check-in-thanks .check-in-thanks-email{margin-top:.75rem;color:rgba(73,54,44,.66);font-size:.92em;font-style:italic}
+.catrina-stopmotion{position:relative;width:min(184px,54vw);aspect-ratio:2/3;margin:0 auto .8rem;overflow:hidden;border-radius:47% 47% 42% 42%/24% 24% 12% 12%;background:radial-gradient(ellipse at 50% 72%,rgba(133,77,46,.6),rgba(49,34,25,.99) 69%)}
+.catrina-stopmotion::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 72%,rgba(47,31,21,.2))}
+.catrina-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:catrina-step 3s steps(1,end) infinite;will-change:opacity,transform}
+.catrina-frame--one{animation-delay:0s}.catrina-frame--two{animation-delay:-1s}.catrina-frame--three{animation-delay:-2s}
+@keyframes catrina-step{0%,32%{opacity:1;transform:translateX(-2px) rotate(-.5deg) scale(1.015)}33%,100%{opacity:0;transform:translateX(2px) rotate(.5deg) scale(1)}}
+
+/* Desktop editorial copy and navigation receive the same small readability lift. */
+@media(min-width:721px){
+  :root{--regular-copy-size:clamp(1.14rem,1.4vw,1.28rem)}
+  .special-col>p,.save-date-inner>p:not(.save-date-day){font-family:var(--serif);font-size:var(--regular-copy-size);line-height:1.55}
+  .site-header{min-height:68px}
+  .site-header .nav-link,.site-header .invitation-replay{padding:.78rem .88rem;font-size:.7rem!important;letter-spacing:.135em}
+  .site-header .language-toggle{min-height:40px;padding-inline:13px;font-size:.62rem;letter-spacing:.13em}
+}
+
+/* The two Tepoztlán practical disclosures now echo the full-width lower rows in the travel reference. */
+.travel-chapter--tepoztlan .practical--tepoz{grid-template-columns:minmax(0,1fr)!important;gap:0}
+.travel-chapter--tepoztlan .practical--tepoz .practical-item{grid-column:1!important}
+.travel-chapter--tepoztlan .practical--tepoz .practical-item h4,
+.travel-chapter--tepoztlan .practical--tepoz .practical-item .accordion-panel{grid-column:1!important;grid-row:auto!important}
+
+@media(max-width:720px){
+  .check-in-card.is-confirmed{min-height:430px}
+  .check-in-thanks{max-width:310px}
+  .catrina-stopmotion{width:min(162px,50vw);margin-bottom:.7rem}
+  .check-in-thanks h3{font-size:clamp(2.8rem,14vw,3.55rem)}
+}
+@media(prefers-reduced-motion:reduce){
+  .check-in-thanks.is-visible{animation:none;opacity:1;transform:none}
+  .catrina-frame{animation:none;opacity:0;transform:none}
+  .catrina-frame--one{opacity:1}
+}

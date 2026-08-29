@@ -558,7 +558,7 @@ const uiTranslations = {
   weekTitle: ['A week<br>in <em>México</em>.', 'Una semana<br>en <em>México</em>.'], weekBrief: ['Arrive early, stay a little longer, and make the celebration part of a beautiful week away.', 'Lleguen antes, quédense unos días y disfruten una semana completa en México.'],
   weekArrival: ['Arrive in Mexico City', 'Llegada a la Ciudad de México'], weekArrivalCopy: ['Land in the capital, settle in and begin your Mexico City adventure.', 'Lleguen, instálense y empiecen a recorrer la ciudad.'], weekMuertos: ['Día de Muertos parade', 'Desfile de Día de Muertos'], weekMuertosCopy: ['Experience the city in its most luminous season—marigolds, music and remembrance.', 'Disfruten la ciudad entre cempasúchil, música y recuerdos.'], weekTravel: ['Travel to Tepoztlán', 'Viaje a Tepoztlán'], weekTravelCopy: ['Head south into the mountains; the journey from Mexico City is roughly ninety minutes.', 'El viaje desde la Ciudad de México dura aproximadamente noventa minutos.'], weekWedding: ['Wedding day', 'Día de la boda'], weekWeddingCopy: ['Gather with us at Hotel Piedra Viva for an afternoon and evening under the Tepozteco.', 'Pasen la tarde y la noche con nosotros en Hotel Piedra Viva, al pie del Tepozteco.'], weekPool: ['Pool day or hike', 'Día de alberca o caminata'], weekPoolCopy: ['Keep the day unhurried—cool off by the pool or take in the panoramic mountain trail.', 'Tómense el día con calma: alberca o caminata por la montaña.'], weekReturn: ['Return to Mexico City', 'Regreso a la Ciudad de México'], weekReturnCopy: ['Travel back to the city with a little time left for one last coffee or market visit.', 'Regresen a la ciudad con tiempo para un último café o una visita al mercado.'],
   countdownTitle: ['<em>The</em> <span>Countdown</span>', '<em>La</em> <span>cuenta regresiva</span>'],
-  checkInKicker: ['Your journey', 'Su viaje'], checkInTitle: ['<span>Check</span>-<em>In</em>', '<span>Registro</span>'], checkInIntro: ['Share your travel dates and accommodation details so we know when and where to expect you.', 'Compartan sus fechas y datos de hospedaje para saber cuándo y dónde esperarlos.'], partyLabel: ['Who is coming?', '¿Quiénes vienen?'], arrivalDateLabel: ['Arrival date', 'Fecha de llegada'], departureDateLabel: ['Departure date', 'Fecha de salida'], mexicoCityAccommodationLabel: ['Mexico City neighbourhood', 'Colonia en Ciudad de México'], chooseNeighbourhood: ['Choose a neighbourhood', 'Elige una colonia'], otherOption: ['Other', 'Otro'], otherNeighbourhoodLabel: ['Other neighbourhood', 'Otra colonia'], otherNeighbourhoodPlaceholder: ['Enter neighbourhood', 'Escribe la colonia'], tepoztlanCheckInLabel: ['Tepoztlán check-in', 'Entrada en Tepoztlán'], tepoztlanCheckOutLabel: ['Tepoztlán check-out', 'Salida de Tepoztlán'], tepoztlanLocationLabel: ['Tepoztlán accommodation', 'Hospedaje en Tepoztlán'], chooseTepoztlanLocation: ['Choose accommodation', 'Elige el hospedaje'], otherTepoztlanLabel: ['Other accommodation', 'Otro hospedaje'], otherTepoztlanPlaceholder: ['Enter hotel or accommodation', 'Escribe el hotel o alojamiento'], checkInSubmit: ['Prepare Check-In email <span aria-hidden="true">→</span>', 'Preparar correo de confirmación <span aria-hidden="true">→</span>'], closingTitle: ['We cannot wait<br>to celebrate together.', 'Ya queremos<br>celebrar juntos.']
+  checkInKicker: ['Your journey', 'Su viaje'], checkInTitle: ['<span>Check</span>-<em>In</em>', '<span>Registro</span>'], checkInIntro: ['Share your travel dates and accommodation details so we know when and where to expect you.', 'Compartan sus fechas y datos de hospedaje para saber cuándo y dónde esperarlos.'], partyLabel: ['Who is coming?', '¿Quiénes vienen?'], arrivalDateLabel: ['Arrival date', 'Fecha de llegada'], departureDateLabel: ['Departure date', 'Fecha de salida'], mexicoCityAccommodationLabel: ['Mexico City neighbourhood', 'Colonia en Ciudad de México'], chooseNeighbourhood: ['Choose a neighbourhood', 'Elige una colonia'], otherOption: ['Other', 'Otro'], otherNeighbourhoodLabel: ['Other neighbourhood', 'Otra colonia'], otherNeighbourhoodPlaceholder: ['Enter neighbourhood', 'Escribe la colonia'], tepoztlanCheckInLabel: ['Tepoztlán check-in', 'Entrada en Tepoztlán'], tepoztlanCheckOutLabel: ['Tepoztlán check-out', 'Salida de Tepoztlán'], tepoztlanLocationLabel: ['Tepoztlán accommodation', 'Hospedaje en Tepoztlán'], chooseTepoztlanLocation: ['Choose accommodation', 'Elige el hospedaje'], otherTepoztlanLabel: ['Other accommodation', 'Otro hospedaje'], otherTepoztlanPlaceholder: ['Enter hotel or accommodation', 'Escribe el hotel o alojamiento'], checkInSubmit: ['Prepare Check-In email <span aria-hidden="true">→</span>', 'Preparar correo de confirmación <span aria-hidden="true">→</span>'], checkInThanksKicker: ['Gracias', 'Gracias'], checkInThanksTitle: ['Thank you.', 'Gracias.'], checkInThanksCopy: ['This helps us make everyone’s arrival feel easy and well looked after.', 'Esto nos ayuda a que la llegada de todos sea más fácil y cuidada.'], checkInThanksEmail: ['Your Check-In email is ready to send.', 'Tu correo de registro está listo para enviar.'], closingTitle: ['We cannot wait<br>to celebrate together.', 'Ya queremos<br>celebrar juntos.']
 };
 
 const phraseTranslations = new Map(Object.entries({
@@ -662,6 +662,8 @@ syncNavigation();
 syncHeaderTone();
 
 const checkInForm = document.getElementById('check-in-form');
+const checkInFormContent = checkInForm?.querySelector('.check-in-form-content');
+const checkInThanks = document.getElementById('check-in-thanks');
 const setupConditionalAccommodation = (selectId, fieldId, inputId) => {
   const select = document.getElementById(selectId);
   const field = document.getElementById(fieldId);
@@ -881,10 +883,21 @@ checkInForm.addEventListener('submit', (event) => {
   const message = encodeURIComponent(spanish
     ? `Asistentes: ${party}\nLlegada: ${arrival}\nSalida: ${departure}\nHospedaje en Ciudad de México — colonia: ${mexicoCityNeighbourhood}\nEntrada en Tepoztlán: ${tepoztlanCheckIn}\nSalida de Tepoztlán: ${tepoztlanCheckOut}\nHospedaje en Tepoztlán: ${tepoztlanLocation}`
     : `Who is coming: ${party}\nArrival date: ${arrival}\nDeparture date: ${departure}\nMexico City neighbourhood: ${mexicoCityNeighbourhood}\nTepoztlán check-in: ${tepoztlanCheckIn}\nTepoztlán check-out: ${tepoztlanCheckOut}\nTepoztlán location: ${tepoztlanLocation}`);
-  document.getElementById('form-status').textContent = currentLanguage === 'es'
-    ? 'Gracias. Se abrirá su correo con la confirmación preparada.'
-    : 'Thank you — your email app is opening with your Check-In prepared.';
-  window.location.href = `mailto:valeriaandseanharrigan@gmail.com?subject=${subject}&body=${message}`;
+  const mailtoUrl = `mailto:valeriaandseanharrigan@gmail.com?subject=${subject}&body=${message}`;
+  const formStatus = document.getElementById('form-status');
+  if (formStatus) formStatus.textContent = '';
+  checkInForm.classList.add('is-confirmed');
+  if (checkInFormContent) checkInFormContent.hidden = true;
+  if (checkInThanks) {
+    checkInThanks.hidden = false;
+    requestAnimationFrame(() => {
+      checkInThanks.classList.add('is-visible');
+      checkInThanks.querySelector('h3')?.focus({ preventScroll: true });
+    });
+  }
+  window.setTimeout(() => {
+    window.location.href = mailtoUrl;
+  }, reducedMotion ? 0 : 1250);
 });
 
 // Frosted panels clear a soft lens wherever the pointer rests (desktop only).
