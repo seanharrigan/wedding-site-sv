@@ -10,6 +10,116 @@
   }
 }
 
+/* November weather reads as two ranges on one restrained temperature scale. */
+.weather-ranges{
+  --weather-label-width:64px;
+  --weather-value-width:92px;
+  --weather-gap:clamp(12px,1.8vw,22px);
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  width:min(100%,620px);
+  gap:14px;
+  margin:clamp(20px,2.4vw,30px) auto 0;
+}
+.weather-range{
+  --range-start:0%;
+  --range-width:14%;
+  --range-color:var(--mocha);
+  display:grid;
+  grid-column:1;
+  grid-template-columns:var(--weather-label-width) minmax(0,1fr) var(--weather-value-width);
+  align-items:center;
+  gap:var(--weather-gap);
+}
+.weather-range--day{--range-start:73%;--range-color:#a16f50}
+.weather-range--night{--range-start:9%;--range-color:#676b55}
+.weather-range-label{
+  color:var(--mocha);
+  font-family:var(--sans);
+  font-size:.6rem;
+  font-weight:650;
+  letter-spacing:.2em;
+  text-align:left;
+  text-transform:uppercase;
+}
+.weather-range strong{
+  color:var(--mocha-deep);
+  font-family:var(--serif);
+  font-size:clamp(1.25rem,2vw,1.55rem);
+  font-weight:400;
+  letter-spacing:-.025em;
+  line-height:1;
+  text-align:right;
+  white-space:nowrap;
+}
+.weather-range-track{position:relative;display:block;height:18px}
+.weather-range-track::before{
+  content:"";
+  position:absolute;
+  top:50%;
+  right:0;
+  left:0;
+  height:2px;
+  background:linear-gradient(90deg,rgba(73,54,44,.16),rgba(73,54,44,.3),rgba(73,54,44,.16));
+  transform:translateY(-50%);
+}
+.weather-range-track::after{
+  content:"";
+  position:absolute;
+  inset:3px 0;
+  background:repeating-linear-gradient(90deg,rgba(73,54,44,.18) 0 1px,transparent 1px 25%);
+  pointer-events:none;
+}
+.weather-range-track i{
+  position:absolute;
+  top:50%;
+  left:var(--range-start);
+  z-index:1;
+  display:block;
+  width:var(--range-width);
+  height:8px;
+  border-radius:999px;
+  background:var(--range-color);
+  box-shadow:0 4px 12px color-mix(in srgb,var(--range-color) 28%,transparent);
+  transform:translateY(-50%);
+}
+.weather-range-track i::before,
+.weather-range-track i::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:8px;
+  height:8px;
+  border:2px solid var(--paper);
+  border-radius:50%;
+  background:var(--range-color);
+  box-shadow:0 0 0 1px var(--range-color);
+  transform:translateY(-50%);
+}
+.weather-range-track i::before{left:0}
+.weather-range-track i::after{right:0}
+.weather-range-scale{
+  display:flex;
+  grid-column:1;
+  justify-content:space-between;
+  margin:-7px calc(var(--weather-value-width) + var(--weather-gap)) 0 calc(var(--weather-label-width) + var(--weather-gap));
+  color:rgba(73,54,44,.58);
+  font-family:var(--sans);
+  font-size:.48rem;
+  font-weight:600;
+  letter-spacing:.08em;
+}
+.details-weather-copy{margin-top:clamp(24px,3vw,36px)}
+@media(max-width:720px){
+  .weather-ranges{--weather-label-width:48px;--weather-value-width:76px;--weather-gap:10px;gap:12px;margin-top:20px}
+  .weather-range-label{font-size:.54rem;letter-spacing:.16em}
+  .weather-range strong{font-size:1.08rem}
+  .weather-range-track i{height:7px}
+  .weather-range-track i::before,
+  .weather-range-track i::after{width:7px;height:7px}
+  .weather-range-scale{font-size:.45rem}
+}
+
 /* Closing photo: paper ground, breathing room under Check-In, a real drop shadow. */
 .closing{background:var(--paper)!important}
 @media(min-width:721px){
