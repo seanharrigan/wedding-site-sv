@@ -952,8 +952,6 @@ checkInForm?.addEventListener('submit', (event) => {
   }
 
   window.setTimeout(() => {
-    checkInPassage?.classList.remove('is-walking');
-    if (checkInPassage) checkInPassage.hidden = true;
     if (checkInFormContent) checkInFormContent.hidden = true;
     checkInForm.classList.remove('is-confirming');
     checkInForm.classList.add('is-confirmed');
@@ -964,7 +962,12 @@ checkInForm?.addEventListener('submit', (event) => {
         checkInThanks.querySelector('h3')?.focus({ preventScroll: true });
       });
     }
-  }, reducedMotion ? 0 : 2800);
+  }, reducedMotion ? 0 : 240);
+
+  window.setTimeout(() => {
+    checkInPassage?.classList.remove('is-walking');
+    if (checkInPassage) checkInPassage.hidden = true;
+  }, reducedMotion ? 0 : 5200);
 });
 
 // Frosted panels clear a soft lens wherever the pointer rests (desktop only).
