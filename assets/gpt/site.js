@@ -26,6 +26,7 @@ const animationPreview = document.getElementById('animation-preview');
 const animationPreviewClose = document.getElementById('animation-preview-close');
 const languageGate = document.getElementById('language-gate');
 const languageGateOptions = [...document.querySelectorAll('.language-gate-option')];
+const catrinaPassage = document.getElementById('catrina-passage');
 const envelopeStage = document.querySelector('.envelope-stage');
 const suiteComposite = document.querySelector('.suite-composite');
 const closedWaxSeal = document.querySelector('.closed-wax-seal');
@@ -46,6 +47,8 @@ let invitationOpenTimer = 0;
 let invitationCloseTimer = 0;
 let animationPreviewHideTimer = 0;
 let animationPreviewReturnFocus = null;
+let catrinaPassageTimer = 0;
+let catrinaPassageHideTimer = 0;
 const invitationExitDuration = reducedMotion ? 0 : 1320;
 const invitationTargetDelay = reducedMotion ? 0 : 1160;
 
@@ -94,6 +97,38 @@ const setAnimationPreviewOpen = (open) => {
     animationPreviewReturnFocus?.focus?.({ preventScroll: true });
     animationPreviewHideTimer = 0;
   }, reducedMotion ? 0 : 260);
+};
+
+const clearCatrinaPassageTimers = () => {
+  clearTimeout(catrinaPassageTimer);
+  clearTimeout(catrinaPassageHideTimer);
+  catrinaPassageTimer = 0;
+  catrinaPassageHideTimer = 0;
+};
+
+const playCatrinaPassage = () => {
+  if (!body.classList.contains('invitation-active')) return;
+  if (!catrinaPassage || reducedMotion) {
+    invitationIntro.classList.remove('is-awaiting-passage');
+    openEnvelope?.focus({ preventScroll: true });
+    return;
+  }
+
+  clearCatrinaPassageTimers();
+  invitationIntro.classList.add('is-awaiting-passage');
+  catrinaPassage.hidden = false;
+  requestAnimationFrame(() => catrinaPassage.classList.add('is-visible'));
+
+  catrinaPassageTimer = window.setTimeout(() => {
+    catrinaPassage.classList.remove('is-visible');
+    invitationIntro.classList.remove('is-awaiting-passage');
+    catrinaPassageHideTimer = window.setTimeout(() => {
+      catrinaPassage.hidden = true;
+      openEnvelope?.focus({ preventScroll: true });
+      catrinaPassageHideTimer = 0;
+    }, 650);
+    catrinaPassageTimer = 0;
+  }, 6400);
 };
 
 const syncHeaderTone = () => {
@@ -598,7 +633,7 @@ const uiTranslations = {
   weekTitle: ['A week<br>in <em>México</em>.', 'Una semana<br>en <em>México</em>.'], weekBrief: ['Arrive early, stay a little longer, and make the celebration part of a beautiful week away.', 'Lleguen antes, quédense unos días y disfruten una semana completa en México.'],
   weekArrival: ['Arrive in Mexico City', 'Llegada a la Ciudad de México'], weekArrivalCopy: ['Land in the capital, settle in and begin your Mexico City adventure.', 'Lleguen, instálense y empiecen a recorrer la ciudad.'], weekMuertos: ['Día de Muertos parade', 'Desfile de Día de Muertos'], weekMuertosCopy: ['Experience the city in its most luminous season—marigolds, music and remembrance.', 'Disfruten la ciudad entre cempasúchil, música y recuerdos.'], weekTravel: ['Travel to Tepoztlán', 'Viaje a Tepoztlán'], weekTravelCopy: ['Head south into the mountains; the journey from Mexico City is roughly ninety minutes.', 'El viaje desde la Ciudad de México dura aproximadamente noventa minutos.'], weekWedding: ['Wedding day', 'Día de la boda'], weekWeddingCopy: ['Gather with us at Hotel Piedra Viva for an afternoon and evening under the Tepozteco.', 'Pasen la tarde y la noche con nosotros en Hotel Piedra Viva, al pie del Tepozteco.'], weekPool: ['Pool day or hike', 'Día de alberca o caminata'], weekPoolCopy: ['Keep the day unhurried—cool off by the pool or take in the panoramic mountain trail.', 'Tómense el día con calma: alberca o caminata por la montaña.'], weekReturn: ['Return to Mexico City', 'Regreso a la Ciudad de México'], weekReturnCopy: ['Travel back to the city with a little time left for one last coffee or market visit.', 'Regresen a la ciudad con tiempo para un último café o una visita al mercado.'],
   countdownTitle: ['<em>The</em> <span>Countdown</span>', '<em>La</em> <span>cuenta regresiva</span>'],
-  checkInKicker: ['Your journey', 'Su viaje'], checkInTitle: ['<span>Check</span>-<em>In</em>', '<span>Registro</span>'], checkInIntro: ['Share your travel dates and accommodation details so we know when and where to expect you.', 'Compartan sus fechas y datos de hospedaje para saber cuándo y dónde esperarlos.'], partyLabel: ['Who is coming?', '¿Quiénes vienen?'], arrivalDateLabel: ['Arrival date', 'Fecha de llegada'], departureDateLabel: ['Departure date', 'Fecha de salida'], mexicoCityAccommodationLabel: ['Mexico City neighbourhood', 'Colonia en Ciudad de México'], chooseNeighbourhood: ['Choose a neighbourhood', 'Elige una colonia'], otherOption: ['Other', 'Otro'], otherNeighbourhoodLabel: ['Other neighbourhood', 'Otra colonia'], otherNeighbourhoodPlaceholder: ['Enter neighbourhood', 'Escribe la colonia'], tepoztlanCheckInLabel: ['Tepoztlán check-in', 'Entrada en Tepoztlán'], tepoztlanCheckOutLabel: ['Tepoztlán check-out', 'Salida de Tepoztlán'], tepoztlanLocationLabel: ['Tepoztlán accommodation', 'Hospedaje en Tepoztlán'], chooseTepoztlanLocation: ['Choose accommodation', 'Elige el hospedaje'], otherTepoztlanLabel: ['Other accommodation', 'Otro hospedaje'], otherTepoztlanPlaceholder: ['Enter hotel or accommodation', 'Escribe el hotel o alojamiento'], checkInSubmit: ['Prepare Check-In email <span aria-hidden="true">→</span>', 'Preparar correo de confirmación <span aria-hidden="true">→</span>'], checkInThanksKicker: ['Gracias', 'Gracias'], checkInThanksTitle: ['Thank you.', 'Gracias.'], checkInThanksCopy: ['This helps us make everyone’s arrival feel easy and well looked after.', 'Esto nos ayuda a que la llegada de todos sea más fácil y cuidada.'], checkInThanksEmail: ['Your Check-In email is ready to send.', 'Tu correo de registro está listo para enviar.'], closingTitle: ['We cannot wait<br>to celebrate together.', 'Ya queremos<br>celebrar juntos.']
+  checkInKicker: ['Your journey', 'Su viaje'], checkInTitle: ['<span>Check</span>-<em>In</em>', '<span>Registro</span>'], checkInIntro: ['Share your travel dates and accommodation details so we know when and where to expect you.', 'Compartan sus fechas y datos de hospedaje para saber cuándo y dónde esperarlos.'], partyLabel: ['Who is coming?', '¿Quiénes vienen?'], arrivalDateLabel: ['Arrival date', 'Fecha de llegada'], departureDateLabel: ['Departure date', 'Fecha de salida'], mexicoCityAccommodationLabel: ['Mexico City neighbourhood', 'Colonia en Ciudad de México'], chooseNeighbourhood: ['Choose a neighbourhood', 'Elige una colonia'], otherOption: ['Other', 'Otro'], otherNeighbourhoodLabel: ['Other neighbourhood', 'Otra colonia'], otherNeighbourhoodPlaceholder: ['Enter neighbourhood', 'Escribe la colonia'], tepoztlanCheckInLabel: ['Tepoztlán check-in', 'Entrada en Tepoztlán'], tepoztlanCheckOutLabel: ['Tepoztlán check-out', 'Salida de Tepoztlán'], tepoztlanLocationLabel: ['Tepoztlán accommodation', 'Hospedaje en Tepoztlán'], chooseTepoztlanLocation: ['Choose accommodation', 'Elige el hospedaje'], otherTepoztlanLabel: ['Other accommodation', 'Otro hospedaje'], otherTepoztlanPlaceholder: ['Enter hotel or accommodation', 'Escribe el hotel o alojamiento'], checkInSubmit: ['Submit Check-In <span aria-hidden="true">→</span>', 'Enviar registro <span aria-hidden="true">→</span>'], checkInThanksKicker: ['Gracias', 'Gracias'], checkInThanksTitle: ['Thank you.', 'Gracias.'], checkInThanksCopy: ['This helps us make everyone’s arrival feel easy and well looked after.', 'Esto nos ayuda a que la llegada de todos sea más fácil y cuidada.'], checkInThanksEmail: ['This confirmation is a preview only—nothing has been sent.', 'Esta confirmación es solo una vista previa; aún no se ha enviado nada.'], closingTitle: ['We cannot wait<br>to celebrate together.', 'Ya queremos<br>celebrar juntos.']
 };
 
 const phraseTranslations = new Map(Object.entries({
@@ -704,6 +739,7 @@ syncHeaderTone();
 const checkInForm = document.getElementById('check-in-form');
 const checkInFormContent = checkInForm?.querySelector('.check-in-form-content');
 const checkInThanks = document.getElementById('check-in-thanks');
+const checkInPassage = document.getElementById('check-in-passage');
 const setupConditionalAccommodation = (selectId, fieldId, inputId) => {
   const select = document.getElementById(selectId);
   const field = document.getElementById(fieldId);
@@ -902,42 +938,33 @@ document.addEventListener('wedding:languagechange', () => {
   });
 });
 
-checkInForm.addEventListener('submit', (event) => {
+checkInForm?.addEventListener('submit', (event) => {
   event.preventDefault();
-  const data = new FormData(event.currentTarget);
-  const party = data.get('party');
-  const arrival = data.get('arrival');
-  const departure = data.get('departure');
-  const mexicoCityNeighbourhoodChoice = data.get('mexicoCityNeighbourhood');
-  const mexicoCityNeighbourhood = mexicoCityNeighbourhoodChoice === 'Other'
-    ? data.get('mexicoCityNeighbourhoodOther')
-    : mexicoCityNeighbourhoodChoice;
-  const tepoztlanCheckIn = data.get('tepoztlanCheckIn');
-  const tepoztlanCheckOut = data.get('tepoztlanCheckOut');
-  const tepoztlanLocationChoice = data.get('tepoztlanLocation');
-  const tepoztlanLocation = tepoztlanLocationChoice === 'Other'
-    ? data.get('tepoztlanLocationOther')
-    : tepoztlanLocationChoice;
-  const spanish = currentLanguage === 'es';
-  const subject = encodeURIComponent(spanish ? `Confirmación de boda — ${party}` : `Wedding Check-In — ${party}`);
-  const message = encodeURIComponent(spanish
-    ? `Asistentes: ${party}\nLlegada: ${arrival}\nSalida: ${departure}\nHospedaje en Ciudad de México — colonia: ${mexicoCityNeighbourhood}\nEntrada en Tepoztlán: ${tepoztlanCheckIn}\nSalida de Tepoztlán: ${tepoztlanCheckOut}\nHospedaje en Tepoztlán: ${tepoztlanLocation}`
-    : `Who is coming: ${party}\nArrival date: ${arrival}\nDeparture date: ${departure}\nMexico City neighbourhood: ${mexicoCityNeighbourhood}\nTepoztlán check-in: ${tepoztlanCheckIn}\nTepoztlán check-out: ${tepoztlanCheckOut}\nTepoztlán location: ${tepoztlanLocation}`);
-  const mailtoUrl = `mailto:valeriaandseanharrigan@gmail.com?subject=${subject}&body=${message}`;
+  if (checkInForm.classList.contains('is-confirming') || checkInForm.classList.contains('is-confirmed')) return;
   const formStatus = document.getElementById('form-status');
   if (formStatus) formStatus.textContent = '';
-  checkInForm.classList.add('is-confirmed');
-  if (checkInFormContent) checkInFormContent.hidden = true;
-  if (checkInThanks) {
-    checkInThanks.hidden = false;
-    requestAnimationFrame(() => {
-      checkInThanks.classList.add('is-visible');
-      checkInThanks.querySelector('h3')?.focus({ preventScroll: true });
-    });
+  checkInForm.classList.add('is-confirming');
+  event.currentTarget.querySelector('button[type="submit"]')?.setAttribute('disabled', '');
+  if (checkInPassage) {
+    checkInPassage.hidden = false;
+    void checkInPassage.offsetWidth;
+    requestAnimationFrame(() => checkInPassage.classList.add('is-walking'));
   }
+
   window.setTimeout(() => {
-    window.location.href = mailtoUrl;
-  }, reducedMotion ? 0 : 1250);
+    checkInPassage?.classList.remove('is-walking');
+    if (checkInPassage) checkInPassage.hidden = true;
+    if (checkInFormContent) checkInFormContent.hidden = true;
+    checkInForm.classList.remove('is-confirming');
+    checkInForm.classList.add('is-confirmed');
+    if (checkInThanks) {
+      checkInThanks.hidden = false;
+      requestAnimationFrame(() => {
+        checkInThanks.classList.add('is-visible');
+        checkInThanks.querySelector('h3')?.focus({ preventScroll: true });
+      });
+    }
+  }, reducedMotion ? 0 : 2800);
 });
 
 // Frosted panels clear a soft lens wherever the pointer rests (desktop only).
@@ -975,6 +1002,9 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
 
 // Language gate: pick a language before the invitation opens.
 languageGateOptions.forEach((option) => option.addEventListener('click', () => {
+  const shouldPlayCatrinaPassage = body.classList.contains('invitation-active')
+    && !languageGate.classList.contains('is-optional');
+  if (shouldPlayCatrinaPassage) invitationIntro.classList.add('is-awaiting-passage');
   currentLanguage = option.dataset.language === 'es' ? 'es' : 'en';
   renderLanguage(currentLanguage);
   // The frost clears outward from the chosen option, then the gate steps aside.
@@ -987,7 +1017,11 @@ languageGateOptions.forEach((option) => option.addEventListener('click', () => {
     languageGate.classList.add('is-done');
     languageGate.classList.remove('is-optional', 'is-lens-active');
     body.classList.remove('language-gate-open');
-    if (body.classList.contains('invitation-active')) openEnvelope.focus({ preventScroll: true });
+    if (shouldPlayCatrinaPassage) {
+      playCatrinaPassage();
+    } else if (body.classList.contains('invitation-active')) {
+      openEnvelope.focus({ preventScroll: true });
+    }
   }, reducedMotion ? 0 : 1550);
 }));
 
