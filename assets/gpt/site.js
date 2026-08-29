@@ -21,6 +21,9 @@ const openEnvelope = document.getElementById('open-envelope');
 const enterSite = document.getElementById('enter-site');
 const introClose = document.getElementById('intro-close');
 const invitationReplay = document.getElementById('invitation-replay');
+const animationPreviewTrigger = document.getElementById('animation-preview-trigger');
+const animationPreview = document.getElementById('animation-preview');
+const animationPreviewClose = document.getElementById('animation-preview-close');
 const languageGate = document.getElementById('language-gate');
 const languageGateOptions = [...document.querySelectorAll('.language-gate-option')];
 const envelopeStage = document.querySelector('.envelope-stage');
@@ -41,6 +44,8 @@ let invitationFocusTimer = 0;
 let invitationReplayTimer = 0;
 let invitationOpenTimer = 0;
 let invitationCloseTimer = 0;
+let animationPreviewHideTimer = 0;
+let animationPreviewReturnFocus = null;
 const invitationExitDuration = reducedMotion ? 0 : 1320;
 const invitationTargetDelay = reducedMotion ? 0 : 1160;
 
@@ -64,6 +69,31 @@ const setMenuOpen = (open) => {
   menuToggle.setAttribute('aria-label', open
     ? (spanish ? 'Cerrar menú' : 'Close navigation')
     : (spanish ? 'Abrir menú' : 'Open navigation'));
+};
+
+const setAnimationPreviewOpen = (open) => {
+  if (!animationPreview) return;
+  clearTimeout(animationPreviewHideTimer);
+  if (open) {
+    animationPreviewReturnFocus = document.activeElement === document.body
+      ? animationPreviewTrigger
+      : document.activeElement;
+    setMenuOpen(false);
+    animationPreview.hidden = false;
+    body.classList.add('animation-preview-open');
+    requestAnimationFrame(() => {
+      animationPreview.classList.add('is-visible');
+      animationPreviewClose?.focus({ preventScroll: true });
+    });
+    return;
+  }
+  animationPreview.classList.remove('is-visible');
+  body.classList.remove('animation-preview-open');
+  animationPreviewHideTimer = window.setTimeout(() => {
+    animationPreview.hidden = true;
+    animationPreviewReturnFocus?.focus?.({ preventScroll: true });
+    animationPreviewHideTimer = 0;
+  }, reducedMotion ? 0 : 260);
 };
 
 const syncHeaderTone = () => {
@@ -319,6 +349,11 @@ invitationReplay.addEventListener('click', (event) => {
   setMenuOpen(false);
   revealInvitation({ replay: true });
 });
+animationPreviewTrigger?.addEventListener('click', () => setAnimationPreviewOpen(true));
+animationPreviewClose?.addEventListener('click', () => setAnimationPreviewOpen(false));
+animationPreview?.addEventListener('click', (event) => {
+  if (event.target === animationPreview) setAnimationPreviewOpen(false);
+});
 
 menuToggle.addEventListener('click', () => {
   setMenuOpen(!body.classList.contains('menu-open'));
@@ -332,6 +367,10 @@ document.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && body.classList.contains('animation-preview-open')) {
+    setAnimationPreviewOpen(false);
+    return;
+  }
   if (passwordGate && !passwordGate.hidden && !passwordGate.classList.contains('is-done')) {
     if (event.key === 'Escape') passwordInput?.focus({ preventScroll: true });
     return;
@@ -355,6 +394,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 navLinks.forEach((link) => link.addEventListener('click', (event) => {
+  if (!link.hasAttribute('href')) return;
   event.preventDefault();
   const target = document.querySelector(link.getAttribute('href'));
   setMenuOpen(false);
@@ -495,7 +535,7 @@ document.querySelectorAll('.timeline').forEach((timeline) => {
 });
 
 const uiTranslations = {
-  navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenida'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'],
+  navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenida'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'], navAnimation: ['Animation', 'Animación'], animationPreviewTitle: ['Animation', 'Animación'], animationPreviewClose: ['Close animation preview', 'Cerrar vista previa de animación'],
   introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], closeInvitation: ['Return to the closed invitation', 'Volver a la invitación cerrada'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar al sitio <span aria-hidden="true">→</span>'], invitationEnter: ['Enter our celebration', 'Entrar a nuestra celebración'], invitationCheckIn: ['Please check in', 'Confirma tu asistencia'], checkInInvitationAction: ['Please check in on the wedding website', 'Confirma tu asistencia en el sitio de la boda'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See our gallery', 'Ver nuestra galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],

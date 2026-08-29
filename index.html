@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="assets/gpt/site.css?v=20260829a">
   <link rel="stylesheet" href="assets/gpt/save-date-botanical.css?v=20260825b">
   <link rel="stylesheet" href="assets/gpt/timeline-alignment.css?v=20260825b">
-  <link rel="stylesheet" href="assets/gpt/final-overrides.css?v=20260829m">
+  <link rel="stylesheet" href="assets/gpt/final-overrides.css?v=20260829n">
   <title>The wedding of Sean &amp; Valeria, Tepoztlán, 2026.</title>
 </head>
 <body>
@@ -102,9 +102,16 @@
     <a class="brand" href="#home" aria-label="Sean and Valeria, back to top"><img class="brand-logo brand-logo--dark" src="assets/gpt/sv-logo-variants/solid/sv-logo-mocha-true-solid.png" alt="" width="1536" height="1024" decoding="sync" fetchpriority="high" draggable="false"><img class="brand-logo brand-logo--light" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt="" width="1536" height="1024" decoding="sync" fetchpriority="high" draggable="false"></a>
     <div class="mobile-nav-controls"><span class="mobile-current" id="mobile-current" aria-live="polite">Welcome</span><button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><span></span><span></span></button></div>
     <nav class="nav-links" id="nav-links" aria-label="Primary navigation">
-      <button class="invitation-replay" id="invitation-replay" type="button" data-i18n="viewInvitation">Invitation</button><a class="nav-link active" href="#welcome" data-i18n="navWelcome">Welcome</a><a class="nav-link" href="#details" data-i18n="navDetails">Details</a><a class="nav-link" href="#travel" data-i18n="navTravel">Travel</a><a class="nav-link" href="#faq">FAQ</a><a class="nav-link nav-cta" href="#check-in" data-i18n="navCheckIn">Check-In</a><button class="language-toggle" id="language-toggle" type="button" aria-label="Cambiar a español"><span class="language-current">EN</span><span class="language-divider">/</span><span class="language-next">ES</span></button>
+      <button class="invitation-replay" id="invitation-replay" type="button" data-i18n="viewInvitation">Invitation</button><a class="nav-link active" href="#welcome" data-i18n="navWelcome">Welcome</a><a class="nav-link" href="#details" data-i18n="navDetails">Details</a><a class="nav-link" href="#travel" data-i18n="navTravel">Travel</a><a class="nav-link" href="#faq">FAQ</a><a class="nav-link nav-cta" href="#check-in" data-i18n="navCheckIn">Check-In</a><button class="nav-link animation-preview-trigger" id="animation-preview-trigger" type="button" data-i18n="navAnimation">Animation</button><button class="language-toggle" id="language-toggle" type="button" aria-label="Cambiar a español"><span class="language-current">EN</span><span class="language-divider">/</span><span class="language-next">ES</span></button>
     </nav>
   </header>
+  <div class="animation-preview" id="animation-preview" hidden>
+    <section class="animation-preview-panel" role="dialog" aria-modal="true" aria-labelledby="animation-preview-title">
+      <button class="animation-preview-close" id="animation-preview-close" type="button" data-i18n-aria="animationPreviewClose" aria-label="Close animation preview"><span aria-hidden="true">×</span></button>
+      <h2 id="animation-preview-title" data-i18n="animationPreviewTitle">Animation</h2>
+      <div class="catrina-stopmotion catrina-stopmotion--preview" aria-label="Animated Catrina preview"><img class="catrina-frame catrina-frame--one" src="assets/gpt/catrina-checkin-frame-01.png" alt=""><img class="catrina-frame catrina-frame--two" src="assets/gpt/catrina-checkin-frame-02.png" alt=""><img class="catrina-frame catrina-frame--three" src="assets/gpt/catrina-checkin-frame-03.png" alt=""></div>
+    </section>
+  </div>
 
   <main class="site" id="main">
     <section class="section hero hero--image-only" id="home" data-nav="welcome" data-header-tone="dark" aria-label="Sean and Valeria by the coast"><img class="hero-seal" src="assets/gpt/wax-seal-sv-exact-transparent-v3.png" alt="Sean and Valeria monogram wax seal" width="1271" height="1237"></section>
@@ -264,6 +271,6 @@
 
     <footer class="footer" data-header-tone="dark"><img class="footer-logo" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt="Sean and Valeria monogram"><div class="footer-signoff"><strong>Sean &amp; Valeria</strong><span>03 · 11 · 2026 · Tepoztlán</span></div></footer>
   </main>
-  <script src="assets/gpt/site.js?v=20260829ab"></script>
+  <script src="assets/gpt/site.js?v=20260829ac"></script>
 </body>
 </html>

@@ -684,11 +684,11 @@ html:lang(es) .special-col .section-title{
 /* Keep the main paper canvas predictably centred on large desktop screens. */
 @media(min-width:1180px){
   .site{
-    width:70vw;
+    width:60vw;
     max-width:none;
   }
   .site-header{
-    width:calc(70vw - 64px);
+    width:calc(60vw - 64px);
     max-width:none;
   }
 }
@@ -1090,11 +1090,15 @@ html:lang(es) .special-col .section-title{
 
 /* Desktop editorial copy and navigation receive the same small readability lift. */
 @media(min-width:721px){
-  :root{--regular-copy-size:clamp(1.14rem,1.4vw,1.28rem)}
+  :root{--regular-copy-size:clamp(1.18rem,1.46vw,1.35rem)}
   .special-col>p,.save-date-inner>p:not(.save-date-day){font-family:var(--serif);font-size:var(--regular-copy-size);line-height:1.55}
   .site-header{min-height:68px}
-  .site-header .nav-link,.site-header .invitation-replay{padding:.78rem .88rem;font-size:.7rem!important;letter-spacing:.135em}
-  .site-header .language-toggle{min-height:40px;padding-inline:13px;font-size:.62rem;letter-spacing:.13em}
+  .site-header .nav-link,.site-header .invitation-replay{padding:.78rem clamp(.58rem,1vw,.84rem);font-size:clamp(.66rem,.85vw,.76rem)!important;letter-spacing:.135em}
+  .site-header .language-toggle{min-height:40px;padding-inline:clamp(10px,1vw,14px);font-size:clamp(.58rem,.72vw,.68rem);letter-spacing:.13em}
+}
+@media(min-width:721px) and (max-width:1419px){
+  .site-header .nav-link,.site-header .invitation-replay{padding-inline:clamp(.4rem,calc(.4rem + (100vw - 1180px)*.027),.84rem);font-size:clamp(.6rem,calc(.6rem + (100vw - 1180px)*.00985),.76rem)!important;letter-spacing:.115em}
+  .site-header .language-toggle{min-height:36px;padding-inline:clamp(7px,calc(7px + (100vw - 1180px)*.027),14px);font-size:clamp(.53rem,calc(.53rem + (100vw - 1180px)*.00923),.68rem);letter-spacing:.11em}
 }
 
 /* The two Tepoztlán practical disclosures now echo the full-width lower rows in the travel reference. */
@@ -1113,4 +1117,24 @@ html:lang(es) .special-col .section-title{
   .check-in-thanks.is-visible{animation:none;opacity:1;transform:none}
   .catrina-frame{animation:none;opacity:0;transform:none}
   .catrina-frame--one{opacity:1}
+}
+
+/* A temporary frosted preview lets the Catrina animation be reviewed without resubmitting Check-In. */
+body.animation-preview-open{overflow:hidden}
+.animation-preview[hidden]{display:none!important}
+.animation-preview{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:24px;color:var(--off-white);background:rgba(47,33,25,.34);opacity:0;-webkit-backdrop-filter:blur(14px) saturate(112%);backdrop-filter:blur(14px) saturate(112%);transition:opacity .26s ease}
+.animation-preview.is-visible{opacity:1}
+.animation-preview-panel{position:relative;display:grid;justify-items:center;width:min(100%,420px);padding:clamp(34px,4vw,48px) clamp(28px,4vw,46px) clamp(38px,4vw,50px);border:1px solid rgba(255,249,239,.42);border-radius:42px;background:linear-gradient(140deg,rgba(255,249,239,.58),rgba(230,213,192,.44));box-shadow:0 30px 80px rgba(24,14,9,.32),inset 0 1px rgba(255,255,255,.62);-webkit-backdrop-filter:blur(28px) saturate(116%);backdrop-filter:blur(28px) saturate(116%);transform:translateY(14px) scale(.985);transition:transform .5s var(--ease-refined)}
+.animation-preview.is-visible .animation-preview-panel{transform:none}
+.animation-preview-panel .eyebrow{margin:0 0 .55rem;color:rgba(73,54,44,.72);font-size:.55rem}
+.animation-preview-panel h2{margin:0 0 1.1rem;color:var(--mocha-deep);font-family:var(--script);font-size:clamp(3.3rem,7vw,4.8rem);font-weight:400;letter-spacing:-.06em;line-height:.78}
+.catrina-stopmotion--preview{width:min(270px,68vw);margin:0;border-radius:48% 48% 42% 42%/24% 24% 12% 12%;box-shadow:0 20px 40px rgba(52,31,20,.2)}
+.animation-preview-close{position:absolute;top:14px;right:15px;display:grid;width:34px;height:34px;place-items:center;padding:0;border:1px solid rgba(73,54,44,.25);border-radius:50%;color:var(--mocha-deep);background:rgba(255,249,239,.26);font-size:1.35rem;font-weight:300;line-height:1;cursor:pointer;transition:background .3s ease,transform .35s var(--ease-refined)}
+.animation-preview-close:hover{background:rgba(255,249,239,.6);transform:rotate(8deg) scale(1.04)}
+.animation-preview-trigger{border:0!important;background:transparent!important;cursor:pointer}
+@media(max-width:720px){
+  .animation-preview{padding:18px}
+  .animation-preview-panel{width:min(100%,344px);padding:34px 26px 38px;border-radius:32px}
+  .animation-preview-panel h2{font-size:clamp(3rem,16vw,4.1rem)}
+  .catrina-stopmotion--preview{width:min(230px,64vw)}
 }
