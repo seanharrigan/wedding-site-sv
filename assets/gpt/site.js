@@ -967,7 +967,7 @@ checkInForm?.addEventListener('submit', (event) => {
   window.setTimeout(() => {
     checkInPassage?.classList.remove('is-walking');
     if (checkInPassage) checkInPassage.hidden = true;
-  }, reducedMotion ? 0 : 5200);
+  }, reducedMotion ? 0 : 4200);
 });
 
 // Frosted panels clear a soft lens wherever the pointer rests (desktop only).

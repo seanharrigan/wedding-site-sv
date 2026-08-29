@@ -1083,7 +1083,7 @@ html:lang(es) .special-col .section-title{
 .check-in-form-content[hidden],.check-in-thanks[hidden]{display:none!important}
 .check-in-card.is-confirmed{display:grid;min-height:500px;place-items:center}
 .check-in-thanks{width:100%;max-width:390px;margin:auto;padding-top:142px;text-align:center;opacity:0;transform:translate3d(-26px,8px,0)}
-.check-in-thanks.is-visible{animation:check-in-thanks-in 1.15s var(--ease-refined) both}
+.check-in-thanks.is-visible{animation:check-in-thanks-in .9s var(--ease-refined) both}
 @keyframes check-in-thanks-in{to{opacity:1;transform:none}}
 .check-in-thanks .eyebrow{margin:0 0 .45rem;color:var(--mocha);font-size:.58rem}
 .check-in-thanks h3{margin:0;color:var(--mocha-deep);font-family:var(--script);font-size:clamp(3.1rem,5vw,4.3rem);font-weight:400;letter-spacing:-.055em;line-height:.82}
@@ -1232,8 +1232,8 @@ body.animation-preview-open{overflow:hidden}
 .check-in-passage{--catrina-track-inset:clamp(28px,6vw,46px);position:absolute;inset:0;z-index:4;overflow:hidden;pointer-events:none}
 .check-in-card.is-confirming .check-in-form-content{opacity:.11;pointer-events:none;transform:scale(.992);transition:opacity .45s ease,transform .65s cubic-bezier(.16,1,.3,1)}
 .catrina-walk{position:absolute;top:18%;left:var(--catrina-track-inset);width:112px;aspect-ratio:2/3;opacity:0;transform:translateY(-50%);will-change:left,transform,opacity}
-.check-in-passage.is-walking .catrina-walk{animation:check-in-catrina-cross 5.2s cubic-bezier(.22,.61,.36,1) both}
-.catrina-walk .catrina-dance-frame{animation-duration:2.4s}
+.check-in-passage.is-walking .catrina-walk{animation:check-in-catrina-cross 4.2s cubic-bezier(.22,.61,.36,1) both}
+.catrina-walk .catrina-dance-frame{animation-duration:2s}
 .catrina-walk .catrina-dance-frame--one{animation-delay:0s}
 .catrina-walk .catrina-dance-frame--two{animation-delay:-1.08s}
 .catrina-walk .catrina-dance-frame--three{animation-delay:-.72s}
