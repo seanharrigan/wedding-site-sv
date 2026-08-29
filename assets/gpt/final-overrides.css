@@ -680,3 +680,90 @@ html:lang(es) .special-col .section-title{
     min-width:0;
   }
 }
+
+/* Keep the main paper canvas predictably centred on large desktop screens. */
+@media(min-width:1180px){
+  .site{
+    width:70vw;
+    max-width:none;
+  }
+  .site-header{
+    width:calc(70vw - 64px);
+    max-width:none;
+  }
+}
+
+/* One shared cactus-section title, followed by two quieter subtitles. */
+.special-inner{
+  row-gap:clamp(40px,5vw,72px);
+}
+.special-heading{
+  position:relative;
+  z-index:1;
+  grid-column:1 / -1;
+  text-align:center;
+}
+.special-heading-title{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:.18em;
+  margin:0;
+  color:var(--off-white);
+  font-family:var(--serif);
+  font-size:var(--section-title-serif)!important;
+  font-weight:400;
+  letter-spacing:-.035em;
+  line-height:.92;
+  text-transform:uppercase;
+}
+.special-heading-title em{
+  color:var(--off-white);
+  font-family:var(--script);
+  font-size:1.25em!important;
+  font-style:normal;
+  font-weight:400;
+  letter-spacing:-.06em;
+  line-height:.78;
+  text-transform:none;
+}
+.special-subtitle{
+  max-width:420px;
+  margin:0 auto;
+  color:var(--off-white);
+  font-family:var(--serif);
+  font-size:clamp(1.75rem,2.4vw,2.4rem);
+  font-weight:400;
+  letter-spacing:-.025em;
+  line-height:1.05;
+  text-align:center;
+}
+@media(max-width:720px){
+  .special-inner{row-gap:36px}
+  .special-heading-title{flex-wrap:wrap;gap:.1em;font-size:clamp(2.65rem,12vw,3.65rem)!important}
+  .special-subtitle{font-size:clamp(1.7rem,7.5vw,2.1rem)}
+  .special-col--gifts{margin-top:4px}
+}
+
+/* A transform-only wax-seal lift avoids GPU shadow flicker at the hero edge. */
+.hero-seal{
+  filter:none!important;
+  animation:none!important;
+  transform:translate3d(-50%,50%,0) scale(1);
+  transition:transform .65s cubic-bezier(.16,1,.3,1)!important;
+  will-change:transform;
+}
+@media(hover:hover) and (pointer:fine){
+  .hero-seal:hover{
+    filter:none!important;
+    animation:none!important;
+    transform:translate3d(-50%,47%,0) scale(1.025)!important;
+  }
+}
+@media(max-width:720px){
+  .hero-seal,.hero-seal:hover{
+    filter:none!important;
+    animation:none!important;
+    transform:translate3d(-50%,50%,0) scale(1)!important;
+  }
+}
