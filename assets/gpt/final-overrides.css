@@ -1131,9 +1131,9 @@ body.animation-preview-open{overflow:hidden}
 .animation-preview-examples{display:grid;width:100%;gap:18px;justify-items:center}
 .catrina-stopmotion--preview{width:min(184px,46vw);margin:0;border-radius:48% 48% 42% 42%/24% 24% 12% 12%;box-shadow:0 20px 40px rgba(52,31,20,.2)}
 .catrina-stopmotion--reference{border:1px solid rgba(73,54,44,.1)}
-.catrina-dance-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;animation:catrina-dance-step 2.4s steps(1,end) infinite;will-change:opacity,transform}
+.catrina-dance-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;animation:catrina-dance-step 2.4s ease-in-out infinite;will-change:opacity,transform}
 .catrina-dance-frame--one{animation-delay:0s}.catrina-dance-frame--two{animation-delay:-1.8s}.catrina-dance-frame--three{animation-delay:-1.2s}.catrina-dance-frame--four{animation-delay:-.6s}
-@keyframes catrina-dance-step{0%,24.99%{opacity:1;transform:translateY(-1px) scale(1.01)}25%,100%{opacity:0;transform:translateY(1px) scale(1)}}
+@keyframes catrina-dance-step{0%{opacity:1;transform:scale(1.015)}21%{opacity:1;transform:scale(1.008)}25%{opacity:0;transform:scale(1)}96%{opacity:0;transform:scale(1.022)}100%{opacity:1;transform:scale(1.015)}}
 .animation-preview-close{position:absolute;top:14px;right:15px;display:grid;width:34px;height:34px;place-items:center;padding:0;border:1px solid rgba(73,54,44,.25);border-radius:50%;color:var(--mocha-deep);background:rgba(255,249,239,.26);font-size:1.35rem;font-weight:300;line-height:1;cursor:pointer;transition:background .3s ease,transform .35s var(--ease-refined)}
 .animation-preview-close:hover{background:rgba(255,249,239,.6);transform:rotate(8deg) scale(1.04)}
 .animation-preview-trigger{border:0!important;background:transparent!important;cursor:pointer}
