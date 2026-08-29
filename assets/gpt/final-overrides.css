@@ -1145,16 +1145,36 @@ body.animation-preview-open{overflow:hidden}
   .catrina-stopmotion--preview{width:min(184px,58vw)}
 }
 
-/* Desktop canvas: let the outside gutters close in before the editorial page scales down. */
+/* Desktop canvas: use the editorial page generously at full laptop widths.
+   As a window closes in, keep its reading width until the beige gutters have
+   eased down to roughly 6% per side; only then let the page scale with it. */
 @media(min-width:721px){
+  :root{--desktop-canvas-width:min(max(70vw,1008px),88vw)}
   .site{
-    width:min(864px,calc(100% - 64px));
+    width:var(--desktop-canvas-width);
     max-width:none;
   }
   .site-header{
-    width:min(800px,calc(100% - 112px));
+    width:calc(var(--desktop-canvas-width) - 64px);
     max-width:none;
   }
+
+  /* Keep the temperature scale visibly continuous on desktop. */
+  .details-weather .weather-range-track{
+    min-width:58px;
+    height:24px;
+  }
+  .details-weather .weather-range-track::before{
+    height:2px;
+    border-radius:999px;
+    background:linear-gradient(90deg,rgba(73,54,44,.22),rgba(73,54,44,.48) 50%,rgba(73,54,44,.22));
+    opacity:1;
+  }
+  .details-weather .weather-range-track::after{
+    height:7px;
+    background:rgba(73,54,44,.36);
+  }
+  .details-weather .weather-range-track i{height:7px}
 }
 
 /* The chosen Catrina loop is deliberately unhurried in the review panel and opening ritual. */
