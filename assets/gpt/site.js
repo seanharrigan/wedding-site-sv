@@ -613,6 +613,7 @@ const renderLanguage = (language) => {
   storeValue('wedding-language', language);
   syncNavigation();
   requestAnimationFrame(() => { if (typeof placeSuiteHotspots === 'function') placeSuiteHotspots(); });
+  document.dispatchEvent(new CustomEvent('wedding:languagechange', { detail: language }));
 };
 
 // The header's EN/ES and the envelope's discreet control both open the frosted language gate.
@@ -683,6 +684,181 @@ const setupConditionalAccommodation = (selectId, fieldId, inputId) => {
 
 setupConditionalAccommodation('mexico-city-neighbourhood', 'mexico-city-neighbourhood-other-field', 'mexico-city-neighbourhood-other');
 setupConditionalAccommodation('tepoztlan-location', 'tepoztlan-location-other-field', 'tepoztlan-location-other');
+
+// Desktop browsers do not expose the native date popover for visual styling,
+// so the form uses a small paper-toned calendar there and keeps the familiar
+// native date control on phones.
+const desktopDateMedia = matchMedia('(min-width: 721px)');
+const datePickerInstances = [];
+let openDatePicker = null;
+const parseCalendarDate = (isoDate) => {
+  if (!isoDate) return null;
+  const [year, month, day] = isoDate.split('-').map(Number);
+  return new Date(year, month - 1, day, 12);
+};
+const calendarIso = (date) => [
+  date.getFullYear(),
+  String(date.getMonth() + 1).padStart(2, '0'),
+  String(date.getDate()).padStart(2, '0')
+].join('-');
+const closeDatePicker = (instance) => {
+  if (!instance) return;
+  instance.panel.hidden = true;
+  instance.input.setAttribute('aria-expanded', 'false');
+  instance.trigger.setAttribute('aria-expanded', 'false');
+  if (openDatePicker === instance) openDatePicker = null;
+};
+const renderDatePicker = (instance) => {
+  const { input, panel, title, days, previous, next, minDate, maxDate } = instance;
+  const language = currentLanguage === 'es' ? 'es-MX' : 'en-CA';
+  const year = instance.visibleMonth.getFullYear();
+  const month = instance.visibleMonth.getMonth();
+  const selected = parseCalendarDate(input.value);
+  const monthNumber = (date) => date.getFullYear() * 12 + date.getMonth();
+
+  title.textContent = new Intl.DateTimeFormat(language, { month: 'long', year: 'numeric' }).format(instance.visibleMonth);
+  previous.disabled = monthNumber(instance.visibleMonth) <= monthNumber(minDate);
+  next.disabled = monthNumber(instance.visibleMonth) >= monthNumber(maxDate);
+  days.replaceChildren();
+
+  const weekdayLabels = currentLanguage === 'es'
+    ? ['L', 'M', 'X', 'J', 'V', 'S', 'D']
+    : ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  weekdayLabels.forEach((label) => {
+    const weekday = document.createElement('span');
+    weekday.className = 'date-picker-weekday';
+    weekday.textContent = label;
+    days.append(weekday);
+  });
+
+  const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let cell = 0; cell < 42; cell += 1) {
+    const dayNumber = cell - firstWeekday + 1;
+    if (dayNumber < 1 || dayNumber > daysInMonth) {
+      const blank = document.createElement('span');
+      blank.className = 'date-picker-blank';
+      days.append(blank);
+      continue;
+    }
+
+    const date = new Date(year, month, dayNumber, 12);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'date-picker-day';
+    button.textContent = String(dayNumber);
+    button.disabled = date < minDate || date > maxDate;
+    button.setAttribute('aria-label', new Intl.DateTimeFormat(language, { dateStyle: 'long' }).format(date));
+    if (selected && calendarIso(selected) === calendarIso(date)) {
+      button.classList.add('is-selected');
+      button.setAttribute('aria-current', 'date');
+    }
+    button.addEventListener('click', () => {
+      input.value = calendarIso(date);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      closeDatePicker(instance);
+      input.focus({ preventScroll: true });
+    });
+    days.append(button);
+  }
+};
+const openDesktopDatePicker = (instance) => {
+  if (!desktopDateMedia.matches) return;
+  if (openDatePicker && openDatePicker !== instance) closeDatePicker(openDatePicker);
+  const selected = parseCalendarDate(instance.input.value);
+  instance.visibleMonth = selected
+    ? new Date(selected.getFullYear(), selected.getMonth(), 1, 12)
+    : new Date(instance.minDate.getFullYear(), instance.minDate.getMonth(), 1, 12);
+  renderDatePicker(instance);
+  instance.panel.hidden = false;
+  instance.input.setAttribute('aria-expanded', 'true');
+  instance.trigger.setAttribute('aria-expanded', 'true');
+  openDatePicker = instance;
+};
+
+document.querySelectorAll('.check-in-card input[type="date"]').forEach((input) => {
+  const field = input.closest('.field');
+  const shell = document.createElement('div');
+  const trigger = document.createElement('button');
+  const panel = document.createElement('div');
+  const header = document.createElement('div');
+  const previous = document.createElement('button');
+  const title = document.createElement('strong');
+  const next = document.createElement('button');
+  const days = document.createElement('div');
+  const minDate = parseCalendarDate(input.min);
+  const maxDate = parseCalendarDate(input.max);
+
+  shell.className = 'date-input-shell';
+  trigger.type = 'button';
+  trigger.className = 'date-picker-trigger';
+  trigger.innerHTML = '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="14" height="12.5" rx="2"></rect><path d="M6.5 2.8v3.4M13.5 2.8v3.4M3 8h14"></path></svg>';
+  trigger.setAttribute('aria-label', currentLanguage === 'es' ? 'Elegir fecha' : 'Choose date');
+  trigger.setAttribute('aria-haspopup', 'dialog');
+  trigger.setAttribute('aria-expanded', 'false');
+  panel.className = 'date-picker-panel';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-label', currentLanguage === 'es' ? 'Elegir fecha' : 'Choose date');
+  panel.hidden = true;
+  header.className = 'date-picker-header';
+  previous.type = 'button';
+  previous.className = 'date-picker-nav';
+  previous.innerHTML = '<span aria-hidden="true">←</span>';
+  previous.setAttribute('aria-label', currentLanguage === 'es' ? 'Mes anterior' : 'Previous month');
+  next.type = 'button';
+  next.className = 'date-picker-nav';
+  next.innerHTML = '<span aria-hidden="true">→</span>';
+  next.setAttribute('aria-label', currentLanguage === 'es' ? 'Mes siguiente' : 'Next month');
+  days.className = 'date-picker-days';
+  header.append(previous, title, next);
+  panel.append(header, days);
+  input.parentNode.insertBefore(shell, input);
+  shell.append(input, trigger, panel);
+  field.classList.add('date-field');
+  if (input.id === 'departure-date' || input.id === 'tepoztlan-check-out') field.classList.add('date-field--align-right');
+
+  const instance = { input, trigger, panel, title, days, previous, next, minDate, maxDate, visibleMonth: minDate };
+  datePickerInstances.push(instance);
+  trigger.addEventListener('click', () => panel.hidden ? openDesktopDatePicker(instance) : closeDatePicker(instance));
+  input.addEventListener('click', () => openDesktopDatePicker(instance));
+  previous.addEventListener('click', () => {
+    instance.visibleMonth = new Date(instance.visibleMonth.getFullYear(), instance.visibleMonth.getMonth() - 1, 1, 12);
+    renderDatePicker(instance);
+  });
+  next.addEventListener('click', () => {
+    instance.visibleMonth = new Date(instance.visibleMonth.getFullYear(), instance.visibleMonth.getMonth() + 1, 1, 12);
+    renderDatePicker(instance);
+  });
+});
+
+const syncDatePickerMode = () => {
+  datePickerInstances.forEach((instance) => {
+    closeDatePicker(instance);
+    instance.input.type = desktopDateMedia.matches ? 'text' : 'date';
+    instance.input.readOnly = desktopDateMedia.matches;
+    instance.input.setAttribute('aria-haspopup', desktopDateMedia.matches ? 'dialog' : 'false');
+    instance.trigger.hidden = !desktopDateMedia.matches;
+  });
+};
+desktopDateMedia.addEventListener('change', syncDatePickerMode);
+syncDatePickerMode();
+document.addEventListener('pointerdown', (event) => {
+  if (openDatePicker && !event.target.closest('.date-field')) closeDatePicker(openDatePicker);
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && openDatePicker) closeDatePicker(openDatePicker);
+});
+document.addEventListener('wedding:languagechange', () => {
+  datePickerInstances.forEach((instance) => {
+    const spanish = currentLanguage === 'es';
+    instance.trigger.setAttribute('aria-label', spanish ? 'Elegir fecha' : 'Choose date');
+    instance.panel.setAttribute('aria-label', spanish ? 'Elegir fecha' : 'Choose date');
+    instance.previous.setAttribute('aria-label', spanish ? 'Mes anterior' : 'Previous month');
+    instance.next.setAttribute('aria-label', spanish ? 'Mes siguiente' : 'Next month');
+    if (!instance.panel.hidden) renderDatePicker(instance);
+  });
+});
 
 checkInForm.addEventListener('submit', (event) => {
   event.preventDefault();
