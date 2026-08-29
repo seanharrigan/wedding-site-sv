@@ -1,12 +1,12 @@
 /* Give the Welcome message a little more quiet space above and below. */
 .welcome-section{
-  padding-top:clamp(205px,17.5vw,270px)!important;
-  padding-bottom:clamp(285px,22vw,365px)!important;
+  padding-top:clamp(220px,18.5vw,290px)!important;
+  padding-bottom:clamp(305px,23vw,385px)!important;
 }
 @media(max-width:720px){
   .welcome-section{
-    padding-top:184px!important;
-    padding-bottom:232px!important;
+    min-height:92svh!important;
+    padding:clamp(210px,26svh,280px) 22px clamp(250px,30svh,330px)!important;
   }
 }
 
