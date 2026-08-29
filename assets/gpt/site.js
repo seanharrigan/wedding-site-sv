@@ -572,6 +572,7 @@ document.querySelectorAll('.timeline').forEach((timeline) => {
 const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenidos'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'], navAnimation: ['Animation', 'Animación'], animationPreviewTitle: ['Animation', 'Animación'], animationPreviewClose: ['Close animation preview', 'Cerrar vista previa de animación'],
   openInvitationAria: ["Open Sean and Valeria's wedding invitation", 'Abrir la invitación de boda de Sean y Valeria'], invitationSuiteAria: ['Wedding invitation suite', 'Conjunto de invitación de boda'], backToTopAria: ['Sean and Valeria, back to top', 'Sean y Valeria, volver al inicio'], primaryNavigationAria: ['Primary navigation', 'Navegación principal'], firstCatrinaPreviewAria: ['First animated Catrina preview', 'Primera vista previa animada de la Catrina'], secondCatrinaPreviewAria: ['Second animated Catrina preview', 'Segunda vista previa animada de la Catrina'], heroAria: ['Sean and Valeria by the coast', 'Sean y Valeria junto a la costa'], heroSealAlt: ['Sean and Valeria monogram wax seal', 'Sello de cera con el monograma de Sean y Valeria'], detailsPairAria: ['Venue and dress code details', 'Detalles del lugar y código de vestimenta'], fallPaletteAria: ['Suggested fall colour palette', 'Paleta de colores de otoño sugerida'], weatherAria: ['November weather in Tepoztlán', 'Clima de noviembre en Tepoztlán'], celebrationTimelineAria: ['Wedding day celebration timeline', 'Horario de la celebración de la boda'], weekItineraryAria: ['Suggested week itinerary', 'Itinerario sugerido para la semana'], neighbourhoodsAria: ['Recommended neighbourhoods', 'Colonias recomendadas'], specialAria: ['Special request and gifts', 'Petición especial y regalos'], closingAria: ['Thank you', 'Gracias'], romaPhotoAlt: ['A leafy street with historic architecture in Mexico City', 'Una calle arbolada con arquitectura histórica en la Ciudad de México'], bellasPhotoAlt: ['Palacio de Bellas Artes in Mexico City at golden hour', 'Palacio de Bellas Artes en la Ciudad de México durante la hora dorada'], conventPhotoAlt: ['Historic church architecture in Tepoztlán', 'Arquitectura histórica de iglesia en Tepoztlán'], ridgePhotoAlt: ['The mountain landscape of Tepoztlán', 'El paisaje montañoso de Tepoztlán'], accommodationPhotoAlt: ['Tall cacti and gardens at Hotel Piedra Viva with Tepoztlán mountains', 'Cactus altos y jardines en Hotel Piedra Viva con las montañas de Tepoztlán'], closingPhotoAlt: ['Sean kissing Valeria at sunset by the ocean', 'Sean besando a Valeria al atardecer junto al mar'], footerLogoAlt: ['Sean and Valeria monogram', 'Monograma de Sean y Valeria'],
+  galleryAria: ['Gallery from Mexico City and Tepoztlán', 'Galería de la Ciudad de México y Tepoztlán'], galleryKicker: ['A little glimpse', 'Un pequeño vistazo'], galleryTitle: ['<span>Scenes from</span> <em>México.</em>', '<span>Escenas de</span> <em>México.</em>'], galleryCopy: ['A few corners of Mexico City and Tepoztlán to look forward to along the way.', 'Algunos rincones de la Ciudad de México y Tepoztlán para esperar con ilusión durante el viaje.'], galleryCeremonialAlt: ['Ceremonial dress in Tepoztlán', 'Vestimenta ceremonial en Tepoztlán'], galleryChurchAlt: ['A church street in Tepoztlán', 'Una calle junto a una iglesia en Tepoztlán'], galleryOfrendaAlt: ['A Día de Muertos altar in Mexico City', 'Una ofrenda de Día de Muertos en la Ciudad de México'], galleryReformaAlt: ['Ángel de la Independencia at dusk', 'El Ángel de la Independencia al atardecer'], galleryLaneAlt: ['A quiet lane in Tepoztlán', 'Una calle tranquila en Tepoztlán'], galleryStreetAlt: ['A historic Tepoztlán street', 'Una calle histórica de Tepoztlán'],
   introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], closeInvitation: ['Return to the closed invitation', 'Volver a la invitación cerrada'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar al sitio <span aria-hidden="true">→</span>'], invitationEnter: ['Enter our celebration', 'Entrar a nuestra celebración'], invitationCheckIn: ['Please check in', 'Confirma tu asistencia'], checkInInvitationAction: ['Please check in on the wedding website', 'Confirma tu asistencia en el sitio de la boda'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See our gallery', 'Ver nuestra galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],
@@ -947,12 +948,14 @@ document.addEventListener('wedding:languagechange', () => {
 checkInForm?.addEventListener('submit', (event) => {
   event.preventDefault();
   if (checkInForm.classList.contains('is-confirming') || checkInForm.classList.contains('is-confirmed')) return;
+  const checkInTransitionDuration = reducedMotion ? 0 : 1900;
   const formStatus = document.getElementById('form-status');
   if (formStatus) formStatus.textContent = '';
   checkInForm.classList.add('is-confirming');
   event.currentTarget.querySelector('button[type="submit"]')?.setAttribute('disabled', '');
   if (checkInPassage) {
     checkInPassage.hidden = false;
+    checkInPassage.classList.remove('is-arrived');
     void checkInPassage.offsetWidth;
     requestAnimationFrame(() => checkInPassage.classList.add('is-walking'));
   }
@@ -961,6 +964,10 @@ checkInForm?.addEventListener('submit', (event) => {
     if (checkInFormContent) checkInFormContent.hidden = true;
     checkInForm.classList.remove('is-confirming');
     checkInForm.classList.add('is-confirmed');
+    if (checkInPassage) {
+      checkInPassage.classList.remove('is-walking');
+      checkInPassage.classList.add('is-arrived');
+    }
     if (checkInThanks) {
       checkInThanks.hidden = false;
       requestAnimationFrame(() => {
@@ -968,12 +975,7 @@ checkInForm?.addEventListener('submit', (event) => {
         checkInThanks.querySelector('h3')?.focus({ preventScroll: true });
       });
     }
-  }, reducedMotion ? 0 : 240);
-
-  window.setTimeout(() => {
-    checkInPassage?.classList.remove('is-walking');
-    if (checkInPassage) checkInPassage.hidden = true;
-  }, reducedMotion ? 0 : 4200);
+  }, checkInTransitionDuration);
 });
 
 // Frosted panels clear a soft lens wherever the pointer rests (desktop only).
