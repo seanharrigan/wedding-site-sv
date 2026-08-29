@@ -1144,3 +1144,15 @@ body.animation-preview-open{overflow:hidden}
   .animation-preview-examples{gap:20px}
   .catrina-stopmotion--preview{width:min(184px,58vw)}
 }
+
+/* Desktop canvas: let the outside gutters close in before the editorial page scales down. */
+@media(min-width:721px){
+  .site{
+    width:min(864px,calc(100% - 64px));
+    max-width:none;
+  }
+  .site-header{
+    width:min(800px,calc(100% - 112px));
+    max-width:none;
+  }
+}
