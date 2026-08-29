@@ -1122,7 +1122,7 @@ html:lang(es) .special-col .section-title{
 /* A temporary frosted preview lets the Catrina animation be reviewed without resubmitting Check-In. */
 body.animation-preview-open{overflow:hidden}
 .animation-preview[hidden]{display:none!important}
-.animation-preview{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:24px;color:var(--off-white);background:rgba(47,33,25,.52);opacity:0;-webkit-backdrop-filter:blur(34px) saturate(120%);backdrop-filter:blur(34px) saturate(120%);transition:opacity .26s ease}
+.animation-preview{position:fixed;inset:0;height:100dvh;min-height:100dvh;z-index:1200;display:grid;place-items:center;padding:24px;color:var(--off-white);background:rgba(47,33,25,.52);opacity:0;-webkit-backdrop-filter:blur(34px) saturate(120%);backdrop-filter:blur(34px) saturate(120%);transition:opacity .26s ease}
 .animation-preview.is-visible{opacity:1}
 .animation-preview-panel{position:relative;display:grid;justify-items:center;width:min(100%,440px);padding:clamp(24px,4vw,40px);border:0;border-radius:0;background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;transform:translateY(14px) scale(.985);transition:transform .5s var(--ease-refined)}
 .animation-preview.is-visible .animation-preview-panel{transform:none}
