@@ -32,7 +32,7 @@ const mobileCurrent = document.getElementById('mobile-current');
 const skipLink = document.querySelector('.skip-link');
 const headerToneSections = [...document.querySelectorAll('[data-header-tone]')];
 const mainSite = document.getElementById('main');
-const accessHash = '3cc91c46c1cd593603b9aa6cd2aecb9c2ab67142d2b42656136a55be53881a52';
+const accessHash = 'ecaf6dd0ad0c57473723257f3733a39aa525d0e226da7dcdd46c710ccbece8dc';
 let headerToneFrame = 0;
 let invitationHideTimer = 0;
 let invitationFocusTimer = 0;
@@ -500,7 +500,7 @@ const uiTranslations = {
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],
   arrivalTitle: ['Guest arrival', 'Llegada de invitados'], arrivalDesc: ['Welcome drinks and a little time to settle into the gardens.', 'Bebidas de bienvenida y un rato para disfrutar los jardines.'],
   ceremonyTitle: ['Ceremony', 'Ceremonia'], ceremonyDesc: ['Join us outdoors as we exchange vows beneath the mountains.', 'Acompáñennos al aire libre para intercambiar nuestros votos frente a las montañas.'],
-  cocktailTitle: ['Cocktail hour & canapés', 'Cócteles y canapés'], cocktailDesc: ['Cocktails, music and small bites in the courtyard.', 'Cócteles, música y bocadillos en el patio.'],
+  cocktailTitle: ['Canapés', 'Canapés'], cocktailDesc: ['Cocktails, music and small bites in the courtyard.', 'Cócteles, música y bocadillos en el patio.'],
   receptionTitle: ['Reception', 'Recepción'], receptionDesc: ['Find your table and raise a glass as the evening begins.', 'Busquen su mesa y brinden con nosotros para comenzar la noche.'],
   dinnerTitle: ['Dinner', 'Cena'], dinnerDesc: ['A candlelit meal inspired by the flavours of Mexico.', 'Una cena a la luz de las velas inspirada en los sabores de México.'],
   partyTitle: ['Party', 'Fiesta'], partyDesc: ['Meet us on the dance floor and stay as long as you can.', 'Nos vemos en la pista de baile. Quédense todo lo que puedan.'],

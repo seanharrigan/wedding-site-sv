@@ -160,7 +160,7 @@
     --weather-label-width:48px;
     --weather-value-width:76px;
     --weather-gap:10px;
-    width:calc(100% - 44px);
+    width:calc(100% - 52px);
     gap:12px;
     margin-top:20px;
   }
@@ -172,6 +172,36 @@
   .weather-range-track i::before,
   .weather-range-track i::after{width:5px;height:5px}
   .weather-range-scale{font-size:.45rem}
+  .details-weather-copy{width:calc(100% - 52px);margin-inline:auto}
+}
+
+/* Regular editorial copy shares one readable size and serif treatment. */
+:root{--regular-copy-size:clamp(1.06rem,1.3vw,1.18rem)}
+.detail-panel p:not(.detail-label),
+.details-weather-copy,
+.chapter-copy,
+.chapter-copy p,
+.week-day p,
+.practical-body p,
+.faq .accordion-panel p,
+.check-in-copy>p:not(.eyebrow){
+  font-family:var(--serif);
+  font-size:var(--regular-copy-size);
+  line-height:1.55;
+  letter-spacing:0;
+  text-transform:none;
+}
+.detail-panel .detail-meta{
+  font-family:var(--serif);
+  font-size:var(--regular-copy-size);
+  line-height:1.5;
+  letter-spacing:0;
+  text-transform:none;
+}
+@media(max-width:720px){
+  :root{--regular-copy-size:1.06rem}
+  .city-photos .city-photo:first-child figcaption{padding-right:14px}
+  .city-photos .city-photo:last-child figcaption{padding-left:14px}
 }
 
 /* Closing photo: paper ground, breathing room under Check-In, a real drop shadow. */
@@ -326,6 +356,22 @@
 .suite-hotspot::before,.suite-hotspot::after{display:none!important}
 
 @media(max-width:720px){
+  .language-gate{
+    inset:0!important;
+    box-sizing:border-box;
+    width:100%!important;
+    height:100dvh!important;
+    padding-right:max(20px,env(safe-area-inset-right))!important;
+    padding-left:max(20px,env(safe-area-inset-left))!important;
+  }
+  .language-gate-panel{
+    position:relative;
+    right:auto;
+    left:auto;
+    width:min(100%,340px)!important;
+    margin-inline:auto;
+    transform:translate3d(0,0,0);
+  }
   .invitation-intro .intro-close{
     display:none!important;
   }
@@ -346,15 +392,15 @@
   }
   .invitation-intro{
     position:fixed!important;
-    inset:-2px!important;
-    width:calc(100vw + 4px)!important;
-    height:calc(100vh + 4px)!important;
-    height:calc(100svh + 4px)!important;
-    height:calc(100dvh + 4px)!important;
-    min-width:calc(100vw + 4px)!important;
-    min-height:calc(100vh + 4px)!important;
-    min-height:calc(100svh + 4px)!important;
-    min-height:calc(100dvh + 4px)!important;
+    inset:0!important;
+    width:100%!important;
+    height:100vh!important;
+    height:100svh!important;
+    height:100dvh!important;
+    min-width:100%!important;
+    min-height:100vh!important;
+    min-height:100svh!important;
+    min-height:100dvh!important;
     max-width:none!important;
     max-height:none!important;
     overflow:hidden!important;
