@@ -948,7 +948,7 @@ document.addEventListener('wedding:languagechange', () => {
 checkInForm?.addEventListener('submit', (event) => {
   event.preventDefault();
   if (checkInForm.classList.contains('is-confirming') || checkInForm.classList.contains('is-confirmed')) return;
-  const checkInTransitionDuration = reducedMotion ? 0 : 1900;
+  const checkInTransitionDuration = reducedMotion ? 0 : 2600;
   const formStatus = document.getElementById('form-status');
   if (formStatus) formStatus.textContent = '';
   checkInForm.classList.add('is-confirming');

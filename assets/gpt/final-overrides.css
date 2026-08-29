@@ -1341,3 +1341,48 @@ body.animation-preview-open{overflow:hidden}
     100%{left:calc(50% - 24px);opacity:1;transform:translateY(-50%) rotate(0)}
   }
 }
+
+/* Travel disclosures use the same full two-column row in each chapter. */
+.travel-chapter--city .practical--city,
+.travel-chapter--tepoztlan .practical--tepoz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%;column-gap:clamp(24px,3vw,44px);row-gap:0}
+.travel-chapter--city .practical-item:nth-child(1) h4,
+.travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-column:1!important;grid-row:1!important}
+.travel-chapter--city .practical-item:nth-child(2) h4,
+.travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-column:2!important;grid-row:1!important}
+.travel-chapter--city .practical-item .accordion-panel,
+.travel-chapter--tepoztlan .practical-item .accordion-panel{grid-column:1 / -1!important;grid-row:2!important}
+
+/* The confirmation settles as one centred composition: a small, still Catrina
+   above the copy. Its four illustrations get equal time only during the hand-off. */
+.check-in-card.is-confirmed{min-height:410px}
+.check-in-thanks{min-height:0;max-width:330px;padding:0}
+.check-in-thanks h3:focus{outline:0}
+.check-in-passage{--catrina-track-left:calc(50% - 165px);--catrina-track-right:calc(50% + 125px)}
+.catrina-walk{top:calc(50% - 155px);left:var(--catrina-track-left);width:40px}
+.check-in-passage.is-walking .catrina-walk{animation:check-in-catrina-cross-copy 2.6s linear both}
+@keyframes check-in-catrina-cross-copy{
+  0%{left:var(--catrina-track-left);opacity:0;transform:translateY(-50%) rotate(-1deg)}
+  8%{opacity:1}
+  92%{opacity:1;transform:translateY(-50%) rotate(1deg)}
+  100%{left:var(--catrina-track-right);opacity:0;transform:translateY(-50%) rotate(0)}
+}
+.check-in-passage.is-walking .catrina-dance-frame{animation-name:check-in-catrina-frame;animation-duration:2.6s;animation-timing-function:linear}
+.check-in-passage.is-walking .catrina-dance-frame--one{animation-delay:0s}
+.check-in-passage.is-walking .catrina-dance-frame--two{animation-delay:-.65s}
+.check-in-passage.is-walking .catrina-dance-frame--three{animation-delay:-1.3s}
+.check-in-passage.is-walking .catrina-dance-frame--four{animation-delay:-1.95s}
+@keyframes check-in-catrina-frame{0%,24.99%{opacity:1;transform:scale(1.01)}25%,100%{opacity:0;transform:scale(1)}}
+.check-in-passage.is-arrived .catrina-walk{top:calc(50% - 155px);left:calc(50% - 20px);opacity:0;transform:translateY(-50%);animation:check-in-catrina-settle .34s ease-out .08s both}
+@keyframes check-in-catrina-settle{to{opacity:1}}
+.check-in-passage.is-arrived .catrina-dance-frame{animation:none!important;opacity:0!important;transform:none!important}
+.check-in-passage.is-arrived .catrina-dance-frame--one{opacity:1!important}
+
+@media(max-width:720px){
+  .travel-chapter--city .practical--city,
+  .travel-chapter--tepoztlan .practical--tepoz{display:block!important}
+  .check-in-card.is-confirmed{min-height:370px}
+  .check-in-thanks{max-width:280px}
+  .check-in-passage{--catrina-track-left:calc(50% - 140px);--catrina-track-right:calc(50% + 106px)}
+  .catrina-walk,.check-in-passage.is-arrived .catrina-walk{top:calc(50% - 132px);width:34px}
+  .check-in-passage.is-arrived .catrina-walk{left:calc(50% - 17px)}
+}
