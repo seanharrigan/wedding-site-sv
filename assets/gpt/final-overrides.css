@@ -156,7 +156,14 @@
   }
 }
 @media(max-width:720px){
-  .weather-ranges{--weather-label-width:48px;--weather-value-width:76px;--weather-gap:10px;gap:12px;margin-top:20px}
+  .weather-ranges{
+    --weather-label-width:48px;
+    --weather-value-width:76px;
+    --weather-gap:10px;
+    width:calc(100% - 28px);
+    gap:12px;
+    margin-top:20px;
+  }
   .weather-range-label{font-size:.54rem;letter-spacing:.16em}
   .weather-range strong{font-size:1.08rem}
   .weather-range{padding:3px 0}
