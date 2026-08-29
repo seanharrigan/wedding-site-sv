@@ -15,6 +15,7 @@ const passwordGate = document.getElementById('password-gate');
 const passwordGateForm = document.getElementById('password-gate-form');
 const passwordInput = document.getElementById('invitation-password');
 const passwordGateStatus = document.getElementById('password-gate-status');
+const constructionMessage = document.getElementById('construction-message');
 const invitationIntro = document.getElementById('invitation-intro');
 const openEnvelope = document.getElementById('open-envelope');
 const enterSite = document.getElementById('enter-site');
@@ -32,7 +33,8 @@ const mobileCurrent = document.getElementById('mobile-current');
 const skipLink = document.querySelector('.skip-link');
 const headerToneSections = [...document.querySelectorAll('[data-header-tone]')];
 const mainSite = document.getElementById('main');
-const accessHash = 'ecaf6dd0ad0c57473723257f3733a39aa525d0e226da7dcdd46c710ccbece8dc';
+const guestAccessHash = 'ecaf6dd0ad0c57473723257f3733a39aa525d0e226da7dcdd46c710ccbece8dc';
+const adminAccessHash = '25688512fee107987b57aee0feef189470a3ee891ff776588ab62e1ba8d6a5f2';
 let headerToneFrame = 0;
 let invitationHideTimer = 0;
 let invitationFocusTimer = 0;
@@ -209,7 +211,7 @@ const closeInvitation = () => {
 
 const keepWebsiteAtTop = () => scrollTo({ top: 0, left: 0, behavior: 'auto' });
 
-const accessGranted = readStoredValue('wedding-access-granted-v1') === 'true';
+const accessGranted = readStoredValue('wedding-admin-access-v1') === 'true';
 
 if (!accessGranted) {
   languageGate?.classList.add('is-done');
@@ -745,14 +747,17 @@ passwordGateForm?.addEventListener('submit', async (event) => {
   passwordGate.classList.remove('is-error');
   passwordGateStatus.textContent = '';
 
-  let matches = false;
+  let attemptHash = '';
   try {
-    matches = await hashAccessAttempt(passwordInput.value) === accessHash;
+    attemptHash = await hashAccessAttempt(passwordInput.value);
   } catch {
     passwordGateStatus.textContent = 'Unable to check the password. Please refresh and try again.';
   }
 
-  if (!matches) {
+  const isGuest = attemptHash === guestAccessHash;
+  const isAdmin = attemptHash === adminAccessHash;
+
+  if (!isGuest && !isAdmin) {
     passwordGate.classList.add('is-error');
     passwordGateStatus.textContent ||= 'That password does not match. Please try again. / La contraseña no coincide.';
     passwordInput.select();
@@ -761,7 +766,18 @@ passwordGateForm?.addEventListener('submit', async (event) => {
     return;
   }
 
-  storeValue('wedding-access-granted-v1', 'true');
+  if (isGuest) {
+    passwordInput.blur();
+    passwordGateStatus.textContent = '';
+    passwordGate.classList.add('is-construction');
+    passwordGate.setAttribute('aria-label', 'Website under construction');
+    passwordGateForm.setAttribute('aria-hidden', 'true');
+    constructionMessage?.setAttribute('aria-hidden', 'false');
+    submitButton.disabled = false;
+    return;
+  }
+
+  storeValue('wedding-admin-access-v1', 'true');
   passwordGate.classList.add('is-clearing');
   document.documentElement.classList.add('access-transitioning');
   passwordInput.blur();

@@ -767,3 +767,80 @@ html:lang(es) .special-col .section-title{
     transform:translate3d(-50%,50%,0) scale(1)!important;
   }
 }
+
+/* The active menu label follows the section tone just like the SV mark. */
+@media(min-width:721px){
+  .site-header:not(.header-on-dark) .nav-link.active,
+  .site-header:not(.header-on-dark):hover .nav-link.active,
+  .site-header:not(.header-on-dark):focus-within .nav-link.active{
+    color:var(--mocha-deep)!important;
+  }
+  .site-header.header-on-dark .nav-link.active,
+  .site-header.header-on-dark:hover .nav-link.active,
+  .site-header.header-on-dark:focus-within .nav-link.active{
+    color:var(--off-white)!important;
+  }
+}
+
+/* Guest access resolves into a frosted construction note; admin access continues onward. */
+.password-gate-form{
+  max-height:86px;
+  overflow:visible;
+  opacity:1;
+  transform:none;
+  transition:max-height .7s var(--ease-refined),margin .7s var(--ease-refined),opacity .35s ease,transform .65s var(--ease-refined),visibility 0s linear 0s;
+}
+.construction-message{
+  max-width:500px;
+  max-height:0;
+  margin:0;
+  overflow:hidden;
+  visibility:hidden;
+  opacity:0;
+  transform:translateY(12px);
+  transition:max-height .85s var(--ease-refined),margin .85s var(--ease-refined),opacity .55s ease,transform .85s var(--ease-refined),visibility 0s linear .85s;
+}
+.construction-message h1{
+  margin:0;
+  color:var(--off-white);
+  font-family:var(--script);
+  font-size:clamp(4.1rem,7.6vw,6.6rem);
+  font-weight:400;
+  letter-spacing:-.055em;
+  line-height:.78;
+}
+.construction-message p{
+  margin:clamp(24px,3vw,34px) auto 0;
+  color:rgba(255,249,239,.9);
+  font-family:var(--serif);
+  font-size:clamp(1.08rem,1.5vw,1.3rem);
+  line-height:1.45;
+}
+.construction-message .construction-message-es{
+  margin-top:17px;
+  color:rgba(255,249,239,.68);
+  font-size:clamp(.92rem,1.15vw,1.08rem);
+}
+.password-gate.is-construction .password-gate-form{
+  max-height:0;
+  margin-top:0;
+  visibility:hidden;
+  opacity:0;
+  transform:translateY(-8px) scale(.99);
+  pointer-events:none;
+  transition-delay:0s,0s,0s,0s,.7s;
+}
+.password-gate.is-construction .construction-message{
+  max-height:380px;
+  margin-top:10px;
+  visibility:visible;
+  opacity:1;
+  transform:none;
+  transition-delay:.12s,.12s,.28s,.22s,0s;
+}
+@media(max-width:720px){
+  .construction-message{max-width:330px}
+  .construction-message h1{font-size:clamp(3.8rem,18vw,5rem)}
+  .construction-message p{font-size:1.06rem}
+  .construction-message .construction-message-es{font-size:.92rem}
+}
