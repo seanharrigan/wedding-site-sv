@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="assets/gpt/site.css?v=20260829a">
   <link rel="stylesheet" href="assets/gpt/save-date-botanical.css?v=20260825b">
   <link rel="stylesheet" href="assets/gpt/timeline-alignment.css?v=20260825b">
-  <link rel="stylesheet" href="assets/gpt/final-overrides.css?v=20260829j">
+  <link rel="stylesheet" href="assets/gpt/final-overrides.css?v=20260829k">
   <title>Sean &amp; Valeria — Tepoztlán, 2026</title>
 </head>
 <body>
@@ -122,7 +122,7 @@
         <h2 class="save-date-title" id="save-date-title"><span data-i18n="saveWord">Save</span> <em data-i18n="theWord">The</em> <span data-i18n="dateWord">Date</span></h2>
         <p class="save-date-day" data-i18n="saveDate">Tuesday, November 3, 2026</p>
         <div class="save-date-place"><strong>Hotel Piedra Viva</strong><span>Tepoztlán, Morelos, México</span></div>
-        <p data-i18n="saveDateCopy">Our ceremony begins at 2:45 PM at La Cascada. Please arrive at 2:00 PM. After we say “I do,” we’ll celebrate with drinks and canapés at cocktail hour before moving inside for dinner, speeches, and dancing the night away.</p>
+        <p data-i18n="saveDateCopy">Our ceremony begins at 2:45 PM at La Cascada. Please arrive at 2:00 PM. After we say “I do,” we’ll gather for cocktail hour before moving inside for dinner, speeches, and dancing the night away.</p>
       </div>
     </section>
 
@@ -150,7 +150,7 @@
         <div class="timeline-events">
           <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">◷</span><time>2:00 PM</time><h3>Guest arrival</h3></article>
           <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">◌</span><time>2:45 PM</time><h3 data-i18n="ceremonyTitle">Ceremony</h3></article>
-          <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">○</span><time>4:00 PM</time><h3 data-i18n="cocktailTitle">Canapés</h3></article>
+          <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">○</span><time>4:00 PM</time><h3 data-i18n="cocktailTitle">Cocktail Hour</h3></article>
           <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">✦</span><time>5:15 PM</time><h3>Reception</h3></article>
           <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">✧</span><time>6:00 PM</time><h3>Dinner</h3></article>
           <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">✺</span><time>7:30 PM</time><h3>Party</h3></article>
@@ -224,9 +224,9 @@
     </section>
     <section class="section special" data-header-tone="dark" aria-label="Special request and gifts">
       <div class="special-inner">
-        <header class="special-heading reveal"><h2 class="section-title special-heading-title" data-i18n="specialSharedTitle"><em>Special</em> <span>Requests</span></h2></header>
+        <header class="special-heading reveal"><h2 class="section-title special-heading-title" data-i18n="specialSharedTitle"><span>Special</span> <em>Request</em></h2></header>
         <article class="special-col special-col--tribute reveal from-left"><h3 class="special-subtitle" data-i18n="specialTitle">For those who remain in spirit.</h3><hr class="rule"><p data-i18n="ofrendaCopy">We kindly invite you to bring a small framed photo of a loved one who is no longer with us. In keeping with tradition, we will be preparing an <em>ofrenda</em> to honour and remember those who remain in our hearts.</p></article>
-        <article class="special-col special-col--gifts reveal from-right"><h3 class="special-subtitle" data-i18n="giftsTitle">Your presence is our gift.</h3><hr class="rule"><p data-i18n="giftSummary">Your presence is the greatest gift we could receive.</p><p class="gift-copy" data-i18n="giftCopy">If you would like to give something, a contribution toward our future would be deeply appreciated. Canadian guests may send an e-transfer to valeriaandseanharrigan@gmail.com. We kindly ask for electronic transfers only, rather than cash. Thank you.</p></article>
+        <article class="special-col special-col--gifts reveal from-right"><h3 class="special-subtitle" data-i18n="giftsTitle">Your presence is our gift.</h3><hr class="rule"><p data-i18n="giftSummary">Celebrating with you is more than enough.</p><p class="gift-copy" data-i18n="giftCopy">If you would still like to give something, you are welcome to contribute toward our future. Canadian guests may send an e-transfer to valeriaandseanharrigan@gmail.com. Electronic transfers are preferred to cash, but please know there is absolutely no expectation.</p></article>
       </div>
     </section>
 
@@ -249,10 +249,12 @@
         <div class="field full"><label for="guest-party" data-i18n="partyLabel">Who is coming?</label><input id="guest-party" name="party" type="text" autocomplete="name" placeholder="Names of everyone in your party" data-i18n-placeholder="partyPlaceholder" required></div>
         <div class="field"><label for="arrival-date" data-i18n="arrivalDateLabel">Arrival date</label><input id="arrival-date" name="arrival" type="date" min="2026-10-28" max="2026-11-08" required></div>
         <div class="field"><label for="departure-date" data-i18n="departureDateLabel">Departure date</label><input id="departure-date" name="departure" type="date" min="2026-10-29" max="2026-11-10" required></div>
-        <div class="field full"><label for="mexico-city-neighbourhood" data-i18n="mexicoCityAccommodationLabel">Mexico City accommodation</label><input id="mexico-city-neighbourhood" name="mexicoCityNeighbourhood" type="text" autocomplete="address-level2" placeholder="Neighbourhood" data-i18n-placeholder="neighbourhoodPlaceholder" required></div>
+        <div class="field full"><label for="mexico-city-neighbourhood" data-i18n="mexicoCityAccommodationLabel">Mexico City neighbourhood</label><select id="mexico-city-neighbourhood" name="mexicoCityNeighbourhood" autocomplete="address-level2" aria-controls="mexico-city-neighbourhood-other-field" required><option value="" selected disabled data-i18n="chooseNeighbourhood">Choose a neighbourhood</option><option value="Roma Norte">Roma Norte</option><option value="Condesa">Condesa</option><option value="Centro Histórico">Centro Histórico</option><option value="Other" data-i18n="otherOption">Other</option></select></div>
+        <div class="field full conditional-field" id="mexico-city-neighbourhood-other-field" hidden><label for="mexico-city-neighbourhood-other" data-i18n="otherNeighbourhoodLabel">Other neighbourhood</label><input id="mexico-city-neighbourhood-other" name="mexicoCityNeighbourhoodOther" type="text" autocomplete="address-level2" placeholder="Enter neighbourhood" data-i18n-placeholder="otherNeighbourhoodPlaceholder"></div>
         <div class="field"><label for="tepoztlan-check-in" data-i18n="tepoztlanCheckInLabel">Tepoztlán check-in</label><input id="tepoztlan-check-in" name="tepoztlanCheckIn" type="date" min="2026-11-01" max="2026-11-05" required></div>
         <div class="field"><label for="tepoztlan-check-out" data-i18n="tepoztlanCheckOutLabel">Tepoztlán check-out</label><input id="tepoztlan-check-out" name="tepoztlanCheckOut" type="date" min="2026-11-02" max="2026-11-07" required></div>
-        <div class="field full"><label for="tepoztlan-location" data-i18n="tepoztlanLocationLabel">Location</label><input id="tepoztlan-location" name="tepoztlanLocation" type="text" autocomplete="organization" placeholder="Hotel or accommodation" data-i18n-placeholder="locationPlaceholder" required></div>
+        <div class="field full"><label for="tepoztlan-location" data-i18n="tepoztlanLocationLabel">Tepoztlán accommodation</label><select id="tepoztlan-location" name="tepoztlanLocation" autocomplete="organization" aria-controls="tepoztlan-location-other-field" required><option value="" selected disabled data-i18n="chooseTepoztlanLocation">Choose accommodation</option><option value="Hotel Piedra Viva">Hotel Piedra Viva</option><option value="Other" data-i18n="otherOption">Other</option></select></div>
+        <div class="field full conditional-field" id="tepoztlan-location-other-field" hidden><label for="tepoztlan-location-other" data-i18n="otherTepoztlanLabel">Other accommodation</label><input id="tepoztlan-location-other" name="tepoztlanLocationOther" type="text" autocomplete="organization" placeholder="Enter hotel or accommodation" data-i18n-placeholder="otherTepoztlanPlaceholder"></div>
       </div><button class="button button--clay" type="submit" data-i18n="checkInSubmit">Prepare Check-In email <span aria-hidden="true">→</span></button><p class="form-status" id="form-status" aria-live="polite"></p></form>
     </div></section>
 
@@ -262,6 +264,6 @@
 
     <footer class="footer" data-header-tone="dark"><img class="footer-logo" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt="Sean and Valeria monogram"><div class="footer-signoff"><strong>Sean &amp; Valeria</strong><span>03 · 11 · 2026 · Tepoztlán</span></div></footer>
   </main>
-  <script src="assets/gpt/site.js?v=20260829y"></script>
+  <script src="assets/gpt/site.js?v=20260829z"></script>
 </body>
 </html>

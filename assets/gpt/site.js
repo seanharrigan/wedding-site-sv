@@ -502,14 +502,14 @@ const uiTranslations = {
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],
   arrivalTitle: ['Guest arrival', 'Llegada de invitados'], arrivalDesc: ['Welcome drinks and a little time to settle into the gardens.', 'Bebidas de bienvenida y un rato para disfrutar los jardines.'],
   ceremonyTitle: ['Ceremony', 'Ceremonia'], ceremonyDesc: ['Join us outdoors as we exchange vows beneath the mountains.', 'Acompáñennos al aire libre para intercambiar nuestros votos frente a las montañas.'],
-  cocktailTitle: ['Canapés', 'Canapés'], cocktailDesc: ['Cocktails, music and small bites in the courtyard.', 'Cócteles, música y bocadillos en el patio.'],
+  cocktailTitle: ['Cocktail Hour', 'Hora del cóctel'], cocktailDesc: ['Cocktails and music in the courtyard.', 'Cócteles y música en el patio.'],
   receptionTitle: ['Reception', 'Recepción'], receptionDesc: ['Find your table and raise a glass as the evening begins.', 'Busquen su mesa y brinden con nosotros para comenzar la noche.'],
   dinnerTitle: ['Dinner', 'Cena'], dinnerDesc: ['A candlelit meal inspired by the flavours of Mexico.', 'Una cena a la luz de las velas inspirada en los sabores de México.'],
   partyTitle: ['Party', 'Fiesta'], partyDesc: ['Meet us on the dance floor and stay as long as you can.', 'Nos vemos en la pista de baile. Quédense todo lo que puedan.'],
   antojitosDesc: ['A late-night Mexican snack before one last dance.', 'Antojitos de madrugada antes del último baile.'],
   finDesc: ['Carriages, hugs and a very happy goodnight.', 'Abrazos y buenas noches.'],
   travelWeddingDay: ['Wedding day', 'Día de la boda'],
-  travelWeddingDayCopy: ['Our ceremony will begin at 2:45 PM at La Cascada. Please arrive at 2:00 PM. After we say “I do,” we’ll celebrate with drinks and canapés at cocktail hour before moving inside for dinner, speeches, and dancing the night away.', 'La ceremonia comienza a las 2:45 PM en La Cascada. Les pedimos llegar a las 2:00 PM. Después del “sí, acepto” habrá cócteles y canapés. Luego pasaremos a la cena, los discursos y el baile.'],
+  travelWeddingDayCopy: ['Our ceremony will begin at 2:45 PM at La Cascada. Please arrive at 2:00 PM. After we say “I do,” we’ll gather for cocktail hour before moving inside for dinner, speeches, and dancing the night away.', 'La ceremonia comienza a las 2:45 PM en La Cascada. Les pedimos llegar a las 2:00 PM. Después del “sí, acepto” nos reuniremos para la hora del cóctel. Luego pasaremos a la cena, los discursos y el baile.'],
   travelAccommodation: ['Accommodation', 'Estancia'],
   travelAccommodationCopy: ['Hotel Piedra Viva is a 1.5-hour drive from Mexico City. We recommend staying at the hotel; rooms are limited, so close family will be given priority.', 'Hotel Piedra Viva está a una hora y media de la Ciudad de México. Recomendamos hospedarse ahí. Hay pocas habitaciones, así que daremos prioridad a la familia cercana.'],
   travelAccommodationMore: ['$2,250 MXN per night for two (about $180 CAD); a 3rd or 4th guest in a double suite is $850 MXN each. Tepoztlán also has lovely boutique hotels nearby.', '$2,250 MXN por noche para dos personas. La tercera o cuarta persona en una suite doble paga $850 MXN. También hay buenos hoteles boutique cerca.'],
@@ -532,9 +532,9 @@ const uiTranslations = {
   romaLabel: ['Roma Norte', 'Roma Norte'], romaCaption: ['Leafy streets, galleries and cafés', 'Calles arboladas, galerías y cafés'], bellasLabel: ['Bellas Artes', 'Bellas Artes'], bellasCaption: ['Architecture, murals and golden light', 'Arquitectura, murales y luz dorada'],
   conventLabel: ['The Ex-Convent', 'El Ex Convento'], conventCaption: ['Stone courtyards and centuries of history', 'Patios de piedra y siglos de historia'], ridgeLabel: ['The Tepozteco', 'El Tepozteco'], ridgeCaption: ['Dramatic mountains above the town', 'Montañas imponentes sobre el pueblo'],
   ofrendaCopy: ['We kindly invite you to bring a small framed photo of a loved one who is no longer with us. In keeping with tradition, we will be preparing an <em>ofrenda</em> to honour and remember those who remain in our hearts.', 'Los invitamos a traer una foto pequeña y enmarcada de un ser querido que ya no esté con nosotros. Prepararemos una <em>ofrenda</em> para recordarlos y tenerlos presentes.'],
-  giftSummary: ['Your presence is the greatest gift we could receive.', 'Su presencia es el mejor regalo para nosotros.'],
+  giftSummary: ['Celebrating with you is more than enough.', 'Celebrar con ustedes es más que suficiente.'],
   giftDetails: ['Gift details', 'Detalles del regalo'],
-  giftCopy: ['If you would like to give something, a contribution toward our future would be deeply appreciated. Canadian guests may send an e-transfer to valeriaandseanharrigan@gmail.com. We kindly ask for electronic transfers only, rather than cash. Thank you.', 'Si desean hacernos un regalo, agradeceríamos mucho una aportación para nuestro futuro. Para los invitados en México, compartiremos los datos de transferencia más cerca de la fecha. Les pedimos no traer efectivo. Gracias.'],
+  giftCopy: ['If you would still like to give something, you are welcome to contribute toward our future. Canadian guests may send an e-transfer to valeriaandseanharrigan@gmail.com. Electronic transfers are preferred to cash, but please know there is absolutely no expectation.', 'Si aun así desean hacernos un regalo, pueden hacer una aportación para nuestro futuro. Para los invitados en México, compartiremos los datos de transferencia más cerca de la fecha. Preferimos transferencias en lugar de efectivo, pero no hay ninguna expectativa.'],
   alcoholQuestion: ['Can I bring my own alcohol?', '¿Puedo traer mi propio alcohol?'],
   alcoholAnswer: ['No need! We’ll have an open bar throughout the celebration. Please note that the hotel does not allow outside alcohol. Just bring your best energy and get ready to celebrate!', 'No hace falta. Habrá barra libre durante toda la celebración y el hotel no permite ingresar bebidas. Solo vengan con ganas de celebrar.'],
   welcomeCopy: ['We are delighted to welcome you <br>to our wedding website. Here, you will <br>find all the essential details for our special day.', 'Nos da mucho gusto recibirlos <br>en nuestra página. Aquí encontrarán <br>todo lo necesario para nuestro gran día.'],
@@ -547,18 +547,18 @@ const uiTranslations = {
   faqLocalTransportAnswer: ['Taxis and rideshare services are the simplest options between local accommodation and Hotel Piedra Viva. Complimentary parking is available at the venue.', 'Lo más fácil para moverse entre los hoteles y Piedra Viva es tomar un taxi o Uber. El hotel cuenta con estacionamiento gratuito.'],
   faqKicker: ['Good to know', 'Información útil'], faqTitle: ['Frequently asked<br><em>Questions</em>.', 'Preguntas<br><em>Frecuentes</em>.'], faqGuestQuestion: ['Can I bring a guest?', '¿Puedo llevar acompañante?'], faqChildrenQuestion: ['Are children invited?', '¿Están invitados los niños?'], faqArrivalQuestion: ['When should I arrive?', '¿Cuándo debo llegar?'], faqIndoorsQuestion: ['Is the celebration indoors or outdoors?', '¿La celebración es interior o exterior?'], faqLocalTransportQuestion: ['How should I get around Tepoztlán?', '¿Cómo debo moverme en Tepoztlán?'], faqContactQuestion: ['Who can I contact?', '¿A quién puedo contactar?'],
   welcomeTitle: ['Welcome', 'Bienvenidos'],
-  saveEyebrow: ['Our wedding day', 'El día de nuestra boda'], saveWord: ['Save', 'Reserva'], theWord: ['The', 'La'], dateWord: ['Date', 'Fecha'], saveDate: ['Tuesday, November 3, 2026', 'Martes, 3 de noviembre de 2026'], saveDateCopy: ['Our ceremony begins at 2:45 PM at La Cascada. Please arrive at 2:00 PM. After we say “I do,” we’ll celebrate with drinks and canapés at cocktail hour before moving inside for dinner, speeches, and dancing the night away.', 'La ceremonia comienza a las 2:45 PM en La Cascada. Les pedimos llegar a las 2:00 PM. Después del “sí, acepto” habrá cócteles y canapés. Luego pasaremos a la cena, los discursos y el baile.'],
+  saveEyebrow: ['Our wedding day', 'El día de nuestra boda'], saveWord: ['Save', 'Reserva'], theWord: ['The', 'La'], dateWord: ['Date', 'Fecha'], saveDate: ['Tuesday, November 3, 2026', 'Martes, 3 de noviembre de 2026'], saveDateCopy: ['Our ceremony begins at 2:45 PM at La Cascada. Please arrive at 2:00 PM. After we say “I do,” we’ll gather for cocktail hour before moving inside for dinner, speeches, and dancing the night away.', 'La ceremonia comienza a las 2:45 PM en La Cascada. Les pedimos llegar a las 2:00 PM. Después del “sí, acepto” nos reuniremos para la hora del cóctel. Luego pasaremos a la cena, los discursos y el baile.'],
   detailsKicker: ['The gathering', 'El encuentro'], detailsTitle: ['Wedding details', 'Detalles de la boda'], venueTitle: ['Venue', 'Lugar'], openMap: ['Open map', 'Abrir mapa'], dressTitle: ['Dress code', 'Código de vestimenta'], formalAttire: ['Formal attire', 'Vestimenta formal'], programEyebrow: ['The order of the day', 'El orden del día'], celebrationTitle: ['Celebration', 'Celebración'],
   travelKicker: ['The journey', 'El viaje'], travelTitle: ['Travel', 'Viaje'], browseHotels: ['Browse hotels', 'Ver hoteles'],
   travelSubline: ['For those travelling from afar', 'Para quienes viajan desde lejos'], chapterSchedule: ['Schedule', 'Itinerario'], monthOct: ['Oct', 'Oct'], monthNov: ['Nov', 'Nov'],
   hoodRoma: ['Leafy streets, cafés and galleries. Lively and central; a little noisy on weekends.', 'Calles arboladas, cafés y galerías. Animada y céntrica; algo ruidosa los fines de semana.'], hoodCondesa: ['Art-deco blocks around two parks, great restaurants. Calmer evenings, slightly further from the centre.', 'Edificios art déco alrededor de dos parques y muy buenos restaurantes. Noches más tranquilas, un poco más lejos del centro.'], hoodReforma: ['Modern, polished and lined with large hotels. More corporate in feel and farther from Centro Histórico.', 'Moderna, elegante y con hoteles grandes. Tiene un ambiente más corporativo y queda más lejos del Centro Histórico.'], hoodCentro: ['The Zócalo, Bellas Artes and major museums are on your doorstep. Historic, atmospheric and home to many older hotels; scenes from 007: Spectre were filmed here.', 'El Zócalo, Bellas Artes y los principales museos quedan a un paso. Es histórico, lleno de ambiente y tiene muchos hoteles antiguos; aquí se filmaron escenas de 007: Spectre.'],
   cityArriving: ['Arriving', 'Llegada'], cityStayTitle: ['Where to stay', 'Dónde hospedarse'], tepoztlanKicker: ['Things to do in', 'Qué hacer en'], weatherDays: ['Day', 'Día'], weatherNights: ['Night', 'Noche'],
   cityEyebrow: ['Explore Mexico with us', 'Explora México con nosotros'], cityTitle: ['Things to do<br>in the <em>City</em>.', 'Qué hacer<br>en la <em>Ciudad</em>.'],
-  specialSharedTitle: ['<em>Special</em> <span>Requests</span>', '<em>Peticiones</em> <span>Especiales</span>'], specialTitle: ['For those who remain in spirit.', 'Para quienes siguen con nosotros en espíritu.'], giftsTitle: ['Your presence is our gift.', 'Su presencia es nuestro mejor regalo.'],
+  specialSharedTitle: ['<span>Special</span> <em>Request</em>', '<span>Petición</span> <em>Especial</em>'], specialTitle: ['For those who remain in spirit.', 'Para quienes siguen con nosotros en espíritu.'], giftsTitle: ['Your presence is our gift.', 'Su presencia es nuestro mejor regalo.'],
   weekTitle: ['A week<br>in <em>México</em>.', 'Una semana<br>en <em>México</em>.'], weekBrief: ['Arrive early, stay a little longer, and make the celebration part of a beautiful week away.', 'Lleguen antes, quédense unos días y disfruten una semana completa en México.'],
   weekArrival: ['Arrive in Mexico City', 'Llegada a la Ciudad de México'], weekArrivalCopy: ['Land in the capital, settle in and begin your Mexico City adventure.', 'Lleguen, instálense y empiecen a recorrer la ciudad.'], weekMuertos: ['Día de Muertos parade', 'Desfile de Día de Muertos'], weekMuertosCopy: ['Experience the city in its most luminous season—marigolds, music and remembrance.', 'Disfruten la ciudad entre cempasúchil, música y recuerdos.'], weekTravel: ['Travel to Tepoztlán', 'Viaje a Tepoztlán'], weekTravelCopy: ['Head south into the mountains; the journey from Mexico City is roughly ninety minutes.', 'El viaje desde la Ciudad de México dura aproximadamente noventa minutos.'], weekWedding: ['Wedding day', 'Día de la boda'], weekWeddingCopy: ['Gather with us at Hotel Piedra Viva for an afternoon and evening under the Tepozteco.', 'Pasen la tarde y la noche con nosotros en Hotel Piedra Viva, al pie del Tepozteco.'], weekPool: ['Pool day or hike', 'Día de alberca o caminata'], weekPoolCopy: ['Keep the day unhurried—cool off by the pool or take in the panoramic mountain trail.', 'Tómense el día con calma: alberca o caminata por la montaña.'], weekReturn: ['Return to Mexico City', 'Regreso a la Ciudad de México'], weekReturnCopy: ['Travel back to the city with a little time left for one last coffee or market visit.', 'Regresen a la ciudad con tiempo para un último café o una visita al mercado.'],
   countdownTitle: ['<em>The</em> <span>Countdown</span>', '<em>La</em> <span>cuenta regresiva</span>'],
-  checkInKicker: ['Your journey', 'Su viaje'], checkInTitle: ['<span>Check</span>-<em>In</em>', '<span>Registro</span>'], checkInIntro: ['Share your travel dates and accommodation details so we know when and where to expect you.', 'Compartan sus fechas y datos de hospedaje para saber cuándo y dónde esperarlos.'], partyLabel: ['Who is coming?', '¿Quiénes vienen?'], arrivalDateLabel: ['Arrival date', 'Fecha de llegada'], departureDateLabel: ['Departure date', 'Fecha de salida'], mexicoCityAccommodationLabel: ['Mexico City accommodation', 'Hospedaje en Ciudad de México'], neighbourhoodPlaceholder: ['Neighbourhood', 'Colonia'], tepoztlanCheckInLabel: ['Tepoztlán check-in', 'Entrada en Tepoztlán'], tepoztlanCheckOutLabel: ['Tepoztlán check-out', 'Salida de Tepoztlán'], tepoztlanLocationLabel: ['Location', 'Lugar'], locationPlaceholder: ['Hotel or accommodation', 'Hotel o alojamiento'], checkInSubmit: ['Prepare Check-In email <span aria-hidden="true">→</span>', 'Preparar correo de confirmación <span aria-hidden="true">→</span>'], closingTitle: ['We cannot wait<br>to celebrate together.', 'Ya queremos<br>celebrar juntos.']
+  checkInKicker: ['Your journey', 'Su viaje'], checkInTitle: ['<span>Check</span>-<em>In</em>', '<span>Registro</span>'], checkInIntro: ['Share your travel dates and accommodation details so we know when and where to expect you.', 'Compartan sus fechas y datos de hospedaje para saber cuándo y dónde esperarlos.'], partyLabel: ['Who is coming?', '¿Quiénes vienen?'], arrivalDateLabel: ['Arrival date', 'Fecha de llegada'], departureDateLabel: ['Departure date', 'Fecha de salida'], mexicoCityAccommodationLabel: ['Mexico City neighbourhood', 'Colonia en Ciudad de México'], chooseNeighbourhood: ['Choose a neighbourhood', 'Elige una colonia'], otherOption: ['Other', 'Otro'], otherNeighbourhoodLabel: ['Other neighbourhood', 'Otra colonia'], otherNeighbourhoodPlaceholder: ['Enter neighbourhood', 'Escribe la colonia'], tepoztlanCheckInLabel: ['Tepoztlán check-in', 'Entrada en Tepoztlán'], tepoztlanCheckOutLabel: ['Tepoztlán check-out', 'Salida de Tepoztlán'], tepoztlanLocationLabel: ['Tepoztlán accommodation', 'Hospedaje en Tepoztlán'], chooseTepoztlanLocation: ['Choose accommodation', 'Elige el hospedaje'], otherTepoztlanLabel: ['Other accommodation', 'Otro hospedaje'], otherTepoztlanPlaceholder: ['Enter hotel or accommodation', 'Escribe el hotel o alojamiento'], checkInSubmit: ['Prepare Check-In email <span aria-hidden="true">→</span>', 'Preparar correo de confirmación <span aria-hidden="true">→</span>'], closingTitle: ['We cannot wait<br>to celebrate together.', 'Ya queremos<br>celebrar juntos.']
 };
 
 const phraseTranslations = new Map(Object.entries({
@@ -661,16 +661,45 @@ syncNavigation();
 syncHeaderTone();
 
 const checkInForm = document.getElementById('check-in-form');
+const setupConditionalAccommodation = (selectId, fieldId, inputId) => {
+  const select = document.getElementById(selectId);
+  const field = document.getElementById(fieldId);
+  const input = document.getElementById(inputId);
+  if (!select || !field || !input) return;
+
+  const sync = () => {
+    const isOther = select.value === 'Other';
+    field.hidden = !isOther;
+    input.disabled = !isOther;
+    input.required = isOther;
+    select.setAttribute('aria-expanded', String(isOther));
+    if (!isOther) input.value = '';
+    if (isOther) requestAnimationFrame(() => input.focus({ preventScroll: true }));
+  };
+
+  select.addEventListener('change', sync);
+  sync();
+};
+
+setupConditionalAccommodation('mexico-city-neighbourhood', 'mexico-city-neighbourhood-other-field', 'mexico-city-neighbourhood-other');
+setupConditionalAccommodation('tepoztlan-location', 'tepoztlan-location-other-field', 'tepoztlan-location-other');
+
 checkInForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
   const party = data.get('party');
   const arrival = data.get('arrival');
   const departure = data.get('departure');
-  const mexicoCityNeighbourhood = data.get('mexicoCityNeighbourhood');
+  const mexicoCityNeighbourhoodChoice = data.get('mexicoCityNeighbourhood');
+  const mexicoCityNeighbourhood = mexicoCityNeighbourhoodChoice === 'Other'
+    ? data.get('mexicoCityNeighbourhoodOther')
+    : mexicoCityNeighbourhoodChoice;
   const tepoztlanCheckIn = data.get('tepoztlanCheckIn');
   const tepoztlanCheckOut = data.get('tepoztlanCheckOut');
-  const tepoztlanLocation = data.get('tepoztlanLocation');
+  const tepoztlanLocationChoice = data.get('tepoztlanLocation');
+  const tepoztlanLocation = tepoztlanLocationChoice === 'Other'
+    ? data.get('tepoztlanLocationOther')
+    : tepoztlanLocationChoice;
   const spanish = currentLanguage === 'es';
   const subject = encodeURIComponent(spanish ? `Confirmación de boda — ${party}` : `Wedding Check-In — ${party}`);
   const message = encodeURIComponent(spanish

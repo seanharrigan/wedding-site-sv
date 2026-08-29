@@ -745,6 +745,119 @@ html:lang(es) .special-col .section-title{
   .special-col--gifts{margin-top:4px}
 }
 
+/* Keep Weather comfortably inside the same mobile reading column as the
+   Venue and Formal Attire copy rather than stretching toward the paper edge. */
+@media(max-width:720px){
+  .details-weather{
+    width:calc(100% - 72px)!important;
+    max-width:360px;
+    margin-right:auto!important;
+    margin-left:auto!important;
+  }
+  .details-weather::before{width:100%}
+  .weather-ranges,
+  .details-weather-copy{
+    width:100%!important;
+    margin-right:auto;
+    margin-left:auto;
+  }
+}
+
+/* Check-In uses quiet editorial controls: restrained selects, warm calendar
+   affordances, and a simple lift in place of the stock travelling shimmer. */
+.check-in-card .field select{
+  width:100%;
+  min-width:0;
+  padding:.4rem 2rem .4rem 0;
+  border:0;
+  border-bottom:1px solid rgba(73,54,44,.3);
+  border-radius:0;
+  color:var(--mocha-deep);
+  background-color:transparent;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2349362c' stroke-width='1.4'%3E%3Cpath d='m5 7 5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right .15rem center;
+  background-size:16px;
+  font-family:var(--serif);
+  font-size:1rem;
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  transition:border-color .3s ease,color .3s ease;
+}
+.check-in-card .field select:hover,
+.check-in-card .field select:focus{
+  border-bottom-color:var(--mocha);
+  outline:0;
+}
+.check-in-card .field select:invalid{color:rgba(73,54,44,.52)}
+.check-in-card .conditional-field[hidden]{display:none!important}
+.check-in-card .conditional-field:not([hidden]){
+  animation:conditional-field-in .45s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes conditional-field-in{
+  from{opacity:0;transform:translateY(-5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.check-in-card input[type="date"]{
+  color-scheme:light;
+  accent-color:var(--mocha);
+}
+.check-in-card input[type="date"]::-webkit-calendar-picker-indicator{
+  width:17px;
+  height:17px;
+  margin:0;
+  padding:5px;
+  border-radius:50%;
+  background-color:rgba(73,54,44,.07);
+  opacity:.72;
+  cursor:pointer;
+  transition:opacity .3s ease,background-color .3s ease,transform .35s cubic-bezier(.16,1,.3,1);
+}
+.check-in-card input[type="date"]::-webkit-calendar-picker-indicator:hover{
+  background-color:rgba(73,54,44,.13);
+  opacity:1;
+  transform:scale(1.06);
+}
+.check-in-card .button::after{display:none!important}
+.check-in-card .button{
+  box-shadow:0 9px 22px rgba(52,38,31,.16)!important;
+  transition:color .35s ease,background-color .45s ease,box-shadow .45s ease,transform .55s cubic-bezier(.16,1,.3,1)!important;
+}
+@media(hover:hover) and (pointer:fine){
+  .check-in-card .button:hover{
+    border-color:#3f2d24!important;
+    background:#3f2d24!important;
+    box-shadow:0 14px 28px rgba(52,38,31,.23)!important;
+    transform:translateY(-2px)!important;
+  }
+}
+.check-in-card .button:active{transform:translateY(0) scale(.992)!important}
+.check-in-card .button:focus-visible{outline:2px solid var(--cream);outline-offset:4px}
+
+@media(max-width:720px){
+  .check-in{
+    padding-right:24px!important;
+    padding-left:24px!important;
+  }
+  .check-in-grid{
+    width:100%;
+    max-width:480px;
+    margin-inline:auto;
+  }
+  .check-in-copy{padding-inline:6px}
+  .check-in-card{padding-right:18px!important;padding-left:18px!important}
+}
+@media(max-width:360px){
+  .check-in-card .form-grid{grid-template-columns:minmax(0,1fr)!important}
+  .check-in-card .field{grid-column:1!important}
+}
+
+/* Reframe the desktop image without disturbing the angled copy overlay. */
+@media(min-width:721px){
+  .closing-photo img{object-position:center 48%!important}
+}
+
 /* A transform-only wax-seal lift avoids GPU shadow flicker at the hero edge. */
 .hero-seal{
   filter:none!important;
