@@ -1218,12 +1218,13 @@ body.animation-preview-open{overflow:hidden}
   transition:opacity .65s ease,transform .8s cubic-bezier(.16,1,.3,1)!important;
 }
 
-/* Check-In is a local-only preview for now: the little Catrina crosses the card before the thank-you appears. */
+/* Check-In is a local-only preview for now: the little Catrina crosses the card
+   along the top edge before the thank-you appears. */
 .check-in-card{position:relative}
 .check-in-passage[hidden]{display:none!important}
 .check-in-passage{position:absolute;inset:0;z-index:4;overflow:hidden;pointer-events:none}
 .check-in-card.is-confirming .check-in-form-content{opacity:.11;pointer-events:none;transform:scale(.992);transition:opacity .45s ease,transform .65s cubic-bezier(.16,1,.3,1)}
-.catrina-walk{position:absolute;top:50%;left:-132px;width:112px;aspect-ratio:2/3;transform:translateY(-50%);will-change:left,transform}
+.catrina-walk{position:absolute;top:18%;left:-132px;width:112px;aspect-ratio:2/3;transform:translateY(-50%);will-change:left,transform}
 .check-in-passage.is-walking .catrina-walk{animation:check-in-catrina-cross 2.8s cubic-bezier(.22,.61,.36,1) both}
 .catrina-walk .catrina-dance-frame{animation-duration:1.44s}
 .catrina-walk .catrina-dance-frame--one{animation-delay:0s}
