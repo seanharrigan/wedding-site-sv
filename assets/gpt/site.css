@@ -2602,6 +2602,7 @@ html:lang(es) .special-col .section-title{font-size:clamp(1rem,6.2cqi,2.2rem)!im
 .password-gate-copy{max-width:420px;margin:24px auto 28px;font-family:var(--serif);font-size:1.05rem;line-height:1.45;opacity:.86}
 .password-gate-copy span{font-size:.93em;opacity:.72}
 .password-gate-form{display:grid;width:min(100%,410px);margin-top:22px;justify-items:center}
+.password-gate-form .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 .password-gate-control{display:grid;width:100%;grid-template-columns:1fr auto;align-items:center;padding:5px;border:1px solid rgba(255,249,239,.3);border-radius:999px;background:rgba(255,249,239,.1);box-shadow:inset 0 1px rgba(255,255,255,.2),0 16px 42px rgba(24,15,10,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:border-color .35s ease,background .35s ease,box-shadow .45s ease,transform .45s var(--ease-refined)}
 .password-gate-control:focus-within{border-color:rgba(255,249,239,.62);background:rgba(255,249,239,.16);box-shadow:inset 0 1px rgba(255,255,255,.3),0 18px 46px rgba(24,15,10,.17)}
 .password-gate-control input{min-width:0;height:46px;padding:0 17px;border:0;outline:0;color:var(--off-white);background:transparent;font-family:var(--sans);font-size:.78rem;letter-spacing:.08em}
@@ -2627,13 +2628,64 @@ body.password-gate-open{overflow:hidden}
   .password-gate:hover::before{--lens-r:145px}
 }
 @media(max-width:720px){
-  .password-gate{padding:22px}
-  .password-gate-logo{width:92px;margin-bottom:18px}
-  .password-gate h1{font-size:clamp(4.5rem,23vw,6.2rem)}
-  .password-gate-copy{margin:20px auto 24px;font-size:.98rem}
-  .password-gate-control{grid-template-columns:1fr}
-  .password-gate-control input{height:48px;text-align:center}
-  .password-gate-control button{width:100%;justify-content:center}
+  .password-gate{
+    min-height:100svh;
+    padding:max(22px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left));
+    overflow:hidden;
+    background:linear-gradient(180deg,rgba(83,67,57,.18),rgba(55,42,35,.26));
+  }
+  .password-gate::before{
+    background:linear-gradient(160deg,rgba(128,109,95,.74),rgba(84,67,57,.8));
+    -webkit-backdrop-filter:blur(17px) saturate(88%);
+    backdrop-filter:blur(17px) saturate(88%);
+  }
+  .password-gate-panel{
+    width:min(100%,350px);
+    text-shadow:none;
+    transform:translateY(-3svh);
+  }
+  .password-gate-logo{
+    width:78px;
+    margin:0 0 30px;
+    opacity:.96;
+    filter:drop-shadow(0 5px 16px rgba(30,20,15,.13));
+  }
+  .password-gate-form{width:100%;margin-top:0}
+  .password-gate-control{
+    grid-template-columns:minmax(0,1fr) 48px;
+    min-height:58px;
+    padding:4px;
+    border-color:rgba(255,249,239,.4);
+    background:rgba(255,249,239,.105);
+    box-shadow:inset 0 1px rgba(255,255,255,.2),0 14px 34px rgba(25,16,12,.13);
+    -webkit-backdrop-filter:blur(15px) saturate(105%);
+    backdrop-filter:blur(15px) saturate(105%);
+  }
+  .password-gate-control:focus-within{
+    border-color:rgba(255,249,239,.7);
+    background:rgba(255,249,239,.14);
+    box-shadow:inset 0 1px rgba(255,255,255,.28),0 17px 38px rgba(25,16,12,.17);
+  }
+  .password-gate-control input{
+    height:48px;
+    padding:0 13px 0 16px;
+    text-align:left;
+    font-size:16px;
+    letter-spacing:.025em;
+  }
+  .password-gate-control input::placeholder{font-size:.72rem;letter-spacing:.045em}
+  .password-gate-control button{
+    width:48px;
+    min-height:48px;
+    justify-content:center;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    box-shadow:0 5px 16px rgba(24,15,10,.12);
+  }
+  .password-gate-control button span:first-child{display:none}
+  .password-gate-control button span[aria-hidden="true"]{font-size:.85rem;transform:translateX(1px)}
+  .password-gate-status{margin-top:10px;font-size:.58rem}
 }
 @media(prefers-reduced-motion:reduce){.password-gate,.password-gate::before,.password-gate-panel,.language-gate.is-arriving .language-gate-panel{animation:none!important;transition:none!important}}
 
