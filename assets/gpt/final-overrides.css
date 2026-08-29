@@ -160,7 +160,7 @@
     --weather-label-width:48px;
     --weather-value-width:76px;
     --weather-gap:10px;
-    width:calc(100% - 28px);
+    width:calc(100% - 44px);
     gap:12px;
     margin-top:20px;
   }
