@@ -95,7 +95,7 @@ const playPasswordCatrinaPassage = (onComplete) => {
       catrinaPassage.classList.remove('is-password-handoff');
       catrinaPassageHideTimer = 0;
       onComplete?.();
-    }, 360);
+    }, 650);
     catrinaPassageTimer = 0;
   }, passageDuration);
 };
