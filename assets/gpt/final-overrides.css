@@ -2153,3 +2153,24 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   .animation-lab-stage.is-playing .animation-lab-art--open{opacity:1!important;animation:none!important}
   .animation-lab-stage.is-playing::after{opacity:0!important;animation:none!important}
 }
+
+/* The hero photo and its tint must share one edge. A legacy hover treatment
+   inset only the photo layer, producing a second curved edge and flickering
+   lower corners. Keep the portrait calm and let the seal be the interaction. */
+.hero--image-only::before,
+.hero--image-only::after{
+  border-radius:inherit!important;
+  clip-path:none!important;
+}
+.hero--image-only::before{
+  transition:transform .7s cubic-bezier(.16,1,.3,1)!important;
+  filter:none!important;
+  will-change:auto!important;
+}
+@media(hover:hover) and (pointer:fine){
+  .hero--image-only:hover::before{
+    clip-path:none!important;
+    filter:none!important;
+    transform:scale(calc(1.012 + var(--hero-shift,0)*.000025))!important;
+  }
+}
