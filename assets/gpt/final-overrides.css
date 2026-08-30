@@ -1537,6 +1537,40 @@ html:lang(es) .special-col .section-title{
   }
 }
 
+/* Replace the legacy named-grid placement with an explicit two-column
+   disclosure grid: both headings sit in row one and either answer spans row
+   two across the complete travel width. */
+@media(min-width:721px){
+  .travel-chapter--city .practical--city,
+  .travel-chapter--tepoztlan .practical--tepoz{
+    grid-template-areas:none!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-auto-flow:row!important;
+  }
+  .travel-chapter--city .practical-item h4,
+  .travel-chapter--tepoztlan .practical-item h4{
+    grid-row:1!important;
+  }
+  .travel-chapter--city .practical-item .accordion-panel,
+  .travel-chapter--tepoztlan .practical-item .accordion-panel{
+    grid-column:1 / -1!important;
+    grid-row:2!important;
+  }
+}
+@media(max-width:720px){
+  .travel-chapter--city .practical--city,
+  .travel-chapter--tepoztlan .practical--tepoz{
+    grid-template-areas:none!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-auto-flow:row!important;
+  }
+  .travel-chapter--city .practical-item .accordion-panel,
+  .travel-chapter--tepoztlan .practical-item .accordion-panel{
+    grid-column:1 / -1!important;
+    grid-row:2!important;
+  }
+}
+
 /* A submitted check-in closes on the same invitation envelope instead of a
    generic panel. The single confirmation line stays deliberately quiet while
    the small Catrina completes the hand-off above it. */
