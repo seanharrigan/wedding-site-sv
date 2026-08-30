@@ -42,7 +42,7 @@ let invitationCloseTimer = 0;
 let catrinaPassageTimer = 0;
 let catrinaPassageHideTimer = 0;
 const invitationExitDuration = reducedMotion ? 0 : 680;
-const invitationTargetDelay = reducedMotion ? 0 : 1160;
+const invitationCloseDuration = reducedMotion ? 0 : 620;
 
 const clearInvitationTimers = () => {
   clearTimeout(invitationHideTimer);
@@ -154,7 +154,7 @@ const revealInvitation = ({ replay = false } = {}) => {
   clearInvitationTimers();
   invitationIntro.hidden = false;
   body.classList.add('invitation-active');
-  invitationIntro.classList.remove('is-open', 'is-opening', 'is-closing', 'is-returning', 'is-leaving', 'is-preparing', 'is-replaying');
+  invitationIntro.classList.remove('is-open', 'is-opening', 'is-closing', 'is-leaving', 'is-preparing', 'is-replaying');
   invitationIntro.setAttribute('aria-hidden', 'false');
   envelopeStage.setAttribute('aria-hidden', 'true');
   const gateOpen = languageGate && !languageGate.classList.contains('is-done');
@@ -185,13 +185,13 @@ const revealInvitation = ({ replay = false } = {}) => {
 const enterCelebration = () => {
   if (invitationIntro.hidden || invitationIntro.classList.contains('is-leaving')) return;
   clearInvitationTimers();
-  invitationIntro.classList.remove('is-opening', 'is-closing', 'is-returning', 'is-preparing', 'is-replaying');
+  invitationIntro.classList.remove('is-opening', 'is-closing', 'is-preparing', 'is-replaying');
   invitationIntro.classList.add('is-leaving');
   suiteComposite?.classList.remove('is-glow-active', 'is-action-hovered');
   storeValue('wedding-invitation-seen', 'true');
   invitationHideTimer = setTimeout(() => {
     invitationIntro.hidden = true;
-    invitationIntro.classList.remove('is-leaving', 'is-open', 'is-opening', 'is-closing', 'is-returning');
+    invitationIntro.classList.remove('is-leaving', 'is-open', 'is-opening', 'is-closing');
     invitationIntro.setAttribute('aria-hidden', 'true');
     body.classList.remove('invitation-active');
     invitationHideTimer = 0;
@@ -205,20 +205,14 @@ const closeInvitation = () => {
   invitationIntro.classList.remove('is-opening', 'is-preparing', 'is-replaying');
   invitationIntro.classList.add('is-closing');
   suiteComposite?.classList.remove('is-glow-active', 'is-action-hovered');
-  if (reducedMotion) {
-    invitationIntro.classList.remove('is-open');
-  } else {
-    requestAnimationFrame(() => {
-      invitationIntro.classList.remove('is-open');
-      requestAnimationFrame(() => invitationIntro.classList.add('is-returning'));
-    });
-  }
+  if (reducedMotion) invitationIntro.classList.remove('is-open');
+  else requestAnimationFrame(() => invitationIntro.classList.remove('is-open'));
   invitationCloseTimer = setTimeout(() => {
-    invitationIntro.classList.remove('is-closing', 'is-returning');
+    invitationIntro.classList.remove('is-closing');
     envelopeStage.setAttribute('aria-hidden', 'true');
     openEnvelope.focus({ preventScroll: true });
     invitationCloseTimer = 0;
-  }, reducedMotion ? 0 : 760);
+  }, invitationCloseDuration);
 };
 
 const keepWebsiteAtTop = () => scrollTo({ top: 0, left: 0, behavior: 'auto' });
@@ -249,7 +243,7 @@ if (!accessGranted) {
 }
 
 openEnvelope.addEventListener('click', () => {
-  if (invitationIntro.classList.contains('is-open') || invitationIntro.classList.contains('is-opening')) return;
+  if (invitationIntro.classList.contains('is-open') || invitationIntro.classList.contains('is-opening') || invitationIntro.classList.contains('is-closing') || invitationIntro.classList.contains('is-leaving')) return;
   keepWebsiteAtTop();
   clearTimeout(invitationFocusTimer);
   clearTimeout(invitationReplayTimer);
@@ -316,8 +310,6 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && body.classList.contains('invitation-active')) {
     if (invitationIntro.classList.contains('is-open') || invitationIntro.classList.contains('is-opening')) {
       closeInvitation();
-    } else {
-      enterCelebration();
     }
     return;
   }
@@ -598,7 +590,7 @@ const renderLanguage = (language) => {
 
 // The header's EN/ES and the envelope's discreet control both open the frosted language gate.
 const openLanguageGate = () => {
-  if (!languageGate) return;
+  if (!languageGate || languageGate.classList.contains('is-clearing') || invitationIntro.classList.contains('is-leaving')) return;
   setMenuOpen(false);
   languageGate.classList.remove('is-clearing');
   languageGate.classList.remove('is-done');
@@ -607,7 +599,7 @@ const openLanguageGate = () => {
   setTimeout(() => document.querySelector('.language-gate-panel')?.focus({ preventScroll: true }), reducedMotion ? 0 : 350);
 };
 const dismissLanguageGate = () => {
-  if (!languageGate || languageGate.classList.contains('is-done')) return;
+  if (!languageGate || languageGate.classList.contains('is-done') || languageGate.classList.contains('is-clearing')) return;
   if (!languageGate.classList.contains('is-optional')) return;
   languageGate.classList.add('is-done');
   languageGate.classList.remove('is-optional', 'is-lens-active');
@@ -1016,6 +1008,7 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
 
 // Language gate: pick a language before the invitation opens.
 languageGateOptions.forEach((option) => option.addEventListener('click', () => {
+  if (languageGate.classList.contains('is-clearing') || languageGate.classList.contains('is-done')) return;
   currentLanguage = option.dataset.language === 'es' ? 'es' : 'en';
   renderLanguage(currentLanguage);
   // The frost clears outward from the chosen option, then the gate steps aside.
