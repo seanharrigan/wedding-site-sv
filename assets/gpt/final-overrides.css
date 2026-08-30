@@ -1096,12 +1096,6 @@ html:lang(es) .special-col .section-title{
   .site-header .language-toggle{min-height:36px;padding-inline:clamp(7px,calc(7px + (100vw - 1180px)*.027),14px);font-size:clamp(.53rem,calc(.53rem + (100vw - 1180px)*.00923),.68rem);letter-spacing:.11em}
 }
 
-/* The two Tepoztlán practical disclosures now echo the full-width lower rows in the travel reference. */
-.travel-chapter--tepoztlan .practical--tepoz{grid-template-columns:minmax(0,1fr)!important;gap:0}
-.travel-chapter--tepoztlan .practical--tepoz .practical-item{grid-column:1!important}
-.travel-chapter--tepoztlan .practical--tepoz .practical-item h4,
-.travel-chapter--tepoztlan .practical--tepoz .practical-item .accordion-panel{grid-column:1!important;grid-row:auto!important}
-
 @media(max-width:720px){
   .check-in-card.is-confirmed{min-height:430px}
   .check-in-thanks{max-width:310px}
@@ -1283,16 +1277,6 @@ html:lang(es) .special-col .section-title{
   }
 }
 
-/* Travel disclosures use the same full two-column row in each chapter. */
-.travel-chapter--city .practical--city,
-.travel-chapter--tepoztlan .practical--tepoz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%;column-gap:clamp(24px,3vw,44px);row-gap:0}
-.travel-chapter--city .practical-item:nth-child(1) h4,
-.travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-column:1!important;grid-row:1!important}
-.travel-chapter--city .practical-item:nth-child(2) h4,
-.travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-column:2!important;grid-row:1!important}
-.travel-chapter--city .practical-item .accordion-panel,
-.travel-chapter--tepoztlan .practical-item .accordion-panel{grid-column:1 / -1!important;grid-row:2!important}
-
 /* The confirmation settles as one centred composition: a small, still Catrina
    above the copy. Its four illustrations get equal time only during the hand-off. */
 .check-in-card.is-confirmed{min-height:410px}
@@ -1319,8 +1303,6 @@ html:lang(es) .special-col .section-title{
 .check-in-passage.is-arrived .catrina-dance-frame--one{opacity:1!important}
 
 @media(max-width:720px){
-  .travel-chapter--city .practical--city,
-  .travel-chapter--tepoztlan .practical--tepoz{display:block!important}
   .check-in-card.is-confirmed{min-height:370px}
   .check-in-thanks{max-width:280px}
   .check-in-passage{--catrina-track-left:calc(50% - 140px);--catrina-track-right:calc(50% + 106px)}
@@ -1354,27 +1336,6 @@ html:lang(es) .special-col .section-title{
 
 /* The weather reads as a complete detail card: eyebrow, title, then range. */
 .details-weather-title{margin:0 0 clamp(22px,2.7vw,34px);color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(2rem,3.4vw,3.7rem);font-weight:400;letter-spacing:-.03em;line-height:.94}
-
-/* Each travel pair keeps its two concise headers aligned, while the single
-   open disclosure gets the full row beneath them. */
-@media(min-width:721px){
-  .travel-chapter--city .practical--city,
-  .travel-chapter--tepoztlan .practical--tepoz{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:0 clamp(24px,3vw,44px)!important;width:100%}
-  .travel-chapter--city .practical-item,
-  .travel-chapter--tepoztlan .practical-item{display:contents}
-  .travel-chapter--city .practical-item h4,
-  .travel-chapter--tepoztlan .practical-item h4{display:block;grid-row:1!important;margin:0;border-bottom:1px solid rgba(73,54,44,.16)}
-  .travel-chapter--city .practical-item:nth-child(1) h4,
-  .travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-column:1!important}
-  .travel-chapter--city .practical-item:nth-child(2) h4,
-  .travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-column:2!important}
-  .travel-chapter--city .practical-item .accordion-panel,
-  .travel-chapter--tepoztlan .practical-item .accordion-panel{grid-column:1 / -1!important;grid-row:2!important;width:100%}
-  .travel-chapter--city .practical-item .accordion-trigger,
-  .travel-chapter--tepoztlan .practical-item .accordion-trigger{padding:12px 2px 12px 0}
-  .travel-chapter--city .practical-body,
-  .travel-chapter--tepoztlan .practical-body{padding:0 0 22px}
-}
 
 /* The neighbourhood recommendations are an unobtrusive, consistent four-photo
    strip inside the relevant disclosure only. */
@@ -1507,67 +1468,6 @@ html:lang(es) .special-col .section-title{
   .invitation-intro.is-open .suite-composite img{
     object-fit:cover!important;
     object-position:center center!important;
-  }
-}
-
-/* Ensure an opened disclosure actually uses the full answer lane rather than
-   leaving its copy stranded in a narrow left column. */
-@media(min-width:721px){
-  .travel-chapter--city .practical-body{
-    display:block!important;
-  }
-  .travel-chapter--city .practical-body>p,
-  .travel-chapter--tepoztlan .practical-body>p{
-    width:100%!important;
-    max-width:none!important;
-  }
-  .travel-chapter--tepoztlan .practical-body{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  }
-}
-@media(max-width:720px){
-  .travel-chapter--city .practical-body,
-  .travel-chapter--tepoztlan .practical-body{
-    display:block!important;
-  }
-  .travel-chapter--city .practical-body>p,
-  .travel-chapter--tepoztlan .practical-body>p{
-    width:100%!important;
-    max-width:none!important;
-  }
-}
-
-/* Replace the legacy named-grid placement with an explicit two-column
-   disclosure grid: both headings sit in row one and either answer spans row
-   two across the complete travel width. */
-@media(min-width:721px){
-  .travel-chapter--city .practical--city,
-  .travel-chapter--tepoztlan .practical--tepoz{
-    grid-template-areas:none!important;
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    grid-auto-flow:row!important;
-  }
-  .travel-chapter--city .practical-item h4,
-  .travel-chapter--tepoztlan .practical-item h4{
-    grid-row:1!important;
-  }
-  .travel-chapter--city .practical-item .accordion-panel,
-  .travel-chapter--tepoztlan .practical-item .accordion-panel{
-    grid-column:1 / -1!important;
-    grid-row:2!important;
-  }
-}
-@media(max-width:720px){
-  .travel-chapter--city .practical--city,
-  .travel-chapter--tepoztlan .practical--tepoz{
-    grid-template-areas:none!important;
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    grid-auto-flow:row!important;
-  }
-  .travel-chapter--city .practical-item .accordion-panel,
-  .travel-chapter--tepoztlan .practical-item .accordion-panel{
-    grid-column:1 / -1!important;
-    grid-row:2!important;
   }
 }
 
@@ -2236,13 +2136,13 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   }
 }
 
-/* Travel on a phone retains the quiet, underlined disclosure system from
-   desktop. Each related pair stays side-by-side; the opened answer spans the
-   full width beneath, with no pale pill or card behind it. */
+/* Authoritative Travel disclosure layout. Both chapter pairs use one shared
+   two-column heading row and one full-width answer row on desktop and mobile. */
 .travel-chapter--city .practical--city,
 .travel-chapter--tepoztlan .practical--tepoz{
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-areas:"first second" "answer answer"!important;
   width:100%;
   margin-top:clamp(22px,3vw,34px)!important;
   padding:0!important;
@@ -2270,15 +2170,17 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   background:transparent!important;
 }
 .travel-chapter--city .practical-item:nth-child(1) h4,
-.travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-column:1!important}
+.travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-area:first!important}
 .travel-chapter--city .practical-item:nth-child(2) h4,
-.travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-column:2!important}
+.travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-area:second!important}
 .travel-chapter--city .practical-item .accordion-panel,
 .travel-chapter--tepoztlan .practical-item .accordion-panel{
+  grid-area:answer!important;
   grid-column:1 / -1!important;
   grid-row:2!important;
-  width:100%;
-  min-width:0;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
 }
 .travel-chapter--city .practical-item .accordion-trigger,
 .travel-chapter--tepoztlan .practical-item .accordion-trigger{
@@ -2291,7 +2193,16 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
 .travel-chapter--city .practical-item.open h4,
 .travel-chapter--tepoztlan .practical-item.open h4{border-bottom-color:var(--mocha)!important}
 .travel-chapter--city .practical-body,
-.travel-chapter--tepoztlan .practical-body{padding:clamp(16px,2vw,24px) 0 clamp(20px,2.8vw,32px)!important}
+.travel-chapter--tepoztlan .practical-body{
+  width:100%!important;
+  max-width:none!important;
+  padding:clamp(16px,2vw,24px) 0 clamp(20px,2.8vw,32px)!important;
+}
+.travel-chapter--city .practical-body>p,
+.travel-chapter--tepoztlan .practical-body>p{
+  width:100%!important;
+  max-width:none!important;
+}
 
 /* Each neighbourhood owns its own image and copy: no detached thumbnail
    strip, no repeated Roma Norte label. */
@@ -2524,29 +2435,6 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   }
 }
 
-/* On desktop the two Tepoztlán headings deliberately share one answer lane.
-   The open disclosure is therefore always a full row, never the left column
-   inherited from Accommodation when Transport is the item being explored. */
-@media(min-width:721px){
-  .travel-chapter--tepoztlan .practical--tepoz{
-    grid-template-areas:
-      "accommodation transport"
-      "answer answer"!important;
-  }
-  .travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-area:accommodation!important}
-  .travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-area:transport!important}
-  .travel-chapter--tepoztlan .practical-item .accordion-panel{
-    grid-column:answer-start / answer-end!important;
-    grid-row:answer-start / answer-end!important;
-    width:100%!important;
-    min-width:100%!important;
-  }
-  .travel-chapter--tepoztlan .practical-item .practical-body{
-    width:100%!important;
-    max-width:none!important;
-  }
-}
-
 /* Mobile details calibration: keep the weather title aligned with the
    Formal attire and Hotel Piedra Viva headings, and give the temperature
    rails a little more breathing room at either side. */
@@ -2658,19 +2546,6 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   }
 }
 
-/* Keep every expanded travel answer on the shared full-width row. */
-.travel-chapter--city .practical-item .accordion-panel,
-.travel-chapter--tepoztlan .practical-item .accordion-panel{
-  grid-column:1 / -1!important;
-  width:100%!important;
-  max-width:none!important;
-}
-.travel-chapter--city .practical-item .practical-body,
-.travel-chapter--tepoztlan .practical-item .practical-body{
-  width:100%!important;
-  max-width:none!important;
-}
-
 /* On phones, pull the disclosure chips closer to the image pair and reduce
    the gap before the next chapter divider. */
 @media(max-width:720px){
@@ -2682,44 +2557,4 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
     margin-top:30px!important;
     padding-top:28px!important;
   }
-}
-
-/* Final travel-disclosure layout contract. This comes last so the old
-   three-column and named-grid experiments cannot pull an expanded answer back
-   into the Accommodation column. The two chips share the first row; the one
-   open answer always owns the complete row below on every screen size. */
-.travel-chapter--city .practical--city,
-.travel-chapter--tepoztlan .practical--tepoz{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-areas:"first second" "answer answer"!important;
-  column-gap:clamp(18px,3vw,44px)!important;
-  row-gap:0!important;
-}
-.travel-chapter--city .practical-item,
-.travel-chapter--tepoztlan .practical-item{display:contents!important}
-.travel-chapter--city .practical-item:nth-child(1) h4,
-.travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-area:first!important}
-.travel-chapter--city .practical-item:nth-child(2) h4,
-.travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-area:second!important}
-.travel-chapter--city .practical-item .accordion-panel,
-.travel-chapter--tepoztlan .practical-item .accordion-panel{
-  grid-area:answer!important;
-  grid-column:1 / -1!important;
-  grid-row:2!important;
-  width:100%!important;
-  min-width:0!important;
-  max-width:none!important;
-}
-.travel-chapter--city .practical-item .practical-body,
-.travel-chapter--tepoztlan .practical-item .practical-body,
-.travel-chapter--city .practical-item .practical-body>p,
-.travel-chapter--tepoztlan .practical-item .practical-body>p{
-  display:block!important;
-  width:100%!important;
-  max-width:none!important;
-}
-@media(max-width:720px){
-  .travel-chapter--city .practical--city,
-  .travel-chapter--tepoztlan .practical--tepoz{column-gap:18px!important}
 }
