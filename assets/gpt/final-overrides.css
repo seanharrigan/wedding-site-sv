@@ -1709,3 +1709,166 @@ html:lang(es) .special-col .section-title{
     line-height:1.12;
   }
 }
+
+/* Full-art invitation flow: the supplied envelope and invitation images are
+   the interface. They occupy the viewport exactly; the closed envelope has
+   one quiet whole-image hover, and either screen can be activated anywhere. */
+.invitation-intro{
+  position:fixed!important;
+  inset:0!important;
+  z-index:1000!important;
+  width:100%!important;
+  min-width:100%!important;
+  height:100vh!important;
+  height:100svh!important;
+  height:100dvh!important;
+  min-height:100vh!important;
+  min-height:100svh!important;
+  min-height:100dvh!important;
+  max-width:none!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+  background:#efe5d8!important;
+  touch-action:manipulation;
+}
+.invitation-intro .intro-atmosphere{display:none!important}
+.invitation-intro .intro-cover,
+.invitation-intro .envelope-stage{
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  min-width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  filter:none!important;
+}
+.invitation-intro .intro-cover{
+  z-index:4!important;
+  cursor:pointer;
+  background:url("invitation-envelope-closed-desktop-v1.png") center / cover no-repeat!important;
+  box-shadow:none!important;
+  opacity:1!important;
+  transform:scale(1)!important;
+  transition:opacity .58s ease,transform .82s cubic-bezier(.16,1,.3,1)!important;
+  will-change:opacity,transform;
+}
+.invitation-intro .open-invitation-cue{
+  z-index:8!important;
+  pointer-events:none!important;
+}
+@media(hover:hover) and (pointer:fine){
+  .invitation-intro:not(.is-open) .intro-cover:hover,
+  .invitation-intro:not(.is-open) .intro-cover:focus-visible{
+    filter:none!important;
+    transform:scale(1.012)!important;
+  }
+}
+.invitation-intro.is-opening .intro-cover,
+.invitation-intro.is-open .intro-cover{
+  opacity:0!important;
+  transform:scale(1.014)!important;
+  pointer-events:none!important;
+}
+.invitation-intro .envelope-stage{
+  z-index:3!important;
+  cursor:pointer;
+  opacity:0!important;
+  pointer-events:none!important;
+  transform:translate3d(0,8px,0) scale(.994)!important;
+  transition:opacity .58s ease,transform .88s cubic-bezier(.16,1,.3,1)!important;
+  will-change:opacity,transform;
+}
+.invitation-intro .suite-composite,
+.invitation-intro .suite-art,
+.invitation-intro .suite-art img{
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  min-width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  filter:none!important;
+}
+.invitation-intro .suite-composite{
+  opacity:1!important;
+  transform:none!important;
+  transition:none!important;
+  pointer-events:none!important;
+}
+.invitation-intro .suite-art{opacity:0!important;transition:opacity .3s ease!important}
+html[lang="en"] .invitation-intro .suite-art--en,
+html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
+.invitation-intro .suite-art img{object-fit:cover!important;object-position:center!important}
+.invitation-intro.is-open .envelope-stage{
+  opacity:1!important;
+  pointer-events:auto!important;
+  transform:translate3d(0,0,0) scale(1)!important;
+  animation:none!important;
+}
+.invitation-intro.is-opening.is-open .envelope-stage{animation:none!important}
+.invitation-intro.is-closing .envelope-stage,
+.invitation-intro.is-leaving .envelope-stage{
+  opacity:0!important;
+  pointer-events:none!important;
+  transform:translate3d(0,-5px,0) scale(1.008)!important;
+  animation:none!important;
+}
+.invitation-intro.is-closing.is-returning .intro-cover{
+  opacity:1!important;
+  transform:scale(1)!important;
+  transition:opacity .42s ease .2s,transform .66s cubic-bezier(.16,1,.3,1) .16s!important;
+}
+.invitation-intro .enter-site-cue{
+  position:absolute;
+  bottom:clamp(20px,4vh,42px);
+  left:50%;
+  z-index:5;
+  display:inline-flex;
+  align-items:center;
+  min-height:42px;
+  padding:0 18px;
+  border:1px solid rgba(255,249,239,.55);
+  border-radius:999px;
+  color:rgba(255,249,239,.94);
+  background:rgba(48,32,23,.26);
+  box-shadow:inset 0 1px rgba(255,255,255,.2),0 10px 28px rgba(29,18,13,.18);
+  -webkit-backdrop-filter:blur(8px) saturate(106%);
+  backdrop-filter:blur(8px) saturate(106%);
+  font-family:var(--sans);
+  font-size:.58rem;
+  font-weight:600;
+  letter-spacing:.16em;
+  line-height:1;
+  text-transform:uppercase;
+  white-space:nowrap;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.invitation-intro .intro-cover>.closed-wax-seal,
+.invitation-intro .closed-wax-seal{display:none!important}
+@media(max-width:720px){
+  .invitation-intro .intro-cover{background-image:url("invitation-envelope-closed-mobile-v1.png")!important}
+  .invitation-intro .enter-site-cue{bottom:max(20px,env(safe-area-inset-bottom));min-height:39px;padding:0 15px;font-size:.5rem;letter-spacing:.14em}
+}
+@media(prefers-reduced-motion:reduce){
+  .invitation-intro .intro-cover,
+  .invitation-intro .envelope-stage,
+  .invitation-intro.is-closing.is-returning .intro-cover{transition:none!important}
+}

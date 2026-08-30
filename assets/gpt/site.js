@@ -26,9 +26,6 @@ const languageGateOptions = [...document.querySelectorAll('.language-gate-option
 const catrinaPassage = document.getElementById('catrina-passage');
 const envelopeStage = document.querySelector('.envelope-stage');
 const suiteComposite = document.querySelector('.suite-composite');
-const closedWaxSeal = document.querySelector('.closed-wax-seal');
-const suiteCards = [...document.querySelectorAll('.suite-card[href], .suite-hotspot[href]')];
-const suiteHoverPieces = [...document.querySelectorAll('.suite-hotspot, .suite-monogram-card')];
 const nav = document.getElementById('nav-links');
 const mobileCurrent = document.getElementById('mobile-current');
 const skipLink = document.querySelector('.skip-link');
@@ -153,24 +150,6 @@ const syncNavigation = () => {
   requestAnimationFrame(syncNavIndicator);
 };
 
-const placeClosedWaxSeal = () => {
-  if (!closedWaxSeal) return;
-  const mobile = innerWidth <= 720;
-  const naturalWidth = mobile ? 941 : 1672;
-  const naturalHeight = mobile ? 1672 : 941;
-  const spec = mobile
-    ? { cx: 462 / 941, cy: 1102.5 / 1672, width: 336 / 941 }
-    : { cx: 822.5 / 1672, cy: 725.5 / 941, width: 309 / 1672 };
-  const box = invitationIntro.getBoundingClientRect();
-  if (!box.width || !box.height) return;
-  const scale = Math.max(box.width / naturalWidth, box.height / naturalHeight);
-  const offsetX = (box.width - naturalWidth * scale) / 2;
-  const offsetY = mobile ? 0 : (box.height - naturalHeight * scale) / 2;
-  closedWaxSeal.style.left = `${(offsetX + spec.cx * naturalWidth * scale).toFixed(1)}px`;
-  closedWaxSeal.style.top = `${(offsetY + spec.cy * naturalHeight * scale).toFixed(1)}px`;
-  closedWaxSeal.style.width = `${(spec.width * naturalWidth * scale).toFixed(1)}px`;
-};
-
 const revealInvitation = ({ replay = false } = {}) => {
   clearInvitationTimers();
   invitationIntro.hidden = false;
@@ -178,7 +157,6 @@ const revealInvitation = ({ replay = false } = {}) => {
   invitationIntro.classList.remove('is-open', 'is-opening', 'is-closing', 'is-returning', 'is-leaving', 'is-preparing', 'is-replaying');
   invitationIntro.setAttribute('aria-hidden', 'false');
   envelopeStage.setAttribute('aria-hidden', 'true');
-  requestAnimationFrame(placeClosedWaxSeal);
   const gateOpen = languageGate && !languageGate.classList.contains('is-done');
 
   if (replay && !reducedMotion) {
@@ -255,7 +233,6 @@ if (!accessGranted) {
   header.inert = true;
   mainSite.inert = true;
   body.classList.add('invitation-active', 'password-gate-open');
-  requestAnimationFrame(placeClosedWaxSeal);
   setTimeout(() => passwordInput?.focus({ preventScroll: true }), reducedMotion ? 0 : 420);
 } else {
   passwordGate.hidden = true;
@@ -301,58 +278,12 @@ enterSite.addEventListener('click', () => {
   keepWebsiteAtTop();
   enterCelebration();
 });
-introClose.addEventListener('click', closeInvitation);
-suiteCards.forEach((card) => card.addEventListener('click', (event) => {
+enterSite.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
   event.preventDefault();
-  const target = document.querySelector(card.getAttribute('href'));
-  enterCelebration();
-  // Scroll once the invitation overlay is fully hidden: while it is still up the
-  // page cannot scroll, so an earlier jump is silently discarded.
-  const settleTarget = () => {
-    if (!target) return;
-    if (!invitationIntro.hidden) { setTimeout(settleTarget, 60); return; }
-    requestAnimationFrame(() => target.scrollIntoView({ behavior: 'auto', block: 'start' }));
-  };
-  setTimeout(settleTarget, invitationTargetDelay);
-}));
-suiteHoverPieces.forEach((card) => {
-  card.addEventListener('pointerenter', () => suiteComposite?.classList.add('is-action-hovered'));
-  card.addEventListener('pointerleave', () => {
-    suiteComposite?.classList.remove('is-action-hovered');
-  });
+  enterSite.click();
 });
-
-const attachInvitationGlow = (panel) => {
-  let targetX = innerWidth / 2, targetY = innerHeight / 2;
-  let glowX = targetX, glowY = targetY, glowFrame = 0;
-  const settleGlow = () => {
-    glowX += (targetX - glowX) * .14;
-    glowY += (targetY - glowY) * .14;
-    panel.style.setProperty('--invitation-glow-x', `${glowX.toFixed(1)}px`);
-    panel.style.setProperty('--invitation-glow-y', `${glowY.toFixed(1)}px`);
-    glowFrame = (Math.abs(targetX - glowX) > .35 || Math.abs(targetY - glowY) > .35)
-      ? requestAnimationFrame(settleGlow)
-      : 0;
-  };
-  const trackGlow = (event, snap = false) => {
-    const bounds = panel.getBoundingClientRect();
-    targetX = event.clientX - bounds.left;
-    targetY = event.clientY - bounds.top;
-    if (snap) { glowX = targetX; glowY = targetY; }
-    if (!glowFrame) glowFrame = requestAnimationFrame(settleGlow);
-  };
-  panel.addEventListener('pointerenter', (event) => {
-    trackGlow(event, true);
-    panel.classList.add('is-glow-active');
-  });
-  panel.addEventListener('pointermove', (event) => trackGlow(event));
-  panel.addEventListener('pointerleave', () => {
-    panel.classList.remove('is-glow-active', 'is-action-hovered');
-  });
-};
-if (suiteComposite && matchMedia('(hover: hover) and (pointer: fine)').matches && !reducedMotion) {
-  attachInvitationGlow(suiteComposite);
-}
+introClose.addEventListener('click', closeInvitation);
 invitationReplay.addEventListener('click', (event) => {
   event.preventDefault();
   event.stopPropagation();
@@ -541,7 +472,7 @@ const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenidos'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'],
   openInvitationAria: ["Open Sean and Valeria's wedding invitation", 'Abrir la invitación de boda de Sean y Valeria'], invitationSuiteAria: ['Wedding invitation suite', 'Conjunto de invitación de boda'], backToTopAria: ['Sean and Valeria, back to top', 'Sean y Valeria, volver al inicio'], primaryNavigationAria: ['Primary navigation', 'Navegación principal'], neighbourhoodGalleryAria: ['Recommended Mexico City neighbourhoods', 'Colonias recomendadas de la Ciudad de México'], heroAria: ['Sean and Valeria by the coast', 'Sean y Valeria junto a la costa'], heroSealAlt: ['Sean and Valeria monogram wax seal', 'Sello de cera con el monograma de Sean y Valeria'], detailsPairAria: ['Venue and dress code details', 'Detalles del lugar y código de vestimenta'], fallPaletteAria: ['Suggested fall colour palette', 'Paleta de colores de otoño sugerida'], weatherAria: ['November weather in Tepoztlán', 'Clima de noviembre en Tepoztlán'], celebrationTimelineAria: ['Wedding day celebration timeline', 'Horario de la celebración de la boda'], weekItineraryAria: ['Suggested week itinerary', 'Itinerario sugerido para la semana'], neighbourhoodsAria: ['Recommended neighbourhoods', 'Colonias recomendadas'], specialAria: ['Special request and gifts', 'Petición especial y regalos'], closingAria: ['Thank you', 'Gracias'], romaPhotoAlt: ['A leafy street with historic architecture in Mexico City', 'Una calle arbolada con arquitectura histórica en la Ciudad de México'], condesaPhotoAlt: ['Art Deco homes and trees in Condesa, Mexico City', 'Casas art déco y árboles en Condesa, Ciudad de México'], reformaPhotoAlt: ['Paseo de la Reforma in Mexico City at golden hour', 'Paseo de la Reforma en la Ciudad de México al atardecer'], centroPhotoAlt: ['Historic arcades in Centro Histórico, Mexico City', 'Arcadas históricas en el Centro Histórico de la Ciudad de México'], bellasPhotoAlt: ['Palacio de Bellas Artes in Mexico City at golden hour', 'Palacio de Bellas Artes en la Ciudad de México durante la hora dorada'], conventPhotoAlt: ['Historic church architecture in Tepoztlán', 'Arquitectura histórica de iglesia en Tepoztlán'], ridgePhotoAlt: ['The mountain landscape of Tepoztlán', 'El paisaje montañoso de Tepoztlán'], accommodationPhotoAlt: ['Tall cacti and gardens at Hotel Piedra Viva with Tepoztlán mountains', 'Cactus altos y jardines en Hotel Piedra Viva con las montañas de Tepoztlán'], closingPhotoAlt: ['Sean kissing Valeria at sunset by the ocean', 'Sean besando a Valeria al atardecer junto al mar'], footerLogoAlt: ['Sean and Valeria monogram', 'Monograma de Sean y Valeria'],
   galleryAria: ['Gallery from Mexico City and Tepoztlán', 'Galería de la Ciudad de México y Tepoztlán'], galleryKicker: ['A little glimpse', 'Un pequeño vistazo'], galleryTitle: ['<span>Scenes from</span> <em>México.</em>', '<span>Escenas de</span> <em>México.</em>'], galleryCopy: ['A few corners of Mexico City and Tepoztlán to look forward to along the way.', 'Algunos rincones de la Ciudad de México y Tepoztlán para esperar con ilusión durante el viaje.'], galleryCeremonialAlt: ['Ceremonial dress in Tepoztlán', 'Vestimenta ceremonial en Tepoztlán'], galleryChurchAlt: ['A church street in Tepoztlán', 'Una calle junto a una iglesia en Tepoztlán'], galleryOfrendaAlt: ['A Día de Muertos altar in Mexico City', 'Una ofrenda de Día de Muertos en la Ciudad de México'], galleryReformaAlt: ['Ángel de la Independencia at dusk', 'El Ángel de la Independencia al atardecer'], galleryLaneAlt: ['A quiet lane in Tepoztlán', 'Una calle tranquila en Tepoztlán'], galleryStreetAlt: ['A historic Tepoztlán street', 'Una calle histórica de Tepoztlán'],
-  introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], closeInvitation: ['Return to the closed invitation', 'Volver a la invitación cerrada'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar al sitio <span aria-hidden="true">→</span>'], invitationEnter: ['Enter our celebration', 'Entrar a nuestra celebración'], invitationCheckIn: ['Please check in', 'Confirma tu asistencia'], checkInInvitationAction: ['Please check in on the wedding website', 'Confirma tu asistencia en el sitio de la boda'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See our gallery', 'Ver nuestra galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
+  introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Tap anywhere to open', 'Toca para abrir'], closeInvitation: ['Return to the closed invitation', 'Volver a la invitación cerrada'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Tap anywhere to enter <span aria-hidden="true">→</span>', 'Toca para entrar <span aria-hidden="true">→</span>'], invitationEnter: ['Enter our celebration', 'Entrar a nuestra celebración'], invitationCheckIn: ['Please check in', 'Confirma tu asistencia'], checkInInvitationAction: ['Please check in on the wedding website', 'Confirma tu asistencia en el sitio de la boda'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See our gallery', 'Ver nuestra galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],
@@ -662,7 +593,6 @@ const renderLanguage = (language) => {
   menuToggle.setAttribute('aria-label', language === 'es' ? 'Abrir menú' : 'Open navigation');
   storeValue('wedding-language', language);
   syncNavigation();
-  requestAnimationFrame(() => { if (typeof placeSuiteHotspots === 'function') placeSuiteHotspots(); });
   document.dispatchEvent(new CustomEvent('wedding:languagechange', { detail: language }));
 };
 
@@ -1173,50 +1103,6 @@ passwordGateForm?.addEventListener('submit', async (event) => {
     });
   });
 });
-
-// Invitation suite hotspots are authored in artwork coordinates and mapped
-// through the image's object-fit: cover transform, so they track the cards.
-const suiteHotspotStage = document.querySelector('.suite-composite');
-const placeSuiteHotspots = () => {
-  if (!suiteHotspotStage) return;
-  const mobile = innerWidth <= 720;
-  const img = suiteHotspotStage.querySelector(`.suite-art--${currentLanguage === 'es' ? 'es' : 'en'} img`);
-  const naturalWidth = img?.naturalWidth || (mobile ? 795 : 1920);
-  const naturalHeight = img?.naturalHeight || (mobile ? 1414 : 1080);
-  const box = suiteHotspotStage.getBoundingClientRect();
-  if (!box.width || !box.height) return;
-  const scale = Math.max(box.width / naturalWidth, box.height / naturalHeight);
-  // Honour the image's object-position (the artwork is bottom-anchored).
-  const position = (img ? getComputedStyle(img).objectPosition : '50% 50%').split(' ');
-  const anchor = (value, extent) => (value.endsWith('%') ? parseFloat(value) / 100 * extent : parseFloat(value) || 0);
-  const slackX = box.width - naturalWidth * scale;
-  const slackY = box.height - naturalHeight * scale;
-  const offsetX = position[0].endsWith('%') ? slackX * parseFloat(position[0]) / 100 : anchor(position[0], slackX);
-  const offsetY = (position[1] || '50%').endsWith('%') ? slackY * parseFloat(position[1] || '50%') / 100 : anchor(position[1], slackY);
-  suiteHotspotStage.querySelectorAll('.suite-hotspot, .suite-monogram-card').forEach((spot) => {
-    const spec = (mobile ? spot.dataset.mobile : spot.dataset.desktop) || spot.dataset.desktop;
-    if (!spec) return;
-    const [cx, cy, w, h, rotate] = spec.split(',').map(Number);
-    const width = w * naturalWidth * scale;
-    const height = h * naturalHeight * scale;
-    spot.style.setProperty('left', `${(offsetX + cx * naturalWidth * scale - width / 2).toFixed(1)}px`, 'important');
-    spot.style.setProperty('top', `${(offsetY + cy * naturalHeight * scale - height / 2).toFixed(1)}px`, 'important');
-    spot.style.setProperty('right', 'auto', 'important');
-    spot.style.setProperty('width', `${width.toFixed(1)}px`, 'important');
-    spot.style.setProperty('height', `${height.toFixed(1)}px`, 'important');
-    spot.style.setProperty('--spot-rotate', `${rotate || 0}deg`);
-    spot.style.setProperty('--spot-counter-rotate', `${-(rotate || 0)}deg`);
-  });
-};
-if (suiteHotspotStage) {
-  placeSuiteHotspots();
-  addEventListener('resize', placeSuiteHotspots, { passive: true });
-  suiteHotspotStage.querySelectorAll('img').forEach((img) => img.addEventListener('load', placeSuiteHotspots));
-  openEnvelope.addEventListener('click', () => requestAnimationFrame(placeSuiteHotspots));
-}
-placeClosedWaxSeal();
-addEventListener('resize', placeClosedWaxSeal, { passive: true });
-addEventListener('orientationchange', placeClosedWaxSeal);
 
 const wedding = new Date('2026-11-03T14:00:00-06:00').getTime();
 const countdownValues = {
