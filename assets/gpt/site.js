@@ -306,7 +306,14 @@ suiteCards.forEach((card) => card.addEventListener('click', (event) => {
   event.preventDefault();
   const target = document.querySelector(card.getAttribute('href'));
   enterCelebration();
-  setTimeout(() => target?.scrollIntoView({ behavior: 'auto', block: 'start' }), invitationTargetDelay);
+  // Scroll once the invitation overlay is fully hidden: while it is still up the
+  // page cannot scroll, so an earlier jump is silently discarded.
+  const settleTarget = () => {
+    if (!target) return;
+    if (!invitationIntro.hidden) { setTimeout(settleTarget, 60); return; }
+    requestAnimationFrame(() => target.scrollIntoView({ behavior: 'auto', block: 'start' }));
+  };
+  setTimeout(settleTarget, invitationTargetDelay);
 }));
 suiteHoverPieces.forEach((card) => {
   card.addEventListener('pointerenter', () => suiteComposite?.classList.add('is-action-hovered'));
@@ -688,10 +695,18 @@ languageGate?.addEventListener('click', (event) => {
 });
 renderLanguage(currentLanguage);
 
+// Track every section currently inside the observation band, so a fast scroll
+// that makes one section leave and the next enter in the same batch still
+// resolves to the section that is actually there.
+const navBand = new Map();
 const sectionObserver = new IntersectionObserver((entries) => {
-  const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) navBand.set(entry.target, entry.intersectionRatio);
+    else navBand.delete(entry.target);
+  });
+  const visible = [...navBand.entries()].sort((a, b) => b[1] - a[1])[0];
   if (!visible) return;
-  const key = visible.target.dataset.nav;
+  const key = visible[0].dataset.nav;
   navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${key}`));
   syncNavigation();
 }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, .2, .5] });
