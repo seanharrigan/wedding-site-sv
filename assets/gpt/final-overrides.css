@@ -1522,7 +1522,7 @@ html:lang(es) .special-col .section-title{
   overflow:hidden;
   border:0!important;
   border-radius:26px!important;
-  background:url("opening-envelope-exact-logo-desktop-v7.webp") center / cover no-repeat!important;
+  background:url("invitation-envelope-closed-desktop-v1.png") center / cover no-repeat!important;
   box-shadow:0 24px 58px rgba(30,17,11,.3)!important;
 }
 .check-in-card.is-confirmed::before{display:none!important}
@@ -1563,7 +1563,7 @@ html:lang(es) .special-col .section-title{
   .check-in-card.is-confirmed{
     aspect-ratio:941 / 1672;
     border-radius:22px!important;
-    background-image:url("opening-envelope-exact-logo-mobile-v7.webp")!important;
+    background-image:url("invitation-envelope-closed-mobile-v1.png")!important;
   }
   .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
     top:27%;
@@ -1639,7 +1639,7 @@ html:lang(es) .special-col .section-title{
   inset:0;
   z-index:0;
   display:block!important;
-  background:url("opening-envelope-exact-logo-desktop-v7.webp") center / cover no-repeat;
+  background:url("invitation-envelope-closed-desktop-v1.png") center / cover no-repeat;
   opacity:.74;
   transform:scale(1.018);
   transition:opacity .9s ease,transform 1.15s cubic-bezier(.22,.61,.36,1);
@@ -1700,7 +1700,7 @@ html:lang(es) .special-col .section-title{
   transform:translate(-50%,-50%);
 }
 @media(max-width:720px){
-  .check-in-card::before{background-image:url("opening-envelope-exact-logo-mobile-v7.webp")}
+  .check-in-card::before{background-image:url("invitation-envelope-closed-mobile-v1.png")}
   .check-in-card::after{background:linear-gradient(160deg,rgba(253,248,241,.9),rgba(235,221,204,.9))}
   .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
     top:50%;
@@ -1961,4 +1961,64 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
   opacity:0!important;
   pointer-events:none!important;
   transition:opacity .16s ease!important;
+}
+
+/* Final mobile calibration: preserve the Details layout while making its
+   secondary headings quieter, and give the timeline the same breathing room
+   as the surrounding sections. */
+@media(max-width:720px){
+  .wedding-details .detail-panel h3,
+  .wedding-details .detail-panel h3 a{
+    max-width:12ch;
+    margin-inline:auto;
+    font-size:clamp(1.85rem,8.8vw,2.5rem)!important;
+    letter-spacing:-.03em;
+    line-height:1;
+  }
+  .celebration-shell{
+    padding-right:clamp(28px,7.5vw,36px)!important;
+    padding-left:clamp(28px,7.5vw,36px)!important;
+  }
+
+  /* These are the large section headings only. Welcome is intentionally not
+     included: it remains the generous opening moment. */
+  .celebration-heading .section-title,
+  .special-heading-title,
+  .check-in-copy .section-title,
+  .closing-copy .section-title,
+  .countdown .section-title{
+    font-size:clamp(2.4rem,10.8vw,3.25rem)!important;
+  }
+  .celebration-heading .section-title em,
+  .special-heading-title em,
+  .check-in-copy .section-title em,
+  .countdown .section-title em{font-size:1.25em!important}
+  .travel-heading .section-title em{font-size:clamp(3rem,14vw,4.25rem)!important}
+  .faq-head .section-title{font-size:clamp(1.52rem,7vw,2rem)!important}
+
+  /* The confirmation line should remain a quiet, readable caption on phone. */
+  .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
+    width:min(76%,270px);
+    font-size:clamp(.9rem,4vw,1.05rem)!important;
+    line-height:1.28;
+  }
+  .check-in-card.is-confirmed .check-in-passage{z-index:6!important}
+  .check-in-card.is-confirmed .catrina-walk,
+  .check-in-card.is-confirmed .check-in-passage.is-arrived .catrina-walk{
+    top:20%!important;
+    width:48px!important;
+    filter:drop-shadow(0 3px 4px rgba(61,39,27,.18));
+  }
+}
+
+/* The city disclosure is a thumbnail strip, not a row of portrait cards. */
+.neighbourhood-gallery img{
+  height:68px!important;
+  aspect-ratio:auto!important;
+  object-position:center 48%;
+}
+@media(max-width:720px){
+  .neighbourhood-gallery{gap:10px!important;margin:18px 0!important}
+  .neighbourhood-gallery img{height:clamp(60px,16vw,72px)!important;border-radius:10px!important}
+  .neighbourhood-gallery figcaption{margin-top:.35rem!important;font-size:.82rem!important}
 }
