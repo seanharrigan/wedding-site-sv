@@ -1461,3 +1461,6 @@ html:lang(es) .special-col .section-title{
   outline-offset:3px;
   border-radius:3px;
 }
+
+/* The finished English desktop artwork includes its own printed monogram. */
+@media(min-width:721px){html[lang="en"] .suite-monogram-card{display:none}}
