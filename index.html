@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="assets/gpt/site.css?v=20260829a">
   <link rel="stylesheet" href="assets/gpt/save-date-botanical.css?v=20260825b">
   <link rel="stylesheet" href="assets/gpt/timeline-alignment.css?v=20260825b">
-  <link rel="stylesheet" href="assets/gpt/final-overrides.css?v=20260830i">
+  <link rel="stylesheet" href="assets/gpt/final-overrides.css?v=20260830j">
   <title>Sean and Valeria</title>
 </head>
 <body>
@@ -94,7 +94,7 @@
     <a class="brand" href="#home" data-i18n-aria="backToTopAria" aria-label="Sean and Valeria, back to top"><img class="brand-logo brand-logo--dark" src="assets/gpt/sv-logo-variants/solid/sv-logo-mocha-true-solid.png" alt="" width="1536" height="1024" decoding="sync" fetchpriority="high" draggable="false"><img class="brand-logo brand-logo--light" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt="" width="1536" height="1024" decoding="sync" fetchpriority="high" draggable="false"></a>
     <div class="mobile-nav-controls"><span class="mobile-current" id="mobile-current" aria-live="polite">Welcome</span><button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><span></span><span></span></button></div>
     <nav class="nav-links" id="nav-links" data-i18n-aria="primaryNavigationAria" aria-label="Primary navigation">
-      <button class="invitation-replay" id="invitation-replay" type="button" data-i18n="viewInvitation">Invitation</button><a class="nav-link active" href="#welcome" data-i18n="navWelcome">Welcome</a><a class="nav-link" href="#details" data-i18n="navDetails">Details</a><a class="nav-link" href="#travel" data-i18n="navTravel">Travel</a><a class="nav-link" href="#faq">FAQ</a><a class="nav-link nav-cta" href="#check-in" data-i18n="navCheckIn">Check-In</a><button class="language-toggle" id="language-toggle" type="button" aria-label="Cambiar a español"><span class="language-current">EN</span><span class="language-divider">/</span><span class="language-next">ES</span></button>
+      <button class="invitation-replay" id="invitation-replay" type="button" data-i18n="viewInvitation">Invitation</button><a class="nav-link active" href="#welcome" data-i18n="navWelcome">Welcome</a><a class="nav-link" href="#details" data-i18n="navDetails">Details</a><a class="nav-link" href="#travel" data-i18n="navTravel">Travel</a><a class="nav-link" href="#faq">FAQ</a><a class="nav-link nav-cta" href="#check-in" data-i18n="navCheckIn">Check-In</a><a class="nav-link nav-link--animation-lab" href="#animations" data-i18n="navAnimations">Animations</a><button class="language-toggle" id="language-toggle" type="button" aria-label="Cambiar a español"><span class="language-current">EN</span><span class="language-divider">/</span><span class="language-next">ES</span></button>
     </nav>
   </header>
 
@@ -251,12 +251,49 @@
       </div><button class="button button--clay" type="submit" data-i18n="checkInSubmit">Submit Check-In <span aria-hidden="true">→</span></button><p class="form-status" id="form-status" aria-live="polite"></p></div><div class="check-in-passage" id="check-in-passage" hidden aria-hidden="true"><div class="catrina-walk"><img class="catrina-dance-frame catrina-dance-frame--one" src="assets/gpt/catrina-dance-reference-frame-01.webp" alt="" decoding="async"><img class="catrina-dance-frame catrina-dance-frame--two" src="assets/gpt/catrina-dance-reference-frame-02.webp" alt="" decoding="async"><img class="catrina-dance-frame catrina-dance-frame--three" src="assets/gpt/catrina-dance-reference-frame-03.webp" alt="" decoding="async"><img class="catrina-dance-frame catrina-dance-frame--four" src="assets/gpt/catrina-dance-reference-frame-04.webp" alt="" decoding="async"></div></div><div class="check-in-thanks" id="check-in-thanks" hidden aria-live="polite"><p class="eyebrow" data-i18n="checkInThanksKicker">Gracias</p><h3 tabindex="-1" data-i18n="checkInThanksTitle">Thank you.</h3><p data-i18n="checkInThanksCopy">This helps us make everyone’s arrival feel easy and well looked after.</p><p class="check-in-thanks-email" data-i18n="checkInThanksEmail">This confirmation is a preview only—nothing has been sent.</p></div></form>
     </div></section>
 
+    <!-- Temporary invitation-transition comparison. This is intentionally separate
+         from the actual invitation flow so one treatment can be chosen later. -->
+    <section class="section animation-lab" id="animations" data-nav="animations" data-header-tone="light" aria-labelledby="animations-title">
+      <div class="animation-lab-inner">
+        <header class="animation-lab-heading reveal">
+          <p class="eyebrow" data-i18n="animationLabKicker">Temporary study</p>
+          <h2 class="section-title" id="animations-title" data-i18n="animationLabTitle"><span>Invitation</span> <em>animations.</em></h2>
+          <p data-i18n="animationLabCopy">Choose a transition below. Each preview begins with the closed envelope, then moves to the open invitation.</p>
+        </header>
+        <div class="animation-lab-player reveal" data-animation-lab>
+          <button class="animation-lab-arrow" type="button" data-animation-lab-prev aria-label="Previous animation"><span aria-hidden="true">←</span></button>
+          <div class="animation-lab-stage" data-animation-style="dissolve" data-animation-lab-stage role="button" tabindex="0" aria-label="Replay the selected invitation animation">
+            <picture class="animation-lab-art animation-lab-art--closed" aria-hidden="true">
+              <source media="(max-width: 720px)" srcset="assets/gpt/invitation-envelope-closed-mobile-v1.png">
+              <img src="assets/gpt/invitation-envelope-closed-desktop-v1.png" alt="" decoding="async" loading="lazy">
+            </picture>
+            <picture class="animation-lab-art animation-lab-art--open animation-lab-art--en" aria-hidden="true">
+              <source media="(max-width: 720px)" srcset="assets/gpt/invitation-open-en-mobile-v2.png">
+              <img src="assets/gpt/invitation-open-en-desktop-v3.png" alt="" decoding="async" loading="lazy">
+            </picture>
+            <picture class="animation-lab-art animation-lab-art--open animation-lab-art--es" aria-hidden="true">
+              <source media="(max-width: 720px)" srcset="assets/gpt/invitation-open-es-mobile-v2.png">
+              <img src="assets/gpt/invitation-open-es-desktop-v3.png" alt="" decoding="async" loading="lazy">
+            </picture>
+            <span class="animation-lab-stage-cue" aria-hidden="true" data-i18n="animationLabReplay">Tap to replay</span>
+          </div>
+          <button class="animation-lab-arrow" type="button" data-animation-lab-next aria-label="Next animation"><span aria-hidden="true">→</span></button>
+        </div>
+        <div class="animation-lab-controls reveal">
+          <p class="animation-lab-current" aria-live="polite" data-animation-lab-label>01 · Soft dissolve</p>
+          <div class="animation-lab-selector" role="group" aria-label="Choose an invitation animation" data-animation-lab-selector>
+            <button type="button" data-animation-lab-choice="0" aria-pressed="true" aria-label="Animation 1: Soft dissolve">01</button><button type="button" data-animation-lab-choice="1" aria-pressed="false" aria-label="Animation 2: Paper lift">02</button><button type="button" data-animation-lab-choice="2" aria-pressed="false" aria-label="Animation 3: Gentle glide">03</button><button type="button" data-animation-lab-choice="3" aria-pressed="false" aria-label="Animation 4: Focus reveal">04</button><button type="button" data-animation-lab-choice="4" aria-pressed="false" aria-label="Animation 5: Quiet fold">05</button><button type="button" data-animation-lab-choice="5" aria-pressed="false" aria-label="Animation 6: Rising card">06</button><button type="button" data-animation-lab-choice="6" aria-pressed="false" aria-label="Animation 7: Warm wash">07</button><button type="button" data-animation-lab-choice="7" aria-pressed="false" aria-label="Animation 8: Soft turn">08</button><button type="button" data-animation-lab-choice="8" aria-pressed="false" aria-label="Animation 9: Diagonal reveal">09</button><button type="button" data-animation-lab-choice="9" aria-pressed="false" aria-label="Animation 10: Slow swell">10</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section closing" data-header-tone="light" data-i18n-aria="closingAria" aria-label="Thank you"><div class="closing-photo reveal"><img src="assets/gpt/sean-valeria-sunset.jpg" data-i18n-alt="closingPhotoAlt" alt="Sean kissing Valeria at sunset by the ocean" width="1333" height="2000" loading="lazy"><div class="closing-copy"><h2 class="section-title" data-i18n="closingTitle">We cannot wait<br>to celebrate together.</h2></div></div></section>
 
     <section class="section countdown" data-header-tone="light" aria-labelledby="countdown-title"><div class="reveal"><p class="eyebrow">Until we say I do</p><h2 class="section-title" id="countdown-title" data-i18n="countdownTitle"><em>The</em> <span>Countdown</span></h2></div><div class="countdown-grid stagger" aria-live="polite"><div class="countdown-unit"><span class="countdown-value" id="days">—</span><span class="countdown-label">Days</span></div><div class="countdown-unit"><span class="countdown-value" id="hours">—</span><span class="countdown-label">Hours</span></div><div class="countdown-unit"><span class="countdown-value" id="minutes">—</span><span class="countdown-label">Minutes</span></div><div class="countdown-unit"><span class="countdown-value" id="seconds">—</span><span class="countdown-label">Seconds</span></div></div></section>
 
     <footer class="footer" data-header-tone="dark"><img class="footer-logo" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" data-i18n-alt="footerLogoAlt" alt="Sean and Valeria monogram"><div class="footer-signoff"><strong>Sean &amp; Valeria</strong><span>03 · 11 · 2026 · Tepoztlán</span></div></footer>
   </main>
-  <script src="assets/gpt/site.js?v=20260830b"></script>
+  <script src="assets/gpt/site.js?v=20260830c"></script>
 </body>
 </html>
