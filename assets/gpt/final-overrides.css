@@ -2516,3 +2516,74 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
     border-radius:24px!important;
   }
 }
+
+/* Travel disclosures use a light frosted chip instead of repeated divider
+   rules. The arrow remains the affordance and rotates when the panel opens. */
+.travel-chapter--city .practical-item h4,
+.travel-chapter--tepoztlan .practical-item h4{
+  border:0!important;
+}
+.travel-chapter--city .practical-item h4::after,
+.travel-chapter--tepoztlan .practical-item h4::after{
+  display:none!important;
+}
+.travel-chapter--city .practical-item .accordion-trigger,
+.travel-chapter--tepoztlan .practical-item .accordion-trigger{
+  width:max-content!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:.62rem 1rem!important;
+  border:1px solid rgba(255,249,239,.58)!important;
+  border-radius:999px!important;
+  background:rgba(255,249,239,.42)!important;
+  box-shadow:0 8px 20px rgba(52,38,31,.08),inset 0 1px rgba(255,255,255,.45);
+  -webkit-backdrop-filter:blur(10px) saturate(108%);
+  backdrop-filter:blur(10px) saturate(108%);
+  transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,transform .35s cubic-bezier(.16,1,.3,1)!important;
+}
+.travel-chapter--city .practical-item .accordion-trigger:hover,
+.travel-chapter--city .practical-item .accordion-trigger:focus-visible,
+.travel-chapter--tepoztlan .practical-item .accordion-trigger:hover,
+.travel-chapter--tepoztlan .practical-item .accordion-trigger:focus-visible,
+.travel-chapter--city .practical-item.open .accordion-trigger,
+.travel-chapter--tepoztlan .practical-item.open .accordion-trigger{
+  border-color:rgba(73,54,44,.26)!important;
+  background:rgba(255,249,239,.68)!important;
+  box-shadow:0 12px 24px rgba(52,38,31,.12),inset 0 1px rgba(255,255,255,.62);
+  transform:translateY(-2px);
+}
+
+/* Four consistent wide thumbnails on desktop, stacked one-per-row on mobile. */
+@media(min-width:721px){
+  .travel-chapter--city .neighbourhoods{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:clamp(16px,2.2vw,30px)!important;
+  }
+  .travel-chapter--city .neighbourhoods li>img{
+    height:auto!important;
+    aspect-ratio:3 / 2!important;
+    object-fit:cover;
+  }
+}
+@media(max-width:720px){
+  .travel-chapter--city .practical-item,
+  .travel-chapter--tepoztlan .practical-item{
+    background:transparent!important;
+  }
+  .travel-chapter--city .neighbourhoods{
+    grid-template-columns:1fr!important;
+  }
+  .travel-chapter--city .neighbourhoods li{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto!important;
+  }
+  .travel-chapter--city .neighbourhoods li>img{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    aspect-ratio:3 / 2!important;
+    object-fit:cover;
+  }
+  .travel-chapter--city .neighbourhoods li>div{align-content:start}
+}
