@@ -1349,7 +1349,7 @@ html:lang(es) .special-col .section-title{
 
 /* Password access borrows the exact same 2.6-second, four-frame Catrina
    cadence as Check-In, then hands the stage to the language choice. */
-.catrina-passage.is-password-handoff{z-index:1250;background:rgba(246,238,227,.56);-webkit-backdrop-filter:blur(15px) saturate(92%);backdrop-filter:blur(15px) saturate(92%)}
+.catrina-passage.is-password-handoff{z-index:1250;background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
 .catrina-passage.is-password-handoff .catrina-passage-figure{--catrina-track-left:calc(50% - 170px);--catrina-track-right:calc(50% + 110px);position:absolute;top:50%;left:var(--catrina-track-left);width:60px;opacity:0;transform:translateY(-50%)}
 .catrina-passage.is-password-handoff.is-visible .catrina-passage-figure{animation:password-catrina-cross 2.6s linear both}
 .catrina-passage.is-password-handoff .catrina-dance-frame{animation-name:check-in-catrina-frame;animation-duration:2.6s;animation-timing-function:linear}
@@ -1398,8 +1398,15 @@ html:lang(es) .special-col .section-title{
   .catrina-passage.is-password-handoff .catrina-passage-figure{--catrina-track-left:calc(50% - 146px);--catrina-track-right:calc(50% + 100px);width:51px}
 }
 
-/* Keep the access frost continuous while the Catrina passes to language choice. */
+/* One identical frosted surface spans password, Catrina, and language choice. */
+.password-gate{background:transparent!important}
+.password-gate::before,.language-gate::before{
+  background:linear-gradient(160deg,rgba(40,30,24,.34),rgba(24,17,13,.42))!important;
+  -webkit-backdrop-filter:blur(11px) saturate(108%)!important;
+  backdrop-filter:blur(11px) saturate(108%)!important;
+}
 .password-gate.is-clearing::before{opacity:1!important;--lens-r:0px!important}
+.language-gate.is-password-pending{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 
 /* Desktop travel disclosures have room to read: two text columns and a very
    shallow photo strip, never four cramped portrait cards. */

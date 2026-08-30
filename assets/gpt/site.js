@@ -1065,6 +1065,7 @@ passwordGateForm?.addEventListener('submit', async (event) => {
 
   storeValue('wedding-admin-access-v1', 'true');
   passwordGate.classList.add('is-clearing');
+  languageGate.classList.add('is-password-pending');
   document.documentElement.classList.add('access-transitioning');
   passwordInput.blur();
 
@@ -1074,7 +1075,7 @@ passwordGateForm?.addEventListener('submit', async (event) => {
     body.classList.remove('password-gate-open');
     document.documentElement.classList.remove('access-required', 'access-transitioning');
     document.documentElement.classList.add('access-granted');
-    languageGate.classList.remove('is-done', 'is-clearing', 'is-optional');
+    languageGate.classList.remove('is-done', 'is-clearing', 'is-optional', 'is-password-pending');
     languageGate.classList.add('is-arriving');
     body.classList.add('language-gate-open');
     invitationIntro.inert = false;
@@ -1082,8 +1083,8 @@ passwordGateForm?.addEventListener('submit', async (event) => {
     mainSite.inert = false;
     revealInvitation();
     requestAnimationFrame(() => {
-      languageGate.classList.remove('is-arriving');
       document.querySelector('.language-gate-panel')?.focus({ preventScroll: true });
+      window.setTimeout(() => languageGate.classList.remove('is-arriving'), reducedMotion ? 0 : 950);
     });
   });
 });
