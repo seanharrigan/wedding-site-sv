@@ -41,7 +41,7 @@ let invitationOpenTimer = 0;
 let invitationCloseTimer = 0;
 let catrinaPassageTimer = 0;
 let catrinaPassageHideTimer = 0;
-const invitationExitDuration = reducedMotion ? 0 : 1320;
+const invitationExitDuration = reducedMotion ? 0 : 680;
 const invitationTargetDelay = reducedMotion ? 0 : 1160;
 
 const clearInvitationTimers = () => {
@@ -267,7 +267,7 @@ openEnvelope.addEventListener('click', () => {
     invitationIntro.classList.remove('is-opening');
     enterSite.focus({ preventScroll: true });
     invitationOpenTimer = 0;
-  }, reducedMotion ? 0 : (innerWidth <= 720 ? 1120 : 850));
+  }, reducedMotion ? 0 : (innerWidth <= 720 ? 760 : 680));
 });
 openEnvelope.addEventListener('keydown', (event) => {
   if (event.key !== 'Enter' && event.key !== ' ') return;

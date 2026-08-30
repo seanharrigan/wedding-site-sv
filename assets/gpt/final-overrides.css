@@ -1893,3 +1893,39 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
     transform-origin:center center!important;
   }
 }
+
+/* A quiet, image-first handoff between each invitation screen. No legacy wash
+   or delayed hold: the artwork settles in, then gives way to the site cleanly. */
+.invitation-intro .intro-cover{
+  transition:opacity .5s cubic-bezier(.22,.61,.36,1),transform .72s cubic-bezier(.16,1,.3,1)!important;
+}
+.invitation-intro.is-opening .intro-cover,
+.invitation-intro.is-open .intro-cover{
+  transform:scale(1.005)!important;
+}
+.invitation-intro .envelope-stage{
+  transform:translate3d(0,5px,0) scale(.997)!important;
+  transition:opacity .54s cubic-bezier(.22,.61,.36,1) .04s,transform .76s cubic-bezier(.16,1,.3,1) .04s!important;
+}
+.invitation-intro.is-open .envelope-stage{
+  transform:translate3d(0,0,0) scale(1)!important;
+}
+.invitation-intro.is-opening::after,
+.invitation-intro.is-leaving::after{
+  opacity:0!important;
+  animation:none!important;
+}
+.invitation-intro.is-leaving{
+  visibility:visible!important;
+  opacity:0!important;
+  transition:opacity .58s cubic-bezier(.22,.61,.36,1),visibility 0s linear .62s!important;
+}
+.invitation-intro.is-leaving .envelope-stage{
+  opacity:0!important;
+  transform:translate3d(0,-3px,0) scale(1.004)!important;
+  transition:opacity .44s ease,transform .58s cubic-bezier(.22,.61,.36,1)!important;
+}
+.invitation-intro.is-leaving~.site-header,
+.invitation-intro.is-leaving~main.site{
+  animation:none!important;
+}
