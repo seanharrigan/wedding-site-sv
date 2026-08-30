@@ -1408,6 +1408,23 @@ html:lang(es) .special-col .section-title{
 .password-gate.is-clearing::before{opacity:1!important;--lens-r:0px!important}
 .language-gate.is-password-pending{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 
+/* The access action is simply a generous arrow—quiet and self-explanatory. */
+.password-gate-control button{
+  min-width:60px!important;
+  justify-content:center!important;
+  padding-inline:0!important;
+}
+.password-gate-control button span[aria-hidden="true"]{
+  font-size:1.2rem!important;
+  line-height:1;
+  transform:translateX(1px);
+}
+@media(max-width:720px){
+  .password-gate-control{grid-template-columns:minmax(0,1fr) 52px!important}
+  .password-gate-control button{width:52px!important;min-height:50px!important}
+  .password-gate-control button span[aria-hidden="true"]{font-size:1.18rem!important}
+}
+
 /* Desktop travel disclosures have room to read: two text columns and a very
    shallow photo strip, never four cramped portrait cards. */
 @media(min-width:721px){
