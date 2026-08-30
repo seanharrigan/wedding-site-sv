@@ -1510,6 +1510,33 @@ html:lang(es) .special-col .section-title{
   }
 }
 
+/* Ensure an opened disclosure actually uses the full answer lane rather than
+   leaving its copy stranded in a narrow left column. */
+@media(min-width:721px){
+  .travel-chapter--city .practical-body{
+    display:block!important;
+  }
+  .travel-chapter--city .practical-body>p,
+  .travel-chapter--tepoztlan .practical-body>p{
+    width:100%!important;
+    max-width:none!important;
+  }
+  .travel-chapter--tepoztlan .practical-body{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:720px){
+  .travel-chapter--city .practical-body,
+  .travel-chapter--tepoztlan .practical-body{
+    display:block!important;
+  }
+  .travel-chapter--city .practical-body>p,
+  .travel-chapter--tepoztlan .practical-body>p{
+    width:100%!important;
+    max-width:none!important;
+  }
+}
+
 /* A submitted check-in closes on the same invitation envelope instead of a
    generic panel. The single confirmation line stays deliberately quiet while
    the small Catrina completes the hand-off above it. */
