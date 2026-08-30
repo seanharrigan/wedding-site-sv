@@ -2508,3 +2508,11 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
     transform:translateX(-clamp(10px,1.6vw,22px));
   }
 }
+
+/* Keep the Mexico City Día de Muertos image a rounded rectangle on phones,
+   matching its desktop treatment; the companion image retains its arch. */
+@media(max-width:720px){
+  .travel-chapter--city .city-photo--wide img{
+    border-radius:24px!important;
+  }
+}
