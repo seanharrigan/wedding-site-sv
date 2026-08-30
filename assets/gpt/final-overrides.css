@@ -1410,20 +1410,32 @@ html:lang(es) .special-col .section-title{
 .language-gate.is-arriving{opacity:1!important;visibility:visible!important;transition:none!important}
 
 /* The access action is simply a generous arrow—quiet and self-explanatory. */
+.password-gate-form{
+  width:min(100%,350px)!important;
+}
+.password-gate-control{
+  grid-template-columns:minmax(0,1fr) 68px!important;
+}
 .password-gate-control button{
-  min-width:60px!important;
+  width:64px!important;
+  min-width:64px!important;
+  min-height:46px!important;
   justify-content:center!important;
   padding-inline:0!important;
+  border-radius:999px!important;
+  color:#4b3022!important;
+  background:#fff8ee!important;
 }
 .password-gate-control button span[aria-hidden="true"]{
-  font-size:1.2rem!important;
+  font-size:1.28rem!important;
   line-height:1;
   transform:translateX(1px);
 }
 @media(max-width:720px){
-  .password-gate-control{grid-template-columns:minmax(0,1fr) 52px!important}
-  .password-gate-control button{width:52px!important;min-height:50px!important}
-  .password-gate-control button span[aria-hidden="true"]{font-size:1.18rem!important}
+  .password-gate-form{width:min(100%,312px)!important}
+  .password-gate-control{grid-template-columns:minmax(0,1fr) 60px!important}
+  .password-gate-control button{width:60px!important;min-width:60px!important;min-height:50px!important;border-radius:999px!important}
+  .password-gate-control button span[aria-hidden="true"]{font-size:1.22rem!important;color:#4b3022!important}
 }
 
 /* Desktop travel disclosures have room to read: two text columns and a very
