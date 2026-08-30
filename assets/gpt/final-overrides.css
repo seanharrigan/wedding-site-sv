@@ -2587,3 +2587,29 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   }
   .travel-chapter--city .neighbourhoods li>div{align-content:start}
 }
+
+/* Keep every expanded travel answer on the shared full-width row. */
+.travel-chapter--city .practical-item .accordion-panel,
+.travel-chapter--tepoztlan .practical-item .accordion-panel{
+  grid-column:1 / -1!important;
+  width:100%!important;
+  max-width:none!important;
+}
+.travel-chapter--city .practical-item .practical-body,
+.travel-chapter--tepoztlan .practical-item .practical-body{
+  width:100%!important;
+  max-width:none!important;
+}
+
+/* On phones, pull the disclosure chips closer to the image pair and reduce
+   the gap before the next chapter divider. */
+@media(max-width:720px){
+  .travel-chapter--city .practical--city,
+  .travel-chapter--tepoztlan .practical--tepoz{
+    margin-top:14px!important;
+  }
+  .travel-chapter--city + .travel-chapter--tepoztlan{
+    margin-top:30px!important;
+    padding-top:28px!important;
+  }
+}
