@@ -479,8 +479,9 @@ const uiTranslations = {
   travelWeddingDay: ['Wedding day', 'Día de la boda'],
   travelWeddingDayCopy: ['Our ceremony will begin at 2:45 PM at La Cascada. Please arrive at 2:00 PM. After we say “I do,” we’ll gather for cocktail hour before moving inside for dinner, speeches, and dancing the night away.', 'La ceremonia comienza a las 2:45 PM en La Cascada. Les pedimos llegar a las 2:00 PM. Después del “sí, acepto” nos reuniremos para la hora del cóctel. Luego pasaremos a la cena, los discursos y el baile.'],
   travelAccommodation: ['Accommodation', 'Estancia'],
-  travelAccommodationCopy: ['Hotel Piedra Viva is sold out. Tepoztlán is about a 1.5-hour drive from Mexico City, and there are lovely boutique hotels nearby.', 'Hotel Piedra Viva ya está lleno. Tepoztlán está a una hora y media de la Ciudad de México y hay muy buenos hoteles boutique cerca.'],
-  travelAccommodationMore: ['We recommend booking a nearby hotel as soon as you can.', 'Les recomendamos reservar un hotel cercano lo antes posible.'],
+  travelAccommodationCopy: ['Hotel Piedra Viva is a 1.5-hour drive from Mexico City. We recommend staying at the hotel; rooms are limited, so close family will be given priority.', 'Hotel Piedra Viva está a una hora y media de la Ciudad de México. Recomendamos hospedarse ahí. Hay pocas habitaciones, así que daremos prioridad a la familia cercana.'],
+  travelAccommodationMore: ['$2,250 MXN per night for two (about $180 CAD); a 3rd or 4th guest in a double suite is $850 MXN each. Tepoztlán also has lovely boutique hotels nearby.', '$2,250 MXN por noche para dos personas. La tercera o cuarta persona en una suite doble paga $850 MXN. También hay buenos hoteles boutique cerca.'],
+  travelAccommodationAvailability: ['Hotel Piedra Viva is now fully booked, and we are unable to offer any additional rooms. Thank you for understanding.', 'Hotel Piedra Viva ya está lleno y ya no podemos ofrecer más habitaciones. Gracias por su comprensión.'],
   travelTransport: ['Transport', 'Transporte'],
   travelTransportAirport: ['<strong>Arrival at Benito Juárez Airport (MEX)</strong><br>About 25–45 minutes to downtown Mexico City, depending on traffic.', '<strong>Llegada al Aeropuerto Internacional Benito Juárez (MEX)</strong><br>Está a unos 25–45 minutos del centro de la Ciudad de México, según el tráfico.'],
   travelTransportCity: ['<strong>Mexico City to Tepoztlán</strong><br>About 1.5 hours by private transfer, taxi, rideshare or rental car.', '<strong>CDMX a Tepoztlán</strong><br>Aproximadamente una hora y media en traslado privado, taxi, Uber o auto rentado.'],
@@ -498,7 +499,7 @@ const uiTranslations = {
   tepoztlanMapNote: ['Use the map to begin exploring the town and the places surrounding our venue.', 'Usen el mapa para explorar el pueblo y los lugares cercanos al hotel.'],
   tepoztlanMap: ['See on map <span aria-hidden="true">↗</span>', 'Ver en el mapa <span aria-hidden="true">↗</span>'],
   romaLabel: ['Roma Norte', 'Roma Norte'], romaCaption: ['Leafy streets, galleries and cafés', 'Calles arboladas, galerías y cafés'], condesaLabel: ['Condesa', 'Condesa'], reformaLabel: ['Reforma', 'Reforma'], centroLabel: ['Centro Histórico', 'Centro Histórico'], diaMuertosLabel: ['Día de Muertos', 'Día de Muertos'], diaMuertosCaption: ['Marigolds, memory and Mexico City', 'Cempasúchil, memoria y Ciudad de México'], diaMuertosPhotoAlt: ['Día de Muertos altar in Mexico City with marigolds and the Mexican flag', 'Altar de Día de Muertos en la Ciudad de México con cempasúchil y la bandera mexicana'], bellasLabel: ['Bellas Artes', 'Bellas Artes'], bellasCaption: ['Architecture, murals and golden light', 'Arquitectura, murales y luz dorada'],
-  conventLabel: ['The Ex-Convent', 'El Ex Convento'], conventCaption: ['Stone courtyards and centuries of history', 'Patios de piedra y siglos de historia'], ridgeLabel: ['The Tepozteco', 'El Tepozteco'], ridgeCaption: ['Dramatic mountains above the town', 'Montañas imponentes sobre el pueblo'],
+  conventLabel: ['The Ex-Convent', 'El Ex Convento'], conventCaption: ['Stone courtyards and centuries of history', 'Patios de piedra y siglos de historia'], ridgeLabel: ['Tepozteco', 'Tepozteco'], ridgeCaption: ['Dramatic mountains above the town', 'Montañas imponentes sobre el pueblo'],
   ofrendaCopy: ['We kindly invite you to bring a small framed photo of a loved one who is no longer with us. In keeping with tradition, we will be preparing an <em>ofrenda</em> to honour and remember those who remain in our hearts.', 'Los invitamos a traer una foto pequeña y enmarcada de un ser querido que ya no esté con nosotros. Prepararemos una <em>ofrenda</em> para recordarlos y tenerlos presentes.'],
   giftSummary: ['Celebrating with you is more than enough.', 'Celebrar con ustedes es más que suficiente.'],
   giftDetails: ['Gift details', 'Detalles del regalo'],
@@ -669,6 +670,129 @@ const setupConditionalAccommodation = (selectId, fieldId, inputId) => {
 
 setupConditionalAccommodation('mexico-city-neighbourhood', 'mexico-city-neighbourhood-other-field', 'mexico-city-neighbourhood-other');
 setupConditionalAccommodation('tepoztlan-location', 'tepoztlan-location-other-field', 'tepoztlan-location-other');
+
+// Native option sheets cannot take on the site's paper-and-ink treatment. Keep
+// the real selects for validation and submission, then expose an accessible
+// in-page list that matches the calendar popover on every screen size.
+const paperSelectControls = [];
+const setupPaperSelect = (select) => {
+  if (!select || select.dataset.paperSelectReady === 'true') return;
+  const field = select.closest('.field');
+  if (!field) return;
+
+  const fieldLabel = field.querySelector(`label[for="${select.id}"]`);
+  const control = document.createElement('div');
+  const trigger = document.createElement('button');
+  const menu = document.createElement('div');
+  const menuId = `${select.id}-menu`;
+
+  select.dataset.paperSelectReady = 'true';
+  select.classList.add('native-select-proxy');
+  select.tabIndex = -1;
+  select.setAttribute('aria-hidden', 'true');
+  control.className = 'paper-select-control';
+  trigger.type = 'button';
+  trigger.className = 'paper-select-trigger';
+  trigger.setAttribute('aria-haspopup', 'listbox');
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.setAttribute('aria-controls', menuId);
+  if (fieldLabel) {
+    const labelId = `${select.id}-label`;
+    fieldLabel.id = labelId;
+    trigger.setAttribute('aria-labelledby', labelId);
+    fieldLabel.addEventListener('click', (event) => {
+      event.preventDefault();
+      trigger.focus({ preventScroll: true });
+      trigger.click();
+    });
+  }
+  menu.className = 'paper-select-menu';
+  menu.id = menuId;
+  menu.hidden = true;
+  menu.setAttribute('role', 'listbox');
+
+  const close = ({ focus = false } = {}) => {
+    menu.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+    control.classList.remove('is-open');
+    if (focus) trigger.focus({ preventScroll: true });
+  };
+  const open = () => {
+    paperSelectControls.forEach((instance) => {
+      if (instance.control !== control) instance.close();
+    });
+    menu.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    control.classList.add('is-open');
+    const selected = menu.querySelector('[aria-selected="true"]:not(:disabled)') || menu.querySelector('button:not(:disabled)');
+    selected?.focus({ preventScroll: true });
+  };
+  const selectValue = (value) => {
+    select.value = value;
+    select.dispatchEvent(new Event('input', { bubbles: true }));
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    close({ focus: true });
+  };
+  const render = () => {
+    const selectedOption = select.options[select.selectedIndex];
+    trigger.replaceChildren();
+    const label = document.createElement('span');
+    label.className = 'paper-select-value';
+    label.textContent = selectedOption?.textContent.trim() || '';
+    const arrow = document.createElement('span');
+    arrow.className = 'paper-select-arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '↓';
+    trigger.append(label, arrow);
+    trigger.classList.toggle('is-placeholder', !select.value);
+    menu.replaceChildren();
+    [...select.options].forEach((option) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'paper-select-option';
+      item.dataset.value = option.value;
+      item.disabled = option.disabled;
+      item.textContent = option.textContent.trim();
+      item.setAttribute('role', 'option');
+      item.setAttribute('aria-selected', String(option.value === select.value));
+      item.addEventListener('click', () => {
+        if (!option.disabled) selectValue(option.value);
+      });
+      menu.append(item);
+    });
+  };
+
+  select.insertAdjacentElement('afterend', control);
+  control.append(trigger, menu);
+  render();
+  select.addEventListener('change', render);
+  trigger.addEventListener('click', () => menu.hidden ? open() : close());
+  trigger.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      open();
+    }
+  });
+  menu.addEventListener('keydown', (event) => {
+    const options = [...menu.querySelectorAll('button:not(:disabled)')];
+    const index = options.indexOf(document.activeElement);
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      close({ focus: true });
+    } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      options[(index + direction + options.length) % options.length]?.focus({ preventScroll: true });
+    }
+  });
+  document.addEventListener('pointerdown', (event) => {
+    if (!control.contains(event.target)) close();
+  });
+  document.addEventListener('wedding:languagechange', render);
+  paperSelectControls.push({ control, close });
+};
+
+document.querySelectorAll('.check-in-card select').forEach(setupPaperSelect);
 
 // Desktop browsers do not expose the native date popover for visual styling,
 // so the form uses a small paper-toned calendar there and keeps the familiar
@@ -895,8 +1019,8 @@ document.addEventListener('wedding:languagechange', () => {
 const showCheckInConfirmation = () => {
   if (!checkInForm) return;
   if (checkInForm.classList.contains('is-confirming') || checkInForm.classList.contains('is-confirmed')) return;
-  const checkInTransitionDuration = reducedMotion ? 0 : 2600;
-  const checkInRevealDelay = reducedMotion ? 0 : 420;
+  const checkInTransitionDuration = reducedMotion ? 0 : 3400;
+  const checkInRevealDelay = reducedMotion ? 0 : 90;
   const formStatus = document.getElementById('form-status');
   if (formStatus) formStatus.textContent = '';
   const formHeight = Math.ceil(checkInForm.getBoundingClientRect().height);

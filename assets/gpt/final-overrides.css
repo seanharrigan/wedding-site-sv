@@ -2300,3 +2300,165 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   .travel-chapter--city .neighbourhoods li strong{font-size:1rem!important}
   .travel-chapter--city .neighbourhoods li span{font-size:.93rem!important;line-height:1.38!important}
 }
+
+/* Let the Tepozteco fill the frame—not the lower street. The taller crop keeps
+   the complete ridge in view on both the paired desktop composition and phone. */
+.tepoz-photos .city-photo:last-child img{
+  aspect-ratio:4 / 5!important;
+  height:auto!important;
+  object-fit:cover!important;
+  object-position:center 10%!important;
+}
+
+/* On a phone the cactus glass is one continuous surface from edge to edge;
+   there is no exposed strip of artwork above the frost. */
+@media(max-width:720px){
+  .special-inner::before{
+    inset:0!important;
+    border-radius:inherit!important;
+    -webkit-mask-image:none!important;
+    mask-image:none!important;
+  }
+  .special-inner::after{inset:14px!important}
+}
+
+/* Keep the original Piedra Viva context, then add the sold-out note as a
+   separate, considerate line rather than making the whole section feel abrupt. */
+.travel-chapter--tepoztlan .accommodation-availability{
+  max-width:54ch;
+  margin-top:.8rem!important;
+  color:rgba(73,54,44,.76)!important;
+  font-style:italic;
+}
+
+/* A paper select mirrors the hand-built calendar: the native select remains in
+   the form for validation and submission, while the visible list is themed. */
+.check-in-card .field:has(.native-select-proxy){
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.check-in-card .field:has(.native-select-proxy)::after{display:none!important}
+.check-in-card .field select.native-select-proxy{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  margin:-1px!important;
+  padding:0!important;
+  border:0!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  clip-path:inset(50%)!important;
+}
+.paper-select-control{position:relative;width:100%;min-width:0}
+.paper-select-trigger{
+  display:flex;
+  width:100%;
+  min-height:36px;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:.25rem 0 .45rem;
+  border:0;
+  border-bottom:1px solid rgba(73,54,44,.3);
+  border-radius:0;
+  color:var(--mocha-deep);
+  background:transparent;
+  font-family:var(--serif);
+  font-size:1.03rem;
+  line-height:1.25;
+  text-align:left;
+  cursor:pointer;
+  transition:border-color .28s ease,color .28s ease;
+}
+.paper-select-trigger:hover,.paper-select-trigger:focus-visible,.paper-select-control.is-open .paper-select-trigger{
+  border-bottom-color:var(--mocha);
+  outline:0;
+}
+.paper-select-trigger.is-placeholder{color:rgba(73,54,44,.52)}
+.paper-select-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.paper-select-arrow{display:block;color:var(--mocha);font-family:var(--sans);font-size:.88rem;line-height:1;opacity:.8;transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .25s ease}
+.paper-select-control.is-open .paper-select-arrow{opacity:1;transform:rotate(180deg)}
+.paper-select-menu{
+  position:absolute;
+  z-index:40;
+  top:calc(100% + 10px);
+  left:0;
+  display:grid;
+  width:min(100%,330px);
+  padding:7px;
+  border:1px solid rgba(73,54,44,.18);
+  border-radius:18px;
+  background:linear-gradient(155deg,#fffaf2,#eee2d3);
+  box-shadow:0 20px 46px rgba(42,26,18,.24),inset 0 1px rgba(255,255,255,.72);
+  animation:date-picker-in .35s cubic-bezier(.16,1,.3,1) both;
+}
+.paper-select-menu[hidden]{display:none!important}
+.paper-select-option{
+  width:100%;
+  min-height:37px;
+  padding:8px 10px;
+  border:0;
+  border-radius:11px;
+  color:var(--mocha-deep);
+  background:transparent;
+  font-family:var(--serif);
+  font-size:.97rem;
+  line-height:1.2;
+  text-align:left;
+  cursor:pointer;
+  transition:color .22s ease,background-color .28s ease,transform .3s cubic-bezier(.16,1,.3,1);
+}
+.paper-select-option:hover:not(:disabled),.paper-select-option:focus-visible{outline:0;color:var(--cream);background:var(--mocha);transform:translateX(2px)}
+.paper-select-option[aria-selected="true"]{color:var(--cream);background:var(--mocha-deep);box-shadow:0 5px 12px rgba(52,38,31,.16)}
+.paper-select-option:disabled{display:none}
+.check-in-card:has(.paper-select-menu:not([hidden])){overflow:visible!important}
+@media(max-width:720px){
+  .paper-select-trigger{min-height:35px;font-size:1rem}
+  .paper-select-menu{width:100%;max-width:calc(100vw - 52px)}
+}
+
+/* The envelope is already present behind the form. Ease the frosted layer back
+   by one small step so the artwork is perceptible without distracting from entry. */
+.check-in-card:not(.is-confirmed)::before{opacity:.79!important}
+.check-in-card:not(.is-confirmed)::after{
+  background:linear-gradient(150deg,rgba(253,248,241,.87),rgba(235,221,204,.85))!important;
+  -webkit-backdrop-filter:blur(10px) saturate(.88)!important;
+  backdrop-filter:blur(10px) saturate(.88)!important;
+}
+
+/* The hand-off remains visible above the message, then settles. The message
+   itself lands comfortably above the wax seal rather than on top of it. */
+.check-in-card .catrina-walk,
+.check-in-card.is-confirmed .catrina-walk,
+.check-in-card.is-confirmed .check-in-passage.is-arrived .catrina-walk{
+  top:17%!important;
+  width:46px!important;
+}
+.check-in-passage.is-walking .catrina-walk{animation:check-in-catrina-cross-copy 3.4s linear both!important}
+.check-in-passage.is-walking .catrina-dance-frame{animation-duration:3.4s!important}
+.check-in-passage.is-walking .catrina-dance-frame--one{animation-delay:0s!important}
+.check-in-passage.is-walking .catrina-dance-frame--two{animation-delay:-.85s!important}
+.check-in-passage.is-walking .catrina-dance-frame--three{animation-delay:-1.7s!important}
+.check-in-passage.is-walking .catrina-dance-frame--four{animation-delay:-2.55s!important}
+.check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
+  top:31%!important;
+  width:min(72%,430px)!important;
+  line-height:1.2!important;
+}
+@media(max-width:720px){
+  .check-in-card .catrina-walk,
+  .check-in-card.is-confirmed .catrina-walk,
+  .check-in-card.is-confirmed .check-in-passage.is-arrived .catrina-walk{
+    top:21%!important;
+    width:42px!important;
+  }
+  .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
+    top:42%!important;
+    width:min(72%,258px)!important;
+    font-size:clamp(.95rem,4.2vw,1.08rem)!important;
+    line-height:1.24!important;
+  }
+}
