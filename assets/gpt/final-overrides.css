@@ -1504,3 +1504,67 @@ html:lang(es) .special-col .section-title{
     object-position:center center!important;
   }
 }
+
+/* A submitted check-in closes on the same invitation envelope instead of a
+   generic panel. The single confirmation line stays deliberately quiet while
+   the small Catrina completes the hand-off above it. */
+.check-in-card.is-confirmed{
+  display:grid!important;
+  place-items:center;
+  min-height:0!important;
+  padding:0!important;
+  aspect-ratio:1672 / 941;
+  overflow:hidden;
+  border:0!important;
+  border-radius:26px!important;
+  background:url("opening-envelope-exact-logo-desktop-v7.webp") center / cover no-repeat!important;
+  box-shadow:0 24px 58px rgba(30,17,11,.3)!important;
+}
+.check-in-card.is-confirmed::before{display:none!important}
+.check-in-card.is-confirmed .check-in-thanks{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:block;
+  width:auto;
+  max-width:none;
+  min-height:0;
+  margin:0;
+  padding:0;
+  text-align:center;
+}
+.check-in-card.is-confirmed .check-in-thanks .eyebrow,
+.check-in-card.is-confirmed .check-in-thanks h3,
+.check-in-card.is-confirmed .check-in-thanks>p:not(.check-in-thanks-email){display:none!important}
+.check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
+  position:absolute;
+  top:31%;
+  left:50%;
+  width:min(78%,460px);
+  margin:0;
+  color:#482d21;
+  font-family:var(--serif);
+  font-size:clamp(.96rem,1.45vw,1.25rem)!important;
+  font-style:normal;
+  line-height:1.3;
+  text-shadow:0 1px rgba(255,250,241,.45);
+  transform:translateX(-50%);
+}
+.check-in-card.is-confirmed .check-in-passage{z-index:3}
+.check-in-card.is-confirmed .catrina-walk,
+.check-in-card.is-confirmed .check-in-passage.is-arrived .catrina-walk{top:20%;}
+
+@media(max-width:720px){
+  .check-in-card.is-confirmed{
+    aspect-ratio:941 / 1672;
+    border-radius:22px!important;
+    background-image:url("opening-envelope-exact-logo-mobile-v7.webp")!important;
+  }
+  .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
+    top:27%;
+    width:min(76%,270px);
+    font-size:clamp(.96rem,4.2vw,1.1rem)!important;
+  }
+  .check-in-card.is-confirmed .catrina-walk,
+  .check-in-card.is-confirmed .check-in-passage.is-arrived .catrina-walk{top:18%;}
+}
