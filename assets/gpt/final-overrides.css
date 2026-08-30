@@ -2588,6 +2588,15 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   .travel-chapter--city .neighbourhoods li>div{align-content:start}
 }
 
+/* Desktop-only optical correction for Special Request: keep the intentional
+   off-centre balance, but bring the divider back into the central gap so it
+   does not sit against the left column. */
+@media(min-width:721px){
+  .special-inner .special-col--gifts{
+    margin-left:clamp(-32px,-2.5vw,-16px)!important;
+  }
+}
+
 /* Keep every expanded travel answer on the shared full-width row. */
 .travel-chapter--city .practical-item .accordion-panel,
 .travel-chapter--tepoztlan .practical-item .accordion-panel{
