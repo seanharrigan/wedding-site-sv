@@ -2462,3 +2462,26 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
     line-height:1.24!important;
   }
 }
+
+/* On desktop the two Tepoztlán headings deliberately share one answer lane.
+   The open disclosure is therefore always a full row, never the left column
+   inherited from Accommodation when Transport is the item being explored. */
+@media(min-width:721px){
+  .travel-chapter--tepoztlan .practical--tepoz{
+    grid-template-areas:
+      "accommodation transport"
+      "answer answer"!important;
+  }
+  .travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-area:accommodation!important}
+  .travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-area:transport!important}
+  .travel-chapter--tepoztlan .practical-item .accordion-panel{
+    grid-column:answer-start / answer-end!important;
+    grid-row:answer-start / answer-end!important;
+    width:100%!important;
+    min-width:100%!important;
+  }
+  .travel-chapter--tepoztlan .practical-item .practical-body{
+    width:100%!important;
+    max-width:none!important;
+  }
+}
