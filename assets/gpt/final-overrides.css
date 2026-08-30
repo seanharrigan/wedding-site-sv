@@ -1463,4 +1463,16 @@ html:lang(es) .special-col .section-title{
 }
 
 /* The finished English desktop artwork includes its own printed monogram. */
-@media(min-width:721px){html[lang="en"] .suite-monogram-card{display:none}}
+@media(min-width:721px){
+  html[lang="en"] .suite-monogram-card{display:none}
+  .invitation-intro.is-open .suite-composite{
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    clip-path:none!important;
+  }
+  .invitation-intro.is-open .suite-composite img{
+    object-fit:cover!important;
+    object-position:center center!important;
+  }
+}
