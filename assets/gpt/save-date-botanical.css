@@ -1,14 +1,14 @@
 /* Save-the-Date: pale tan textile with botanical leaf shadows. */
 .save-date::after{
   background-color:#9a7a5b;
-  background-image:linear-gradient(180deg,rgba(52,38,31,.03),rgba(52,38,31,.16)),url("save-date-botanical-shadow-desktop-v3.png");
+  background-image:linear-gradient(180deg,rgba(52,38,31,.03),rgba(52,38,31,.16)),url("save-date-botanical-shadow-desktop-v3.webp");
   background-position:center;
   background-size:cover;
 }
 
 @media(max-width:720px){
   .save-date::after{
-    background-image:linear-gradient(180deg,rgba(52,38,31,.02),rgba(52,38,31,.14)),url("save-date-botanical-shadow-mobile-v3.png");
+    background-image:linear-gradient(180deg,rgba(52,38,31,.02),rgba(52,38,31,.14)),url("save-date-botanical-shadow-mobile-v3.webp");
     background-position:center 48%;
   }
 }

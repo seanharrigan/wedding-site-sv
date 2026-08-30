@@ -422,7 +422,7 @@
   }
   .invitation-intro .intro-cover{
     z-index:4;
-    background:url("opening-envelope-exact-logo-mobile-v7.png") center center/cover no-repeat;
+    background:url("opening-envelope-exact-logo-mobile-v7.webp") center center/cover no-repeat;
     opacity:1;
     transform:translate3d(0,0,0) scale(1);
     backface-visibility:hidden;
@@ -440,7 +440,7 @@
     position:absolute;
     inset:0;
     z-index:6;
-    background:url("opening-envelope-exact-logo-mobile-v7.png") center center/cover no-repeat;
+    background:url("opening-envelope-exact-logo-mobile-v7.webp") center center/cover no-repeat;
     opacity:0;
     pointer-events:none;
   }
@@ -1448,4 +1448,16 @@ html:lang(es) .special-col .section-title{
   .check-in-card .field select,
   .check-in-card .field textarea{min-height:42px;padding:.58rem 0;font-size:1.22rem;line-height:1.35}
   .check-in-card .button{min-height:56px;margin-top:28px;padding-inline:1.75rem;font-size:.7rem}
+}
+
+/* Production audit: keyboard focus must be visible on every form control.
+   The date/text inputs previously only shifted a 1px border on focus and the
+   selects had no indicator at all. */
+.check-in-card .field input:focus-visible,
+.check-in-card .field textarea:focus-visible,
+.check-in-card .field select:focus-visible,
+.check-in-card .date-picker-trigger:focus-visible{
+  outline:2px solid var(--mocha);
+  outline-offset:3px;
+  border-radius:3px;
 }
