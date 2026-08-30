@@ -2485,3 +2485,17 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
     max-width:none!important;
   }
 }
+
+/* Mobile details calibration: keep the weather title aligned with the
+   Formal attire and Hotel Piedra Viva headings, and give the temperature
+   rails a little more breathing room at either side. */
+@media(max-width:720px){
+  .details-weather-title{
+    font-size:clamp(1.85rem,8.8vw,2.5rem)!important;
+    line-height:1!important;
+  }
+  .details-weather .weather-ranges{
+    width:calc(100% - 34px)!important;
+    margin-inline:auto!important;
+  }
+}
