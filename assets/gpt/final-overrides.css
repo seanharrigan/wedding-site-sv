@@ -1397,3 +1397,55 @@ html:lang(es) .special-col .section-title{
   .neighbourhood-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}
   .catrina-passage.is-password-handoff .catrina-passage-figure{--catrina-track-left:calc(50% - 140px);--catrina-track-right:calc(50% + 106px);width:34px}
 }
+
+/* Desktop travel disclosures have room to read: two text columns and a very
+   shallow photo strip, never four cramped portrait cards. */
+@media(min-width:721px){
+  .travel-chapter--city .practical-body,
+  .travel-chapter--tepoztlan .practical-body{display:block;padding:22px 0 34px}
+  .travel-chapter--city .practical-body>p,
+  .travel-chapter--tepoztlan .practical-body>p{max-width:760px;margin:0}
+  .travel-chapter--city .neighbourhoods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px clamp(36px,5vw,72px);margin:0}
+  .travel-chapter--city .neighbourhoods li{gap:.35rem}
+  .travel-chapter--city .neighbourhoods li strong{font-size:clamp(1.06rem,1.25vw,1.2rem);line-height:1.1}
+  .neighbourhood-gallery{gap:clamp(8px,1.1vw,14px);margin:24px 0 28px}
+  .neighbourhood-gallery img{height:clamp(76px,7vw,104px);aspect-ratio:auto;border-radius:11px;object-position:center 48%}
+  .neighbourhood-gallery figcaption{margin-top:.42rem;font-size:clamp(.88rem,1vw,1rem)}
+}
+
+/* One larger editorial reading size for all desktop body copy. Labels,
+   captions, navigation and titles remain on their own scales. */
+@media(min-width:721px){
+  :root{--desktop-editorial-copy:clamp(1.3rem,1.55vw,1.44rem)}
+  .welcome-copy,
+  .save-date-inner>p:last-child,
+  .detail-panel p:not(.detail-label),
+  .details-weather-copy,
+  .week-day p,
+  .chapter-copy,.chapter-copy p,
+  .practical-body p,
+  .neighbourhoods li span,
+  .special-col>p,
+  .faq .accordion-panel p,
+  .check-in-copy>p:not(.eyebrow),
+  .check-in-thanks>p:not(.eyebrow){font-size:var(--desktop-editorial-copy)!important;line-height:1.55}
+  .welcome-inner .welcome-copy{line-height:1.55!important}
+}
+
+/* Check-In becomes a full-width desktop composition: the introduction leads,
+   then a generous form spans the section beneath it. */
+@media(min-width:981px){
+  .check-in{padding-block:clamp(132px,11vw,180px)!important}
+  .check-in-grid{grid-template-columns:1fr!important;gap:clamp(38px,5vw,64px);width:min(100%,1120px);margin-inline:auto}
+  .check-in-copy{max-width:680px;margin-inline:auto;text-align:center}
+  .check-in-copy .eyebrow,.check-in-copy .rule,.check-in-copy>p{margin-inline:auto}
+  .check-in-copy>p{max-width:640px}
+  .check-in-card{width:100%;max-width:none;min-height:0;padding:clamp(42px,5vw,64px) clamp(42px,6vw,78px);border-radius:38px}
+  .check-in-card .form-grid{gap:22px clamp(34px,4vw,58px)}
+  .check-in-card .field{gap:6px}
+  .check-in-card .field label{font-size:.6rem;letter-spacing:.18em}
+  .check-in-card .field input,
+  .check-in-card .field select,
+  .check-in-card .field textarea{min-height:42px;padding:.58rem 0;font-size:1.22rem;line-height:1.35}
+  .check-in-card .button{min-height:56px;margin-top:28px;padding-inline:1.75rem;font-size:.7rem}
+}
