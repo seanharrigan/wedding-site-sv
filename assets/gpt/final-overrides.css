@@ -2135,6 +2135,19 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
   .animation-lab-selector{gap:6px}
   .animation-lab-selector button{width:32px;height:29px}
 }
+
+/* The base mobile rule hides a button's first span, which also caught the
+   password arrow once its text was simplified. Keep that single arrow visible. */
+@media(max-width:720px){
+  .password-gate-control button span[aria-hidden="true"]{
+    display:inline-block!important;
+    color:#4b3022!important;
+    font-size:1.32rem!important;
+    font-weight:500;
+    line-height:1!important;
+    transform:translateX(1px)!important;
+  }
+}
 @media(prefers-reduced-motion:reduce){
   .animation-lab-stage.is-playing .animation-lab-art--closed{opacity:0!important;animation:none!important}
   .animation-lab-stage.is-playing .animation-lab-art--open{opacity:1!important;animation:none!important}
