@@ -21,9 +21,6 @@ const openEnvelope = document.getElementById('open-envelope');
 const enterSite = document.getElementById('enter-site');
 const introClose = document.getElementById('intro-close');
 const invitationReplay = document.getElementById('invitation-replay');
-const animationPreviewTrigger = document.getElementById('animation-preview-trigger');
-const animationPreview = document.getElementById('animation-preview');
-const animationPreviewClose = document.getElementById('animation-preview-close');
 const languageGate = document.getElementById('language-gate');
 const languageGateOptions = [...document.querySelectorAll('.language-gate-option')];
 const catrinaPassage = document.getElementById('catrina-passage');
@@ -45,8 +42,6 @@ let invitationFocusTimer = 0;
 let invitationReplayTimer = 0;
 let invitationOpenTimer = 0;
 let invitationCloseTimer = 0;
-let animationPreviewHideTimer = 0;
-let animationPreviewReturnFocus = null;
 let catrinaPassageTimer = 0;
 let catrinaPassageHideTimer = 0;
 const invitationExitDuration = reducedMotion ? 0 : 1320;
@@ -74,31 +69,6 @@ const setMenuOpen = (open) => {
     : (spanish ? 'Abrir menú' : 'Open navigation'));
 };
 
-const setAnimationPreviewOpen = (open) => {
-  if (!animationPreview) return;
-  clearTimeout(animationPreviewHideTimer);
-  if (open) {
-    animationPreviewReturnFocus = document.activeElement === document.body
-      ? animationPreviewTrigger
-      : document.activeElement;
-    setMenuOpen(false);
-    animationPreview.hidden = false;
-    body.classList.add('animation-preview-open');
-    requestAnimationFrame(() => {
-      animationPreview.classList.add('is-visible');
-      animationPreviewClose?.focus({ preventScroll: true });
-    });
-    return;
-  }
-  animationPreview.classList.remove('is-visible');
-  body.classList.remove('animation-preview-open');
-  animationPreviewHideTimer = window.setTimeout(() => {
-    animationPreview.hidden = true;
-    animationPreviewReturnFocus?.focus?.({ preventScroll: true });
-    animationPreviewHideTimer = 0;
-  }, reducedMotion ? 0 : 260);
-};
-
 const clearCatrinaPassageTimers = () => {
   clearTimeout(catrinaPassageTimer);
   clearTimeout(catrinaPassageHideTimer);
@@ -106,29 +76,28 @@ const clearCatrinaPassageTimers = () => {
   catrinaPassageHideTimer = 0;
 };
 
-const playCatrinaPassage = () => {
-  if (!body.classList.contains('invitation-active')) return;
+const playPasswordCatrinaPassage = (onComplete) => {
   if (!catrinaPassage || reducedMotion) {
-    invitationIntro.classList.remove('is-awaiting-passage');
-    openEnvelope?.focus({ preventScroll: true });
+    onComplete?.();
     return;
   }
 
+  const passageDuration = 2600;
   clearCatrinaPassageTimers();
-  invitationIntro.classList.add('is-awaiting-passage');
+  catrinaPassage.classList.add('is-password-handoff');
   catrinaPassage.hidden = false;
   requestAnimationFrame(() => catrinaPassage.classList.add('is-visible'));
 
   catrinaPassageTimer = window.setTimeout(() => {
     catrinaPassage.classList.remove('is-visible');
-    invitationIntro.classList.remove('is-awaiting-passage');
     catrinaPassageHideTimer = window.setTimeout(() => {
       catrinaPassage.hidden = true;
-      openEnvelope?.focus({ preventScroll: true });
+      catrinaPassage.classList.remove('is-password-handoff');
       catrinaPassageHideTimer = 0;
-    }, 650);
+      onComplete?.();
+    }, 360);
     catrinaPassageTimer = 0;
-  }, 6400);
+  }, passageDuration);
 };
 
 const syncHeaderTone = () => {
@@ -382,12 +351,8 @@ invitationReplay.addEventListener('click', (event) => {
   event.stopPropagation();
   if (body.classList.contains('invitation-active')) return;
   setMenuOpen(false);
+  keepWebsiteAtTop();
   revealInvitation({ replay: true });
-});
-animationPreviewTrigger?.addEventListener('click', () => setAnimationPreviewOpen(true));
-animationPreviewClose?.addEventListener('click', () => setAnimationPreviewOpen(false));
-animationPreview?.addEventListener('click', (event) => {
-  if (event.target === animationPreview) setAnimationPreviewOpen(false);
 });
 
 menuToggle.addEventListener('click', () => {
@@ -402,10 +367,6 @@ document.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && body.classList.contains('animation-preview-open')) {
-    setAnimationPreviewOpen(false);
-    return;
-  }
   if (passwordGate && !passwordGate.hidden && !passwordGate.classList.contains('is-done')) {
     if (event.key === 'Escape') passwordInput?.focus({ preventScroll: true });
     return;
@@ -570,8 +531,8 @@ document.querySelectorAll('.timeline').forEach((timeline) => {
 });
 
 const uiTranslations = {
-  navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenidos'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'], navAnimation: ['Animation', 'Animación'], animationPreviewTitle: ['Animation', 'Animación'], animationPreviewClose: ['Close animation preview', 'Cerrar vista previa de animación'],
-  openInvitationAria: ["Open Sean and Valeria's wedding invitation", 'Abrir la invitación de boda de Sean y Valeria'], invitationSuiteAria: ['Wedding invitation suite', 'Conjunto de invitación de boda'], backToTopAria: ['Sean and Valeria, back to top', 'Sean y Valeria, volver al inicio'], primaryNavigationAria: ['Primary navigation', 'Navegación principal'], firstCatrinaPreviewAria: ['First animated Catrina preview', 'Primera vista previa animada de la Catrina'], secondCatrinaPreviewAria: ['Second animated Catrina preview', 'Segunda vista previa animada de la Catrina'], heroAria: ['Sean and Valeria by the coast', 'Sean y Valeria junto a la costa'], heroSealAlt: ['Sean and Valeria monogram wax seal', 'Sello de cera con el monograma de Sean y Valeria'], detailsPairAria: ['Venue and dress code details', 'Detalles del lugar y código de vestimenta'], fallPaletteAria: ['Suggested fall colour palette', 'Paleta de colores de otoño sugerida'], weatherAria: ['November weather in Tepoztlán', 'Clima de noviembre en Tepoztlán'], celebrationTimelineAria: ['Wedding day celebration timeline', 'Horario de la celebración de la boda'], weekItineraryAria: ['Suggested week itinerary', 'Itinerario sugerido para la semana'], neighbourhoodsAria: ['Recommended neighbourhoods', 'Colonias recomendadas'], specialAria: ['Special request and gifts', 'Petición especial y regalos'], closingAria: ['Thank you', 'Gracias'], romaPhotoAlt: ['A leafy street with historic architecture in Mexico City', 'Una calle arbolada con arquitectura histórica en la Ciudad de México'], bellasPhotoAlt: ['Palacio de Bellas Artes in Mexico City at golden hour', 'Palacio de Bellas Artes en la Ciudad de México durante la hora dorada'], conventPhotoAlt: ['Historic church architecture in Tepoztlán', 'Arquitectura histórica de iglesia en Tepoztlán'], ridgePhotoAlt: ['The mountain landscape of Tepoztlán', 'El paisaje montañoso de Tepoztlán'], accommodationPhotoAlt: ['Tall cacti and gardens at Hotel Piedra Viva with Tepoztlán mountains', 'Cactus altos y jardines en Hotel Piedra Viva con las montañas de Tepoztlán'], closingPhotoAlt: ['Sean kissing Valeria at sunset by the ocean', 'Sean besando a Valeria al atardecer junto al mar'], footerLogoAlt: ['Sean and Valeria monogram', 'Monograma de Sean y Valeria'],
+  navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenidos'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'],
+  openInvitationAria: ["Open Sean and Valeria's wedding invitation", 'Abrir la invitación de boda de Sean y Valeria'], invitationSuiteAria: ['Wedding invitation suite', 'Conjunto de invitación de boda'], backToTopAria: ['Sean and Valeria, back to top', 'Sean y Valeria, volver al inicio'], primaryNavigationAria: ['Primary navigation', 'Navegación principal'], neighbourhoodGalleryAria: ['Recommended Mexico City neighbourhoods', 'Colonias recomendadas de la Ciudad de México'], heroAria: ['Sean and Valeria by the coast', 'Sean y Valeria junto a la costa'], heroSealAlt: ['Sean and Valeria monogram wax seal', 'Sello de cera con el monograma de Sean y Valeria'], detailsPairAria: ['Venue and dress code details', 'Detalles del lugar y código de vestimenta'], fallPaletteAria: ['Suggested fall colour palette', 'Paleta de colores de otoño sugerida'], weatherAria: ['November weather in Tepoztlán', 'Clima de noviembre en Tepoztlán'], celebrationTimelineAria: ['Wedding day celebration timeline', 'Horario de la celebración de la boda'], weekItineraryAria: ['Suggested week itinerary', 'Itinerario sugerido para la semana'], neighbourhoodsAria: ['Recommended neighbourhoods', 'Colonias recomendadas'], specialAria: ['Special request and gifts', 'Petición especial y regalos'], closingAria: ['Thank you', 'Gracias'], romaPhotoAlt: ['A leafy street with historic architecture in Mexico City', 'Una calle arbolada con arquitectura histórica en la Ciudad de México'], condesaPhotoAlt: ['Art Deco homes and trees in Condesa, Mexico City', 'Casas art déco y árboles en Condesa, Ciudad de México'], reformaPhotoAlt: ['Paseo de la Reforma in Mexico City at golden hour', 'Paseo de la Reforma en la Ciudad de México al atardecer'], centroPhotoAlt: ['Historic arcades in Centro Histórico, Mexico City', 'Arcadas históricas en el Centro Histórico de la Ciudad de México'], bellasPhotoAlt: ['Palacio de Bellas Artes in Mexico City at golden hour', 'Palacio de Bellas Artes en la Ciudad de México durante la hora dorada'], conventPhotoAlt: ['Historic church architecture in Tepoztlán', 'Arquitectura histórica de iglesia en Tepoztlán'], ridgePhotoAlt: ['The mountain landscape of Tepoztlán', 'El paisaje montañoso de Tepoztlán'], accommodationPhotoAlt: ['Tall cacti and gardens at Hotel Piedra Viva with Tepoztlán mountains', 'Cactus altos y jardines en Hotel Piedra Viva con las montañas de Tepoztlán'], closingPhotoAlt: ['Sean kissing Valeria at sunset by the ocean', 'Sean besando a Valeria al atardecer junto al mar'], footerLogoAlt: ['Sean and Valeria monogram', 'Monograma de Sean y Valeria'],
   galleryAria: ['Gallery from Mexico City and Tepoztlán', 'Galería de la Ciudad de México y Tepoztlán'], galleryKicker: ['A little glimpse', 'Un pequeño vistazo'], galleryTitle: ['<span>Scenes from</span> <em>México.</em>', '<span>Escenas de</span> <em>México.</em>'], galleryCopy: ['A few corners of Mexico City and Tepoztlán to look forward to along the way.', 'Algunos rincones de la Ciudad de México y Tepoztlán para esperar con ilusión durante el viaje.'], galleryCeremonialAlt: ['Ceremonial dress in Tepoztlán', 'Vestimenta ceremonial en Tepoztlán'], galleryChurchAlt: ['A church street in Tepoztlán', 'Una calle junto a una iglesia en Tepoztlán'], galleryOfrendaAlt: ['A Día de Muertos altar in Mexico City', 'Una ofrenda de Día de Muertos en la Ciudad de México'], galleryReformaAlt: ['Ángel de la Independencia at dusk', 'El Ángel de la Independencia al atardecer'], galleryLaneAlt: ['A quiet lane in Tepoztlán', 'Una calle tranquila en Tepoztlán'], galleryStreetAlt: ['A historic Tepoztlán street', 'Una calle histórica de Tepoztlán'],
   introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Open invitation', 'Abrir invitación'], closeInvitation: ['Return to the closed invitation', 'Volver a la invitación cerrada'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Enter our celebration <span aria-hidden="true">→</span>', 'Entrar al sitio <span aria-hidden="true">→</span>'], invitationEnter: ['Enter our celebration', 'Entrar a nuestra celebración'], invitationCheckIn: ['Please check in', 'Confirma tu asistencia'], checkInInvitationAction: ['Please check in on the wedding website', 'Confirma tu asistencia en el sitio de la boda'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See our gallery', 'Ver nuestra galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
   heroEyebrow: ['The wedding of', 'La boda de'],
@@ -606,7 +567,7 @@ const uiTranslations = {
   tepoztlanStay: ['Spend some time wandering through the market, stop by the Ex-Convento de la Natividad, or hike up El Tepozteco if you’re feeling adventurous. There are also lots of great little cafés and places to eat along the way.', 'Dense una vuelta por el mercado, visiten el Ex Convento de la Natividad o suban al Tepozteco si tienen ganas de caminar. También hay muchos cafés y buenos lugares para comer.'],
   tepoztlanMapNote: ['Use the map to begin exploring the town and the places surrounding our venue.', 'Usen el mapa para explorar el pueblo y los lugares cercanos al hotel.'],
   tepoztlanMap: ['See on map <span aria-hidden="true">↗</span>', 'Ver en el mapa <span aria-hidden="true">↗</span>'],
-  romaLabel: ['Roma Norte', 'Roma Norte'], romaCaption: ['Leafy streets, galleries and cafés', 'Calles arboladas, galerías y cafés'], bellasLabel: ['Bellas Artes', 'Bellas Artes'], bellasCaption: ['Architecture, murals and golden light', 'Arquitectura, murales y luz dorada'],
+  romaLabel: ['Roma Norte', 'Roma Norte'], romaCaption: ['Leafy streets, galleries and cafés', 'Calles arboladas, galerías y cafés'], condesaLabel: ['Condesa', 'Condesa'], reformaLabel: ['Reforma', 'Reforma'], centroLabel: ['Centro Histórico', 'Centro Histórico'], diaMuertosLabel: ['Día de Muertos', 'Día de Muertos'], diaMuertosCaption: ['Marigolds, memory and Mexico City', 'Cempasúchil, memoria y Ciudad de México'], diaMuertosPhotoAlt: ['Día de Muertos altar in Mexico City with marigolds and the Mexican flag', 'Altar de Día de Muertos en la Ciudad de México con cempasúchil y la bandera mexicana'], bellasLabel: ['Bellas Artes', 'Bellas Artes'], bellasCaption: ['Architecture, murals and golden light', 'Arquitectura, murales y luz dorada'],
   conventLabel: ['The Ex-Convent', 'El Ex Convento'], conventCaption: ['Stone courtyards and centuries of history', 'Patios de piedra y siglos de historia'], ridgeLabel: ['The Tepozteco', 'El Tepozteco'], ridgeCaption: ['Dramatic mountains above the town', 'Montañas imponentes sobre el pueblo'],
   ofrendaCopy: ['We kindly invite you to bring a small framed photo of a loved one who is no longer with us. In keeping with tradition, we will be preparing an <em>ofrenda</em> to honour and remember those who remain in our hearts.', 'Los invitamos a traer una foto pequeña y enmarcada de un ser querido que ya no esté con nosotros. Prepararemos una <em>ofrenda</em> para recordarlos y tenerlos presentes.'],
   giftSummary: ['Celebrating with you is more than enough.', 'Celebrar con ustedes es más que suficiente.'],
@@ -630,7 +591,7 @@ const uiTranslations = {
   travelKicker: ['The journey', 'El viaje'], travelTitle: ['Travel', 'Viaje'], browseHotels: ['Browse hotels', 'Ver hoteles'],
   travelSubline: ['For those travelling from afar', 'Para quienes viajan desde lejos'], chapterSchedule: ['Schedule', 'Itinerario'], monthOct: ['Oct', 'Oct'], monthNov: ['Nov', 'Nov'],
   hoodRoma: ['Leafy streets, cafés and galleries. Lively and central; a little noisy on weekends.', 'Calles arboladas, cafés y galerías. Animada y céntrica; algo ruidosa los fines de semana.'], hoodCondesa: ['Art-deco blocks around two parks, great restaurants. Calmer evenings, slightly further from the centre.', 'Edificios art déco alrededor de dos parques y muy buenos restaurantes. Noches más tranquilas, un poco más lejos del centro.'], hoodReforma: ['Modern, polished and lined with large hotels. More corporate in feel and farther from Centro Histórico.', 'Moderna, elegante y con hoteles grandes. Tiene un ambiente más corporativo y queda más lejos del Centro Histórico.'], hoodCentro: ['The Zócalo, Bellas Artes and major museums are on your doorstep. Historic, atmospheric and home to many older hotels; scenes from 007: Spectre were filmed here.', 'El Zócalo, Bellas Artes y los principales museos quedan a un paso. Es histórico, lleno de ambiente y tiene muchos hoteles antiguos; aquí se filmaron escenas de 007: Spectre.'],
-  cityArriving: ['Arriving', 'Llegada'], cityStayTitle: ['Where to stay', 'Dónde hospedarse'], tepoztlanKicker: ['Things to do in', 'Qué hacer en'], weatherDays: ['Day', 'Día'], weatherNights: ['Night', 'Noche'],
+  cityArriving: ['Arriving', 'Llegada'], cityStayTitle: ['Where to stay', 'Dónde hospedarse'], tepoztlanKicker: ['Things to do in', 'Qué hacer en'], weatherTitle: ['Tepoztlán in November', 'Tepoztlán en noviembre'], weatherDays: ['Day', 'Día'], weatherNights: ['Night', 'Noche'],
   cityEyebrow: ['Explore Mexico with us', 'Explora México con nosotros'], cityTitle: ['Things to do<br>in the <em>City</em>.', 'Qué hacer<br>en la <em>Ciudad</em>.'],
   specialSharedTitle: ['<span>Special</span> <em>Request</em>', '<span>Petición</span> <em>Especial</em>'], specialTitle: ['For those who remain in spirit.', 'Para quienes siguen con nosotros en espíritu.'], giftsTitle: ['Your presence is our gift.', 'Su presencia es nuestro mejor regalo.'],
   weekTitle: ['A week<br>in <em>México</em>.', 'Una semana<br>en <em>México</em>.'], weekBrief: ['Arrive early, stay a little longer, and make the celebration part of a beautiful week away.', 'Lleguen antes, quédense unos días y disfruten una semana completa en México.'],
@@ -945,14 +906,14 @@ document.addEventListener('wedding:languagechange', () => {
   });
 });
 
-checkInForm?.addEventListener('submit', (event) => {
-  event.preventDefault();
+const showCheckInConfirmation = () => {
+  if (!checkInForm) return;
   if (checkInForm.classList.contains('is-confirming') || checkInForm.classList.contains('is-confirmed')) return;
   const checkInTransitionDuration = reducedMotion ? 0 : 2600;
   const formStatus = document.getElementById('form-status');
   if (formStatus) formStatus.textContent = '';
   checkInForm.classList.add('is-confirming', 'is-confirmed');
-  event.currentTarget.querySelector('button[type="submit"]')?.setAttribute('disabled', '');
+  checkInForm.querySelector('button[type="submit"]')?.setAttribute('disabled', '');
   if (checkInFormContent) checkInFormContent.hidden = true;
   if (checkInThanks) {
     checkInThanks.hidden = false;
@@ -975,6 +936,19 @@ checkInForm?.addEventListener('submit', (event) => {
       checkInPassage.classList.add('is-arrived');
     }
   }, checkInTransitionDuration);
+};
+
+checkInForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  showCheckInConfirmation();
+});
+
+// Some mobile browsers do not promote a light touch on the styled submit button
+// to the form submit event. Handle that path explicitly while preserving keyboard submit.
+checkInForm?.querySelector('button[type="submit"]')?.addEventListener('click', (event) => {
+  if (checkInForm?.classList.contains('is-confirming') || checkInForm?.classList.contains('is-confirmed')) return;
+  event.preventDefault();
+  showCheckInConfirmation();
 });
 
 // Frosted panels clear a soft lens wherever the pointer rests (desktop only).
@@ -1012,9 +986,6 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
 
 // Language gate: pick a language before the invitation opens.
 languageGateOptions.forEach((option) => option.addEventListener('click', () => {
-  const shouldPlayCatrinaPassage = body.classList.contains('invitation-active')
-    && !languageGate.classList.contains('is-optional');
-  if (shouldPlayCatrinaPassage) invitationIntro.classList.add('is-awaiting-passage');
   currentLanguage = option.dataset.language === 'es' ? 'es' : 'en';
   renderLanguage(currentLanguage);
   // The frost clears outward from the chosen option, then the gate steps aside.
@@ -1027,9 +998,7 @@ languageGateOptions.forEach((option) => option.addEventListener('click', () => {
     languageGate.classList.add('is-done');
     languageGate.classList.remove('is-optional', 'is-lens-active');
     body.classList.remove('language-gate-open');
-    if (shouldPlayCatrinaPassage) {
-      playCatrinaPassage();
-    } else if (body.classList.contains('invitation-active')) {
+    if (body.classList.contains('invitation-active')) {
       openEnvelope.focus({ preventScroll: true });
     }
   }, reducedMotion ? 0 : 1550);
@@ -1084,7 +1053,12 @@ passwordGateForm?.addEventListener('submit', async (event) => {
   document.documentElement.classList.add('access-transitioning');
   passwordInput.blur();
 
-  setTimeout(() => {
+  playPasswordCatrinaPassage(() => {
+    passwordGate.classList.add('is-done');
+    passwordGate.hidden = true;
+    body.classList.remove('password-gate-open');
+    document.documentElement.classList.remove('access-required', 'access-transitioning');
+    document.documentElement.classList.add('access-granted');
     languageGate.classList.remove('is-done', 'is-clearing', 'is-optional');
     languageGate.classList.add('is-arriving');
     body.classList.add('language-gate-open');
@@ -1092,17 +1066,11 @@ passwordGateForm?.addEventListener('submit', async (event) => {
     header.inert = false;
     mainSite.inert = false;
     revealInvitation();
-  }, reducedMotion ? 0 : 360);
-
-  setTimeout(() => {
-    passwordGate.classList.add('is-done');
-    passwordGate.hidden = true;
-    body.classList.remove('password-gate-open');
-    document.documentElement.classList.remove('access-required', 'access-transitioning');
-    document.documentElement.classList.add('access-granted');
-    languageGate.classList.remove('is-arriving');
-    document.querySelector('.language-gate-panel')?.focus({ preventScroll: true });
-  }, reducedMotion ? 0 : 1180);
+    requestAnimationFrame(() => {
+      languageGate.classList.remove('is-arriving');
+      document.querySelector('.language-gate-panel')?.focus({ preventScroll: true });
+    });
+  });
 });
 
 // Invitation suite hotspots are authored in artwork coordinates and mapped

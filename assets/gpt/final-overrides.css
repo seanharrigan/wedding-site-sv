@@ -1126,31 +1126,10 @@ html:lang(es) .special-col .section-title{
   .catrina-frame--one,.catrina-dance-frame--one{opacity:1}
 }
 
-/* A temporary frosted preview lets the Catrina animation be reviewed without resubmitting Check-In. */
-body.animation-preview-open{overflow:hidden}
-.animation-preview[hidden]{display:none!important}
-.animation-preview{position:fixed;inset:0;height:100dvh;min-height:100dvh;z-index:1200;display:grid;place-items:center;padding:24px;color:var(--off-white);background:rgba(47,33,25,.52);opacity:0;-webkit-backdrop-filter:blur(34px) saturate(120%);backdrop-filter:blur(34px) saturate(120%);transition:opacity .26s ease}
-.animation-preview.is-visible{opacity:1}
-.animation-preview-panel{position:relative;display:grid;justify-items:center;width:min(100%,440px);padding:clamp(24px,4vw,40px);border:0;border-radius:0;background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;transform:translateY(14px) scale(.985);transition:transform .5s var(--ease-refined)}
-.animation-preview.is-visible .animation-preview-panel{transform:none}
-.animation-preview-panel .eyebrow{margin:0 0 .55rem;color:rgba(73,54,44,.72);font-size:.55rem}
-.animation-preview-panel h2{display:none}
-.animation-preview-examples{display:grid;width:100%;gap:26px;justify-items:center}
-.catrina-stopmotion--preview{width:min(200px,52vw);margin:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
-.catrina-stopmotion--preview::after{content:none}
-.catrina-stopmotion--reference{border:0}
+/* Shared stop-motion frames power the password and check-in hand-offs. */
 .catrina-dance-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;animation:catrina-dance-step 2.4s linear infinite;will-change:opacity,transform}
 .catrina-dance-frame--one{animation-delay:0s}.catrina-dance-frame--two{animation-delay:-1.8s}.catrina-dance-frame--three{animation-delay:-1.2s}.catrina-dance-frame--four{animation-delay:-.6s}
 @keyframes catrina-dance-step{0%{opacity:1;transform:scale(1.016)}18%{opacity:1;transform:scale(1.008)}25%{opacity:0;transform:scale(1.002)}93%{opacity:0;transform:scale(1.024)}100%{opacity:1;transform:scale(1.016)}}
-.animation-preview-close{position:absolute;top:14px;right:15px;display:grid;width:34px;height:34px;place-items:center;padding:0;border:1px solid rgba(73,54,44,.25);border-radius:50%;color:var(--mocha-deep);background:rgba(255,249,239,.26);font-size:1.35rem;font-weight:300;line-height:1;cursor:pointer;transition:background .3s ease,transform .35s var(--ease-refined)}
-.animation-preview-close:hover{background:rgba(255,249,239,.6);transform:rotate(8deg) scale(1.04)}
-.animation-preview-trigger{border:0!important;background:transparent!important;cursor:pointer}
-@media(max-width:720px){
-  .animation-preview{padding:18px}
-  .animation-preview-panel{width:min(100%,360px);padding:24px 20px}
-  .animation-preview-examples{gap:20px}
-  .catrina-stopmotion--preview{width:min(184px,58vw)}
-}
 
 /* Desktop canvas: use the editorial page generously at full laptop widths.
    As a window closes in, keep its reading width until the beige gutters have
@@ -1278,30 +1257,6 @@ body.animation-preview-open{overflow:hidden}
   .check-in-passage.is-walking .catrina-walk{animation:none!important}
 }
 
-/* A quiet, art-directed gallery sits between the requests and the practical FAQ. */
-.gallery-section{
-  position:relative;
-  overflow:hidden;
-  padding:clamp(84px,10vw,144px) clamp(24px,7vw,110px) clamp(92px,11vw,160px);
-  color:var(--mocha-deep);
-  background:
-    radial-gradient(66% 42% at 8% 4%,rgba(201,178,146,.18),transparent 72%),
-    linear-gradient(145deg,#f8f0e5 0%,#f2e7d7 52%,#f8f2e9 100%);
-}
-.gallery-heading{max-width:530px;margin:0 auto clamp(36px,5vw,66px);text-align:center}
-.gallery-heading .eyebrow{margin:0 0 .7rem;color:rgba(73,54,44,.7)}
-.gallery-title{display:block;margin:0;color:var(--mocha-deep)}
-.gallery-title span{display:inline;font-family:var(--serif);font-size:var(--section-title-serif);font-weight:400;letter-spacing:-.035em;line-height:.92;text-transform:uppercase;white-space:nowrap}
-.gallery-title em{display:inline-block;font-family:var(--script);font-size:calc(var(--section-title-script) * .92);font-style:normal;font-weight:400;letter-spacing:-.055em;line-height:.74;text-transform:none;white-space:nowrap}
-.gallery-copy{max-width:420px;margin:1.45rem auto 0;color:#725f50;font-family:var(--serif);font-size:var(--regular-copy-size);line-height:1.48}
-.gallery-mosaic{display:grid;grid-template-columns:.92fr 1.08fr .95fr;grid-template-rows:repeat(6,clamp(92px,9.8vw,156px));gap:clamp(8px,1.1vw,16px);width:min(100%,1080px);margin:auto}
-.gallery-card{position:relative;z-index:0;min-width:0;margin:0;overflow:hidden;border:1px solid rgba(255,252,246,.82);border-radius:clamp(14px,2vw,28px);background:#b7a38d;box-shadow:0 12px 28px rgba(69,48,34,.12);isolation:isolate;transition:transform .8s cubic-bezier(.16,1,.3,1),box-shadow .8s cubic-bezier(.16,1,.3,1)}
-.gallery-card::after{position:absolute;inset:0;z-index:1;content:"";pointer-events:none;background:linear-gradient(145deg,rgba(255,246,232,.09),transparent 46%,rgba(45,30,21,.12));mix-blend-mode:soft-light}
-.gallery-card img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.88) contrast(.98) sepia(.055);transition:transform 1.15s cubic-bezier(.16,1,.3,1),filter .7s ease}
-.gallery-card--ceremonial{grid-column:1;grid-row:1 / span 3}.gallery-card--church{grid-column:2;grid-row:1 / span 2}.gallery-card--ofrenda{grid-column:3;grid-row:1 / span 2}.gallery-card--reforma{grid-column:2;grid-row:3 / span 2}.gallery-card--lane{grid-column:3;grid-row:3 / span 2}.gallery-card--street{grid-column:1 / -1;grid-row:5 / span 2}
-.gallery-card--ceremonial img{object-position:50% 48%}.gallery-card--church img{object-position:center 52%}.gallery-card--ofrenda img{object-position:51% 48%}.gallery-card--reforma img{object-position:center 52%}.gallery-card--lane img{object-position:center 54%}.gallery-card--street img{object-position:center 54%}
-@media(hover:hover) and (pointer:fine){.gallery-card:hover{z-index:2;transform:translateY(-5px) rotate(.15deg);box-shadow:0 22px 42px rgba(69,48,34,.2)}.gallery-card:hover img{filter:saturate(.96) contrast(1);transform:scale(1.045)}}
-
 /* The Catrina crosses only during the hand-off, then settles small and still
    above the centred thank-you message. */
 .check-in-card.is-confirmed{display:grid;min-height:500px;place-items:center}
@@ -1322,13 +1277,6 @@ body.animation-preview-open{overflow:hidden}
 .check-in-passage.is-arrived .catrina-dance-frame--one{opacity:1!important}
 
 @media(max-width:720px){
-  .gallery-section{padding:78px 18px 88px}
-  .gallery-heading{max-width:340px;margin-bottom:32px}
-  .gallery-title em{font-size:calc(var(--section-title-script) * .82)}
-  .gallery-copy{max-width:290px;margin-top:1.2rem}
-  .gallery-mosaic{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(8,clamp(68px,19vw,94px));gap:8px}
-  .gallery-card{border-radius:14px}
-  .gallery-card--ceremonial{grid-column:1;grid-row:1 / span 3}.gallery-card--church{grid-column:2;grid-row:1 / span 2}.gallery-card--ofrenda{grid-column:2;grid-row:3 / span 2}.gallery-card--reforma{grid-column:1;grid-row:4 / span 2}.gallery-card--lane{grid-column:2;grid-row:5 / span 2}.gallery-card--street{grid-column:1 / -1;grid-row:7 / span 2}
   .check-in-card.is-confirmed{min-height:430px}
   .check-in-thanks{min-height:232px;max-width:300px;padding-top:64px}
   .catrina-walk{top:calc(50% - 104px);width:48px}
@@ -1398,3 +1346,54 @@ body.animation-preview-open{overflow:hidden}
   .site-header .language-toggle{font-size:clamp(.62rem,.78vw,.72rem)}
 }
 @media(max-width:720px){.check-in-card.is-confirmed{min-height:390px}}
+
+/* Password access borrows the exact same 2.6-second, four-frame Catrina
+   cadence as Check-In, then hands the stage to the language choice. */
+.catrina-passage.is-password-handoff{z-index:1250;background:rgba(246,238,227,.56);-webkit-backdrop-filter:blur(15px) saturate(92%);backdrop-filter:blur(15px) saturate(92%)}
+.catrina-passage.is-password-handoff .catrina-passage-figure{--catrina-track-left:calc(50% - 165px);--catrina-track-right:calc(50% + 125px);position:absolute;top:50%;left:var(--catrina-track-left);width:40px;opacity:0;transform:translateY(-50%)}
+.catrina-passage.is-password-handoff.is-visible .catrina-passage-figure{animation:password-catrina-cross 2.6s linear both}
+.catrina-passage.is-password-handoff .catrina-dance-frame{animation-name:check-in-catrina-frame;animation-duration:2.6s;animation-timing-function:linear}
+.catrina-passage.is-password-handoff .catrina-dance-frame--one{animation-delay:0s}
+.catrina-passage.is-password-handoff .catrina-dance-frame--two{animation-delay:-.65s}
+.catrina-passage.is-password-handoff .catrina-dance-frame--three{animation-delay:-1.3s}
+.catrina-passage.is-password-handoff .catrina-dance-frame--four{animation-delay:-1.95s}
+@keyframes password-catrina-cross{0%{left:var(--catrina-track-left);opacity:0;transform:translateY(-50%) rotate(-1deg)}8%{opacity:1}92%{opacity:1;transform:translateY(-50%) rotate(1deg)}100%{left:var(--catrina-track-right);opacity:0;transform:translateY(-50%) rotate(0)}}
+
+/* The weather reads as a complete detail card: eyebrow, title, then range. */
+.details-weather-title{margin:0 0 clamp(22px,2.7vw,34px);color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(2rem,3.4vw,3.7rem);font-weight:400;letter-spacing:-.03em;line-height:.94}
+
+/* Each travel pair keeps its two concise headers aligned, while the single
+   open disclosure gets the full row beneath them. */
+@media(min-width:721px){
+  .travel-chapter--city .practical--city,
+  .travel-chapter--tepoztlan .practical--tepoz{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:0 clamp(24px,3vw,44px)!important;width:100%}
+  .travel-chapter--city .practical-item,
+  .travel-chapter--tepoztlan .practical-item{display:contents}
+  .travel-chapter--city .practical-item h4,
+  .travel-chapter--tepoztlan .practical-item h4{display:block;grid-row:1!important;margin:0;border-bottom:1px solid rgba(73,54,44,.16)}
+  .travel-chapter--city .practical-item:nth-child(1) h4,
+  .travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-column:1!important}
+  .travel-chapter--city .practical-item:nth-child(2) h4,
+  .travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-column:2!important}
+  .travel-chapter--city .practical-item .accordion-panel,
+  .travel-chapter--tepoztlan .practical-item .accordion-panel{grid-column:1 / -1!important;grid-row:2!important;width:100%}
+  .travel-chapter--city .practical-item .accordion-trigger,
+  .travel-chapter--tepoztlan .practical-item .accordion-trigger{padding:12px 2px 12px 0}
+  .travel-chapter--city .practical-body,
+  .travel-chapter--tepoztlan .practical-body{padding:0 0 22px}
+}
+
+/* The neighbourhood recommendations are an unobtrusive, consistent four-photo
+   strip inside the relevant disclosure only. */
+.neighbourhood-gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.1vw,14px);margin:clamp(18px,2.3vw,28px) 0}
+.neighbourhood-gallery figure{min-width:0;margin:0}
+.neighbourhood-gallery img{display:block;width:100%;aspect-ratio:3 / 4;object-fit:cover;border-radius:14px;filter:saturate(.88) contrast(.98) sepia(.05);box-shadow:0 10px 22px rgba(52,38,31,.12)}
+.neighbourhood-gallery figcaption{margin-top:.55rem;color:var(--mocha-deep);font-family:var(--serif);font-size:clamp(.92rem,1.1vw,1.06rem);line-height:1.1}
+
+@media(max-width:720px){
+  .detail-panel .detail-label{margin-bottom:1.3rem}
+  .details-weather .detail-label{margin-bottom:.9rem}
+  .details-weather-title{font-size:clamp(2.2rem,11vw,3.2rem);margin-bottom:1.45rem}
+  .neighbourhood-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}
+  .catrina-passage.is-password-handoff .catrina-passage-figure{--catrina-track-left:calc(50% - 140px);--catrina-track-right:calc(50% + 106px);width:34px}
+}
