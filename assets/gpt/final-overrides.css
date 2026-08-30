@@ -1407,6 +1407,7 @@ html:lang(es) .special-col .section-title{
 }
 .password-gate.is-clearing::before{opacity:1!important;--lens-r:0px!important}
 .language-gate.is-password-pending{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+.language-gate.is-arriving{opacity:1!important;visibility:visible!important;transition:none!important}
 
 /* The access action is simply a generous arrow—quiet and self-explanatory. */
 .password-gate-control button{
