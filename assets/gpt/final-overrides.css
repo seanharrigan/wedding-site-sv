@@ -2683,3 +2683,43 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
     padding-top:28px!important;
   }
 }
+
+/* Final travel-disclosure layout contract. This comes last so the old
+   three-column and named-grid experiments cannot pull an expanded answer back
+   into the Accommodation column. The two chips share the first row; the one
+   open answer always owns the complete row below on every screen size. */
+.travel-chapter--city .practical--city,
+.travel-chapter--tepoztlan .practical--tepoz{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-areas:"first second" "answer answer"!important;
+  column-gap:clamp(18px,3vw,44px)!important;
+  row-gap:0!important;
+}
+.travel-chapter--city .practical-item,
+.travel-chapter--tepoztlan .practical-item{display:contents!important}
+.travel-chapter--city .practical-item:nth-child(1) h4,
+.travel-chapter--tepoztlan .practical-item:nth-child(1) h4{grid-area:first!important}
+.travel-chapter--city .practical-item:nth-child(2) h4,
+.travel-chapter--tepoztlan .practical-item:nth-child(2) h4{grid-area:second!important}
+.travel-chapter--city .practical-item .accordion-panel,
+.travel-chapter--tepoztlan .practical-item .accordion-panel{
+  grid-area:answer!important;
+  grid-column:1 / -1!important;
+  grid-row:2!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+}
+.travel-chapter--city .practical-item .practical-body,
+.travel-chapter--tepoztlan .practical-item .practical-body,
+.travel-chapter--city .practical-item .practical-body>p,
+.travel-chapter--tepoztlan .practical-item .practical-body>p{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+}
+@media(max-width:720px){
+  .travel-chapter--city .practical--city,
+  .travel-chapter--tepoztlan .practical--tepoz{column-gap:18px!important}
+}
