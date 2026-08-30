@@ -764,6 +764,21 @@ const calendarIso = (date) => [
   String(date.getMonth() + 1).padStart(2, '0'),
   String(date.getDate()).padStart(2, '0')
 ].join('-');
+const checkInDateInputs = [...document.querySelectorAll('.check-in-card input[type="date"]')];
+const laterIsoDate = (...dates) => dates.filter(Boolean).reduce((latest, date) => date > latest ? date : latest, '');
+const dayAfterIso = (isoDate) => {
+  const date = parseCalendarDate(isoDate);
+  if (!date) return '';
+  date.setDate(date.getDate() + 1);
+  return calendarIso(date);
+};
+const todayIso = () => calendarIso(new Date());
+
+checkInDateInputs.forEach((input) => {
+  input.dataset.scheduleMin = input.min;
+  input.dataset.scheduleMax = input.max;
+  input.min = laterIsoDate(input.dataset.scheduleMin, todayIso());
+});
 const closeDatePicker = (instance) => {
   if (!instance) return;
   instance.panel.hidden = true;
@@ -840,7 +855,7 @@ const openDesktopDatePicker = (instance) => {
   openDatePicker = instance;
 };
 
-document.querySelectorAll('.check-in-card input[type="date"]').forEach((input) => {
+checkInDateInputs.forEach((input) => {
   const field = input.closest('.field');
   const shell = document.createElement('div');
   const trigger = document.createElement('button');
@@ -894,6 +909,38 @@ document.querySelectorAll('.check-in-card input[type="date"]').forEach((input) =
     renderDatePicker(instance);
   });
 });
+
+const syncCheckInDateBounds = () => {
+  const updateBounds = (inputId, afterDate = '') => {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    const minimum = laterIsoDate(input.dataset.scheduleMin, todayIso(), afterDate);
+    input.min = minimum;
+    input.max = input.dataset.scheduleMax;
+    if (input.value && (input.value < minimum || input.value > input.max)) input.value = '';
+
+    const instance = datePickerInstances.find((item) => item.input === input);
+    if (!instance) return;
+    instance.minDate = parseCalendarDate(minimum);
+    instance.maxDate = parseCalendarDate(input.max);
+    if (instance.visibleMonth < new Date(instance.minDate.getFullYear(), instance.minDate.getMonth(), 1, 12)) {
+      instance.visibleMonth = new Date(instance.minDate.getFullYear(), instance.minDate.getMonth(), 1, 12);
+    }
+    if (!instance.panel.hidden) renderDatePicker(instance);
+  };
+
+  const arrival = document.getElementById('arrival-date')?.value || '';
+  const tepoztlanCheckIn = document.getElementById('tepoztlan-check-in')?.value || '';
+  updateBounds('arrival-date');
+  updateBounds('departure-date', dayAfterIso(arrival));
+  updateBounds('tepoztlan-check-in');
+  updateBounds('tepoztlan-check-out', dayAfterIso(tepoztlanCheckIn));
+};
+
+syncCheckInDateBounds();
+document.getElementById('arrival-date')?.addEventListener('change', syncCheckInDateBounds);
+document.getElementById('tepoztlan-check-in')?.addEventListener('change', syncCheckInDateBounds);
 
 const syncDatePickerMode = () => {
   datePickerInstances.forEach((instance) => {
