@@ -1631,3 +1631,88 @@ html:lang(es) .special-col .section-title{
   .check-in-card .field:has(select){padding:6px 40px 6px 11px}
   .check-in-card .field:has(select) select{font-size:1rem}
 }
+
+/* The check-in form begins over its eventual envelope rather than replacing
+   itself after submit. A warm frosted layer recedes once the form has faded. */
+.check-in-card{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:#ecdfcf!important;
+}
+.check-in-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  display:block!important;
+  background:url("opening-envelope-exact-logo-desktop-v7.webp") center / cover no-repeat;
+  opacity:.74;
+  transform:scale(1.018);
+  transition:opacity .9s ease,transform 1.15s cubic-bezier(.22,.61,.36,1);
+  pointer-events:none;
+}
+.check-in-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(150deg,rgba(253,248,241,.9),rgba(235,221,204,.88));
+  -webkit-backdrop-filter:blur(12px) saturate(.84);
+  backdrop-filter:blur(12px) saturate(.84);
+  opacity:1;
+  transition:opacity .85s ease,-webkit-backdrop-filter .85s ease,backdrop-filter .85s ease;
+  pointer-events:none;
+}
+.check-in-card .check-in-form-content{
+  position:relative;
+  z-index:2;
+  transition:opacity .42s ease,transform .58s cubic-bezier(.22,.61,.36,1);
+}
+.check-in-card.is-confirming .check-in-form-content{
+  opacity:0!important;
+  transform:translate3d(0,-5px,0) scale(.992)!important;
+}
+.check-in-card.is-confirmed{
+  display:grid!important;
+  min-height:0!important;
+  height:var(--check-in-confirmed-height,440px)!important;
+  padding:0!important;
+  aspect-ratio:auto!important;
+  place-items:center;
+  background:#ecdfcf!important;
+  border:0!important;
+}
+.check-in-card.is-confirmed::before{
+  display:block!important;
+  opacity:1;
+  transform:scale(1);
+}
+.check-in-card.is-confirmed::after{
+  opacity:0;
+  -webkit-backdrop-filter:blur(0) saturate(1);
+  backdrop-filter:blur(0) saturate(1);
+}
+.check-in-card.is-confirmed .check-in-thanks{z-index:4!important}
+.check-in-card.is-confirmed .check-in-passage{z-index:5}
+.check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
+  top:50%;
+  width:min(80%,500px);
+  color:#482d21;
+  font-size:clamp(1.4rem,2.15vw,1.85rem)!important;
+  font-style:normal;
+  font-weight:400;
+  line-height:1.1;
+  text-shadow:0 1px rgba(255,250,241,.5);
+  transform:translate(-50%,-50%);
+}
+@media(max-width:720px){
+  .check-in-card::before{background-image:url("opening-envelope-exact-logo-mobile-v7.webp")}
+  .check-in-card::after{background:linear-gradient(160deg,rgba(253,248,241,.9),rgba(235,221,204,.9))}
+  .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
+    top:50%;
+    width:min(82%,300px);
+    font-size:clamp(1.38rem,6vw,1.72rem)!important;
+    line-height:1.12;
+  }
+}
