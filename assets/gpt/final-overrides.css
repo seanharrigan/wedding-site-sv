@@ -2499,3 +2499,12 @@ html[lang="es"] .animation-lab-art--open.animation-lab-art--es{display:block}
     margin-inline:auto!important;
   }
 }
+
+/* Desktop-only optical correction: the longer event names on the right make
+   the centered timeline read slightly too far right, so nudge the timeline
+   as a whole left without changing its mobile layout. */
+@media(min-width:721px){
+  .celebration-list--live{
+    transform:translateX(-clamp(10px,1.6vw,22px));
+  }
+}
