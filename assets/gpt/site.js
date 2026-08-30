@@ -951,8 +951,16 @@ checkInForm?.addEventListener('submit', (event) => {
   const checkInTransitionDuration = reducedMotion ? 0 : 2600;
   const formStatus = document.getElementById('form-status');
   if (formStatus) formStatus.textContent = '';
-  checkInForm.classList.add('is-confirming');
+  checkInForm.classList.add('is-confirming', 'is-confirmed');
   event.currentTarget.querySelector('button[type="submit"]')?.setAttribute('disabled', '');
+  if (checkInFormContent) checkInFormContent.hidden = true;
+  if (checkInThanks) {
+    checkInThanks.hidden = false;
+    requestAnimationFrame(() => {
+      checkInThanks.classList.add('is-visible');
+      checkInThanks.querySelector('h3')?.focus({ preventScroll: true });
+    });
+  }
   if (checkInPassage) {
     checkInPassage.hidden = false;
     checkInPassage.classList.remove('is-arrived');
@@ -961,19 +969,10 @@ checkInForm?.addEventListener('submit', (event) => {
   }
 
   window.setTimeout(() => {
-    if (checkInFormContent) checkInFormContent.hidden = true;
     checkInForm.classList.remove('is-confirming');
-    checkInForm.classList.add('is-confirmed');
     if (checkInPassage) {
       checkInPassage.classList.remove('is-walking');
       checkInPassage.classList.add('is-arrived');
-    }
-    if (checkInThanks) {
-      checkInThanks.hidden = false;
-      requestAnimationFrame(() => {
-        checkInThanks.classList.add('is-visible');
-        checkInThanks.querySelector('h3')?.focus({ preventScroll: true });
-      });
     }
   }, checkInTransitionDuration);
 });

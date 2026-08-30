@@ -1386,3 +1386,15 @@ body.animation-preview-open{overflow:hidden}
   .catrina-walk,.check-in-passage.is-arrived .catrina-walk{top:calc(50% - 132px);width:34px}
   .check-in-passage.is-arrived .catrina-walk{left:calc(50% - 17px)}
 }
+
+/* A slightly roomier confirmation, plus a modest desktop-only readability lift. */
+.check-in-card.is-confirmed{min-height:440px}
+@media(min-width:721px){
+  :root{--regular-copy-size:clamp(1.24rem,1.52vw,1.42rem)}
+  .welcome-copy,.save-date-inner>p:not(.save-date-day),.detail-panel p,.details-weather-copy,
+  .week-day p,.chapter-copy,.chapter-copy p,.practical-body p,.faq .accordion-panel p,
+  .neighbourhoods li span,.special-col>p,.check-in-copy p{font-size:clamp(1.18rem,1.4vw,1.3rem);line-height:1.55}
+  .site-header .nav-link,.site-header .invitation-replay{font-size:clamp(.71rem,.9vw,.82rem)!important}
+  .site-header .language-toggle{font-size:clamp(.62rem,.78vw,.72rem)}
+}
+@media(max-width:720px){.check-in-card.is-confirmed{min-height:390px}}
