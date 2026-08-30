@@ -1131,11 +1131,11 @@ html:lang(es) .special-col .section-title{
 .catrina-dance-frame--one{animation-delay:0s}.catrina-dance-frame--two{animation-delay:-1.8s}.catrina-dance-frame--three{animation-delay:-1.2s}.catrina-dance-frame--four{animation-delay:-.6s}
 @keyframes catrina-dance-step{0%{opacity:1;transform:scale(1.016)}18%{opacity:1;transform:scale(1.008)}25%{opacity:0;transform:scale(1.002)}93%{opacity:0;transform:scale(1.024)}100%{opacity:1;transform:scale(1.016)}}
 
-/* Desktop canvas: use the editorial page generously at full laptop widths.
-   As a window closes in, keep its reading width until the beige gutters have
-   eased down to roughly 6% per side; only then let the page scale with it. */
+/* Desktop canvas: 70% across the laptop range, capped at the visual width of
+   a 15-inch MacBook Pro. As a window closes in, keep the 13-inch reading
+   width until beige gutters reach roughly 6% per side; only then scale down. */
 @media(min-width:721px){
-  :root{--desktop-canvas-width:min(max(70vw,1008px),88vw)}
+  :root{--desktop-canvas-width:min(1058px,max(70vw,min(896px,88vw)))}
   .site{
     width:var(--desktop-canvas-width);
     max-width:none;
