@@ -1872,3 +1872,24 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
   .invitation-intro .envelope-stage,
   .invitation-intro.is-closing.is-returning .intro-cover{transition:none!important}
 }
+
+/* The retired envelope artwork must never show through while the new full-art
+   screens crossfade. The Spanish desktop source is slightly wider-framed than
+   its English counterpart, so crop it optically without altering the file. */
+.invitation-intro:not(.is-open),
+.invitation-intro.is-open{
+  background:#efe5d8!important;
+  background-image:none!important;
+}
+.invitation-intro::before,
+.invitation-intro.is-opening::before{
+  display:none!important;
+  background:none!important;
+  animation:none!important;
+}
+@media(min-width:721px){
+  html[lang="es"] .invitation-intro .suite-art--es img{
+    transform:scale(1.055)!important;
+    transform-origin:center center!important;
+  }
+}
