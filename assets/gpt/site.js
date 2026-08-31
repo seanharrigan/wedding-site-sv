@@ -9,7 +9,8 @@ const readStoredValue = (key) => {
 const storeValue = (key, value) => {
   try { localStorage.setItem(key, value); } catch { /* Storage can be unavailable in restricted browsing modes. */ }
 };
-const languageToggle = document.getElementById('language-toggle');
+const navLanguage = document.getElementById('nav-language');
+const navLanguageOptions = [...document.querySelectorAll('[data-nav-language]')];
 const introLanguageToggle = document.getElementById('intro-language-toggle');
 const passwordGate = document.getElementById('password-gate');
 const passwordGateForm = document.getElementById('password-gate-form');
@@ -604,9 +605,12 @@ const renderLanguage = (language) => {
   translatedElements.forEach(({ element, key, english }) => {
     element.innerHTML = language === 'es' ? phraseTranslations.get(key) : english;
   });
-  languageToggle.querySelector('.language-current').textContent = language.toUpperCase();
-  languageToggle.querySelector('.language-next').textContent = language === 'en' ? 'ES' : 'EN';
-  languageToggle.setAttribute('aria-label', language === 'en' ? 'Cambiar a español' : 'Switch to English');
+  navLanguageOptions.forEach((option) => {
+    const selected = option.dataset.navLanguage === language;
+    option.classList.toggle('is-current', selected);
+    option.setAttribute('aria-pressed', String(selected));
+  });
+  navLanguage?.setAttribute('aria-label', language === 'es' ? 'Elegir idioma del sitio web' : 'Choose website language');
   introLanguageToggle.querySelector('.language-current').textContent = language.toUpperCase();
   introLanguageToggle.querySelector('.language-next').textContent = language === 'en' ? 'ES' : 'EN';
   introLanguageToggle.setAttribute('aria-label', language === 'en' ? 'Choose language / Elegir idioma' : 'Elegir idioma / Choose language');
@@ -616,7 +620,8 @@ const renderLanguage = (language) => {
   document.dispatchEvent(new CustomEvent('wedding:languagechange', { detail: language }));
 };
 
-// The header's EN/ES and the envelope's discreet control both open the frosted language gate.
+// The invitation retains its frosted chooser. The website header switches
+// directly so returning guests never have to step through a second overlay.
 const openLanguageGate = () => {
   if (!languageGate || languageGate.classList.contains('is-clearing') || invitationIntro.classList.contains('is-leaving')) return;
   setMenuOpen(false);
@@ -633,11 +638,26 @@ const dismissLanguageGate = () => {
   languageGate.classList.remove('is-optional', 'is-lens-active');
   body.classList.remove('language-gate-open');
 };
-languageToggle.addEventListener('click', (event) => {
+navLanguageOptions.forEach((option) => option.addEventListener('click', (event) => {
   event.preventDefault();
   event.stopPropagation();
-  openLanguageGate();
-});
+  const nextLanguage = option.dataset.navLanguage === 'es' ? 'es' : 'en';
+  const applyLanguage = () => {
+    currentLanguage = nextLanguage;
+    renderLanguage(currentLanguage);
+    requestAnimationFrame(() => body.classList.remove('language-transition'));
+    if (innerWidth <= 720) setMenuOpen(false);
+    if (event.detail > 0) option.blur();
+  };
+
+  if (nextLanguage === currentLanguage || reducedMotion) {
+    applyLanguage();
+    return;
+  }
+
+  body.classList.add('language-transition');
+  setTimeout(applyLanguage, 120);
+}));
 introLanguageToggle.addEventListener('click', openLanguageGate);
 languageGate?.addEventListener('click', (event) => {
   if (event.target.closest('.language-gate-option')) return;

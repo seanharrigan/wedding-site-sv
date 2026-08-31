@@ -2561,3 +2561,126 @@ html[lang="es"] .invitation-intro.is-modern-test .suite-composite::before{
   }
   .countdown .section-title em{font-size:1.18em!important}
 }
+
+/* Direct, inline website-language switcher. The invitation's first-visit
+   language gate remains separate; this header control never opens an overlay. */
+.nav-language{
+  display:flex;
+  flex:0 0 auto;
+  align-items:center;
+  gap:4px;
+  margin-left:5px;
+  padding:4px 7px;
+  border:1px solid currentColor;
+  border-radius:999px;
+  color:inherit;
+  background:rgba(255,255,255,.045);
+  opacity:.82;
+  transition:gap .52s var(--ease-refined),padding .52s var(--ease-refined),background .35s ease,border-color .35s ease,opacity .3s ease;
+}
+.nav-language-option{
+  display:flex;
+  min-width:28px;
+  min-height:32px;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  padding:0;
+  border:0;
+  border-radius:999px;
+  color:inherit;
+  background:transparent;
+  font-family:var(--sans);
+  font-size:.66rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  cursor:pointer;
+  opacity:.58;
+  transition:gap .52s var(--ease-refined),color .32s ease,background .32s ease,opacity .32s ease,transform .42s var(--ease-refined),padding .52s var(--ease-refined);
+}
+.nav-language-option.is-current{opacity:1}
+.nav-language-icon{
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+  fill:none;
+  stroke:currentColor;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  transition:color .35s ease,transform .48s var(--ease-refined);
+}
+.nav-language-icon--leaf{stroke-width:1.28}
+.nav-language-icon--cactus{stroke-width:1.45}
+.nav-language-label{
+  max-width:0;
+  overflow:hidden;
+  opacity:0;
+  white-space:nowrap;
+  transform:translateX(-4px);
+  transition:max-width .58s var(--ease-refined),opacity .25s ease,transform .48s var(--ease-refined);
+}
+.nav-language-divider{width:1px;height:18px;background:currentColor;opacity:.18;transition:height .4s ease,opacity .3s ease}
+
+@media(min-width:721px){
+  .nav-links>:not(.nav-language){
+    max-width:150px;
+    overflow:hidden;
+    white-space:nowrap;
+    transition:max-width .62s var(--ease-refined),padding .62s var(--ease-refined),opacity .28s ease,transform .5s var(--ease-refined),color .25s ease;
+  }
+  .nav-links:has(.nav-language:hover)>:not(.nav-language),
+  .nav-links:has(.nav-language:focus-within)>:not(.nav-language){
+    max-width:0;
+    padding-right:0!important;
+    padding-left:0!important;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(-5px);
+  }
+  .nav-links:has(.nav-language:hover)::after,
+  .nav-links:has(.nav-language:focus-within)::after{opacity:0}
+  .nav-language:hover,.nav-language:focus-within{
+    gap:8px;
+    padding:5px 9px;
+    border-color:rgba(247,239,228,.24);
+    background:rgba(247,239,228,.075);
+    opacity:1;
+  }
+  .nav-language:hover .nav-language-option,
+  .nav-language:focus-within .nav-language-option{gap:7px;padding:0 9px;opacity:1}
+  .nav-language:hover .nav-language-label,
+  .nav-language:focus-within .nav-language-label{max-width:88px;opacity:1;transform:none}
+  .nav-language:hover .nav-language-option--en .nav-language-icon,
+  .nav-language:focus-within .nav-language-option--en .nav-language-icon{color:#a8473f;transform:rotate(-3deg) scale(1.04)}
+  .nav-language:hover .nav-language-option--es .nav-language-icon,
+  .nav-language:focus-within .nav-language-option--es .nav-language-icon{color:#667956;transform:rotate(2deg) scale(1.04)}
+  .nav-language-option:hover,.nav-language-option:focus-visible{background:rgba(255,255,255,.08);transform:translateY(-1px)}
+}
+
+@media(max-width:720px){
+  .nav-links .nav-language{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr);
+    width:100%;
+    margin:8px 0 0;
+    padding:6px;
+    border-color:rgba(255,249,239,.12);
+    color:var(--off-white);
+    background:rgba(255,249,239,.04);
+    opacity:0;
+    transform:translateX(-10px);
+    transition:opacity .3s ease,transform .5s var(--ease-refined),background .3s ease;
+  }
+  .menu-open .nav-links .nav-language{opacity:1;transform:none}
+  .nav-language-option{min-height:46px;gap:7px;padding:0 8px;font-size:.64rem;opacity:.76}
+  .nav-language-option.is-current{background:rgba(255,249,239,.075);opacity:1}
+  .nav-language-label{max-width:88px;opacity:1;transform:none}
+  .nav-language-option--en .nav-language-icon{color:#a8473f}
+  .nav-language-option--es .nav-language-icon{color:#718264}
+  .nav-language-divider{height:24px;justify-self:center}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .nav-language,.nav-language-option,.nav-language-icon,.nav-language-label,.nav-links>:not(.nav-language){transition:none!important}
+}
