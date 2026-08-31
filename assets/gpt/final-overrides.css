@@ -3064,3 +3064,8 @@ body.check-in-modal-open{overflow:hidden!important}
   21%,100%{transform:translateY(-50%) scale(1)}
 }
 .check-in-passage.is-arrived .catrina-walk{animation:catrina-idle-pulse 4.6s ease-in-out 1.4s infinite}
+
+/* The FAQ panel's own background matches the page ground exactly, but as an
+   opaque layer it was painting over the gifts card's soft shadow at the section
+   seam, cutting it into a hard line. Transparent lets the shadow fade out. */
+.faq{background:transparent!important}
