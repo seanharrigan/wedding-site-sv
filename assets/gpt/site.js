@@ -531,7 +531,7 @@ const uiTranslations = {
   weekTitle: ['A week<br>in <em>México</em>.', 'Una semana<br>en <em>México</em>.'], weekBrief: ['Arrive early, stay a little longer, and make the celebration part of a beautiful week away.', 'Lleguen antes, quédense unos días y disfruten una semana completa en México.'],
   weekArrival: ['Arrive in Mexico City', 'Llegada a la Ciudad de México'], weekArrivalCopy: ['Land in the capital, settle in and begin your Mexico City adventure.', 'Lleguen, instálense y empiecen a recorrer la ciudad.'], weekMuertos: ['Día de Muertos parade', 'Desfile de Día de Muertos'], weekMuertosCopy: ['Experience the city in its most luminous season—marigolds, music and remembrance.', 'Disfruten la ciudad entre cempasúchil, música y recuerdos.'], weekTravel: ['Travel to Tepoztlán', 'Viaje a Tepoztlán'], weekTravelCopy: ['Head south into the mountains; the journey from Mexico City is roughly ninety minutes.', 'El viaje desde la Ciudad de México dura aproximadamente noventa minutos.'], weekWedding: ['Wedding day', 'Día de la boda'], weekWeddingCopy: ['Gather with us at Hotel Piedra Viva for an afternoon and evening under the Tepozteco.', 'Pasen la tarde y la noche con nosotros en Hotel Piedra Viva, al pie del Tepozteco.'], weekPool: ['Pool day or hike', 'Día de alberca o caminata'], weekPoolCopy: ['Keep the day unhurried—cool off by the pool or take in the panoramic mountain trail.', 'Tómense el día con calma: alberca o caminata por la montaña.'], weekReturn: ['Return to Mexico City', 'Regreso a la Ciudad de México'], weekReturnCopy: ['Travel back to the city with a little time left for one last coffee or market visit.', 'Regresen a la ciudad con tiempo para un último café o una visita al mercado.'],
   countdownTitle: ['<em>The</em> <span>Countdown</span>', '<em>La</em> <span>cuenta regresiva</span>'],
-  checkInKicker: ['Your journey', 'Su viaje'], checkInTitle: ['<span>Check</span>-<em>In</em>', '<span>Registro</span>'], checkInIntro: ['Share your travel dates and accommodation details so we know when and where to expect you.', 'Compartan sus fechas y datos de hospedaje para saber cuándo y dónde esperarlos.'], partyLabel: ['Who is coming?', '¿Quiénes vienen?'], arrivalDateLabel: ['Arrival date', 'Fecha de llegada'], departureDateLabel: ['Departure date', 'Fecha de salida'], mexicoCityAccommodationLabel: ['Mexico City neighbourhood', 'Colonia en Ciudad de México'], chooseNeighbourhood: ['Choose a neighbourhood', 'Elige una colonia'], otherOption: ['Other', 'Otro'], noAccommodationRequired: ['No accommodation required', 'No se requiere alojamiento'], otherNeighbourhoodLabel: ['Other neighbourhood', 'Otra colonia'], otherNeighbourhoodPlaceholder: ['Enter neighbourhood', 'Escribe la colonia'], tepoztlanCheckInLabel: ['Tepoztlán check-in', 'Entrada en Tepoztlán'], tepoztlanCheckOutLabel: ['Tepoztlán check-out', 'Salida de Tepoztlán'], tepoztlanLocationLabel: ['Tepoztlán accommodation', 'Hospedaje en Tepoztlán'], chooseTepoztlanLocation: ['Choose accommodation', 'Elige el hospedaje'], otherTepoztlanLabel: ['Other accommodation', 'Otro hospedaje'], otherTepoztlanPlaceholder: ['Enter hotel or accommodation', 'Escribe el hotel o alojamiento'], checkInSubmit: ['Submit Check-In <span aria-hidden="true">→</span>', 'Enviar registro <span aria-hidden="true">→</span>'], checkInThanksKicker: ['Gracias', 'Gracias'], checkInThanksTitle: ['Thank you.', 'Gracias.'], checkInThanksCopy: ['This helps us make everyone’s arrival feel easy and well looked after.', 'Esto nos ayuda a que la llegada de todos sea más fácil y cuidada.'], checkInThanksEmail: ['Your check-in<br>has been received.', 'Hemos recibido<br>tu registro.'], closingTitle: ['We cannot wait<br>to celebrate together.', 'Ya queremos<br>celebrar juntos.']
+  checkInKicker: ['Your journey', 'Su viaje'], checkInTitle: ['<span>Check</span>-<em>In</em>', '<span>Registro</span>'], checkInIntro: ['Share your travel dates and accommodation details so we know when and where to expect you.', 'Compartan sus fechas y datos de hospedaje para saber cuándo y dónde esperarlos.'], partyLabel: ['Who is coming?', '¿Quiénes vienen?'], arrivalDateLabel: ['Arrival date', 'Fecha de llegada'], departureDateLabel: ['Departure date', 'Fecha de salida'], mexicoCityAccommodationLabel: ['Mexico City neighbourhood', 'Colonia en Ciudad de México'], chooseNeighbourhood: ['Choose a neighbourhood', 'Elige una colonia'], otherOption: ['Other', 'Otro'], noAccommodationRequired: ['No accommodation required', 'No se requiere alojamiento'], otherNeighbourhoodLabel: ['Other neighbourhood', 'Otra colonia'], otherNeighbourhoodPlaceholder: ['Enter neighbourhood', 'Escribe la colonia'], tepoztlanCheckInLabel: ['Tepoztlán check-in', 'Entrada en Tepoztlán'], tepoztlanCheckOutLabel: ['Tepoztlán check-out', 'Salida de Tepoztlán'], tepoztlanLocationLabel: ['Tepoztlán accommodation', 'Hospedaje en Tepoztlán'], chooseTepoztlanLocation: ['Choose accommodation', 'Elige el hospedaje'], otherTepoztlanLabel: ['Other accommodation', 'Otro hospedaje'], otherTepoztlanPlaceholder: ['Enter hotel or accommodation', 'Escribe el hotel o alojamiento'], checkInSubmit: ['Submit Check-In <span aria-hidden="true">→</span>', 'Enviar registro <span aria-hidden="true">→</span>'], checkInRequired: ['Please complete all required fields.', 'Completa todos los campos obligatorios.'], checkInThanksKicker: ['Gracias', 'Gracias'], checkInThanksTitle: ['Thank you.', 'Gracias.'], checkInThanksCopy: ['This helps us make everyone’s arrival feel easy and well looked after.', 'Esto nos ayuda a que la llegada de todos sea más fácil y cuidada.'], checkInThanksEmail: ['Your check-in<br>has been received.', 'Hemos recibido<br>tu registro.'], closingTitle: ['We cannot wait<br>to celebrate together.', 'Ya queremos<br>celebrar juntos.']
 };
 
 const phraseTranslations = new Map(Object.entries({
@@ -693,6 +693,81 @@ const setupConditionalAccommodation = (selectId, fieldId, inputId) => {
 setupConditionalAccommodation('mexico-city-neighbourhood', 'mexico-city-neighbourhood-other-field', 'mexico-city-neighbourhood-other');
 setupConditionalAccommodation('tepoztlan-location', 'tepoztlan-location-other-field', 'tepoztlan-location-other');
 
+// One shared, centred surface keeps the date and accommodation choices
+// consistent on phones and computers without letting popovers escape the card.
+const checkInModal = document.createElement('div');
+checkInModal.className = 'check-in-modal';
+checkInModal.hidden = true;
+checkInModal.innerHTML = '<button class="check-in-modal-backdrop" type="button" tabindex="-1" aria-label="Close"></button><section class="check-in-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="check-in-modal-title"><button class="check-in-modal-close" type="button" aria-label="Close">\u00d7</button><p class="check-in-modal-title" id="check-in-modal-title"></p><div class="check-in-modal-body"></div></section>';
+body.append(checkInModal);
+const checkInModalBody = checkInModal.querySelector('.check-in-modal-body');
+const checkInModalTitle = checkInModal.querySelector('.check-in-modal-title');
+const checkInModalClose = checkInModal.querySelector('.check-in-modal-close');
+const checkInModalBackdrop = checkInModal.querySelector('.check-in-modal-backdrop');
+if (currentLanguage === 'es') {
+  checkInModalClose.setAttribute('aria-label', 'Cerrar');
+  checkInModalBackdrop.setAttribute('aria-label', 'Cerrar');
+}
+let activeCheckInModal = null;
+let checkInModalTimer = 0;
+
+const finishCheckInModalClose = (state, focus = true) => {
+  if (!state) return;
+  if (state.nextSibling?.parentNode === state.parent) state.parent.insertBefore(state.content, state.nextSibling);
+  else state.parent.append(state.content);
+  state.content.hidden = true;
+  checkInModal.hidden = true;
+  body.classList.remove('check-in-modal-open');
+  if (focus) state.trigger?.focus({ preventScroll: true });
+};
+const hideCheckInModal = ({ focus = true, immediate = false } = {}) => {
+  const state = activeCheckInModal;
+  if (!state) return;
+  activeCheckInModal = null;
+  clearTimeout(checkInModalTimer);
+  checkInModal.classList.remove('is-open');
+  checkInModalTimer = window.setTimeout(() => finishCheckInModalClose(state, focus), immediate || reducedMotion ? 0 : 220);
+};
+const showCheckInModal = ({ content, title, trigger, onRequestClose }) => {
+  if (activeCheckInModal) {
+    const previous = activeCheckInModal;
+    activeCheckInModal = null;
+    finishCheckInModalClose(previous, false);
+  }
+  clearTimeout(checkInModalTimer);
+  const state = { content, parent: content.parentNode, nextSibling: content.nextSibling, trigger, onRequestClose };
+  activeCheckInModal = state;
+  checkInModalTitle.textContent = title;
+  checkInModalBody.append(content);
+  content.hidden = false;
+  checkInModal.hidden = false;
+  body.classList.add('check-in-modal-open');
+  requestAnimationFrame(() => checkInModal.classList.add('is-open'));
+};
+const requestCheckInModalClose = () => activeCheckInModal?.onRequestClose?.({ focus: true });
+checkInModalClose.addEventListener('click', requestCheckInModalClose);
+checkInModalBackdrop.addEventListener('click', requestCheckInModalClose);
+document.addEventListener('keydown', (event) => {
+  if (!activeCheckInModal) return;
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    requestCheckInModalClose();
+    return;
+  }
+  if (event.key !== 'Tab') return;
+  const focusable = [...checkInModal.querySelectorAll('button:not(:disabled),[tabindex]:not([tabindex="-1"])')].filter((element) => !element.hidden);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
+
 // Native option sheets cannot take on the site's paper-and-ink treatment. Keep
 // the real selects for validation and submission, then expose an accessible
 // in-page list that matches the calendar popover on every screen size.
@@ -735,10 +810,13 @@ const setupPaperSelect = (select) => {
   menu.setAttribute('role', 'listbox');
 
   const close = ({ focus = false } = {}) => {
-    menu.hidden = true;
     trigger.setAttribute('aria-expanded', 'false');
     control.classList.remove('is-open');
-    if (focus) trigger.focus({ preventScroll: true });
+    if (activeCheckInModal?.content === menu) hideCheckInModal({ focus });
+    else {
+      menu.hidden = true;
+      if (focus) trigger.focus({ preventScroll: true });
+    }
   };
   const open = () => {
     paperSelectControls.forEach((instance) => {
@@ -747,8 +825,14 @@ const setupPaperSelect = (select) => {
     menu.hidden = false;
     trigger.setAttribute('aria-expanded', 'true');
     control.classList.add('is-open');
+    showCheckInModal({
+      content: menu,
+      title: fieldLabel?.textContent.trim() || '',
+      trigger,
+      onRequestClose: close
+    });
     const selected = menu.querySelector('[aria-selected="true"]:not(:disabled)') || menu.querySelector('button:not(:disabled)');
-    selected?.focus({ preventScroll: true });
+    requestAnimationFrame(() => selected?.focus({ preventScroll: true }));
   };
   const selectValue = (value) => {
     select.value = value;
@@ -808,19 +892,14 @@ const setupPaperSelect = (select) => {
       options[(index + direction + options.length) % options.length]?.focus({ preventScroll: true });
     }
   });
-  document.addEventListener('pointerdown', (event) => {
-    if (!control.contains(event.target)) close();
-  });
   document.addEventListener('wedding:languagechange', render);
-  paperSelectControls.push({ control, close });
+  paperSelectControls.push({ select, control, trigger, menu, close, open });
 };
 
 document.querySelectorAll('.check-in-card select').forEach(setupPaperSelect);
 
-// Desktop browsers do not expose the native date popover for visual styling,
-// so the form uses a small paper-toned calendar there and keeps the familiar
-// native date control on phones.
-const desktopDateMedia = matchMedia('(min-width: 721px)');
+// The same custom calendar is used at every width so the interaction and date
+// rules do not change between a phone and a computer.
 const datePickerInstances = [];
 let openDatePicker = null;
 const parseCalendarDate = (isoDate) => {
@@ -850,7 +929,8 @@ checkInDateInputs.forEach((input) => {
 });
 const closeDatePicker = (instance) => {
   if (!instance) return;
-  instance.panel.hidden = true;
+  if (activeCheckInModal?.content === instance.panel) hideCheckInModal({ focus: true });
+  else instance.panel.hidden = true;
   instance.input.setAttribute('aria-expanded', 'false');
   instance.trigger.setAttribute('aria-expanded', 'false');
   if (openDatePicker === instance) openDatePicker = null;
@@ -910,18 +990,23 @@ const renderDatePicker = (instance) => {
     days.append(button);
   }
 };
-const openDesktopDatePicker = (instance) => {
-  if (!desktopDateMedia.matches) return;
+const openDatePickerPanel = (instance) => {
   if (openDatePicker && openDatePicker !== instance) closeDatePicker(openDatePicker);
   const selected = parseCalendarDate(instance.input.value);
   instance.visibleMonth = selected
     ? new Date(selected.getFullYear(), selected.getMonth(), 1, 12)
     : new Date(instance.minDate.getFullYear(), instance.minDate.getMonth(), 1, 12);
   renderDatePicker(instance);
-  instance.panel.hidden = false;
   instance.input.setAttribute('aria-expanded', 'true');
   instance.trigger.setAttribute('aria-expanded', 'true');
   openDatePicker = instance;
+  showCheckInModal({
+    content: instance.panel,
+    title: instance.fieldLabel?.textContent.trim() || '',
+    trigger: instance.input,
+    onRequestClose: () => closeDatePicker(instance)
+  });
+  requestAnimationFrame(() => instance.panel.querySelector('.is-selected:not(:disabled),.date-picker-day:not(:disabled)')?.focus({ preventScroll: true }));
 };
 
 checkInDateInputs.forEach((input) => {
@@ -966,10 +1051,11 @@ checkInDateInputs.forEach((input) => {
   if (input.id === 'departure-date' || input.id === 'tepoztlan-check-out') field.classList.add('date-field--align-right');
   if (input.id === 'tepoztlan-check-in' || input.id === 'tepoztlan-check-out') field.classList.add('date-field--open-up');
 
-  const instance = { input, trigger, panel, title, days, previous, next, minDate, maxDate, visibleMonth: minDate };
+  const fieldLabel = field.querySelector(`label[for="${input.id}"]`);
+  const instance = { input, trigger, panel, title, days, previous, next, minDate, maxDate, visibleMonth: minDate, fieldLabel };
   datePickerInstances.push(instance);
-  trigger.addEventListener('click', () => panel.hidden ? openDesktopDatePicker(instance) : closeDatePicker(instance));
-  input.addEventListener('click', () => openDesktopDatePicker(instance));
+  trigger.addEventListener('click', () => panel.hidden ? openDatePickerPanel(instance) : closeDatePicker(instance));
+  input.addEventListener('click', () => openDatePickerPanel(instance));
   previous.addEventListener('click', () => {
     instance.visibleMonth = new Date(instance.visibleMonth.getFullYear(), instance.visibleMonth.getMonth() - 1, 1, 12);
     renderDatePicker(instance);
@@ -1015,23 +1101,22 @@ document.getElementById('tepoztlan-check-in')?.addEventListener('change', syncCh
 const syncDatePickerMode = () => {
   datePickerInstances.forEach((instance) => {
     closeDatePicker(instance);
-    instance.input.type = desktopDateMedia.matches ? 'text' : 'date';
-    instance.input.readOnly = desktopDateMedia.matches;
-    instance.input.setAttribute('aria-haspopup', desktopDateMedia.matches ? 'dialog' : 'false');
-    instance.trigger.hidden = !desktopDateMedia.matches;
+    instance.input.type = 'text';
+    instance.input.readOnly = true;
+    instance.input.setAttribute('aria-haspopup', 'dialog');
+    instance.trigger.hidden = false;
   });
 };
-desktopDateMedia.addEventListener('change', syncDatePickerMode);
 syncDatePickerMode();
-document.addEventListener('pointerdown', (event) => {
-  if (openDatePicker && !event.target.closest('.date-field')) closeDatePicker(openDatePicker);
-});
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && openDatePicker) closeDatePicker(openDatePicker);
-});
 document.addEventListener('wedding:languagechange', () => {
+  const spanish = currentLanguage === 'es';
+  checkInModalClose.setAttribute('aria-label', spanish ? 'Cerrar' : 'Close');
+  checkInModalBackdrop.setAttribute('aria-label', spanish ? 'Cerrar' : 'Close');
+  if (activeCheckInModal) {
+    const field = activeCheckInModal.trigger?.closest('.field');
+    checkInModalTitle.textContent = field?.querySelector('label')?.textContent.trim() || '';
+  }
   datePickerInstances.forEach((instance) => {
-    const spanish = currentLanguage === 'es';
     instance.trigger.setAttribute('aria-label', spanish ? 'Elegir fecha' : 'Choose date');
     instance.panel.setAttribute('aria-label', spanish ? 'Elegir fecha' : 'Choose date');
     instance.previous.setAttribute('aria-label', spanish ? 'Mes anterior' : 'Previous month');
@@ -1096,30 +1181,61 @@ const sendCheckInSubmission = (form) => {
   });
 };
 
+const clearCheckInInvalidState = (control) => {
+  const field = control?.closest('.field');
+  field?.classList.remove('is-invalid');
+  control?.removeAttribute('aria-invalid');
+  paperSelectControls.find((instance) => instance.select === control)?.trigger.removeAttribute('aria-invalid');
+};
+const validateCheckInForm = () => {
+  if (!checkInForm) return false;
+  syncCheckInDateBounds();
+  const requiredControls = [...checkInForm.querySelectorAll('[required]:not(:disabled)')];
+  const invalidControls = requiredControls.filter((control) => !String(control.value || '').trim());
+
+  requiredControls.forEach(clearCheckInInvalidState);
+  invalidControls.forEach((control) => {
+    control.closest('.field')?.classList.add('is-invalid');
+    control.setAttribute('aria-invalid', 'true');
+    paperSelectControls.find((instance) => instance.select === control)?.trigger.setAttribute('aria-invalid', 'true');
+  });
+
+  const formStatus = document.getElementById('form-status');
+  if (!invalidControls.length) {
+    formStatus?.classList.remove('is-error');
+    if (formStatus) formStatus.textContent = '';
+    return true;
+  }
+
+  if (formStatus) {
+    formStatus.textContent = uiTranslations.checkInRequired[currentLanguage === 'es' ? 1 : 0];
+    formStatus.classList.add('is-error');
+  }
+  const firstInvalid = invalidControls[0];
+  const paperSelect = paperSelectControls.find((instance) => instance.select === firstInvalid);
+  const datePicker = datePickerInstances.find((instance) => instance.input === firstInvalid);
+  if (paperSelect) paperSelect.open();
+  else if (datePicker) openDatePickerPanel(datePicker);
+  else firstInvalid.focus({ preventScroll: false });
+  return false;
+};
+
+checkInForm?.addEventListener('input', (event) => clearCheckInInvalidState(event.target));
+checkInForm?.addEventListener('change', (event) => clearCheckInInvalidState(event.target));
+
 const submitCheckIn = (event) => {
   event.preventDefault();
   if (!checkInForm || checkInForm.classList.contains('is-confirming') || checkInForm.classList.contains('is-confirmed')) return;
+  if (!validateCheckInForm()) return;
 
-  // Keep the immediate, crafted confirmation transition. A blank practice
-  // submission remains visual-only; real entries are delivered in the background.
-  const party = new FormData(checkInForm).get('party');
-  if (typeof party === 'string' && party.trim()) {
-    void sendCheckInSubmission(checkInForm).catch(() => {
-      console.warn('The check-in could not be delivered.');
-    });
-  }
+  void sendCheckInSubmission(checkInForm).catch(() => {
+    console.warn('The check-in could not be delivered.');
+  });
 
   showCheckInConfirmation();
 };
 
 checkInForm?.addEventListener('submit', submitCheckIn);
-
-// Some mobile browsers do not promote a light touch on the styled submit button
-// to the form submit event. Handle that path explicitly while preserving keyboard submit.
-checkInForm?.querySelector('button[type="submit"]')?.addEventListener('click', (event) => {
-  if (checkInForm?.classList.contains('is-confirming') || checkInForm?.classList.contains('is-confirmed')) return;
-  submitCheckIn(event);
-});
 
 // Frosted panels clear a soft lens wherever the pointer rests (desktop only).
 const attachLens = (lensPanel) => {

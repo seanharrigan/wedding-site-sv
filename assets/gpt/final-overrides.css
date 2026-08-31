@@ -2766,3 +2766,252 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
     top:37%!important;
   }
 }
+
+/* Check-in choices use one calm, centred interaction surface at every width. */
+body.check-in-modal-open{overflow:hidden!important}
+.check-in-modal[hidden]{display:none!important}
+.check-in-modal{
+  position:fixed;
+  inset:0;
+  z-index:1600;
+  display:grid;
+  place-items:center;
+  padding:clamp(18px,4vw,42px);
+  opacity:0;
+  transition:opacity .22s ease;
+}
+.check-in-modal.is-open{opacity:1}
+.check-in-modal-backdrop{
+  position:absolute;
+  inset:0;
+  width:100%;
+  border:0;
+  background:rgba(47,31,23,.42);
+  -webkit-backdrop-filter:blur(12px) saturate(.9);
+  backdrop-filter:blur(12px) saturate(.9);
+}
+.check-in-modal-dialog{
+  position:relative;
+  z-index:1;
+  width:min(92vw,440px);
+  max-height:calc(100dvh - 36px);
+  overflow:auto;
+  padding:clamp(24px,4vw,34px);
+  border:1px solid rgba(255,255,255,.58);
+  border-radius:28px;
+  background:linear-gradient(145deg,rgba(250,242,230,.94),rgba(239,226,208,.9));
+  box-shadow:0 28px 80px rgba(42,25,17,.25),inset 0 1px rgba(255,255,255,.72);
+  color:#4b3429;
+  opacity:0;
+  transform:translateY(12px) scale(.975);
+  transition:opacity .28s ease,transform .38s cubic-bezier(.16,1,.3,1);
+}
+.check-in-modal.is-open .check-in-modal-dialog{opacity:1;transform:none}
+.check-in-modal-close{
+  position:absolute;
+  top:12px;
+  right:12px;
+  display:grid;
+  width:34px;
+  height:34px;
+  place-items:center;
+  border:1px solid rgba(75,52,41,.16);
+  border-radius:50%;
+  background:rgba(255,250,241,.54);
+  color:inherit;
+  font:300 1.2rem/1 var(--sans);
+  cursor:pointer;
+}
+.check-in-modal-title{
+  margin:0 42px 20px;
+  color:#4b3429;
+  font-family:var(--serif);
+  font-size:1.48rem;
+  line-height:1.2;
+  text-align:center;
+}
+.check-in-modal-body{width:100%}
+.check-in-modal .date-picker-panel,
+.check-in-modal .paper-select-menu{
+  position:static!important;
+  inset:auto!important;
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  animation:none!important;
+  transform:none!important;
+  opacity:1!important;
+}
+.check-in-modal .date-picker-panel[hidden],
+.check-in-modal .paper-select-menu[hidden]{display:none!important}
+.check-in-modal .paper-select-menu{display:grid!important;gap:8px!important}
+.check-in-modal .paper-select-option{
+  width:100%;
+  min-height:48px;
+  padding:11px 16px!important;
+  border:1px solid rgba(75,52,41,.13)!important;
+  border-radius:14px!important;
+  background:rgba(255,250,241,.42)!important;
+  color:#4b3429!important;
+  font-family:var(--serif)!important;
+  font-size:1.08rem!important;
+  text-align:left;
+}
+.check-in-modal .paper-select-option:is(:hover,:focus-visible),
+.check-in-modal .paper-select-option[aria-selected="true"]{
+  border-color:rgba(75,52,41,.3)!important;
+  background:rgba(255,250,241,.82)!important;
+}
+.check-in-modal .date-picker-header{margin-bottom:12px}
+.check-in-modal .date-picker-header strong{font-size:1.28rem!important;font-weight:400}
+.check-in-modal .date-picker-weekday{font-size:.64rem!important}
+.check-in-modal .date-picker-day{
+  min-height:40px!important;
+  font-size:1.04rem!important;
+}
+.check-in-modal .date-picker-nav{width:38px!important;height:38px!important}
+.date-picker-trigger{display:grid!important}
+.check-in-card .field.is-invalid input,
+.check-in-card .field.is-invalid .paper-select-trigger{
+  border-bottom-color:#9d4b42!important;
+  box-shadow:inset 0 -1px #9d4b42!important;
+}
+.check-in-card .field.is-invalid label{color:#8c4039!important}
+.check-in-card .form-status.is-error{
+  min-height:1.4em;
+  margin-top:12px;
+  color:#8c4039!important;
+  font-family:var(--serif);
+  text-align:center;
+}
+
+/* The desktop control stays quiet until invited open; mobile always spells
+   both choices out and marks the active language with its coloured symbol. */
+.nav-language{
+  background:rgba(255,255,255,.025)!important;
+  border-color:color-mix(in srgb,currentColor 22%,transparent)!important;
+}
+.nav-language-divider{
+  display:block!important;
+  width:1px!important;
+  height:18px!important;
+  background:currentColor!important;
+  opacity:.22!important;
+}
+.nav-language-label--long{display:none}
+@media(min-width:721px){
+  .nav-language{width:78px;transition:width .48s var(--ease-refined),background .35s ease,border-color .35s ease,opacity .3s ease!important}
+  .nav-language-option{gap:6px!important}
+  .nav-language:hover .nav-language-label--short,
+  .nav-language:focus-within .nav-language-label--short{display:none!important}
+  .nav-language:hover .nav-language-label--long,
+  .nav-language:focus-within .nav-language-label--long{display:inline-block!important;max-width:72px!important;opacity:1!important;transform:none!important}
+  .nav-language:hover .nav-language-icon,
+  .nav-language:focus-within .nav-language-icon{width:19px!important;flex-basis:19px!important}
+  .nav-language:hover,.nav-language:focus-within{width:174px!important}
+  .nav-language:hover .nav-language-option--en .nav-language-icon,
+  .nav-language:focus-within .nav-language-option--en .nav-language-icon{color:currentColor!important;transform:scale(.94)!important}
+  .nav-language:hover .nav-language-option--es .nav-language-icon,
+  .nav-language:focus-within .nav-language-option--es .nav-language-icon{color:currentColor!important;transform:scale(.94)!important}
+  .nav-language:hover .nav-language-option--en:is(:hover,:focus-visible,.is-current) .nav-language-icon,
+  .nav-language:focus-within .nav-language-option--en:is(:hover,:focus-visible,.is-current) .nav-language-icon{color:#a8473f!important;transform:rotate(-3deg) scale(1.04)!important}
+  .nav-language:hover .nav-language-option--es:is(:hover,:focus-visible,.is-current) .nav-language-icon,
+  .nav-language:focus-within .nav-language-option--es:is(:hover,:focus-visible,.is-current) .nav-language-icon{color:#667956!important;transform:rotate(2deg) scale(1.04)!important}
+}
+@media(max-width:720px){
+  .nav-links .invitation-replay,
+  .nav-links .nav-link{
+    font-size:.72rem!important;
+    letter-spacing:.2em!important;
+    font-weight:600!important;
+  }
+  .nav-links .nav-language{
+    grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr)!important;
+    padding:4px!important;
+    background:rgba(255,255,255,.035)!important;
+  }
+  .nav-language-option{gap:6px!important;padding:0 6px!important;font-size:.68rem!important}
+  .nav-language-label--short{display:none!important}
+  .nav-language-label--long{display:inline-block!important;max-width:none!important;opacity:1!important;transform:none!important}
+  .nav-language-icon{width:20px!important;flex-basis:20px!important;opacity:.48!important}
+  .nav-language-option--en.is-current .nav-language-icon{color:#a8473f!important;opacity:1!important}
+  .nav-language-option--es.is-current .nav-language-icon{color:#667956!important;opacity:1!important}
+  .nav-language-divider{height:22px!important}
+}
+
+/* The photo gets its own clipped layer, while the wax seal remains a sibling
+   that can bridge the photo and Welcome without exposing a second photo edge. */
+.hero--image-only{overflow:visible!important;z-index:3!important;background:transparent!important}
+.hero--image-only::before,
+.hero--image-only::after{content:none!important}
+.hero-visual{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  border-radius:inherit;
+  background:#7a685c;
+  isolation:isolate;
+}
+.hero-visual::before,
+.hero-visual::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+}
+.hero-visual::before{
+  z-index:-2;
+  background:url("sean-valeria-coast.webp") center 58%/cover no-repeat;
+  transform:scale(calc(1.012 + var(--hero-shift,0)*.000025));
+  transform-origin:center;
+  transition:transform 1.15s cubic-bezier(.16,1,.3,1),filter 1.15s ease;
+  will-change:transform;
+}
+.hero-visual::after{
+  z-index:-1;
+  background:linear-gradient(180deg,rgba(20,14,10,.18),transparent 40%,rgba(27,18,12,.12));
+}
+.hero--image-only .hero-seal{z-index:8!important}
+.welcome-section{position:relative;z-index:2}
+@media(hover:hover) and (pointer:fine){
+  .hero--image-only:hover .hero-visual::before{
+    transform:scale(calc(1.03 + var(--hero-shift,0)*.000025));
+    filter:brightness(1.025) saturate(1.02);
+  }
+}
+@media(max-width:720px){
+  .hero-visual::before{background-position:58% center}
+  .hero-visual::after{background:linear-gradient(180deg,rgba(18,13,9,.34),transparent 36%,rgba(21,15,10,.1))}
+}
+
+/* Tighter mobile Catrina passage and a deliberately closer receipt line. */
+@media(max-width:720px){
+  .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{top:31.5%!important}
+  .check-in-modal-dialog{width:min(90vw,410px);padding:24px 18px;border-radius:24px}
+  .check-in-modal-title{margin-bottom:16px;font-size:1.25rem}
+  .check-in-modal .date-picker-header strong{font-size:1.1rem!important}
+  .check-in-modal .date-picker-weekday{font-size:.58rem!important}
+  .check-in-modal .date-picker-day{min-height:36px!important;font-size:.94rem!important}
+}
+@media(max-width:720px) and (prefers-reduced-motion:no-preference){
+  .check-in-passage.is-walking .catrina-walk{
+    animation:check-in-catrina-mobile-pass-tight 3.4s linear both!important;
+  }
+  @keyframes check-in-catrina-mobile-pass-tight{
+    0%{left:27px;opacity:0;transform:translateY(-50%) rotate(-1deg)}
+    9%{opacity:1}
+    91%{opacity:1;transform:translateY(-50%) rotate(1deg)}
+    100%{left:calc(100% - 69px);opacity:0;transform:translateY(-50%) rotate(0)}
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .check-in-modal,.check-in-modal-dialog{transition:none!important}
+}
