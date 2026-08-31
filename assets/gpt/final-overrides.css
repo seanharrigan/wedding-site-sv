@@ -3034,3 +3034,40 @@ body.check-in-modal-open{overflow:hidden!important}
 @media(prefers-reduced-motion:reduce){
   .check-in-modal,.check-in-modal-dialog{transition:none!important}
 }
+
+/* Venue and Travel map actions share one authoritative button treatment. */
+.chapter-map-button,
+.detail-map-button{
+  min-height:46px!important;
+  margin-top:clamp(18px,2.2vw,28px)!important;
+  padding:.8rem 1.35rem!important;
+  border:1px solid var(--mocha)!important;
+  border-radius:999px!important;
+  color:var(--off-white)!important;
+  background:var(--mocha)!important;
+  box-shadow:0 12px 26px rgba(52,38,31,.18)!important;
+  font-size:.62rem!important;
+  letter-spacing:.16em!important;
+  text-decoration:none!important;
+  transition:transform .55s var(--ease-refined),background-color .4s ease,border-color .4s ease,box-shadow .5s ease!important;
+}
+.chapter-map-button::after,
+.detail-map-button::after{display:none!important}
+.chapter-map-button span,
+.detail-map-button span{
+  font-size:.8rem!important;
+  line-height:1;
+  transition:transform .45s var(--ease-refined);
+}
+.chapter-map-button:is(:hover,:focus-visible),
+.detail-map-button:is(:hover,:focus-visible){
+  border-color:var(--mocha-deep)!important;
+  background:var(--mocha-deep)!important;
+  box-shadow:0 16px 32px rgba(52,38,31,.24)!important;
+  transform:translateY(-3px)!important;
+}
+.chapter-map-button:is(:hover,:focus-visible) span,
+.detail-map-button:is(:hover,:focus-visible) span{transform:translate(3px,-2px)}
+@media(max-width:720px){
+  .chapter-map-button,.detail-map-button{min-height:44px!important;margin-top:16px!important}
+}
