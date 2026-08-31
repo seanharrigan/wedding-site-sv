@@ -2743,3 +2743,26 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
     bottom:max(20px,calc(env(safe-area-inset-bottom) + 10px))!important;
   }
 }
+
+/* On the phone confirmation, the Catrina keeps a gentle four-frame dance
+   after arriving. The receipt line sits closer beneath her. */
+@media(max-width:720px) and (prefers-reduced-motion:no-preference){
+  .check-in-passage.is-arrived .catrina-dance-frame{
+    visibility:hidden;
+    opacity:1!important;
+    animation:check-in-catrina-mobile-dance 2.8s steps(1,end) infinite!important;
+  }
+  .check-in-passage.is-arrived .catrina-dance-frame--one{animation-delay:0s!important}
+  .check-in-passage.is-arrived .catrina-dance-frame--two{animation-delay:-.7s!important}
+  .check-in-passage.is-arrived .catrina-dance-frame--three{animation-delay:-1.4s!important}
+  .check-in-passage.is-arrived .catrina-dance-frame--four{animation-delay:-2.1s!important}
+  @keyframes check-in-catrina-mobile-dance{
+    0%,24.99%{visibility:visible;transform:translateY(0) rotate(-.8deg) scale(1.015)}
+    25%,100%{visibility:hidden;transform:translateY(0) rotate(.8deg) scale(1)}
+  }
+}
+@media(max-width:720px){
+  .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
+    top:37%!important;
+  }
+}
