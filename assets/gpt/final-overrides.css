@@ -2677,3 +2677,69 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
     transform:translate(-50%,-50%)!important;
   }
 }
+
+/* Final interaction calibration: the hero image and its tint share one fixed
+   clipping edge, while the photograph gets only a restrained desktop lift. */
+.hero--image-only{
+  overflow:hidden!important;
+  background:transparent!important;
+}
+.hero--image-only::before,
+.hero--image-only::after{
+  inset:0!important;
+  border-radius:inherit!important;
+  clip-path:none!important;
+  backface-visibility:hidden;
+}
+.hero--image-only::before{
+  transform-origin:center!important;
+  transition:transform 1.15s cubic-bezier(.16,1,.3,1)!important;
+  will-change:transform!important;
+}
+@media(hover:hover) and (pointer:fine){
+  .hero--image-only:hover::before{
+    transform:scale(calc(1.018 + var(--hero-shift,0)*.000025))!important;
+  }
+}
+
+/* Desktop optical balance: the time column is intentionally narrower so the
+   longer event names begin just left of the mathematical centre. */
+@media(min-width:721px){
+  .celebration-list--live{transform:none!important}
+  .timeline-events .celebration-event{
+    grid-template-columns:minmax(90px,.84fr) minmax(0,1.16fr)!important;
+  }
+}
+
+/* The lower date fields open upward. Calendar and select surfaces may extend
+   beyond the card, while its artwork layers keep their rounded silhouette. */
+@media(min-width:721px){
+  .date-field--open-up .date-picker-panel{
+    top:auto!important;
+    bottom:calc(100% + 10px)!important;
+  }
+  .check-in-card:has(.date-picker-panel:not([hidden])){
+    overflow:visible!important;
+    -webkit-mask-image:none!important;
+  }
+  .check-in-card:has(.date-picker-panel:not([hidden]))::before,
+  .check-in-card:has(.date-picker-panel:not([hidden]))::after{
+    clip-path:inset(0 round 38px)!important;
+  }
+}
+.paper-select-control--open-up .paper-select-menu{
+  top:auto!important;
+  bottom:calc(100% + 10px)!important;
+}
+
+/* Invitation artwork is lifted a touch on desktop for equal top/bottom text
+   breathing room. The closed-envelope cue sits near the safe lower edge. */
+@media(min-width:721px){
+  .invitation-intro .suite-art img{object-position:center 53%!important}
+}
+@media(max-width:720px){
+  .invitation-intro:not(.is-open) .intro-cover>.open-invitation-cue{
+    top:auto!important;
+    bottom:max(20px,calc(env(safe-area-inset-bottom) + 10px))!important;
+  }
+}
