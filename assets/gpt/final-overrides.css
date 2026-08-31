@@ -2809,24 +2809,27 @@ body.check-in-modal-open{overflow:hidden!important}
 .check-in-modal.is-open .check-in-modal-dialog{opacity:1;transform:none}
 .check-in-modal-close{
   position:absolute;
-  top:12px;
-  right:12px;
+  top:14px;
+  right:16px;
   display:grid;
-  width:34px;
-  height:34px;
+  width:28px;
+  height:28px;
   place-items:center;
-  border:1px solid rgba(75,52,41,.16);
-  border-radius:50%;
-  background:rgba(255,250,241,.54);
+  border:0;
+  border-radius:7px;
+  background:transparent;
   color:inherit;
-  font:300 1.2rem/1 var(--sans);
+  font:400 1.25rem/1 var(--sans);
   cursor:pointer;
+  transition:color .28s ease,background-color .3s ease,transform .4s var(--ease-refined);
 }
+.check-in-modal-close:is(:hover,:focus-visible){color:#a8473f;background:rgba(168,71,63,.08);outline:0;transform:rotate(4deg) scale(1.08)}
 .check-in-modal-title{
   margin:0 42px 20px;
   color:#4b3429;
   font-family:var(--serif);
   font-size:1.48rem;
+  font-weight:700;
   line-height:1.2;
   text-align:center;
 }
@@ -2856,26 +2859,50 @@ body.check-in-modal-open{overflow:hidden!important}
   min-height:48px;
   padding:11px 16px!important;
   border:1px solid rgba(75,52,41,.13)!important;
-  border-radius:14px!important;
+  border-radius:9px!important;
   background:rgba(255,250,241,.42)!important;
   color:#4b3429!important;
   font-family:var(--serif)!important;
   font-size:1.08rem!important;
+  font-weight:600!important;
   text-align:left;
+  transition:border-color .3s ease,background-color .3s ease,color .3s ease,transform .35s var(--ease-refined)!important;
 }
 .check-in-modal .paper-select-option:is(:hover,:focus-visible),
 .check-in-modal .paper-select-option[aria-selected="true"]{
-  border-color:rgba(75,52,41,.3)!important;
-  background:rgba(255,250,241,.82)!important;
+  border-color:rgba(168,71,63,.38)!important;
+  color:#6f342f!important;
+  background:rgba(255,250,241,.88)!important;
+  outline:0;
+  transform:translateX(2px);
 }
 .check-in-modal .date-picker-header{margin-bottom:12px}
-.check-in-modal .date-picker-header strong{font-size:1.28rem!important;font-weight:400}
-.check-in-modal .date-picker-weekday{font-size:.64rem!important}
+.check-in-modal .date-picker-header strong{font-size:1.3rem!important;font-weight:700!important}
+.check-in-modal .date-picker-weekday{color:rgba(75,52,41,.72)!important;font-size:.66rem!important;font-weight:700!important}
 .check-in-modal .date-picker-day{
   min-height:40px!important;
+  border:1px solid transparent!important;
+  border-radius:9px!important;
+  color:#4b3429!important;
   font-size:1.04rem!important;
+  font-weight:650!important;
+  transition:color .25s ease,background-color .3s ease,border-color .3s ease,transform .35s var(--ease-refined)!important;
 }
-.check-in-modal .date-picker-nav{width:38px!important;height:38px!important}
+.check-in-modal .date-picker-day:is(:hover,:focus-visible):not(:disabled){border-color:rgba(168,71,63,.38)!important;color:#6f342f!important;background:rgba(168,71,63,.09)!important;outline:0;transform:translateY(-1px)}
+.check-in-modal .date-picker-day.is-selected{border-color:var(--mocha-deep)!important;color:var(--off-white)!important;background:var(--mocha-deep)!important;box-shadow:0 6px 14px rgba(52,38,31,.2)!important}
+.check-in-modal .date-picker-day:disabled{color:rgba(75,52,41,.34)!important;font-weight:500!important}
+.check-in-modal .date-picker-nav{
+  width:38px!important;
+  height:38px!important;
+  border:1px solid transparent!important;
+  border-radius:9px!important;
+  background:transparent!important;
+  color:#4b3429!important;
+  transition:color .28s ease,background-color .3s ease,border-color .3s ease,transform .4s var(--ease-refined)!important;
+}
+.check-in-modal .date-picker-nav svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.check-in-modal .date-picker-nav:is(:hover,:focus-visible):not(:disabled){border-color:rgba(168,71,63,.28)!important;color:#a8473f!important;background:rgba(168,71,63,.08)!important;outline:0;transform:translateX(0) scale(1.06)}
+.check-in-modal .date-picker-nav:disabled{color:rgba(75,52,41,.28)!important;opacity:1!important}
 .date-picker-trigger{display:grid!important}
 .check-in-card .field.is-invalid input,
 .check-in-card .field.is-invalid .paper-select-trigger{

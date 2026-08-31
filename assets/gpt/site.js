@@ -1035,11 +1035,11 @@ checkInDateInputs.forEach((input) => {
   header.className = 'date-picker-header';
   previous.type = 'button';
   previous.className = 'date-picker-nav';
-  previous.innerHTML = '<span aria-hidden="true">←</span>';
+  previous.innerHTML = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12.5 5-5 5 5 5"></path></svg>';
   previous.setAttribute('aria-label', currentLanguage === 'es' ? 'Mes anterior' : 'Previous month');
   next.type = 'button';
   next.className = 'date-picker-nav';
-  next.innerHTML = '<span aria-hidden="true">→</span>';
+  next.innerHTML = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7.5 5 5 5-5 5"></path></svg>';
   next.setAttribute('aria-label', currentLanguage === 'es' ? 'Mes siguiente' : 'Next month');
   days.className = 'date-picker-days';
   header.append(previous, title, next);
