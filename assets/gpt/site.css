@@ -2703,10 +2703,11 @@ body.password-gate-open{overflow:hidden}
 .language-gate-option::after{content:"";position:absolute;right:18px;bottom:4px;left:18px;height:1px;background:currentColor;opacity:.28;transform:scaleX(.32);transition:opacity .35s ease,transform .5s var(--ease-refined)}
 .language-gate-icon{width:27px;height:27px;flex:0 0 27px;opacity:.9;transition:color .38s ease,transform .5s var(--ease-refined),opacity .3s ease}
 .language-gate-icon--leaf{
-  display:block;
-  background:currentColor;
-  -webkit-mask:url("maple-leaf-outline-ai-v1.svg") center/contain no-repeat;
-  mask:url("maple-leaf-outline-ai-v1.svg") center/contain no-repeat;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.28;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
 .language-gate-icon--cactus{fill:none;stroke:currentColor;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
 .language-gate-option[data-language="en"]:is(:hover,:focus-visible) .language-gate-icon--leaf{color:#963f38}
