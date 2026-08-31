@@ -3045,3 +3045,8 @@ body.check-in-modal-open{overflow:hidden!important}
 @media(max-width:720px){
   .chapter-map-button,.detail-map-button{min-height:44px!important;margin-top:16px!important}
 }
+
+/* Mobile: drop the header pill slightly so it clears the hero's top curve on first load. */
+@media(max-width:720px){
+  .site-header:not(.scrolled){top:24px}
+}
