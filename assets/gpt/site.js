@@ -621,7 +621,6 @@ navLanguageOptions.forEach((option) => option.addEventListener('click', (event) 
     currentLanguage = nextLanguage;
     renderLanguage(currentLanguage);
     requestAnimationFrame(() => body.classList.remove('language-transition'));
-    if (innerWidth <= 720) setMenuOpen(false);
     if (event.detail > 0) option.blur();
   };
 

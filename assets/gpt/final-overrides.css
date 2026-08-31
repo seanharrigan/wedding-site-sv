@@ -2934,17 +2934,34 @@ body.check-in-modal-open{overflow:hidden!important}
     font-weight:600!important;
   }
   .nav-links .nav-language{
+    position:relative;
     grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr)!important;
+    overflow:hidden;
     padding:4px!important;
     background:rgba(255,255,255,.035)!important;
   }
-  .nav-language-option{gap:6px!important;padding:0 6px!important;font-size:.68rem!important}
+  .nav-links .nav-language::before{
+    content:"";
+    position:absolute;
+    z-index:0;
+    top:4px;
+    bottom:4px;
+    left:4px;
+    width:calc(50% - 4.5px);
+    border:1px solid rgba(255,249,239,.08);
+    border-radius:999px;
+    background:rgba(255,249,239,.075);
+    box-shadow:inset 0 1px rgba(255,255,255,.06);
+    transition:transform .52s var(--ease-refined);
+  }
+  html[lang="es"] .nav-links .nav-language::before{transform:translateX(calc(100% + 1px))}
+  .nav-language-option{position:relative;z-index:1;gap:6px!important;padding:0 6px!important;background:transparent!important;font-size:.68rem!important}
   .nav-language-label--short{display:none!important}
   .nav-language-label--long{display:inline-block!important;max-width:none!important;opacity:1!important;transform:none!important}
   .nav-language-icon{width:20px!important;flex-basis:20px!important;opacity:.48!important}
   .nav-language-option--en.is-current .nav-language-icon{color:#a8473f!important;opacity:1!important}
   .nav-language-option--es.is-current .nav-language-icon{color:#667956!important;opacity:1!important}
-  .nav-language-divider{height:22px!important}
+  .nav-language-divider{position:relative;z-index:1;height:22px!important}
 }
 
 /* The photo gets its own clipped layer, while the wax seal remains a sibling
