@@ -2907,14 +2907,16 @@ body.check-in-modal-open{overflow:hidden!important}
 .nav-language-label--long{display:none}
 @media(min-width:721px){
   .nav-language{width:78px;transition:width .48s var(--ease-refined),background .35s ease,border-color .35s ease,opacity .3s ease!important}
-  .nav-language-option{gap:6px!important}
+  .nav-language-option{min-width:0!important;gap:6px!important}
   .nav-language:hover .nav-language-label--short,
   .nav-language:focus-within .nav-language-label--short{display:none!important}
   .nav-language:hover .nav-language-label--long,
-  .nav-language:focus-within .nav-language-label--long{display:inline-block!important;max-width:72px!important;opacity:1!important;transform:none!important}
+  .nav-language:focus-within .nav-language-label--long{display:inline-block!important;max-width:92px!important;overflow:visible!important;opacity:1!important;transform:none!important}
   .nav-language:hover .nav-language-icon,
   .nav-language:focus-within .nav-language-icon{width:19px!important;flex-basis:19px!important}
-  .nav-language:hover,.nav-language:focus-within{width:174px!important}
+  .nav-language:hover,.nav-language:focus-within{width:214px!important}
+  .nav-language:hover .nav-language-option,
+  .nav-language:focus-within .nav-language-option{flex:1 1 0!important}
   .nav-language:hover .nav-language-option--en .nav-language-icon,
   .nav-language:focus-within .nav-language-option--en .nav-language-icon{color:currentColor!important;transform:scale(.94)!important}
   .nav-language:hover .nav-language-option--es .nav-language-icon,
