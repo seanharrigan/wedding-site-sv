@@ -96,34 +96,42 @@ const playPasswordCatrinaPassage = (onComplete) => {
   }, passageDuration);
 };
 
+// Section tone ranges are cached in document coordinates and refreshed whenever
+// layout can have changed, so the per-frame work is arithmetic, not 13 rect reads.
+let headerToneRanges = [];
+const refreshHeaderToneRanges = () => {
+  headerToneRanges = headerToneSections.map((section) => {
+    const rect = section.getBoundingClientRect();
+    return {
+      top: rect.top + scrollY,
+      bottom: rect.bottom + scrollY,
+      tone: section.dataset.headerTone === 'dark' ? 'dark' : 'light',
+    };
+  });
+};
 const syncHeaderTone = () => {
   if (headerToneFrame) return;
   headerToneFrame = requestAnimationFrame(() => {
     headerToneFrame = 0;
+    if (!headerToneRanges.length) refreshHeaderToneRanges();
     const headerRect = header.getBoundingClientRect();
-    const probeY = Math.min(innerHeight - 1, Math.max(0, headerRect.top + (headerRect.height / 2)));
+    const probeY = scrollY + Math.min(innerHeight - 1, Math.max(0, headerRect.top + (headerRect.height / 2)));
     let current = null;
     let nearestDistance = Infinity;
-
-    headerToneSections.forEach((section) => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top <= probeY && rect.bottom > probeY) {
-        current = section;
-        nearestDistance = 0;
-        return;
+    for (const range of headerToneRanges) {
+      if (range.top <= probeY && range.bottom > probeY) {
+        current = range;
+        break;
       }
-      if (nearestDistance === 0) return;
-      const distance = probeY < rect.top ? rect.top - probeY : probeY - rect.bottom;
+      const distance = probeY < range.top ? range.top - probeY : probeY - range.bottom;
       if (distance < nearestDistance) {
-        current = section;
+        current = range;
         nearestDistance = distance;
       }
-    });
-
+    }
     if (!current) return;
-    const tone = current.dataset.headerTone === 'dark' ? 'dark' : 'light';
-    header.dataset.tone = tone;
-    header.classList.toggle('header-on-dark', tone === 'dark');
+    header.dataset.tone = current.tone;
+    header.classList.toggle('header-on-dark', current.tone === 'dark');
   });
 };
 
@@ -332,20 +340,49 @@ navLinks.forEach((link) => link.addEventListener('click', (event) => {
   }
 }));
 
+// Scroll work is coalesced to one frame, the page height is cached (refreshed on
+// any layout change), and custom-property writes are skipped when unchanged.
+let scrollFrame = 0;
+let cachedScrollMax = 0;
+let lastScrollProgress = -1;
+let lastHeroShift = -1;
+const refreshScrollMetrics = () => {
+  cachedScrollMax = document.documentElement.scrollHeight - innerHeight;
+};
 const updateScroll = () => {
-  const max = document.documentElement.scrollHeight - innerHeight;
-  const progress = max > 0 ? (scrollY / max) * 100 : 0;
-  document.documentElement.style.setProperty('--scroll-progress', `${progress}%`);
-  document.documentElement.style.setProperty('--hero-shift', String(Math.min(scrollY, 800)));
-  header.classList.toggle('scrolled', scrollY > 35);
+  if (scrollFrame) return;
+  scrollFrame = requestAnimationFrame(() => {
+    scrollFrame = 0;
+    const progress = cachedScrollMax > 0 ? Math.min(100, Math.max(0, (scrollY / cachedScrollMax) * 100)) : 0;
+    const rounded = Math.round(progress * 20) / 20;
+    if (rounded !== lastScrollProgress) {
+      lastScrollProgress = rounded;
+      document.documentElement.style.setProperty('--scroll-progress', `${rounded}%`);
+    }
+    const shift = Math.min(Math.round(scrollY), 800);
+    if (shift !== lastHeroShift) {
+      lastHeroShift = shift;
+      document.documentElement.style.setProperty('--hero-shift', String(shift));
+    }
+    header.classList.toggle('scrolled', scrollY > 35);
+    syncHeaderTone();
+  });
+};
+const refreshLayoutCaches = () => {
+  refreshScrollMetrics();
+  refreshHeaderToneRanges();
   syncHeaderTone();
 };
 addEventListener('scroll', updateScroll, { passive: true });
-addEventListener('resize', syncHeaderTone, { passive: true });
-addEventListener('orientationchange', syncHeaderTone);
-addEventListener('pageshow', syncHeaderTone);
-window.visualViewport?.addEventListener('resize', syncHeaderTone, { passive: true });
-document.fonts?.ready.then(syncHeaderTone);
+addEventListener('resize', refreshLayoutCaches, { passive: true });
+addEventListener('orientationchange', refreshLayoutCaches);
+addEventListener('pageshow', refreshLayoutCaches);
+window.visualViewport?.addEventListener('resize', refreshLayoutCaches, { passive: true });
+document.fonts?.ready.then(refreshLayoutCaches);
+if ('ResizeObserver' in window) {
+  new ResizeObserver(() => refreshLayoutCaches()).observe(document.body);
+}
+refreshLayoutCaches();
 updateScroll();
 
 const revealObserver = new IntersectionObserver((entries) => {
@@ -1244,13 +1281,15 @@ const attachLens = (lensPanel) => {
     lensPanel.style.setProperty('--lens-y', `${lensY.toFixed(1)}px`);
     lensFrame = (Math.abs(targetX - lensX) > .4 || Math.abs(targetY - lensY) > .4) ? requestAnimationFrame(settle) : 0;
   };
+  let lensRect = null;
   const track = (event, snap) => {
-    const rect = lensPanel.getBoundingClientRect();
-    targetX = event.clientX - rect.left;
-    targetY = event.clientY - rect.top;
+    if (snap || !lensRect) lensRect = lensPanel.getBoundingClientRect();
+    targetX = event.clientX - lensRect.left;
+    targetY = event.clientY - lensRect.top;
     if (snap) { lensX = targetX; lensY = targetY; }
     if (!lensFrame) lensFrame = requestAnimationFrame(settle);
   };
+  addEventListener('resize', () => { lensRect = null; }, { passive: true });
   lensPanel.addEventListener('pointerenter', (event) => track(event, true));
   lensPanel.addEventListener('pointermove', (event) => track(event, false));
   lensPanel.addEventListener('pointerdown', (event) => {
@@ -1373,4 +1412,24 @@ const updateCountdown = () => {
 };
 
 updateCountdown();
-setInterval(updateCountdown, 1000);
+// Tick only while the countdown is on screen; values refresh the instant it
+// scrolls into view, so what the visitor sees is identical.
+const countdownSection = document.querySelector('.countdown');
+let countdownTimer = 0;
+if (countdownSection && 'IntersectionObserver' in window) {
+  new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        if (!countdownTimer) {
+          updateCountdown();
+          countdownTimer = setInterval(updateCountdown, 1000);
+        }
+      } else if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = 0;
+      }
+    });
+  }).observe(countdownSection);
+} else {
+  setInterval(updateCountdown, 1000);
+}
