@@ -1918,20 +1918,6 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
   transition:opacity .16s ease!important;
 }
 
-/* Both routes now share the modern open invitation. The temporary Test route
-   differs only at the closed-envelope stage; Invitation retains the original
-   lacy closed envelope. */
-.invitation-intro.is-modern-test .intro-cover{
-  background-image:url("modern-intro/envelope-desktop.png")!important;
-  background-position:center!important;
-  background-size:cover!important;
-}
-.invitation-intro.is-modern-test .open-invitation-cue{
-  border-color:rgba(245,231,211,.28)!important;
-  color:#f5e7d3!important;
-  background:rgba(30,17,12,.28)!important;
-  box-shadow:inset 0 1px rgba(255,255,255,.08),0 10px 30px rgba(0,0,0,.18)!important;
-}
 .invitation-intro .enter-site-cue{
   border-color:rgba(74,45,31,.25)!important;
   color:#4a2d1f!important;
@@ -1940,9 +1926,6 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
 }
 @media(max-width:720px){
   .nav-links>.invitation-replay{display:inline-flex;width:100%;min-width:0}
-  .invitation-intro.is-modern-test .intro-cover{
-    background-image:url("modern-intro/envelope-mobile.png")!important;
-  }
 }
 
 /* Final mobile calibration: preserve the Details layout while making its
@@ -2538,13 +2521,13 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
   .countdown .section-title em{font-size:1.18em!important}
 }
 
-/* Direct, inline website-language switcher. The invitation's first-visit
-   language gate remains separate; this header control never opens an overlay. */
+/* Compact EN / ES by default; on pointer hover, the letters quietly exchange
+   places with the red maple leaf and green cactus. */
 .nav-language{
   display:flex;
   flex:0 0 auto;
   align-items:center;
-  gap:4px;
+  gap:5px;
   margin-left:5px;
   padding:4px 7px;
   border:1px solid currentColor;
@@ -2552,7 +2535,7 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
   color:inherit;
   background:rgba(255,255,255,.045);
   opacity:.82;
-  transition:gap .52s var(--ease-refined),padding .52s var(--ease-refined),background .35s ease,border-color .35s ease,opacity .3s ease;
+  transition:background .35s ease,border-color .35s ease,opacity .3s ease;
 }
 .nav-language-option{
   display:flex;
@@ -2573,60 +2556,44 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
   text-transform:uppercase;
   cursor:pointer;
   opacity:.58;
-  transition:gap .52s var(--ease-refined),color .32s ease,background .32s ease,opacity .32s ease,transform .42s var(--ease-refined),padding .52s var(--ease-refined);
+  transition:color .32s ease,background .32s ease,opacity .32s ease,transform .42s var(--ease-refined);
 }
 .nav-language-option.is-current{opacity:1}
 .nav-language-icon{
-  width:22px;
+  width:0;
   height:22px;
-  flex:0 0 22px;
+  flex:0 0 0;
+  overflow:hidden;
   fill:none;
   stroke:currentColor;
   stroke-linecap:round;
   stroke-linejoin:round;
-  transition:color .35s ease,transform .48s var(--ease-refined);
+  opacity:0;
+  transform:scale(.78);
+  transition:width .42s var(--ease-refined),flex-basis .42s var(--ease-refined),color .35s ease,opacity .24s ease,transform .48s var(--ease-refined);
 }
 .nav-language-icon--leaf{stroke-width:1.28}
 .nav-language-icon--cactus{stroke-width:1.45}
 .nav-language-label{
-  max-width:0;
+  max-width:28px;
   overflow:hidden;
-  opacity:0;
+  opacity:1;
   white-space:nowrap;
-  transform:translateX(-4px);
-  transition:max-width .58s var(--ease-refined),opacity .25s ease,transform .48s var(--ease-refined);
+  transform:none;
+  transition:max-width .42s var(--ease-refined),opacity .22s ease,transform .42s var(--ease-refined);
 }
-.nav-language-divider{width:1px;height:18px;background:currentColor;opacity:.18;transition:height .4s ease,opacity .3s ease}
+.nav-language-divider{width:auto;height:auto;background:none;opacity:.38;font-family:var(--sans);font-size:.62rem;line-height:1}
 
 @media(min-width:721px){
-  .nav-links>:not(.nav-language){
-    max-width:150px;
-    overflow:hidden;
-    white-space:nowrap;
-    transition:max-width .62s var(--ease-refined),padding .62s var(--ease-refined),opacity .28s ease,transform .5s var(--ease-refined),color .25s ease;
-  }
-  .nav-links:has(.nav-language:hover)>:not(.nav-language),
-  .nav-links:has(.nav-language:focus-within)>:not(.nav-language){
-    max-width:0;
-    padding-right:0!important;
-    padding-left:0!important;
-    opacity:0;
-    pointer-events:none;
-    transform:translateY(-5px);
-  }
-  .nav-links:has(.nav-language:hover)::after,
-  .nav-links:has(.nav-language:focus-within)::after{opacity:0}
   .nav-language:hover,.nav-language:focus-within{
-    gap:8px;
-    padding:5px 9px;
     border-color:rgba(247,239,228,.24);
     background:rgba(247,239,228,.075);
     opacity:1;
   }
-  .nav-language:hover .nav-language-option,
-  .nav-language:focus-within .nav-language-option{gap:7px;padding:0 9px;opacity:1}
   .nav-language:hover .nav-language-label,
-  .nav-language:focus-within .nav-language-label{max-width:88px;opacity:1;transform:none}
+  .nav-language:focus-within .nav-language-label{max-width:0;opacity:0;transform:scale(.8)}
+  .nav-language:hover .nav-language-icon,
+  .nav-language:focus-within .nav-language-icon{width:22px;flex-basis:22px;opacity:1}
   .nav-language:hover .nav-language-option--en .nav-language-icon,
   .nav-language:focus-within .nav-language-option--en .nav-language-icon{color:#a8473f;transform:rotate(-3deg) scale(1.04)}
   .nav-language:hover .nav-language-option--es .nav-language-icon,
@@ -2637,7 +2604,7 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
 @media(max-width:720px){
   .nav-links .nav-language{
     display:grid;
-    grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr);
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
     width:100%;
     margin:8px 0 0;
     padding:6px;
@@ -2649,14 +2616,64 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
     transition:opacity .3s ease,transform .5s var(--ease-refined),background .3s ease;
   }
   .menu-open .nav-links .nav-language{opacity:1;transform:none}
-  .nav-language-option{min-height:46px;gap:7px;padding:0 8px;font-size:.64rem;opacity:.76}
+  .nav-language-option{min-height:46px;padding:0 8px;font-size:.64rem;opacity:.76}
   .nav-language-option.is-current{background:rgba(255,249,239,.075);opacity:1}
-  .nav-language-label{max-width:88px;opacity:1;transform:none}
-  .nav-language-option--en .nav-language-icon{color:#a8473f}
-  .nav-language-option--es .nav-language-icon{color:#718264}
-  .nav-language-divider{height:24px;justify-self:center}
+  .nav-language-label{max-width:28px;opacity:1;transform:none}
+  .nav-language-divider{align-self:center;justify-self:center}
 }
 
 @media(prefers-reduced-motion:reduce){
   .nav-language,.nav-language-option,.nav-language-icon,.nav-language-label,.nav-links>:not(.nav-language){transition:none!important}
+}
+
+/* Final desktop readability pass: keep the script word at its established
+   scale, quiet only the roman FAQ line, and make every form control legible. */
+@media(min-width:721px){
+  .faq-head .section-title>span{
+    display:inline-block;
+    font-size:.88em!important;
+    line-height:1;
+  }
+  .check-in-card .field label{
+    font-size:.68rem!important;
+    letter-spacing:.18em!important;
+  }
+  .check-in-card .field input,
+  .check-in-card .field textarea,
+  .check-in-card .paper-select-trigger{
+    font-size:1.32rem!important;
+    line-height:1.35!important;
+  }
+  .check-in-card .paper-select-option{font-size:1.08rem!important}
+  .check-in-card .button{font-size:.76rem!important}
+  .check-in-card .form-status{font-size:1rem!important}
+}
+
+/* Preserve the cactus card's soft cast shadow without carrying its inset
+   outline into the light FAQ canvas below. */
+.special,.faq{background:var(--paper)!important}
+.special-inner::after{border-bottom:0!important}
+
+/* One definitive phone animation. Earlier desktop experiments cannot override
+   this track, and reduced-motion phones still receive a visible static figure. */
+@media(max-width:720px) and (prefers-reduced-motion:no-preference){
+  .check-in-passage.is-walking .catrina-walk{
+    display:block!important;
+    visibility:visible!important;
+    animation:check-in-catrina-mobile-pass 3.4s linear both!important;
+  }
+  @keyframes check-in-catrina-mobile-pass{
+    0%{left:18px;opacity:0;transform:translateY(-50%) rotate(-1deg)}
+    9%{opacity:1}
+    91%{opacity:1;transform:translateY(-50%) rotate(1deg)}
+    100%{left:calc(100% - 60px);opacity:0;transform:translateY(-50%) rotate(0)}
+  }
+}
+@media(max-width:720px) and (prefers-reduced-motion:reduce){
+  .check-in-passage.is-walking .catrina-walk,
+  .check-in-passage.is-arrived .catrina-walk{
+    left:50%!important;
+    opacity:1!important;
+    transform:translate(-50%,-50%)!important;
+  }
 }
