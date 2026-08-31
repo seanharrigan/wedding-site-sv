@@ -1918,6 +1918,57 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
   transition:opacity .16s ease!important;
 }
 
+/* Temporary comparison route: reuse the proven invitation state machine while
+   swapping only the closed and open artwork. The original lacy invitation
+   remains the default and is restored by the Invitation menu control. */
+.invitation-intro.is-modern-test .intro-cover{
+  background-image:url("modern-intro/envelope-desktop.png")!important;
+  background-position:center!important;
+  background-size:cover!important;
+}
+.invitation-intro.is-modern-test .suite-art{opacity:0!important}
+.invitation-intro.is-modern-test .suite-composite::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:block;
+  width:100%;
+  height:100%;
+  background:url("modern-intro/invite-desktop.png") center / cover no-repeat;
+  pointer-events:none;
+}
+html[lang="es"] .invitation-intro.is-modern-test .suite-composite::before{
+  background-image:url("modern-intro/invite-desktop-esp.png");
+}
+.invitation-intro.is-modern-test .open-invitation-cue{
+  border-color:rgba(245,231,211,.28)!important;
+  color:#f5e7d3!important;
+  background:rgba(30,17,12,.28)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.08),0 10px 30px rgba(0,0,0,.18)!important;
+}
+.invitation-intro.is-modern-test .enter-site-cue{
+  border-color:rgba(74,45,31,.25)!important;
+  color:#4a2d1f!important;
+  background:rgba(250,244,235,.58)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.58),0 10px 28px rgba(67,42,28,.12)!important;
+}
+@media(max-width:720px){
+  .nav-links>.invitation-replay{display:inline-flex;width:100%;min-width:0}
+  .invitation-intro.is-modern-test .intro-cover{
+    background-image:url("modern-intro/envelope-mobile.png")!important;
+  }
+  .invitation-intro.is-modern-test .suite-composite::before{
+    background-image:url("modern-intro/invite-mobile.png");
+    background-color:#f2ece3;
+    background-repeat:no-repeat!important;
+    background-size:contain!important;
+  }
+  html[lang="es"] .invitation-intro.is-modern-test .suite-composite::before{
+    background-image:url("modern-intro/invite-mobile-esp.png");
+  }
+}
+
 /* Final mobile calibration: preserve the Details layout while making its
    secondary headings quieter, and give the timeline the same breathing room
    as the surrounding sections. */

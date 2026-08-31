@@ -21,6 +21,7 @@ const openEnvelope = document.getElementById('open-envelope');
 const enterSite = document.getElementById('enter-site');
 const introClose = document.getElementById('intro-close');
 const invitationReplay = document.getElementById('invitation-replay');
+const invitationTest = document.getElementById('invitation-test');
 const languageGate = document.getElementById('language-gate');
 const languageGateOptions = [...document.querySelectorAll('.language-gate-option')];
 const catrinaPassage = document.getElementById('catrina-passage');
@@ -182,6 +183,36 @@ const revealInvitation = ({ replay = false } = {}) => {
   }, reducedMotion ? 0 : (replay ? 620 : 180));
 };
 
+const setInvitationVariant = (variant = 'original') => {
+  invitationIntro.classList.toggle('is-modern-test', variant === 'modern');
+};
+
+const preloadModernInvitation = () => {
+  const mobile = matchMedia('(max-width: 720px)').matches;
+  const spanish = document.documentElement.lang === 'es';
+  const sources = [
+    mobile ? 'assets/gpt/modern-intro/envelope-mobile.png' : 'assets/gpt/modern-intro/envelope-desktop.png',
+    mobile
+      ? `assets/gpt/modern-intro/invite-mobile${spanish ? '-esp' : ''}.png`
+      : `assets/gpt/modern-intro/invite-desktop${spanish ? '-esp' : ''}.png`
+  ];
+  sources.forEach((source) => {
+    const image = new Image();
+    image.src = source;
+  });
+};
+
+const replayInvitationVariant = (event, variant) => {
+  event.preventDefault();
+  event.stopPropagation();
+  if (body.classList.contains('invitation-active')) return;
+  setMenuOpen(false);
+  keepWebsiteAtTop();
+  setInvitationVariant(variant);
+  if (variant === 'modern') preloadModernInvitation();
+  revealInvitation({ replay: true });
+};
+
 const enterCelebration = () => {
   if (invitationIntro.hidden || invitationIntro.classList.contains('is-leaving')) return;
   clearInvitationTimers();
@@ -278,14 +309,10 @@ enterSite.addEventListener('keydown', (event) => {
   enterSite.click();
 });
 introClose.addEventListener('click', closeInvitation);
-invitationReplay.addEventListener('click', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  if (body.classList.contains('invitation-active')) return;
-  setMenuOpen(false);
-  keepWebsiteAtTop();
-  revealInvitation({ replay: true });
-});
+invitationReplay.addEventListener('click', (event) => replayInvitationVariant(event, 'original'));
+invitationTest?.addEventListener('click', (event) => replayInvitationVariant(event, 'modern'));
+invitationTest?.addEventListener('pointerenter', preloadModernInvitation, { once: true });
+invitationTest?.addEventListener('focus', preloadModernInvitation, { once: true });
 
 menuToggle.addEventListener('click', () => {
   setMenuOpen(!body.classList.contains('menu-open'));
@@ -464,7 +491,7 @@ const uiTranslations = {
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenidos'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'], navAnimations: ['Animations', 'Animaciones'],
   openInvitationAria: ["Open Sean and Valeria's wedding invitation", 'Abrir la invitación de boda de Sean y Valeria'], invitationSuiteAria: ['Wedding invitation suite', 'Conjunto de invitación de boda'], backToTopAria: ['Sean and Valeria, back to top', 'Sean y Valeria, volver al inicio'], primaryNavigationAria: ['Primary navigation', 'Navegación principal'], neighbourhoodGalleryAria: ['Recommended Mexico City neighbourhoods', 'Colonias recomendadas de la Ciudad de México'], heroAria: ['Sean and Valeria by the coast', 'Sean y Valeria junto a la costa'], heroSealAlt: ['Sean and Valeria monogram wax seal', 'Sello de cera con el monograma de Sean y Valeria'], detailsPairAria: ['Venue and dress code details', 'Detalles del lugar y código de vestimenta'], fallPaletteAria: ['Suggested fall colour palette', 'Paleta de colores de otoño sugerida'], weatherAria: ['November weather in Tepoztlán', 'Clima de noviembre en Tepoztlán'], celebrationTimelineAria: ['Wedding day celebration timeline', 'Horario de la celebración de la boda'], weekItineraryAria: ['Suggested week itinerary', 'Itinerario sugerido para la semana'], neighbourhoodsAria: ['Recommended neighbourhoods', 'Colonias recomendadas'], specialAria: ['Special request and gifts', 'Petición especial y regalos'], closingAria: ['Thank you', 'Gracias'], romaPhotoAlt: ['A leafy street with historic architecture in Mexico City', 'Una calle arbolada con arquitectura histórica en la Ciudad de México'], condesaPhotoAlt: ['Art Deco homes and trees in Condesa, Mexico City', 'Casas art déco y árboles en Condesa, Ciudad de México'], reformaPhotoAlt: ['Paseo de la Reforma in Mexico City at golden hour', 'Paseo de la Reforma en la Ciudad de México al atardecer'], centroPhotoAlt: ['Historic arcades in Centro Histórico, Mexico City', 'Arcadas históricas en el Centro Histórico de la Ciudad de México'], bellasPhotoAlt: ['Palacio de Bellas Artes in Mexico City at golden hour', 'Palacio de Bellas Artes en la Ciudad de México durante la hora dorada'], conventPhotoAlt: ['A lush rooftop restaurant in Tepoztlán', 'Un frondoso restaurante en una azotea de Tepoztlán'], ridgePhotoAlt: ['Tepozteco mountain framed by flowers and Tepoztlán streets', 'La montaña del Tepozteco enmarcada por flores y calles de Tepoztlán'], accommodationPhotoAlt: ['Tall cacti and gardens at Hotel Piedra Viva with Tepoztlán mountains', 'Cactus altos y jardines en Hotel Piedra Viva con las montañas de Tepoztlán'], closingPhotoAlt: ['Sean kissing Valeria at sunset by the ocean', 'Sean besando a Valeria al atardecer junto al mar'], footerLogoAlt: ['Sean and Valeria monogram', 'Monograma de Sean y Valeria'],
   galleryAria: ['Gallery from Mexico City and Tepoztlán', 'Galería de la Ciudad de México y Tepoztlán'], galleryKicker: ['A little glimpse', 'Un pequeño vistazo'], galleryTitle: ['<span>Scenes from</span> <em>México.</em>', '<span>Escenas de</span> <em>México.</em>'], galleryCopy: ['A few corners of Mexico City and Tepoztlán to look forward to along the way.', 'Algunos rincones de la Ciudad de México y Tepoztlán para esperar con ilusión durante el viaje.'], galleryCeremonialAlt: ['Ceremonial dress in Tepoztlán', 'Vestimenta ceremonial en Tepoztlán'], galleryChurchAlt: ['A church street in Tepoztlán', 'Una calle junto a una iglesia en Tepoztlán'], galleryOfrendaAlt: ['A Día de Muertos altar in Mexico City', 'Una ofrenda de Día de Muertos en la Ciudad de México'], galleryReformaAlt: ['Ángel de la Independencia at dusk', 'El Ángel de la Independencia al atardecer'], galleryLaneAlt: ['A quiet lane in Tepoztlán', 'Una calle tranquila en Tepoztlán'], galleryStreetAlt: ['A historic Tepoztlán street', 'Una calle histórica de Tepoztlán'],
-  introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Tap anywhere to open', 'Toca para abrir'], closeInvitation: ['Return to the closed invitation', 'Volver a la invitación cerrada'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Tap anywhere to enter <span aria-hidden="true">→</span>', 'Toca para entrar <span aria-hidden="true">→</span>'], invitationEnter: ['Enter our celebration', 'Entrar a nuestra celebración'], invitationCheckIn: ['Please check in', 'Confirma tu asistencia'], checkInInvitationAction: ['Please check in on the wedding website', 'Confirma tu asistencia en el sitio de la boda'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See our gallery', 'Ver nuestra galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
+  introKicker: ['The Wedding Of', 'La boda de'], openEnvelope: ['Click to open', 'Haz clic para abrir'], openInvitation: ['Tap anywhere to open', 'Toca para abrir'], closeInvitation: ['Return to the closed invitation', 'Volver a la invitación cerrada'], inviteEyebrow: ['With joy', 'Con alegría'], inviteFamily: ['Together with their families', 'Con sus familias'], inviteCopy: ['request the pleasure of your company as they celebrate their marriage.', 'tienen el gusto de invitarlos a celebrar su matrimonio.'], inviteVenue: ['Hotel Piedra Viva<br>Tepoztlán, Morelos · México', 'Hotel Piedra Viva<br>Tepoztlán, Morelos · México'], enterSite: ['Tap anywhere to enter <span aria-hidden="true">→</span>', 'Toca para entrar <span aria-hidden="true">→</span>'], invitationEnter: ['Enter our celebration', 'Entrar a nuestra celebración'], invitationCheckIn: ['Please check in', 'Confirma tu asistencia'], checkInInvitationAction: ['Please check in on the wedding website', 'Confirma tu asistencia en el sitio de la boda'], enterInvitation: ['Enter the wedding website', 'Entrar al sitio de la boda'], viewGallery: ['See our gallery', 'Ver nuestra galería'], viewGalleryAction: ['View gallery and enter the wedding website', 'Ver la galería y entrar al sitio de la boda'], viewInvitation: ['Invitation', 'Invitación'], testInvitation: ['Test', 'Prueba'], skipToContent: ['Skip to content', 'Ir al contenido'], partyPlaceholder: ['Names of everyone in your party', 'Nombres de todos los asistentes'],
   heroEyebrow: ['The wedding of', 'La boda de'],
   heroQuote: ['Among mountains, flowers and light,<br>we celebrate our love.', 'Entre montañas, flores y luz,<br>celebramos nuestro amor.'],
   confirmAttendance: ['Confirm attendance', 'Confirmar asistencia'], seeDay: ['See the day', 'Ver el programa'],
@@ -503,7 +530,7 @@ const uiTranslations = {
   ofrendaCopy: ['We kindly invite you to bring a small framed photo of a loved one who is no longer with us. In keeping with tradition, we will be preparing an <em>ofrenda</em> to honour and remember those who remain in our hearts.', 'Los invitamos a traer una foto pequeña y enmarcada de un ser querido que ya no esté con nosotros. Prepararemos una <em>ofrenda</em> para recordarlos y tenerlos presentes.'],
   giftSummary: ['Celebrating with you is more than enough.', 'Celebrar con ustedes es más que suficiente.'],
   giftDetails: ['Gift details', 'Detalles del regalo'],
-  giftCopy: ['If you would still like to give something, you are welcome to contribute toward our future. Canadian guests may send an e-transfer to valeriaandseanharrigan@gmail.com. Electronic transfers are preferred to cash, but please know there is absolutely no expectation.', 'Si aun así desean hacernos un regalo, pueden hacer una aportación para nuestro futuro. Para los invitados en México, compartiremos los datos de transferencia más cerca de la fecha. Preferimos transferencias en lugar de efectivo, pero no hay ninguna expectativa.'],
+  giftCopy: ['If you would still like to contribute toward our future, Canadian guests may send an e-transfer to valeriaandseanharrigan@gmail.com. There is absolutely no expectation.', 'Si aun así desean contribuir a nuestro futuro, los invitados de Canadá pueden enviar una transferencia electrónica a valeriaandseanharrigan@gmail.com. No hay ninguna expectativa.'],
   alcoholQuestion: ['Can I bring my own alcohol?', '¿Puedo traer mi propio alcohol?'],
   alcoholAnswer: ['No need! We’ll have an open bar throughout the celebration. Please note that the hotel does not allow outside alcohol. Just bring your best energy and get ready to celebrate!', 'No hace falta. Habrá barra libre durante toda la celebración y el hotel no permite ingresar bebidas. Solo vengan con ganas de celebrar.'],
   welcomeCopy: ['We are delighted to welcome you <br>to our wedding website. Here, you will <br>find all the essential details for our special day.', 'Nos da mucho gusto recibirlos <br>en nuestra página. Aquí encontrarán <br>todo lo necesario para nuestro gran día.'],
