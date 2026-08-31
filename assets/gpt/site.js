@@ -1195,6 +1195,20 @@ const showCheckInConfirmation = () => {
   }, checkInTransitionDuration);
 };
 
+// Tapping the settled catrina replays her exact arrival dance.
+let checkInReplayTimer = 0;
+checkInPassage?.addEventListener('click', () => {
+  if (!checkInPassage.classList.contains('is-arrived') || checkInPassage.classList.contains('is-walking')) return;
+  checkInPassage.classList.remove('is-arrived');
+  void checkInPassage.offsetWidth;
+  requestAnimationFrame(() => checkInPassage.classList.add('is-walking'));
+  window.clearTimeout(checkInReplayTimer);
+  checkInReplayTimer = window.setTimeout(() => {
+    checkInPassage.classList.remove('is-walking');
+    checkInPassage.classList.add('is-arrived');
+  }, reducedMotion ? 0 : 3400);
+});
+
 const sendCheckInSubmission = (form) => {
   const formData = new FormData(form);
   const payload = new URLSearchParams();

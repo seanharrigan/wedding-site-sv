@@ -3050,3 +3050,17 @@ body.check-in-modal-open{overflow:hidden!important}
 @media(max-width:720px){
   .site-header:not(.scrolled){top:24px}
 }
+
+/* The settled catrina is tappable: replaying her dance. The passage layer
+   itself stays pointer-transparent so it never blocks the thank-you card. */
+.check-in-passage.is-arrived .catrina-walk{pointer-events:auto;cursor:pointer}
+
+/* While settled, a soft double pulse hints that she's tappable. */
+@keyframes catrina-idle-pulse{
+  0%{transform:translateY(-50%) scale(1)}
+  5%{transform:translateY(-50%) scale(1.045)}
+  10%{transform:translateY(-50%) scale(1)}
+  15%{transform:translateY(-50%) scale(1.032)}
+  21%,100%{transform:translateY(-50%) scale(1)}
+}
+.check-in-passage.is-arrived .catrina-walk{animation:catrina-idle-pulse 4.6s ease-in-out 1.4s infinite}
