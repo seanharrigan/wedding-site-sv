@@ -1004,69 +1004,6 @@ html:lang(es) .special-col .section-title{
   }
 }
 
-/* Guest access resolves into a frosted construction note; admin access continues onward. */
-.password-gate-form{
-  max-height:86px;
-  overflow:visible;
-  opacity:1;
-  transform:none;
-  transition:max-height .7s var(--ease-refined),margin .7s var(--ease-refined),opacity .35s ease,transform .65s var(--ease-refined),visibility 0s linear 0s;
-}
-.construction-message{
-  max-width:500px;
-  max-height:0;
-  margin:0;
-  overflow:hidden;
-  visibility:hidden;
-  opacity:0;
-  transform:translateY(12px);
-  transition:max-height .85s var(--ease-refined),margin .85s var(--ease-refined),opacity .55s ease,transform .85s var(--ease-refined),visibility 0s linear .85s;
-}
-.construction-message h1{
-  margin:0;
-  color:var(--off-white);
-  font-family:var(--script);
-  font-size:clamp(4.1rem,7.6vw,6.6rem);
-  font-weight:400;
-  letter-spacing:-.055em;
-  line-height:.78;
-}
-.construction-message p{
-  margin:clamp(24px,3vw,34px) auto 0;
-  color:rgba(255,249,239,.9);
-  font-family:var(--serif);
-  font-size:clamp(1.08rem,1.5vw,1.3rem);
-  line-height:1.45;
-}
-.construction-message .construction-message-es{
-  margin-top:17px;
-  color:rgba(255,249,239,.68);
-  font-size:clamp(.92rem,1.15vw,1.08rem);
-}
-.password-gate.is-construction .password-gate-form{
-  max-height:0;
-  margin-top:0;
-  visibility:hidden;
-  opacity:0;
-  transform:translateY(-8px) scale(.99);
-  pointer-events:none;
-  transition-delay:0s,0s,0s,0s,.7s;
-}
-.password-gate.is-construction .construction-message{
-  max-height:380px;
-  margin-top:10px;
-  visibility:visible;
-  opacity:1;
-  transform:none;
-  transition-delay:.12s,.12s,.28s,.22s,0s;
-}
-@media(max-width:720px){
-  .construction-message{max-width:330px}
-  .construction-message h1{font-size:clamp(3.8rem,18vw,5rem)}
-  .construction-message p{font-size:1.06rem}
-  .construction-message .construction-message-es{font-size:.92rem}
-}
-
 /* Check-In thank-you: a small paper-and-clay Catrina gives the confirmation a warm, celebratory beat. */
 .check-in-form-content[hidden],.check-in-thanks[hidden]{display:none!important}
 .check-in-card.is-confirmed{display:grid;min-height:500px;place-items:center}
@@ -1483,7 +1420,7 @@ html:lang(es) .special-col .section-title{
   overflow:hidden;
   border:0!important;
   border-radius:26px!important;
-  background:url("invitation-envelope-closed-desktop-v1.png") center / cover no-repeat!important;
+  background:url("invitation-envelope-closed-desktop-v1.webp") center / cover no-repeat!important;
   box-shadow:0 24px 58px rgba(30,17,11,.3)!important;
 }
 .check-in-card.is-confirmed::before{display:none!important}
@@ -1524,7 +1461,7 @@ html:lang(es) .special-col .section-title{
   .check-in-card.is-confirmed{
     aspect-ratio:941 / 1672;
     border-radius:22px!important;
-    background-image:url("invitation-envelope-closed-mobile-v1.png")!important;
+    background-image:url("invitation-envelope-closed-mobile-v1.webp")!important;
   }
   .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
     top:27%;
@@ -1600,7 +1537,7 @@ html:lang(es) .special-col .section-title{
   inset:0;
   z-index:0;
   display:block!important;
-  background:url("invitation-envelope-closed-desktop-v1.png") center / cover no-repeat;
+  background:url("invitation-envelope-closed-desktop-v1.webp") center / cover no-repeat;
   opacity:.74;
   transform:scale(1.018);
   transition:opacity .9s ease,transform 1.15s cubic-bezier(.22,.61,.36,1);
@@ -1661,7 +1598,7 @@ html:lang(es) .special-col .section-title{
   transform:translate(-50%,-50%);
 }
 @media(max-width:720px){
-  .check-in-card::before{background-image:url("invitation-envelope-closed-mobile-v1.png")}
+  .check-in-card::before{background-image:url("invitation-envelope-closed-mobile-v1.webp")}
   .check-in-card::after{background:linear-gradient(160deg,rgba(253,248,241,.9),rgba(235,221,204,.9))}
   .check-in-card.is-confirmed .check-in-thanks .check-in-thanks-email{
     top:50%;
@@ -1715,7 +1652,7 @@ html:lang(es) .special-col .section-title{
 .invitation-intro .intro-cover{
   z-index:4!important;
   cursor:pointer;
-  background:url("invitation-envelope-closed-desktop-v1.png") center / cover no-repeat!important;
+  background:url("invitation-envelope-closed-desktop-v1.webp") center / cover no-repeat!important;
   box-shadow:none!important;
   opacity:1!important;
   transform:scale(1)!important;
@@ -1825,7 +1762,7 @@ html[lang="es"] .invitation-intro .suite-art--es{opacity:1!important}
 .invitation-intro .intro-cover>.closed-wax-seal,
 .invitation-intro .closed-wax-seal{display:none!important}
 @media(max-width:720px){
-  .invitation-intro .intro-cover{background-image:url("invitation-envelope-closed-mobile-v1.png")!important}
+  .invitation-intro .intro-cover{background-image:url("invitation-envelope-closed-mobile-v1.webp")!important}
   .invitation-intro .enter-site-cue{bottom:max(20px,env(safe-area-inset-bottom));min-height:39px;padding:0 15px;font-size:.5rem;letter-spacing:.14em}
 }
 @media(prefers-reduced-motion:reduce){

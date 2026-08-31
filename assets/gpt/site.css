@@ -1,4 +1,4 @@
-@font-face{font-family:"Pinyon Script";src:url("PinyonScript-Regular.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Pinyon Script";src:url("PinyonScript-Regular.woff2") format("woff2"),url("PinyonScript-Regular.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
 
 :root {
   --paper:#eee4d6;--paper-light:#f7f0e7;--ink:#2f261f;--muted:#75665a;
@@ -710,7 +710,7 @@ body{background:radial-gradient(circle at 12% 15%,rgba(103,53,31,.2),transparent
 .welcome-inner p{max-width:540px;margin:52px auto 0;padding:0;border:0;color:#5a4031;text-align:center}
 
 /* Save the Date: drapery only, with one restrained script accent. */
-.save-date{min-height:680px;margin-top:0;border-radius:0;padding:clamp(90px,10vw,132px) clamp(20px,8vw,100px);background-color:#6a4938;background-image:linear-gradient(180deg,rgba(44,27,18,.28),rgba(39,23,15,.65)),url("hero-drapery-clean-v2.png");background-position:center;background-size:cover;background-repeat:no-repeat;background-blend-mode:multiply,normal}
+.save-date{min-height:680px;margin-top:0;border-radius:0;padding:clamp(90px,10vw,132px) clamp(20px,8vw,100px);background-color:#6a4938;background-image:linear-gradient(180deg,rgba(44,27,18,.28),rgba(39,23,15,.65)),url("hero-drapery-clean-v2.webp");background-position:center;background-size:cover;background-repeat:no-repeat;background-blend-mode:multiply,normal}
 .save-date::before{content:"";position:absolute;inset:auto 0 -1px;height:72px;background:var(--ivory);clip-path:ellipse(62% 40% at 50% 100%)}
 .save-date-inner{position:relative;z-index:1;width:min(100%,900px)}
 .save-date-inner{text-shadow:0 2px 16px rgba(35,20,13,.42)}
@@ -1073,7 +1073,7 @@ body{background:radial-gradient(circle at 10% 12%,rgba(73,54,44,.2),transparent 
   .hero--image-only{border-radius:27px 27px 30px 30px}
   .hero-seal{width:124px;transform:translate(-50%,50%)}
   @keyframes seal-pop-mobile{0%{transform:translate(-50%,50%) scale(1)}58%{transform:translate(-50%,41%) scale(1.14)}100%{transform:translate(-50%,45%) scale(1.08)}}
-  .celebration-list--live{aspect-ratio:auto;padding:14px;border-radius:22px;background:#f4eadc url("timeline-paper-panel-v1.png") center/cover no-repeat;box-shadow:0 15px 28px rgba(16,10,7,.25)}
+  .celebration-list--live{aspect-ratio:auto;padding:14px;border-radius:22px;background:#f4eadc url("timeline-paper-panel-v1.webp") center/cover no-repeat;box-shadow:0 15px 28px rgba(16,10,7,.25)}
   .timeline-paper{display:none}
   .timeline-events{position:static;display:grid;grid-template-columns:1fr;padding:0}
   .timeline-events .celebration-event{min-height:150px;padding:30px 22px}

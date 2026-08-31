@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <script>try{const access=localStorage.getItem('wedding-admin-access-v1')==='true';document.documentElement.classList.add(access?'access-granted':'access-required');if(access&&localStorage.getItem('wedding-invitation-seen')==='true')document.documentElement.classList.add('returning-visitor')}catch(e){document.documentElement.classList.add('access-required')}</script>
   <meta name="theme-color" content="#292719">
   <meta name="description" content="Sean and Valeria's wedding — November 3, 2026 at Hotel Piedra Viva in Tepoztlán, Morelos, México.">
   <link rel="canonical" href="https://seanandvaleria.com/">
@@ -28,11 +27,14 @@
   <link rel="apple-touch-icon" href="/assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script>try{const access=localStorage.getItem('wedding-access-v1')==='true';document.documentElement.classList.add(access?'access-granted':'access-required');if(access&&localStorage.getItem('wedding-invitation-seen')==='true')document.documentElement.classList.add('returning-visitor')}catch(e){document.documentElement.classList.add('access-required')}</script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Great+Vibes&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/gpt/invitation-envelope-closed-mobile-v1.webp" media="(max-width: 720px)">
+  <link rel="preload" as="image" href="assets/gpt/invitation-envelope-closed-desktop-v1.webp" media="(min-width: 721px)">
   <link rel="stylesheet" href="assets/gpt/site.css?v=20260830b">
   <link rel="stylesheet" href="assets/gpt/save-date-botanical.css?v=20260825b">
   <link rel="stylesheet" href="assets/gpt/timeline-alignment.css?v=20260825b">
-  <link rel="stylesheet" href="assets/gpt/final-overrides.css?v=20260830ah">
+  <link rel="stylesheet" href="assets/gpt/final-overrides.css?v=20260830ai">
   <title>Sean and Valeria</title>
 </head>
 <body>
@@ -49,11 +51,6 @@
         </div>
         <p class="password-gate-status" id="password-gate-status" aria-live="assertive"></p>
       </form>
-      <div class="construction-message" id="construction-message" aria-hidden="true">
-        <h1>You’re looking good.</h1>
-        <p>And so are we. The website is still getting dressed.<br>Come back soon.</p>
-        <p class="construction-message-es" lang="es">Tú también te ves muy bien. Este sitio todavía se está arreglando.<br>Vuelve pronto.</p>
-      </div>
     </div>
   </div>
   <div class="language-gate" id="language-gate" role="group" aria-label="Choose your language / Elige tu idioma">
@@ -64,10 +61,10 @@
   </div>
   <div class="catrina-passage" id="catrina-passage" hidden aria-hidden="true">
     <div class="catrina-passage-figure">
-      <img class="catrina-dance-frame catrina-dance-frame--one" src="assets/gpt/catrina-dance-reference-frame-01.webp" alt="" decoding="async">
-      <img class="catrina-dance-frame catrina-dance-frame--two" src="assets/gpt/catrina-dance-reference-frame-02.webp" alt="" decoding="async">
-      <img class="catrina-dance-frame catrina-dance-frame--three" src="assets/gpt/catrina-dance-reference-frame-03.webp" alt="" decoding="async">
-      <img class="catrina-dance-frame catrina-dance-frame--four" src="assets/gpt/catrina-dance-reference-frame-04.webp" alt="" decoding="async">
+      <img class="catrina-dance-frame catrina-dance-frame--one" src="assets/gpt/catrina-dance-reference-frame-01.webp" alt="" decoding="async" fetchpriority="low">
+      <img class="catrina-dance-frame catrina-dance-frame--two" src="assets/gpt/catrina-dance-reference-frame-02.webp" alt="" decoding="async" fetchpriority="low">
+      <img class="catrina-dance-frame catrina-dance-frame--three" src="assets/gpt/catrina-dance-reference-frame-03.webp" alt="" decoding="async" fetchpriority="low">
+      <img class="catrina-dance-frame catrina-dance-frame--four" src="assets/gpt/catrina-dance-reference-frame-04.webp" alt="" decoding="async" fetchpriority="low">
     </div>
   </div>
   <section class="invitation-intro" id="invitation-intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
@@ -79,12 +76,12 @@
     <div class="envelope-stage" id="enter-site" role="button" tabindex="0" data-i18n-aria="enterInvitation" aria-label="Enter the wedding website" aria-hidden="true">
       <div class="suite-composite" data-i18n-aria="invitationSuiteAria" aria-label="Wedding invitation suite">
         <picture class="suite-art suite-art--en">
-          <source media="(max-width: 720px)" srcset="assets/gpt/modern-intro/invite-mobile.png">
-          <img src="assets/gpt/modern-intro/invite-desktop.png" alt="" decoding="sync" fetchpriority="high">
+          <source media="(max-width: 720px)" srcset="assets/gpt/modern-intro/invite-mobile.webp">
+          <img src="assets/gpt/modern-intro/invite-desktop.webp" alt="" decoding="async">
         </picture>
         <picture class="suite-art suite-art--es">
-          <source media="(max-width: 720px)" srcset="assets/gpt/modern-intro/invite-mobile-esp.png">
-          <img src="assets/gpt/modern-intro/invite-desktop-esp.png" alt="" decoding="sync">
+          <source media="(max-width: 720px)" srcset="assets/gpt/modern-intro/invite-mobile-esp.webp">
+          <img src="assets/gpt/modern-intro/invite-desktop-esp.webp" alt="" decoding="async" loading="lazy">
         </picture>
       </div>
       <span class="enter-site-cue" aria-hidden="true" data-i18n="enterSite">Tap to enter <span aria-hidden="true">→</span></span>
@@ -146,7 +143,7 @@
     <section class="section celebration-section" id="celebration" data-header-tone="dark" aria-labelledby="celebration-title"><svg class="celebration-swoop" viewBox="0 0 1000 130" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 C165 4 330 16 500 44 C690 76 836 100 1000 113 L1000 130 L0 130Z"></path></svg><div class="celebration-shell">
       <div class="celebration-heading reveal"><h2 class="section-title" id="celebration-title" data-i18n="celebrationTitle"><em>The</em> <span>Celebration</span></h2></div>
       <div class="celebration-list celebration-list--live stagger" data-i18n-aria="celebrationTimelineAria" aria-label="Wedding day celebration timeline">
-        <img class="timeline-paper" src="assets/gpt/timeline-paper-panel-v1.png" alt="" width="1536" height="1024" loading="lazy">
+        <img class="timeline-paper" src="assets/gpt/timeline-paper-panel-v1.webp" alt="" width="1536" height="1024" loading="lazy">
         <div class="timeline-events">
           <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">◷</span><time>2:00 PM</time><h3 data-i18n="arrivalTitle">Guest arrival</h3></article>
           <article class="celebration-event"><span class="timeline-icon" aria-hidden="true">◌</span><time>2:45 PM</time><h3 data-i18n="ceremonyTitle">Ceremony</h3></article>
@@ -189,13 +186,13 @@
             <a class="button button--clay chapter-map-button" href="http://google.com/maps/d/u/0/viewer?mid=1yiNMSf_RyHcMNrPHrXk64ykX2ntWhbg&amp;ll=19.332900199892478%2C-99.02823179999999&amp;z=10" target="_blank" rel="noopener" data-i18n="cityMap">See on map <span aria-hidden="true">↗</span></a>
           </div>
           <div class="city-photos reveal from-right">
-            <figure class="city-photo city-photo--wide city-photo--muertos"><img src="assets/gpt/mexico-city-dia-de-muertos-v2.png" data-i18n-alt="diaMuertosPhotoAlt" alt="Día de Muertos parade in Mexico City with musicians, marigolds and a monumental calavera" width="1537" height="1023" loading="lazy"><figcaption><strong data-i18n="diaMuertosLabel">Día de Muertos</strong></figcaption></figure>
-            <figure class="city-photo city-photo--arch"><img src="assets/gpt/mexico-city-bellas-artes-v2.png" data-i18n-alt="bellasPhotoAlt" alt="The ornate façade and domed roof of Palacio de Bellas Artes in Mexico City" width="1024" height="1536" loading="lazy"><figcaption><strong data-i18n="bellasLabel">Bellas Artes</strong></figcaption></figure>
+            <figure class="city-photo city-photo--wide city-photo--muertos"><img src="assets/gpt/mexico-city-dia-de-muertos-v2.webp" data-i18n-alt="diaMuertosPhotoAlt" alt="Día de Muertos parade in Mexico City with musicians, marigolds and a monumental calavera" width="1537" height="1023" loading="lazy"><figcaption><strong data-i18n="diaMuertosLabel">Día de Muertos</strong></figcaption></figure>
+            <figure class="city-photo city-photo--arch"><img src="assets/gpt/mexico-city-bellas-artes-v2.webp" data-i18n-alt="bellasPhotoAlt" alt="The ornate façade and domed roof of Palacio de Bellas Artes in Mexico City" width="1024" height="1536" loading="lazy"><figcaption><strong data-i18n="bellasLabel">Bellas Artes</strong></figcaption></figure>
           </div>
         </div>
         <div class="practical practical--city accordion reveal">
           <article class="practical-item accordion-item"><h4><button class="accordion-trigger" type="button" aria-expanded="false"><span data-i18n="cityArriving">Arriving</span><span class="accordion-plus" aria-hidden="true">+</span></button></h4><div class="accordion-panel"><div class="practical-body"><p data-i18n="travelTransportAirport"><strong>Airport</strong><br>Benito Juárez International (MEX).</p></div></div></article>
-          <article class="practical-item accordion-item"><h4><button class="accordion-trigger" type="button" aria-expanded="false"><span data-i18n="cityStayTitle">Where to stay</span><span class="accordion-plus" aria-hidden="true">+</span></button></h4><div class="accordion-panel"><div class="practical-body"><ul class="neighbourhoods" data-i18n-aria="neighbourhoodsAria" aria-label="Recommended neighbourhoods"><li><img src="assets/gpt/mexico-city-roma-v1.png" data-i18n-alt="romaPhotoAlt" alt="A leafy street with historic architecture in Mexico City" width="1536" height="1024" loading="lazy"><div><strong>Roma Norte</strong><span data-i18n="hoodRoma">Leafy streets, cafés and galleries. Lively and central; a little noisy on weekends.</span></div></li><li><img src="assets/gpt/mexico-city-condesa-v1.png" data-i18n-alt="condesaPhotoAlt" alt="Art Deco homes and trees in Condesa, Mexico City" width="1024" height="1536" loading="lazy"><div><strong>Condesa</strong><span data-i18n="hoodCondesa">Art-deco blocks around two parks, great restaurants. Calmer evenings, slightly further from the centre.</span></div></li><li><img src="assets/gpt/mexico-city-reforma-v1.png" data-i18n-alt="reformaPhotoAlt" alt="Paseo de la Reforma in Mexico City at golden hour" width="1024" height="1536" loading="lazy"><div><strong>Reforma</strong><span data-i18n="hoodReforma">Modern, polished and lined with large hotels. More corporate in feel and farther from Centro Histórico.</span></div></li><li><img src="assets/gpt/mexico-city-centro-v1.png" data-i18n-alt="centroPhotoAlt" alt="Historic arcades in Centro Histórico, Mexico City" width="1024" height="1536" loading="lazy"><div><strong>Centro Histórico</strong><span data-i18n="hoodCentro">The Zócalo, Bellas Artes and major museums are on your doorstep. Historic, atmospheric and home to many older hotels; scenes from 007: Spectre were filmed here.</span></div></li></ul><p data-i18n="cityStay">For accommodation, we recommend staying in Roma Norte, Condesa, Reforma, or Centro Histórico, all well-located and easy to explore. Don't hesitate to contact us for more tips.</p></div></div></article>
+          <article class="practical-item accordion-item"><h4><button class="accordion-trigger" type="button" aria-expanded="false"><span data-i18n="cityStayTitle">Where to stay</span><span class="accordion-plus" aria-hidden="true">+</span></button></h4><div class="accordion-panel"><div class="practical-body"><ul class="neighbourhoods" data-i18n-aria="neighbourhoodsAria" aria-label="Recommended neighbourhoods"><li><img src="assets/gpt/mexico-city-roma-v1.webp" data-i18n-alt="romaPhotoAlt" alt="A leafy street with historic architecture in Mexico City" width="1536" height="1024" loading="lazy"><div><strong>Roma Norte</strong><span data-i18n="hoodRoma">Leafy streets, cafés and galleries. Lively and central; a little noisy on weekends.</span></div></li><li><img src="assets/gpt/mexico-city-condesa-v1.webp" data-i18n-alt="condesaPhotoAlt" alt="Art Deco homes and trees in Condesa, Mexico City" width="1024" height="1536" loading="lazy"><div><strong>Condesa</strong><span data-i18n="hoodCondesa">Art-deco blocks around two parks, great restaurants. Calmer evenings, slightly further from the centre.</span></div></li><li><img src="assets/gpt/mexico-city-reforma-v1.webp" data-i18n-alt="reformaPhotoAlt" alt="Paseo de la Reforma in Mexico City at golden hour" width="1024" height="1536" loading="lazy"><div><strong>Reforma</strong><span data-i18n="hoodReforma">Modern, polished and lined with large hotels. More corporate in feel and farther from Centro Histórico.</span></div></li><li><img src="assets/gpt/mexico-city-centro-v1.webp" data-i18n-alt="centroPhotoAlt" alt="Historic arcades in Centro Histórico, Mexico City" width="1024" height="1536" loading="lazy"><div><strong>Centro Histórico</strong><span data-i18n="hoodCentro">The Zócalo, Bellas Artes and major museums are on your doorstep. Historic, atmospheric and home to many older hotels; scenes from 007: Spectre were filmed here.</span></div></li></ul><p data-i18n="cityStay">For accommodation, we recommend staying in Roma Norte, Condesa, Reforma, or Centro Histórico, all well-located and easy to explore. Don't hesitate to contact us for more tips.</p></div></div></article>
         </div>
       </article>
 
@@ -207,8 +204,8 @@
             <a class="button button--clay chapter-map-button" href="https://maps.google.com/?q=Tepoztl%C3%A1n,+Morelos,+Mexico" target="_blank" rel="noopener" data-i18n="tepoztlanMap">See on map <span aria-hidden="true">↗</span></a>
           </div>
           <div class="tepoz-photos reveal from-right">
-            <figure class="city-photo city-photo--arch"><img src="assets/gpt/tepoztlan-rooftop-restaurants.png" data-i18n-alt="conventPhotoAlt" alt="A lush rooftop restaurant in Tepoztlán" width="1122" height="1402" loading="lazy"><figcaption><strong data-i18n="conventLabel">Rooftop Restaurants</strong></figcaption></figure>
-            <figure class="city-photo city-photo--arch"><img src="assets/gpt/tepoztlan-tepozteco-v3.png" data-i18n-alt="ridgePhotoAlt" alt="Tepozteco mountain framed by flowers and Tepoztlán streets" width="1178" height="1335" loading="lazy"><figcaption><strong data-i18n="ridgeLabel">Tepozteco</strong></figcaption></figure>
+            <figure class="city-photo city-photo--arch"><img src="assets/gpt/tepoztlan-rooftop-restaurants.webp" data-i18n-alt="conventPhotoAlt" alt="A lush rooftop restaurant in Tepoztlán" width="1122" height="1402" loading="lazy"><figcaption><strong data-i18n="conventLabel">Rooftop Restaurants</strong></figcaption></figure>
+            <figure class="city-photo city-photo--arch"><img src="assets/gpt/tepoztlan-tepozteco-v3.webp" data-i18n-alt="ridgePhotoAlt" alt="Tepozteco mountain framed by flowers and Tepoztlán streets" width="1178" height="1335" loading="lazy"><figcaption><strong data-i18n="ridgeLabel">Tepozteco</strong></figcaption></figure>
           </div>
         </div>
         <div class="practical practical--tepoz accordion reveal">
@@ -256,7 +253,7 @@
         <div class="field"><label for="tepoztlan-check-out" data-i18n="tepoztlanCheckOutLabel">Tepoztlán check-out</label><input id="tepoztlan-check-out" name="tepoztlanCheckOut" type="date" min="2026-11-02" max="2026-11-07" required></div>
         <div class="field full"><label for="tepoztlan-location" data-i18n="tepoztlanLocationLabel">Tepoztlán accommodation</label><select id="tepoztlan-location" name="tepoztlanLocation" autocomplete="organization" aria-controls="tepoztlan-location-other-field" required><option value="" selected disabled data-i18n="chooseTepoztlanLocation">Choose accommodation</option><option value="Hotel Piedra Viva">Hotel Piedra Viva</option><option value="Other" data-i18n="otherOption">Other</option><option value="No accommodation required" data-i18n="noAccommodationRequired">No accommodation required</option></select></div>
         <div class="field full conditional-field" id="tepoztlan-location-other-field" hidden><label for="tepoztlan-location-other" data-i18n="otherTepoztlanLabel">Other accommodation</label><input id="tepoztlan-location-other" name="tepoztlanLocationOther" type="text" autocomplete="organization" placeholder="Enter hotel or accommodation" data-i18n-placeholder="otherTepoztlanPlaceholder"></div>
-      </div><button class="button button--clay" type="submit" data-i18n="checkInSubmit">Submit Check-In <span aria-hidden="true">→</span></button><p class="form-status" id="form-status" aria-live="polite"></p></div><div class="check-in-passage" id="check-in-passage" hidden aria-hidden="true"><div class="catrina-walk"><img class="catrina-dance-frame catrina-dance-frame--one" src="assets/gpt/catrina-dance-reference-frame-01.webp" alt="" decoding="async"><img class="catrina-dance-frame catrina-dance-frame--two" src="assets/gpt/catrina-dance-reference-frame-02.webp" alt="" decoding="async"><img class="catrina-dance-frame catrina-dance-frame--three" src="assets/gpt/catrina-dance-reference-frame-03.webp" alt="" decoding="async"><img class="catrina-dance-frame catrina-dance-frame--four" src="assets/gpt/catrina-dance-reference-frame-04.webp" alt="" decoding="async"></div></div><div class="check-in-thanks" id="check-in-thanks" hidden aria-live="polite"><p class="eyebrow" data-i18n="checkInThanksKicker">Gracias</p><h3 tabindex="-1" data-i18n="checkInThanksTitle">Thank you.</h3><p data-i18n="checkInThanksCopy">This helps us make everyone’s arrival feel easy and well looked after.</p><p class="check-in-thanks-email" data-i18n="checkInThanksEmail">This confirmation is a preview only—nothing has been sent.</p></div></form>
+      </div><button class="button button--clay" type="submit" data-i18n="checkInSubmit">Submit Check-In <span aria-hidden="true">→</span></button><p class="form-status" id="form-status" aria-live="polite"></p></div><div class="check-in-passage" id="check-in-passage" hidden aria-hidden="true"><div class="catrina-walk"><img class="catrina-dance-frame catrina-dance-frame--one" src="assets/gpt/catrina-dance-reference-frame-01.webp" alt="" decoding="async" fetchpriority="low"><img class="catrina-dance-frame catrina-dance-frame--two" src="assets/gpt/catrina-dance-reference-frame-02.webp" alt="" decoding="async" fetchpriority="low"><img class="catrina-dance-frame catrina-dance-frame--three" src="assets/gpt/catrina-dance-reference-frame-03.webp" alt="" decoding="async" fetchpriority="low"><img class="catrina-dance-frame catrina-dance-frame--four" src="assets/gpt/catrina-dance-reference-frame-04.webp" alt="" decoding="async" fetchpriority="low"></div></div><div class="check-in-thanks" id="check-in-thanks" hidden aria-live="polite"><p class="eyebrow" data-i18n="checkInThanksKicker">Gracias</p><h3 tabindex="-1" data-i18n="checkInThanksTitle">Thank you.</h3><p data-i18n="checkInThanksCopy">This helps us make everyone’s arrival feel easy and well looked after.</p><p class="check-in-thanks-email" data-i18n="checkInThanksEmail">This confirmation is a preview only—nothing has been sent.</p></div></form>
     </div></section>
 
     <section class="section closing" data-header-tone="light" data-i18n-aria="closingAria" aria-label="Thank you"><div class="closing-photo reveal"><img src="assets/gpt/sean-valeria-sunset.jpg" data-i18n-alt="closingPhotoAlt" alt="Sean kissing Valeria at sunset by the ocean" width="1333" height="2000" loading="lazy"><div class="closing-copy"><h2 class="section-title" data-i18n="closingTitle">We cannot wait<br>to celebrate together.</h2></div></div></section>
@@ -265,6 +262,6 @@
 
     <footer class="footer" data-header-tone="dark"><img class="footer-logo" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" data-i18n-alt="footerLogoAlt" alt="Sean and Valeria monogram"><div class="footer-signoff"><strong>Sean &amp; Valeria</strong><span>03 · 11 · 2026 · Tepoztlán</span></div></footer>
   </main>
-  <script src="assets/gpt/site.js?v=20260830n"></script>
+  <script src="assets/gpt/site.js?v=20260830o"></script>
 </body>
 </html>
