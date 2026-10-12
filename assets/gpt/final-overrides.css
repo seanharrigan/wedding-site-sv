@@ -3069,3 +3069,17 @@ body.check-in-modal-open{overflow:hidden!important}
    opaque layer it was painting over the gifts card's soft shadow at the section
    seam, cutting it into a hard line. Transparent lets the shadow fade out. */
 .faq{background:transparent!important}
+
+/* Translate: Sean and Val see it after the admin password; guests later.
+   It borrows the Invitation button's header styling and adds a speech icon. */
+.nav-translate[hidden]{display:none!important}
+.nav-translate{gap:.55rem}
+.nav-translate-icon{width:19px;height:19px;flex:none;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+@media(min-width:721px){
+  .site-header .nav-translate{padding-inline:.6rem}
+  .nav-translate-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+@media(max-width:720px){
+  .nav-links>.nav-translate:not([hidden]){display:flex!important;flex-direction:row-reverse;justify-content:space-between}
+  .nav-links>.nav-cta:has(+ .nav-translate[hidden]){border-bottom:0!important}
+}

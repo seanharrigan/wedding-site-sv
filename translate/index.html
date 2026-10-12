@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#140e0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Traducir">
+  <title>Sean and Valeria · Translate</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="../assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
+  <link rel="apple-touch-icon" href="../assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
+  <!-- Same cosmetic gate as the site: no invitation password, no translator.
+       Guests are sent back too until TRANSLATE_FOR_GUESTS is true (keep assets/gpt/site.js in step). -->
+  <script>window.TRANSLATE_FOR_GUESTS=false;try{const s=localStorage;if(s.getItem('wedding-access-v1')!=='true'||!(TRANSLATE_FOR_GUESTS||s.getItem('wedding-admin-v1')))location.replace('../')}catch(e){location.replace('../')}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/gpt/PinyonScript-Regular.woff2" crossorigin>
+  <link rel="stylesheet" href="translate.css?v=20261012a">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- The site's language marks: a maple leaf for English, a cactus for Spanish. -->
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M12 2.35l1.28 3.02 1.87-1.08-.42 2.96 2.9-.78-1.08 2.82 3.62.88-3.12 2.3 1.03 2.66-4.98-.93.35 6.45h-2.9l.35-6.45-4.98.93 1.03-2.66-3.12-2.3 3.62-.88-1.08-2.82 2.9.78-.42-2.96 1.87 1.08z"/></symbol>
+  <symbol id="i-cactus" viewBox="0 0 24 24"><path d="M9.6 21V6.2a2.4 2.4 0 0 1 4.8 0V21"/><path d="M9.6 13.5H7.9a2 2 0 0 1-2-2V8.8"/><path d="M14.4 15.5h1.7a2 2 0 0 0 2-2V9.6"/><path d="M6.5 21h11"/></symbol>
+</svg>
+
+<!-- Options: how to use the translator right now -->
+<section class="screen choose" id="choose" hidden>
+  <a class="back" href="../" data-t="back">← seanandvaleria.com</a>
+  <header class="lockup">
+    <img src="../assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt="Sean &amp; Valeria" width="1536" height="1024">
+    <div class="date">3<span class="sep">·</span>11<span class="sep">·</span>2026</div>
+  </header>
+
+  <div class="broadcast-card admin-only" id="broadcast-card">
+    <span class="broadcast-copy"><b data-t="broadcast">Broadcast</b><small id="broadcast-sub"></small></span>
+    <button class="switch" role="switch" aria-checked="false" data-broadcast aria-label="Broadcast"></button>
+  </div>
+
+  <p class="ask" id="ask"></p>
+  <p class="notice-line" id="choose-notice" hidden></p>
+  <div class="choices">
+    <button class="choice wide local-only" type="button" data-view="facing">
+      <span class="pair" aria-hidden="true"><svg class="mark leaf flip"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
+      <span class="name" data-t="facing">Face to face</span><span class="sub" data-t="facingSub">Two people, one table</span>
+    </button>
+    <button class="choice" type="button" data-view="en" lang="en">
+      <svg class="mark leaf" aria-hidden="true"><use href="#i-leaf"/></svg>
+      <span class="name">English</span><span class="sub" data-t="enSub">Subtitles</span>
+    </button>
+    <button class="choice" type="button" data-view="es" lang="es">
+      <svg class="mark cactus" aria-hidden="true"><use href="#i-cactus"/></svg>
+      <span class="name">Español</span><span class="sub" data-t="esSub">Subtítulos</span>
+    </button>
+  </div>
+</section>
+
+<!-- The subtitles -->
+<div class="screen app" id="app" hidden>
+  <header class="bar">
+    <button class="icon" id="to-options" type="button" aria-label="Options">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
+    </button>
+    <img class="bar-mark" src="../assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt="Sean &amp; Valeria" width="1536" height="1024">
+    <span class="bar-pill" id="bar-pill" hidden></span>
+  </header>
+
+  <p class="toast" id="toast" role="status" aria-live="polite"></p>
+
+  <main>
+    <div class="v-wide">
+      <div class="labels">
+        <div class="label" data-lang="en"><svg class="mark leaf" aria-hidden="true"><use href="#i-leaf"/></svg><span class="name">English</span></div>
+        <div class="label" data-lang="es" lang="es"><svg class="mark cactus" aria-hidden="true"><use href="#i-cactus"/></svg><span class="name">Español</span></div>
+      </div>
+      <div class="stream" id="wide" aria-live="polite"></div>
+      <p class="empty" id="wide-empty"></p>
+    </div>
+    <div class="v-stack">
+      <section class="pane" data-lang="en" aria-label="English">
+        <div class="label"><svg class="mark leaf" aria-hidden="true"><use href="#i-leaf"/></svg><span class="name">English</span></div>
+        <div class="stream" aria-live="polite"></div>
+        <p class="empty"></p>
+      </section>
+      <section class="pane" data-lang="es" aria-label="Español" lang="es">
+        <div class="label"><svg class="mark cactus" aria-hidden="true"><use href="#i-cactus"/></svg><span class="name">Español</span></div>
+        <div class="stream" aria-live="polite"></div>
+        <p class="empty"></p>
+      </section>
+    </div>
+    <div class="v-single">
+      <div class="label" id="single-label"><svg class="mark" aria-hidden="true"><use id="single-mark" href="#i-leaf"/></svg><span class="name" id="single-name"></span></div>
+      <div class="stream" id="single" aria-live="polite"></div>
+      <p class="empty" id="single-empty"></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="side">
+      <button class="icon" id="size" type="button" aria-label="Text size"><span class="aa">Aa</span></button>
+    </div>
+    <div class="center">
+      <button class="mic" id="mic" type="button" aria-label="Start listening">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></svg>
+      </button>
+      <div class="status" id="status"></div>
+    </div>
+    <div class="side right">
+      <button class="icon" id="open-menu" type="button" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+      </button>
+    </div>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" aria-label="Menu" aria-hidden="true">
+  <h2 data-t="view">View</h2>
+  <div class="views" role="group" aria-label="View">
+    <button class="view local-only" type="button" data-view="facing" aria-pressed="false">
+      <span class="pair" aria-hidden="true"><svg class="mark leaf flip"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
+      <span><b data-t="facing">Face to face</b><small data-t="facingShort">Across a table</small></span>
+    </button>
+    <button class="view" type="button" data-view="both" aria-pressed="false">
+      <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
+      <span><b data-t="both">Both</b><small data-t="bothSub">Side by side</small></span>
+    </button>
+    <button class="view" type="button" data-view="en" aria-pressed="false">
+      <svg class="mark leaf" aria-hidden="true"><use href="#i-leaf"/></svg>
+      <span><b>English</b><small data-t="onlyEn">Only English</small></span>
+    </button>
+    <button class="view" type="button" data-view="es" aria-pressed="false">
+      <svg class="mark cactus" aria-hidden="true"><use href="#i-cactus"/></svg>
+      <span><b>Español</b><small data-t="onlyEs">Solo español</small></span>
+    </button>
+  </div>
+  <div class="opt two-only"><span><span data-t="swap">Swap sides</span><small data-t="swapSub">Change which language is on top</small></span><button class="switch" role="switch" aria-checked="false" data-opt="swapped" aria-label="Swap sides"></button></div>
+  <div class="opt mic-only"><span><span data-t="tidy">Tidy speech</span><small data-t="tidySub">Leave out um, uh, eh and words said twice</small></span><button class="switch" role="switch" aria-checked="true" data-opt="tidy" aria-label="Tidy speech"></button></div>
+
+  <div class="admin-only">
+    <h3>Admin</h3>
+    <div class="opt"><span><span data-t="broadcast">Broadcast</span><small id="sheet-broadcast-sub"></small></span><button class="switch" role="switch" aria-checked="false" data-broadcast aria-label="Broadcast"></button></div>
+    <div class="actions">
+      <button class="btn" id="clear" type="button" data-t="clear">Clear text</button>
+      <button class="btn" id="demo" type="button" data-t="demo">Play demo</button>
+      <button class="btn" id="sign-out" type="button" data-t="signOut">Sign out of admin</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="fullscreen" type="button" data-t="fullscreen" hidden>Full screen</button>
+    <button class="btn solid" id="close-menu" type="button" data-t="done">Done</button>
+  </div>
+  <p class="key-legend" data-t="legend"><b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.</p>
+</aside>
+
+<script src="translate.js?v=20261012a"></script>
+</body>
+</html>
