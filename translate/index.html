@@ -18,10 +18,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="translate.css?v=20261012b">
+  <link rel="stylesheet" href="translate.css?v=20261012d">
 </head>
 <body>
-<div class="grain" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -43,8 +42,11 @@
     <button class="switch" role="switch" aria-checked="false" data-broadcast aria-label="Broadcast"></button>
   </div>
 
-  <p class="ask" id="ask"></p>
   <p class="notice-line" id="choose-notice" hidden></p>
+  <div class="intro">
+    <p class="eyebrow" data-t="eyebrow">Live translation</p>
+    <p class="ask" id="ask"></p>
+  </div>
   <div class="choices">
     <button class="choice wide local-only" type="button" data-view="facing">
       <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
@@ -146,20 +148,20 @@
   <div class="admin-only">
     <h3>Admin</h3>
     <div class="opt"><span><span data-t="broadcast">Broadcast</span><small id="sheet-broadcast-sub"></small></span><button class="switch" role="switch" aria-checked="false" data-broadcast aria-label="Broadcast"></button></div>
-    <div class="actions">
+    <div class="actions pair-row">
       <button class="btn" id="clear" type="button" data-t="clear">Clear text</button>
       <button class="btn" id="demo" type="button" data-t="demo">Play demo</button>
-      <button class="btn" id="sign-out" type="button" data-t="signOut">Sign out of admin</button>
     </div>
+    <button class="text-link" id="sign-out" type="button" data-t="signOut">Sign out of admin</button>
   </div>
 
-  <div class="actions">
+  <div class="actions pair-row done-row">
     <button class="btn" id="fullscreen" type="button" data-t="fullscreen" hidden>Full screen</button>
     <button class="btn solid" id="close-menu" type="button" data-t="done">Done</button>
   </div>
   <p class="key-legend" data-t="legend"><b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.</p>
 </aside>
 
-<script src="translate.js?v=20261012a"></script>
+<script src="translate.js?v=20261012d"></script>
 </body>
 </html>

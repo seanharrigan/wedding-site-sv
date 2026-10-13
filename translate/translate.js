@@ -25,12 +25,12 @@
   const LANG = ["en", "es"].includes(q.get("lang")) ? q.get("lang") : store.get("wedding-language", "en") === "es" ? "es" : "en";
   const T = {
     en: {
-      back: "← seanandvaleria.com", broadcast: "Broadcast", view: "View", facing: "Face to face", facingSub: "Two people, one table", facingShort: "Across a table",
+      back: "← seanandvaleria.com", eyebrow: "Live translation", broadcast: "Broadcast", view: "View", facing: "Face to face", facingSub: "Two people, one table", facingShort: "Across a table",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Both", bothSub: "Side by side", onlyEn: "Only English", onlyEs: "Only Spanish",
       swap: "Swap sides", swapSub: "Change which language is on top", tidy: "Tidy speech", tidySub: "Leave out um, uh, eh and words said twice",
       clear: "Clear text", demo: "Play demo", signOut: "Sign out of admin", fullscreen: "Full screen", done: "Done",
       legend: "<b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.",
-      askLocal: "How would you like to talk?", askBroadcast: "Read the speeches in", options: "Options",
+      askLocal: "How would you like to talk?", askBroadcast: "Which language would you like?", options: "Options",
       bcOff: "Off · face to face for everyone", bcOn: "On · everyone sees your subtitles", bcOffline: "Can't reach the translation server",
       listening: "Listening", connecting: "Connecting…", reconnecting: "Reconnecting…", tapStart: "Tap to start", live: "Live", waiting: "Waiting",
       speaking: "Speaking to everyone", phones: (n) => n + (n === 1 ? " phone" : " phones"), live_pill: "Live",
@@ -43,12 +43,12 @@
       speakBoth: "Speak in English or Spanish · Habla en inglés o en español", stopped: "Paused after a quiet spell · Tap to continue",
     },
     es: {
-      back: "← seanandvaleria.com", broadcast: "Transmitir", view: "Vista", facing: "Frente a frente", facingSub: "Dos personas, una mesa", facingShort: "En la mesa",
+      back: "← seanandvaleria.com", eyebrow: "Traducción en vivo", broadcast: "Transmitir", view: "Vista", facing: "Frente a frente", facingSub: "Dos personas, una mesa", facingShort: "En la mesa",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Ambos", bothSub: "Lado a lado", onlyEn: "Solo inglés", onlyEs: "Solo español",
       swap: "Cambiar lados", swapSub: "Elige qué idioma va arriba", tidy: "Limpiar el habla", tidySub: "Quita eh, em y palabras repetidas",
       clear: "Borrar texto", demo: "Ver demo", signOut: "Cerrar sesión de admin", fullscreen: "Pantalla completa", done: "Listo",
       legend: "Las líneas <b>rectas</b> son lo que se dijo; las <i>cursivas</i> son la traducción.",
-      askLocal: "¿Cómo quieres conversar?", askBroadcast: "Lee los discursos en", options: "Opciones",
+      askLocal: "¿Cómo quieres conversar?", askBroadcast: "¿En qué idioma quieres leer?", options: "Opciones",
       bcOff: "Apagado · frente a frente para todos", bcOn: "Encendido · todos ven tus subtítulos", bcOffline: "No hay conexión con el servidor",
       listening: "Escuchando", connecting: "Conectando…", reconnecting: "Reconectando…", tapStart: "Toca para empezar", live: "En vivo", waiting: "En espera",
       speaking: "Hablando a todos", phones: (n) => n + (n === 1 ? " teléfono" : " teléfonos"), live_pill: "En vivo",
