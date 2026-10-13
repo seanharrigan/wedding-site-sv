@@ -54,6 +54,15 @@
       saved: "Saved", deleted: "Deleted", error: "Something went wrong. Please try again.", closedNow: "Uploads are closed",
       adminTitle: "Admin", uploadsOpen: "Uploads open", uploadsClosed: "Uploads closed", openUploads: "Open uploads", closeUploads: "Close uploads",
       exportList: "Download list of originals", undated: "Date unknown",
+      titleHtml: "Our wedding, <em>through your eyes</em>",
+      opensKicker: "Coming soon", opensText: (d) => `Uploads open ${d}`, opensSub: "Until then, enjoy the photos already here.",
+      closedKicker: "Thank you", closedText: "Uploads are closed", closedSub: "Thank you for sharing every moment with us.",
+      firstSoon: "The first photos will appear here soon.",
+      dropHere: "Drop your photos here", whoIn: "Who’s in these?", whoInStep: (i, n) => `Photo ${i} of ${n} · tap everyone in it`,
+      next: "Next", finish: "Finish", tagNow: "Tag who’s in them",
+      modeAuto: "Automatic", modeOpen: "Open now", modeClosed: "Closed",
+      modeHint: { auto: (d) => `Guests can upload from ${d}. You can always upload.`, open: "Guests can upload now.", closed: "Guests can’t upload. You still can." },
+      guestUploads: "Guest uploads",
     },
     es: {
       back: "← seanandvaleria.com", eyebrow: "Fotos", title: "Nuestra boda, a través de sus ojos",
@@ -81,6 +90,15 @@
       saved: "Guardado", deleted: "Borrada", error: "Algo salió mal. Inténtalo de nuevo.", closedNow: "Ya no se pueden subir fotos",
       adminTitle: "Admin", uploadsOpen: "Subidas abiertas", uploadsClosed: "Subidas cerradas", openUploads: "Abrir subidas", closeUploads: "Cerrar subidas",
       exportList: "Descargar lista de originales", undated: "Fecha desconocida",
+      titleHtml: "Nuestra boda, <em>a través de sus ojos</em>",
+      opensKicker: "Muy pronto", opensText: (d) => `Podrán subir fotos desde el ${d}`, opensSub: "Mientras tanto, disfruten las fotos que ya están aquí.",
+      closedKicker: "Gracias", closedText: "Ya no se pueden subir fotos", closedSub: "Gracias por compartir cada momento con nosotros.",
+      firstSoon: "Las primeras fotos aparecerán aquí muy pronto.",
+      dropHere: "Suelta tus fotos aquí", whoIn: "¿Quién sale en estas?", whoInStep: (i, n) => `Foto ${i} de ${n} · toca a todos los que salen`,
+      next: "Siguiente", finish: "Terminar", tagNow: "Etiquetar quién sale",
+      modeAuto: "Automático", modeOpen: "Abiertas", modeClosed: "Cerradas",
+      modeHint: { auto: (d) => `Los invitados podrán subir fotos desde el ${d}. Ustedes siempre pueden.`, open: "Los invitados ya pueden subir fotos.", closed: "Los invitados no pueden subir fotos. Ustedes sí." },
+      guestUploads: "Fotos de invitados",
     },
   }[LANG];
 
@@ -131,6 +149,7 @@
   const put = (node, ...kids) => node.replaceChildren(...kids.flat().filter((k) => k != null && k !== false));
   document.documentElement.lang = LANG;
   document.querySelectorAll("[data-t]").forEach((n) => { if (typeof T[n.dataset.t] === "string") n.textContent = T[n.dataset.t]; });
+  $("#title").innerHTML = T.titleHtml;
 
   // ── state ─────────────────────────────────────────────────────────────────
   const S = {
@@ -180,6 +199,8 @@
     S.guests = s.guests;
     S.guestById = new Map(s.guests.map((g) => [g.id, g]));
     S.uploadsOpen = s.uploadsOpen;
+    S.uploadsMode = s.uploadsMode || "auto";
+    S.opensOn = s.opensOn || null;
     S.admin = s.admin;
     if (S.me && !S.guestById.has(S.me.id)) setMe(null);
   }
@@ -191,10 +212,26 @@
 
   // ── header ────────────────────────────────────────────────────────────────
   const uploadBtn = $("#upload-btn"), meBtn = $("#me-btn"), fileInput = $("#file");
+  const canUpload = () => S.uploadsOpen || S.admin;
+  const fmtDay = (d) => new Date(d + "T12:00:00Z").toLocaleDateString(LANG === "es" ? "es-MX" : "en-GB", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" });
+  const mexicoToday = () => new Date(Date.now() - 6 * 3600 * 1000).toISOString().slice(0, 10);
+  // Before uploads open: when they will. After they close: thank you.
+  function closedMessage() {
+    if (S.uploadsMode === "auto" && S.opensOn && mexicoToday() < S.opensOn) return { kicker: T.opensKicker, text: T.opensText(fmtDay(S.opensOn)), sub: T.opensSub };
+    if (S.uploadsMode === "closed" && S.opensOn && mexicoToday() < S.opensOn) return { kicker: T.opensKicker, text: T.opensText(fmtDay(S.opensOn)), sub: T.opensSub };
+    return { kicker: T.closedKicker, text: T.closedText, sub: T.closedSub };
+  }
   function renderHeader() {
     $("#actions").hidden = false;
-    uploadBtn.hidden = !S.uploadsOpen;
-    $("#closed-note").hidden = S.uploadsOpen;
+    uploadBtn.hidden = !canUpload();
+    const card = $("#closed-card");
+    card.hidden = canUpload();
+    if (!card.hidden) {
+      const m = closedMessage();
+      $("#closed-kicker").textContent = m.kicker;
+      $("#closed-text").textContent = m.text;
+      $("#closed-sub").textContent = m.sub;
+    }
     put(meBtn, S.me ? el("span", { class: "me-name", text: S.me.name }) : el("span", { text: T.pickName }));
     $("#admin-pill").hidden = !S.admin;
   }
@@ -247,7 +284,29 @@
   // ── grid ──────────────────────────────────────────────────────────────────
   const grid = $("#grid");
   const imgUrl = (size, id) => `${API}/img/${size}/${id}`;
-  const fadeIn = (e) => e.target.classList.add("in");
+  const fadeIn = (e) => { e.target.classList.add("in"); e.target.parentNode.classList.add("loaded"); };
+  const SEAL = "../assets/gpt/wax-seal-sv-exact-transparent-v3.webp";
+
+  // Justified rows: every photo keeps its shape, and each full row fills the width exactly.
+  function justify(photos, width) {
+    const wide = innerWidth > 720;
+    const target = wide ? 240 : 150, gap = wide ? 6 : 4;
+    const rows = [];
+    let row = [], sum = 0;
+    const ratio = (p) => Math.min(3, Math.max(0.4, p.w && p.h ? p.w / p.h : 1.5));
+    for (const p of photos) {
+      row.push(p);
+      sum += ratio(p);
+      if (sum * target + gap * (row.length - 1) >= width) {
+        const h = (width - gap * (row.length - 1)) / sum;
+        rows.push({ items: row, h });
+        row = []; sum = 0;
+      }
+    }
+    if (row.length) rows.push({ items: row, h: Math.min(target, (width - gap * (row.length - 1)) / sum) });
+    return rows.map((r) => ({ h: r.h, items: r.items.map((p) => ({ p, w: Math.floor(ratio(p) * r.h) })) }));
+  }
+  const rowsWidth = () => Math.max(200, grid.clientWidth - (innerWidth > 720 ? 32 : 8));
   const PERSON = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.6 7-5.6s6.2 2 7 5.6"/></svg>';
 
   function render() {
@@ -260,25 +319,29 @@
     }
     const ordered = [...SEGMENTS, UNDATED].filter((s) => groups.has(s));
     const frag = document.createDocumentFragment();
+    const width = rowsWidth();
+    lastWidth = grid.clientWidth;
     let index = 0;
     let weddingIntro = false;
     for (const seg of ordered) {
       const photos = groups.get(seg);
       if (seg.day === "wedding" && !weddingIntro) {
         weddingIntro = true;
-        frag.append(el("div", { class: "day-intro", id: "day-wedding" }, el("small", { text: L("The wedding", "La boda") }), el("h2", { text: WEDDING_DAY[LANG] })));
+        frag.append(el("div", { class: "day-intro", id: "day-wedding" },
+          el("img", { src: SEAL, alt: "", width: 64, height: 64, loading: "lazy" }),
+          el("small", { text: L("The wedding", "La boda") }), el("h2", { text: WEDDING_DAY[LANG] })));
       }
       const head = el("div", { class: "group-head" },
         el("h2", {}, seg.title),
         el("small", { text: [seg.date || seg.time, T.photos(photos.length)].filter(Boolean).join(" · ") }));
-      const tiles = photos.map((p) => {
+      const rows = justify(photos, width).map((r) => el("div", { class: "jrow", style: `height:${Math.round(r.h)}px` }, r.items.map(({ p, w }) => {
         const i = index++;
-        return el("button", { class: "tile", type: "button", "data-i": i, "aria-label": seg.title, onclick: () => openLightbox(i) },
+        return el("button", { class: "tile", type: "button", "data-i": i, "aria-label": seg.title, style: `width:${w}px;height:${Math.round(r.h)}px`, onclick: () => openLightbox(i) },
           el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async", onload: fadeIn }),
           p.src === "p" ? el("span", { class: "badge", text: T.photographer }) : null,
           p.tags.length ? el("span", { class: "tagn", html: `${PERSON}${p.tags.length}` }) : null);
-      });
-      frag.append(el("section", { class: "group" + (seg.day === "wedding" ? " moment" : ""), id: "seg-" + seg.key, "data-seg": seg.key }, head, el("div", { class: "grid" }, tiles)));
+      })));
+      frag.append(el("section", { class: "group" + (seg.day === "wedding" ? " moment" : ""), id: "seg-" + seg.key, "data-seg": seg.key }, head, el("div", { class: "rows" }, rows)));
     }
     // Visible order must match the tile indices used by the lightbox.
     S.visible = ordered.flatMap((s) => groups.get(s));
@@ -286,6 +349,13 @@
     renderRail(ordered, groups);
     renderEmpty();
   }
+
+  // Re-flow the rows when the width really changes (rotation, window resize), not on scroll.
+  let lastWidth = 0, resizeTimer = 0;
+  addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { if (S.photos.length && Math.abs(grid.clientWidth - lastWidth) > 8) render(); }, 150);
+  });
 
   function renderRail(ordered, groups) {
     const rail = $("#rail");
@@ -322,10 +392,15 @@
   function renderEmpty() {
     const box = $("#empty");
     box.hidden = S.visible.length > 0;
-    if (!box.hidden) {
-      put(box, 
-        el("p", { text: filtered() ? T.empty : T.emptyAll }),
-        filtered() ? el("button", { class: "btn", type: "button", text: T.clearFilters, onclick: () => { S.filter = { people: new Set(), by: null, src: null, mine: false }; render(); } }) : null);
+    if (box.hidden) return;
+    if (filtered()) {
+      put(box, el("p", { text: T.empty }),
+        el("button", { class: "btn", type: "button", text: T.clearFilters, onclick: () => { S.filter = { people: new Set(), by: null, src: null, mine: false }; render(); } }));
+    } else if (canUpload()) {
+      put(box, el("p", { text: T.emptyAll }),
+        el("button", { class: "btn solid", type: "button", html: uploadBtn.innerHTML, onclick: () => uploadBtn.click() }));
+    } else {
+      put(box, el("div", { class: "card" }, el("img", { src: SEAL, alt: "" }), el("p", {}, T.firstSoon)));
     }
   }
 
@@ -352,11 +427,16 @@
   wrap.addEventListener("click", (e) => { if (e.target === wrap) closeSheet(undefined); });
 
   // A searchable list of names. single: resolves with a guest; multi: resolves with a Set.
-  function namePicker({ title, q, hint, multi = false, selected = new Set(), counts = null, allowAdd = false, only = null, exclude = new Set(), footer }) {
+  function namePicker({ title, q, hint, multi = false, selected = new Set(), counts = null, allowAdd = false, only = null, exclude = new Set(), footer, preview,
+    okLabel = T.done, cancelLabel = T.clear, cancelValue = () => new Set() }) {
     let query = "";
     const list = el("div", { class: "list" });
+    const chips = el("div", { class: "chosen" });
     const chosen = new Set(selected);
+    const drawChips = () => put(chips, [...chosen].map((id) => el("span", { class: "tag" }, nameOf(id) || "—",
+      el("button", { type: "button", text: "×", onclick: () => { chosen.delete(id); draw(); } }))));
     const draw = () => {
+      if (multi) drawChips();
       const s = query.trim().toLowerCase();
       const norm = (x) => x.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
       const pool = S.guests.filter((g) => (!only || only.has(g.id)) && !exclude.has(g.id) && (!s || norm(g.name).includes(norm(s))));
@@ -377,7 +457,10 @@
         try {
           const { guest } = await api("/api/guests", { method: "POST", json: { name: query.trim() } });
           if (!S.guestById.has(guest.id)) { S.guests.push(guest); S.guestById.set(guest.id, guest); }
-          closeSheet(guest);
+          if (!multi) return closeSheet(guest);
+          chosen.add(guest.id);
+          query = ""; input.value = "";
+          draw();
         } catch { toast(T.error); }
       } }, T.notListed(query.trim())));
       put(list, ...rows);
@@ -386,12 +469,14 @@
     draw();
     return openSheet(() => [
       title ? el("h2", { text: title }) : null,
+      preview ? el("img", { class: "preview", src: preview, alt: "" }) : null,
       el("p", { class: "q", text: q }),
       hint ? el("p", { class: "hint", text: hint }) : null,
+      multi ? chips : null,
       input, list,
       multi ? el("div", { class: "sheet-foot" },
-        el("button", { class: "btn", type: "button", text: T.clear, onclick: () => closeSheet(new Set()) }),
-        el("button", { class: "btn solid", type: "button", text: T.done, onclick: () => closeSheet(chosen) })) : footer?.() ?? null,
+        el("button", { class: "btn", type: "button", text: cancelLabel, onclick: () => closeSheet(cancelValue()) }),
+        el("button", { class: "btn solid", type: "button", text: okLabel, onclick: () => closeSheet(chosen) })) : footer?.() ?? null,
     ].filter(Boolean));
   }
 
@@ -445,7 +530,7 @@
 
   // ── lightbox ──────────────────────────────────────────────────────────────
   const lb = $("#lightbox"), lbImg = $("#lb-img"), lbInfo = $("#lb-info");
-  const fmtWhen = (t) => new Date(t + "Z").toLocaleString(LANG === "es" ? "es-MX" : "en-CA", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
+  const fmtWhen = (t) => new Date(t + "Z").toLocaleString(LANG === "es" ? "es-MX" : "en-GB", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit", hour12: true });
 
   function openLightbox(i, push = true) {
     if (!S.visible[i]) return;
@@ -484,6 +569,7 @@
     lbImg.src = imgUrl("display", p.id);
     lbImg.alt = segmentOf(p.t).title;
     for (const n of [S.visible[S.lbIndex + 1], S.visible[S.lbIndex - 1]]) if (n) new Image().src = imgUrl("display", n.id);
+    $("#lb-count").textContent = `${S.lbIndex + 1} / ${S.visible.length}`;
     $("#lb-prev").hidden = S.lbIndex === 0;
     $("#lb-next").hidden = S.lbIndex === S.visible.length - 1;
     renderInfo(p);
@@ -698,7 +784,8 @@
       el("div", { class: "tray-thumbs" }, queue.map((it) => el("button", { type: "button", class: it.state, onclick: () => it.state === "done" && openById(it.id) },
         it.thumbUrl ? el("img", { src: it.thumbUrl, alt: "" }) : null,
         el("span", { class: "state", text: it.state === "failed" ? "!" : "…" })))),
-      !busy && done ? el("p", { class: "tray-note", text: T.tagThem }) : null,
+      !busy && done ? el("div", { class: "tray-note" }, el("span", { text: T.tagThem }),
+        el("button", { class: "btn small solid", type: "button", text: T.tagNow, onclick: () => tagBatch() })) : null,
       failed.length ? el("p", { class: "tray-note" }, `${T.failed(failed.length)}: ${reason(failed[0].error)} `,
         el("button", { class: "btn small", type: "button", text: T.retry, onclick: () => { failed.forEach((x) => { x.state = "waiting"; x.error = null; }); renderTray(); pump(); } })) : null,
     );
@@ -709,6 +796,31 @@
     wakeLock?.release?.().catch(() => {});
     wakeLock = null;
     try { await loadPhotos(); render(); } catch {}
+    // Straight after sharing, walk through the new photos once to tag who's in them.
+    if (queue.some((x) => x.state === "done" && !x.existing) && lb.hidden && wrap.hidden) tagBatch();
+  }
+
+  async function tagBatch() {
+    const ids = queue.filter((x) => x.state === "done").map((x) => x.id);
+    const photos = ids.map((id) => S.photos.find((p) => p.id === id)).filter(Boolean);
+    for (const [n, p] of photos.entries()) {
+      const chosen = await namePicker({
+        title: T.whoIn, q: fmtWhen(p.t || "2026-11-03T12:00:00").replace(/^\w/, (c) => c.toUpperCase()), hint: T.whoInStep(n + 1, photos.length),
+        preview: imgUrl("display", p.id), multi: true, allowAdd: true, selected: new Set(p.tags),
+        okLabel: n + 1 < photos.length ? T.next : T.done, cancelLabel: T.finish, cancelValue: () => null,
+      });
+      if (!chosen) break;
+      const add = [...chosen].filter((id) => !p.tags.includes(id));
+      const drop = p.tags.filter((id) => !chosen.has(id));
+      try {
+        await Promise.all([
+          ...add.map((id) => api(`/api/photos/${p.id}/tags`, { method: "POST", json: { guestId: id, by: S.me?.id ?? null } })),
+          ...drop.map((id) => api(`/api/photos/${p.id}/tags/${id}`, { method: "DELETE" })),
+        ]);
+        p.tags = [...chosen];
+      } catch { toast(T.error); }
+    }
+    render();
   }
   function openById(id) {
     let i = S.visible.findIndex((p) => p.id === id);
@@ -744,15 +856,19 @@
 
   // ── admin ─────────────────────────────────────────────────────────────────
   $("#admin-pill").addEventListener("click", () => {
+    const setMode = async (mode) => {
+      try { await api("/api/settings", { method: "PATCH", json: { uploads: mode } }); await loadState(); renderHeader(); renderEmpty(); closeSheet(); toast(T.saved); }
+      catch { toast(T.error); }
+    };
+    const modeHint = S.uploadsMode === "auto" ? T.modeHint.auto(S.opensOn ? fmtDay(S.opensOn) : "—") : T.modeHint[S.uploadsMode];
     openSheet(() => [
       el("h2", { text: T.adminTitle }),
-      el("p", { class: "q", text: S.uploadsOpen ? T.uploadsOpen : T.uploadsClosed }),
+      el("p", { class: "q", text: T.guestUploads }),
+      el("div", { class: "seg-tabs" }, [["auto", T.modeAuto], ["open", T.modeOpen], ["closed", T.modeClosed]].map(([m, label]) =>
+        el("button", { type: "button", "aria-pressed": String(S.uploadsMode === m), text: label, onclick: () => setMode(m) }))),
+      el("p", { class: "hint", text: modeHint }),
       el("p", { class: "hint", text: `${T.photos(S.photos.length)} · ${S.guests.length} ${LANG === "es" ? "nombres" : "names"}` }),
       el("div", { class: "sheet-foot" },
-        el("button", { class: "btn", type: "button", text: S.uploadsOpen ? T.closeUploads : T.openUploads, onclick: async () => {
-          try { await api("/api/settings", { method: "PATCH", json: { uploadsOpen: !S.uploadsOpen } }); await loadState(); renderHeader(); closeSheet(); }
-          catch { toast(T.error); }
-        } }),
         el("button", { class: "btn", type: "button", text: T.exportList, onclick: () => {
           const lines = S.photos.map((p) => `${imgUrl("orig", p.id)}?dl=1`).join("\n");
           const a = el("a", { href: URL.createObjectURL(new Blob([lines], { type: "text/plain" })), download: "sean-valeria-originals.txt" });
@@ -760,6 +876,27 @@
         } })),
     ]);
   });
+
+  // ── drop photos onto the page (computers) ─────────────────────────────────
+  {
+    const drop = $("#drop");
+    let depth = 0;
+    const hasFiles = (e) => [...(e.dataTransfer?.types || [])].includes("Files");
+    addEventListener("dragenter", (e) => { if (!hasFiles(e) || !canUpload()) return; depth++; drop.hidden = false; });
+    addEventListener("dragleave", (e) => { if (!hasFiles(e)) return; depth = Math.max(0, depth - 1); if (!depth) drop.hidden = true; });
+    addEventListener("dragover", (e) => { if (hasFiles(e)) e.preventDefault(); });
+    addEventListener("drop", async (e) => {
+      if (!hasFiles(e)) return;
+      e.preventDefault();
+      depth = 0;
+      drop.hidden = true;
+      if (!canUpload()) return;
+      const files = [...e.dataTransfer.files].filter((f) => f.type.startsWith("image/") || /\.(heic|heif)$/i.test(f.name));
+      if (!files.length) return;
+      if (!S.me && !(await pickWho())) return;
+      addFiles(files);
+    });
+  }
 
   // ── toast ─────────────────────────────────────────────────────────────────
   let toastTimer = 0;

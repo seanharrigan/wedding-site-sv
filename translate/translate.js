@@ -143,8 +143,16 @@
   let lastLayout = "";
 
   // Everything that depends on whether a broadcast is on.
+  // Beige paper normally; the dark cocoa look while the speeches are broadcast.
+  const LOGO = { light: "../assets/gpt/sv-logo-variants/solid/sv-logo-mocha-true-solid.png", dark: "../assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" };
+  function applyTheme() {
+    const dark = broadcast;
+    document.querySelectorAll("img[data-logo]").forEach((img) => { const src = dark ? LOGO.dark : LOGO.light; if (!img.src.endsWith(src.slice(2))) img.src = src; });
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#140e0b" : "#eee5da");
+  }
   function applyMode() {
     body.classList.toggle("broadcasting", broadcast);
+    applyTheme();
     body.classList.toggle("no-mic", !canUseMic());
     $("#choose").classList.toggle("broadcasting", broadcast);
     $("#ask").textContent = broadcast ? (ADMIN ? T.askBroadcastAdmin : T.askBroadcast) : T.askLocal;
