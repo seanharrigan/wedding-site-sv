@@ -3083,3 +3083,6 @@ body.check-in-modal-open{overflow:hidden!important}
   .nav-links>.nav-translate:not([hidden]){display:flex!important;flex-direction:row-reverse;justify-content:space-between}
   .nav-links>.nav-cta:has(+ .nav-translate[hidden]){border-bottom:0!important}
 }
+
+/* A week in México: a second line under a day's title (the parade on the 31st, Lucha Libre on the 1st). */
+.week-note{display:block;margin-top:.28rem;color:#6a5648;font-family:var(--serif);font-size:clamp(.98rem,1.2vw,1.08rem);font-style:italic;line-height:1.25}
