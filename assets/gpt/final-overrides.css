@@ -3097,7 +3097,7 @@ body.check-in-modal-open{overflow:hidden!important}
 
 /* Between the site and its own pages (Photos, Translate): dissolve into paper and back.
    The pages do the same with assets/gpt/subpage.css. */
-.sp-cover{position:fixed;inset:0;z-index:9999;background:#eee5da;opacity:0;pointer-events:none;transition:opacity .28s ease}
+.sp-cover{position:fixed;inset:0;z-index:9999;background:#e3d6c5;opacity:0;pointer-events:none;transition:opacity .28s ease}
 html.sp-leaving .sp-cover{opacity:1;pointer-events:auto}
 html.sp-return .sp-cover{animation:sp-return .65s ease .05s both}
 @keyframes sp-return{from{opacity:1}to{opacity:0}}

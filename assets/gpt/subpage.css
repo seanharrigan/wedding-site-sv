@@ -1,16 +1,48 @@
-/* Shared chrome for the site's own pages (Photos, Translate): a small floating bar in the
-   site's style, and the soft paper fade between pages. Used with subpage.js. */
+/* Shared chrome for the site's own pages (Gallery, Translate), so they sit in the same frame as
+   the home page: the beige backdrop, a paper card over it, and a floating bar over the card's top
+   edge where the home header sits. Plus the soft paper fade between pages. Used with subpage.js. */
 
-/* the bar: monogram home, Home · Photos · Translate, and the language switch */
-.sp-bar{position:absolute;z-index:6;top:calc(10px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
-  width:min(1120px,calc(100% - 24px));height:58px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 8px 0 12px;
+:root{
+  /* the home page's canvas (final-overrides.css: "Desktop canvas") */
+  --sp-canvas:calc(100% - 14px);
+  --sp-card-top:7px;
+  --sp-card-radius:28px;
+  --sp-bar-inset:8px;
+  --sp-bar-top:17px;
+}
+@media (min-width:721px){
+  :root{
+    --sp-canvas:min(2016px,max(70vw,min(896px,88vw)));
+    --sp-card-top:24px;
+    --sp-card-radius:clamp(30px,4vw,54px);
+    --sp-bar-inset:32px;
+    --sp-bar-top:14px;
+  }
+}
+
+/* ── the frame: the home page's beige backdrop and a paper card ───── */
+html.sp-on{background:#d6c8b5}
+html.sp-on body{background:radial-gradient(circle at 12% 8%,rgba(255,246,232,.95),transparent 42rem),
+  radial-gradient(circle at 88% 92%,rgba(196,176,154,.85),transparent 38rem),linear-gradient(150deg,#e4d8c8,#cdbfab) fixed}
+.sp-card,body[data-page=translate] :is(.soon,.choose){
+  position:relative;width:var(--sp-canvas);margin:var(--sp-card-top) auto;background:#eee5da;
+  border:1px solid rgba(255,249,239,.8);border-radius:var(--sp-card-radius);overflow:clip;
+  box-shadow:0 46px 120px rgba(52,38,31,.28),0 14px 36px rgba(52,38,31,.14),0 0 0 1px rgba(255,255,255,.4)}
+.sp-card{min-height:calc(100dvh - 2*var(--sp-card-top))}
+@media (max-width:720px){
+  .sp-card,body[data-page=translate] :is(.soon,.choose){box-shadow:0 26px 70px rgba(52,38,31,.3),0 8px 24px rgba(52,38,31,.16),0 0 0 1px rgba(255,255,255,.4)}
+}
+
+/* ── the bar: where the home header sits, over the card's top edge ── */
+.sp-bar{position:absolute;z-index:6;top:calc(var(--sp-card-top) + var(--sp-bar-top) + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
+  width:calc(var(--sp-canvas) - 2*var(--sp-bar-inset));height:62px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px 0 14px;
   border-radius:999px;border:1px solid rgba(73,54,44,.14);background:rgba(250,245,238,.66);color:#30251f;
   -webkit-backdrop-filter:blur(16px) saturate(120%);backdrop-filter:blur(16px) saturate(120%);
   box-shadow:0 12px 34px rgba(56,38,24,.08),inset 0 1px rgba(255,255,255,.5);
   font-family:"Montserrat",system-ui,sans-serif;transition:background .5s ease,border-color .5s ease,color .5s ease}
-.sp-home{display:grid;place-items:center;width:58px;height:44px;flex:none;border-radius:999px;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.sp-home{display:grid;place-items:center;width:62px;height:46px;flex:none;border-radius:999px;transition:transform .35s cubic-bezier(.16,1,.3,1)}
 .sp-home:hover{transform:translateY(-1px) scale(1.04)}
-.sp-home img{width:52px;height:auto;display:block}
+.sp-home img{width:56px;height:auto;display:block}
 .sp-links{display:flex;align-items:center;gap:clamp(0px,1.4vw,14px);margin-left:auto}
 .sp-links a,.sp-lang button{position:relative;display:inline-flex;align-items:center;min-height:44px;padding:0 clamp(7px,1.3vw,12px);
   font:600 .56rem/1 "Montserrat",system-ui,sans-serif;letter-spacing:.17em;text-transform:uppercase;text-decoration:none;
@@ -26,8 +58,12 @@
 .sp-lang button{padding:0 9px}
 .sp-lang button[aria-pressed=true]{color:#30251f}
 .sp-lang .sep{width:1px;height:12px;background:rgba(73,54,44,.2)}
+@media (max-width:720px){
+  .sp-bar{height:58px;padding:0 4px 0 6px;border-radius:22px}
+  .sp-home{width:54px}
+  .sp-home img{width:48px}
+}
 @media (max-width:540px){
-  .sp-bar{height:54px;padding:0 4px 0 6px}
   .sp-links .sp-to-home{display:none} /* the monogram is home */
   .sp-links{gap:0}
   .sp-links a,.sp-lang button{font-size:.52rem;letter-spacing:.14em;padding:0 8px}
@@ -35,34 +71,54 @@
   .sp-lang button{padding:0 7px}
 }
 
-/* the old corner link gives way to the bar */
+/* the old corner link gives way to the bar; the bar carries the monogram, so each page
+   opens with the same date line, eyebrow and title in the same place */
 html.sp-on .back{display:none!important}
-/* the bar carries the monogram, so the page keeps just its date line */
 html.sp-on .lockup img{display:none}
+html.sp-on .lockup{margin-bottom:10px}
+:root{--sp-head-top:calc(var(--sp-bar-top) + 62px + 44px + env(safe-area-inset-top,0px))}
 
-/* Photos: room for the bar above the header */
-body[data-page=photos] .top{padding-top:calc(100px + env(safe-area-inset-top,0px))}
-body[data-page=photos] .admin-pill{top:calc(82px + env(safe-area-inset-top,0px))}
-/* the leaf shadows begin just below the bar (Safari also leaves a pale patch under the
-   bar's corner if they run all the way up) */
+/* Gallery */
+body[data-page=photos] .top{padding-top:var(--sp-head-top)}
+body[data-page=photos] .admin-pill{top:calc(var(--sp-bar-top) + 74px + env(safe-area-inset-top,0px))}
+/* the leaf shadows begin just below the bar */
 body[data-page=photos] .top::before{-webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 34%,transparent 96%);
   mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 34%,transparent 96%)}
 
-/* Translate: room for the bar on the options and coming-soon screens; none over the subtitles;
-   dark like everything else during a broadcast */
-body[data-page=translate] .choose,body[data-page=translate] .soon{padding-top:calc(92px + env(safe-area-inset-top,0px))}
+/* Translate: the options and coming-soon screens are cards laid out from the top like the
+   Gallery; the subtitles stay full screen, and a broadcast is full screen and dark throughout */
+body[data-page=translate] :is(.soon,.choose){height:calc(100dvh - 2*var(--sp-card-top));justify-content:flex-start;gap:10px;
+  padding-top:var(--sp-head-top);background:radial-gradient(circle at 15% 0,rgba(255,255,255,.55),transparent 30rem),#eee5da}
+body[data-page=translate] :is(.soon,.choose) > .lockup{margin-bottom:10px}
+/* the leaf shadows sit inside the card, as on the Gallery, not on the backdrop */
+body[data-page=translate] :is(.soon,.choose){isolation:isolate}
+html.sp-on body[data-page=translate]:not(.broadcasting)::before{display:none}
+body[data-page=translate]:not(.broadcasting) :is(.soon,.choose)::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.2;mix-blend-mode:multiply;
+  background:url("save-date-botanical-shadow-mobile-v3.webp") center 30%/cover no-repeat;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 360px,transparent 760px);
+  mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 360px,transparent 760px)}
+@media (min-width:721px){body[data-page=translate]:not(.broadcasting) :is(.soon,.choose)::before{background-image:url("save-date-botanical-shadow-desktop-v3.webp");background-position:center 40%}}
+body[data-page=translate] .soon-foot{margin-top:18px}
+body[data-page=translate] .soon .intro{margin-bottom:6px}
+body[data-page=translate] .soon .soon-copy{margin:6px 0 16px}
+body[data-page=translate] .choose .intro{margin-bottom:14px}
+body[data-page=translate] .choose .broadcast-card{order:3;margin-top:14px}
+body[data-page=translate] #app{background:var(--bg-grad)}
 body[data-page=translate]:has(#app:not([hidden])) .sp-bar{display:none}
-body.broadcasting .sp-bar{background:rgba(255,249,239,.06);border-color:rgba(255,249,239,.14);box-shadow:inset 0 1px rgba(255,255,255,.06)}
+body.broadcasting{background:var(--bg-grad)!important}
+body.broadcasting :is(.soon,.choose){width:100%;height:100dvh;margin:0;border:0;border-radius:0;box-shadow:none;background:transparent}
+body.broadcasting .sp-bar{top:calc(14px + env(safe-area-inset-top,0px));width:calc(100% - 28px);
+  background:rgba(255,249,239,.06);border-color:rgba(255,249,239,.14);box-shadow:inset 0 1px rgba(255,255,255,.06)}
 body.broadcasting .sp-links a,body.broadcasting .sp-lang button{color:rgba(255,248,238,.55)}
 body.broadcasting .sp-links a:hover,body.broadcasting .sp-links a[aria-current=page],body.broadcasting .sp-lang button[aria-pressed=true]{color:#fff8ee}
 body.broadcasting .sp-lang::before{background:rgba(255,249,239,.2)}
 body.broadcasting .sp-lang .sep{background:rgba(255,249,239,.25)}
 
 /* ── between pages: dissolve into paper, and rise out of it ───────── */
-.sp-cover{position:fixed;inset:0;z-index:9999;background:#eee5da;opacity:0;pointer-events:none;transition:opacity .28s ease}
+.sp-cover{position:fixed;inset:0;z-index:9999;background:#e3d6c5;opacity:0;pointer-events:none;transition:opacity .28s ease}
 html.sp-leaving .sp-cover{opacity:1;pointer-events:auto}
 /* fade the page's own sections, not <body>: Safari mishandles whole-page opacity with blend modes */
-html.sp-arrive body[data-page=photos] :is(.top,.bars,.grid-wrap,.empty),
+html.sp-arrive body[data-page=photos] .sp-card > :is(.top,.bars,.grid-wrap,.empty),
 html.sp-arrive body[data-page=translate] .screen{animation:sp-arrive .6s cubic-bezier(.16,1,.3,1) both}
 html.sp-arrive .sp-bar{animation:sp-bar-in .7s cubic-bezier(.16,1,.3,1) both}
 @keyframes sp-arrive{from{opacity:0}}

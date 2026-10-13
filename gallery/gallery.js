@@ -32,7 +32,7 @@
 
   const T = {
     en: {
-      back: "← seanandvaleria.com", eyebrow: "Photos", title: "Our wedding, through your eyes",
+      back: "← seanandvaleria.com", eyebrow: "Gallery", title: "Our wedding, through your eyes",
       lede: "Share your photos from the trip and the day. Tag who’s in them, and find every photo of you.",
       add: "Add photos", closed: "Uploads are closed. Thank you for sharing!", you: "You", pickName: "Who are you?",
       all: "All", ofMe: "Photos of me", people: "People", uploadedBy: "Shared by", photographer: "Photographer", guests: "Guests",
@@ -67,7 +67,7 @@
       guestUploads: "Guest uploads",
     },
     es: {
-      back: "← seanandvaleria.com", eyebrow: "Fotos", title: "Nuestra boda, a través de sus ojos",
+      back: "← seanandvaleria.com", eyebrow: "Galería", title: "Nuestra boda, a través de sus ojos",
       lede: "Compartan sus fotos del viaje y del día. Etiqueten a quien aparece y encuentren todas sus fotos.",
       add: "Subir fotos", closed: "Ya no se pueden subir fotos. ¡Gracias por compartir!", you: "Tú", pickName: "¿Quién eres?",
       all: "Todas", ofMe: "Fotos mías", people: "Personas", uploadedBy: "Compartidas por", photographer: "Fotógrafo", guests: "Invitados",

@@ -1,5 +1,5 @@
-// Shared chrome for the site's own pages (Photos, Translate), so they feel like part of
-// seanandvaleria.com: a small floating bar (monogram home, Home · Photos · Translate, EN/ES)
+// Shared chrome for the site's own pages (Gallery, Translate), so they feel like part of
+// seanandvaleria.com: a small floating bar (monogram home, Home · Gallery · Translate, EN/ES)
 // and a soft paper fade between pages. Each page marks itself with <body data-page="…">.
 (() => {
   const store = {
@@ -12,8 +12,8 @@
   const LANG = ["en", "es"].includes(q.get("lang")) ? q.get("lang") : store.get("wedding-language", "en") === "es" ? "es" : "en";
   const here = document.body.dataset.page;
   const T = {
-    en: { home: "Home", photos: "Photos", translate: "Translate", nav: "Site navigation", lang: "Language", homeAria: "Sean and Valeria, back to the website" },
-    es: { home: "Inicio", photos: "Fotos", translate: "Traducir", nav: "Navegación del sitio", lang: "Idioma", homeAria: "Sean y Valeria, volver al sitio" },
+    en: { home: "Home", photos: "Gallery", translate: "Translate", nav: "Site navigation", lang: "Language", homeAria: "Sean and Valeria, back to the website" },
+    es: { home: "Inicio", photos: "Galería", translate: "Traducir", nav: "Navegación del sitio", lang: "Idioma", homeAria: "Sean y Valeria, volver al sitio" },
   }[LANG];
 
   // The site keeps its place when you come back, so "home" steps back if that's where we came from.
