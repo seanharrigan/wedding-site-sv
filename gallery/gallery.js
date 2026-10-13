@@ -5,7 +5,7 @@
 (() => {
   const local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
   // Set after the Worker is deployed (npm run deploy in ../sv-gallery prints the address).
-  const API_PROD = "";
+  const API_PROD = "https://sv-gallery.valeriaandseanharrigan.workers.dev";
   const API = local ? `http://${location.hostname}:8933` : API_PROD;
   const MAX_BYTES = 40 * 1024 * 1024;
   const DISPLAY_EDGE = 2048, THUMB_EDGE = 640;

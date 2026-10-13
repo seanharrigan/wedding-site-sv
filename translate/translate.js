@@ -4,7 +4,7 @@
 (() => {
   const local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
   // Set after the Worker is deployed (npm run deploy in ../subtitulos prints the address).
-  const RELAY_PROD = "";
+  const RELAY_PROD = "https://subtitulos.valeriaandseanharrigan.workers.dev";
   const RELAY = local ? `http://${location.hostname}:8932` : RELAY_PROD;
   const RELAY_WS = RELAY.replace(/^http/, "ws") + "/ws";
   const SONIOX_URL = "wss://stt-rt.soniox.com/transcribe-websocket";
