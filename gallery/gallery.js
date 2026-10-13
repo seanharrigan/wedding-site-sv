@@ -109,7 +109,7 @@
   const SEGMENTS = [
     { key: "before", start: "0000", day: "before", title: L("Before the trip", "Antes del viaje"), rail: L("Before", "Antes") },
     { key: "oct31", start: "2026-10-31T00:00", day: "oct31", title: L("Arrive in Mexico City", "Llegada a la Ciudad de México"), date: L("Saturday 31 October", "Sábado 31 de octubre"), rail: L("Sat 31", "Sáb 31") },
-    { key: "nov1", start: "2026-11-01T00:00", day: "nov1", title: "Día de Muertos", date: L("Sunday 1 November", "Domingo 1 de noviembre"), rail: L("Sun 1", "Dom 1") },
+    { key: "nov1", start: "2026-11-01T00:00", day: "nov1", title: L("Day of the Dead", "Día de Muertos"), date: L("Sunday 1 November", "Domingo 1 de noviembre"), rail: L("Sun 1", "Dom 1") },
     { key: "nov2", start: "2026-11-02T00:00", day: "nov2", title: L("Travel to Tepoztlán", "Viaje a Tepoztlán"), date: L("Monday 2 November", "Lunes 2 de noviembre"), rail: L("Mon 2", "Lun 2") },
     { key: "ready", start: "2026-11-03T00:00", day: "wedding", title: L("Getting ready", "Preparativos"), rail: L("Getting ready", "Preparativos") },
     { key: "arrival", start: "2026-11-03T14:00", day: "wedding", title: L("Guest arrival", "Llegada de invitados"), time: "2:00 PM", rail: L("Arrival", "Llegada") },
