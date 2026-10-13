@@ -151,8 +151,19 @@ body.admin.broadcasting .views,body.admin.broadcasting .views-title{display:none
 .soon-title{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,11vw,3.4rem);line-height:1;color:var(--fg)}
 .soon-copy{max-width:330px;font-size:1.2rem;line-height:1.45;color:var(--fg-soft)}
 .soon-list{list-style:none;display:flex;flex-direction:column;gap:10px;width:min(340px,100%)}
-.soon-list li{display:flex;align-items:center;gap:16px;padding:16px 22px;border:1px solid var(--line);border-radius:24px;text-align:left;
-  background:var(--glass);box-shadow:inset 0 1px rgba(255,255,255,.07)}
+.soon-list li{display:flex;align-items:center;gap:16px;padding:16px 22px;border:1px solid var(--line);border-radius:24px;text-align:left;cursor:pointer;
+  background:var(--glass);box-shadow:inset 0 1px rgba(255,255,255,.07);-webkit-user-select:none;user-select:none;
+  transition:transform .45s var(--ease),background .3s ease,border-color .3s ease,box-shadow .3s ease}
+/* they respond like the choices will on the day, even though they don't open yet */
+@media (hover:hover){
+  .soon-list li:hover{transform:translateY(-2px);background:var(--glass-hover);border-color:var(--line-strong);box-shadow:0 14px 32px rgba(56,38,24,.12),inset 0 1px rgba(255,255,255,.1)}
+}
+.soon-list li:focus-visible{outline:none;border-color:var(--line-strong);background:var(--glass-hover)}
+.soon-list li:active{transform:scale(.98);transition-duration:.12s}
+.soon-list li.nudge{animation:nudge .42s ease}
+@keyframes nudge{20%{transform:translateX(-4px)}45%{transform:translateX(4px)}70%{transform:translateX(-2px)}100%{transform:none}}
+.soon-list li:hover .mark,.soon-list li:hover .mic-mark{transform:scale(1.08)}
+.soon-list .mark,.soon-list .mic-mark{transition:transform .45s var(--ease)}
 .soon-list .pair,.soon-list .mark{font-size:1.1rem}
 .soon-list .pair{flex:none;width:2.3em}
 .soon-list .mic-mark{width:2.3em;color:var(--fg-soft);stroke-width:1.4}
@@ -298,5 +309,6 @@ body.view-en .two-only,body.view-es .two-only,body.no-mic .mic-only{display:none
 .key-legend i{color:var(--translated)}
 
 @media (prefers-reduced-motion:reduce){
-  .sheet,.toast,.switch::after,.choice,.mic,.btn{transition:none}
+  .sheet,.toast,.switch::after,.choice,.mic,.btn,.soon-list li{transition:none}
+  .soon-list li.nudge{animation:none}
 }

@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="translate.css?v=20261013b">
+  <link rel="stylesheet" href="translate.css?v=20261014b">
 </head>
 <body>
 <div class="vignette" aria-hidden="true"></div>
@@ -42,11 +42,11 @@
   </div>
   <p class="soon-copy" data-t="soonCopy"></p>
   <ul class="soon-list">
-    <li>
+    <li tabindex="0" aria-disabled="true">
       <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
       <span><b data-t="facing">Face to face</b><small data-t="soonFacing"></small></span>
     </li>
-    <li>
+    <li tabindex="0" aria-disabled="true">
       <svg class="mark mic-mark" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></svg>
       <span><b data-t="speeches">The speeches</b><small data-t="soonSpeeches"></small></span>
     </li>
@@ -92,6 +92,9 @@
   </div>
 </section>
 
+<!-- one-line notices, over any screen -->
+<p class="toast" id="toast" role="status" aria-live="polite"></p>
+
 <!-- The subtitles -->
 <div class="screen app" id="app" hidden>
   <header class="bar">
@@ -101,8 +104,6 @@
     <img class="bar-mark" data-logo src="../assets/gpt/sv-logo-variants/solid/sv-logo-mocha-true-solid.png" alt="Sean &amp; Valeria" width="1536" height="1024">
     <span class="bar-pill" id="bar-pill" hidden></span>
   </header>
-
-  <p class="toast" id="toast" role="status" aria-live="polite"></p>
 
   <main>
     <div class="v-wide">
@@ -191,6 +192,6 @@
   <p class="key-legend" data-t="legend"><b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.</p>
 </aside>
 
-<script src="translate.js?v=20261014a"></script>
+<script src="translate.js?v=20261014b"></script>
 </body>
 </html>
