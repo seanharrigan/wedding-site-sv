@@ -149,6 +149,15 @@ const syncNavIndicator = () => {
   nav.style.setProperty('--nav-indicator-left', `${active.offsetLeft}px`);
   nav.style.setProperty('--nav-indicator-width', `${active.offsetWidth}px`);
 };
+// The section links ease closer while Translate, Gallery or EN/ES opens; keep the underline with them.
+if ('ResizeObserver' in window) {
+  let indicatorFrame = 0;
+  const indicatorObserver = new ResizeObserver(() => {
+    cancelAnimationFrame(indicatorFrame);
+    indicatorFrame = requestAnimationFrame(syncNavIndicator);
+  });
+  nav.querySelectorAll(':scope > *').forEach((item) => indicatorObserver.observe(item, { box: 'border-box' }));
+}
 
 const syncMobileCurrent = () => {
   const active = nav.querySelector('.nav-link.active');
