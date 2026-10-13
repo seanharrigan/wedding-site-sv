@@ -35,8 +35,8 @@ const accessHash = 'ecaf6dd0ad0c57473723257f3733a39aa525d0e226da7dcdd46c710ccbec
 // Sean and Val's admin password opens the same gate and unlocks Translate. The relay
 // checks the same password itself, so this flag only decides what the page shows.
 const adminHash = '25688512fee107987b57aee0feef189470a3ee891ff776588ab62e1ba8d6a5f2';
-// Flip to true when guests should see Translate too (keep translate/index.html in step).
-const TRANSLATE_FOR_GUESTS = false;
+// Everyone with the invitation password sees Translate. Guests get a "coming soon" page until
+// TRANSLATE_FOR_GUESTS is switched on in translate/index.html; admins get the real thing.
 const navTranslate = document.getElementById('nav-translate');
 let headerToneFrame = 0;
 let invitationHideTimer = 0;
@@ -246,8 +246,7 @@ const accessGranted = readStoredValue('wedding-access-v1') === 'true' && !adminR
 
 const syncTranslateButton = () => {
   if (!navTranslate) return;
-  const show = TRANSLATE_FOR_GUESTS || isAdmin();
-  navTranslate.hidden = !show;
+  navTranslate.hidden = false;
   document.documentElement.classList.toggle('is-admin', isAdmin());
 };
 

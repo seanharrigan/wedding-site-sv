@@ -13,12 +13,12 @@
   <link rel="icon" type="image/png" sizes="512x512" href="../assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
   <link rel="apple-touch-icon" href="../assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
   <!-- Same cosmetic gate as the site: no invitation password, no translator.
-       Guests are sent back too until TRANSLATE_FOR_GUESTS is true (keep assets/gpt/site.js in step). -->
-  <script>window.TRANSLATE_FOR_GUESTS=false;try{const s=localStorage;if(s.getItem('wedding-access-v1')!=='true'||!(TRANSLATE_FOR_GUESTS||s.getItem('wedding-admin-v1')))location.replace('../')}catch(e){location.replace('../')}</script>
+       Until TRANSLATE_FOR_GUESTS is true, guests see a "coming soon" page and only admins can use it. -->
+  <script>window.TRANSLATE_FOR_GUESTS=false;try{if(localStorage.getItem('wedding-access-v1')!=='true')location.replace('../')}catch(e){location.replace('../')}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="translate.css?v=20261012j">
+  <link rel="stylesheet" href="translate.css?v=20261013a">
 </head>
 <body>
 <div class="vignette" aria-hidden="true"></div>
@@ -28,6 +28,31 @@
   <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M12 2.35l1.28 3.02 1.87-1.08-.42 2.96 2.9-.78-1.08 2.82 3.62.88-3.12 2.3 1.03 2.66-4.98-.93.35 6.45h-2.9l.35-6.45-4.98.93 1.03-2.66-3.12-2.3 3.62-.88-1.08-2.82 2.9.78-.42-2.96 1.87 1.08z"/></symbol>
   <symbol id="i-cactus" viewBox="0 0 24 24"><path d="M9.6 21V6.2a2.4 2.4 0 0 1 4.8 0V21"/><path d="M9.6 13.5H7.9a2 2 0 0 1-2-2V8.8"/><path d="M14.4 15.5h1.7a2 2 0 0 0 2-2V9.6"/><path d="M6.5 21h11"/></symbol>
 </svg>
+
+<!-- Guests, until it opens: what it will do on the day -->
+<section class="screen soon" id="soon" hidden>
+  <a class="back" href="../" data-t="back">← seanandvaleria.com</a>
+  <header class="lockup">
+    <img src="../assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" alt="Sean &amp; Valeria" width="1536" height="1024">
+    <div class="date">3<span class="sep">·</span>11<span class="sep">·</span>2026</div>
+  </header>
+  <div class="intro">
+    <p class="eyebrow" data-t="eyebrow">Live translation</p>
+    <h1 class="soon-title" data-t="soonTitle">Coming soon</h1>
+  </div>
+  <p class="soon-copy" data-t="soonCopy"></p>
+  <ul class="soon-list">
+    <li>
+      <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
+      <span><b data-t="facing">Face to face</b><small data-t="soonFacing"></small></span>
+    </li>
+    <li>
+      <svg class="mark mic-mark" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></svg>
+      <span><b data-t="speeches">The speeches</b><small data-t="soonSpeeches"></small></span>
+    </li>
+  </ul>
+  <p class="soon-foot" data-t="soonFoot"></p>
+</section>
 
 <!-- Options: how to use the translator right now -->
 <section class="screen choose" id="choose" hidden>
@@ -166,6 +191,6 @@
   <p class="key-legend" data-t="legend"><b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.</p>
 </aside>
 
-<script src="translate.js?v=20261012k"></script>
+<script src="translate.js?v=20261013a"></script>
 </body>
 </html>

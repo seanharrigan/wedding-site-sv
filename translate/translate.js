@@ -25,6 +25,11 @@
   const LANG = ["en", "es"].includes(q.get("lang")) ? q.get("lang") : store.get("wedding-language", "en") === "es" ? "es" : "en";
   const T = {
     en: {
+      soonTitle: "Coming soon", speeches: "The speeches",
+      soonCopy: "On the wedding day, this page will translate between English and Spanish as people speak, so everyone can follow along.",
+      soonFacing: "Two people, one phone. Each of you reads the other’s words in your own language.",
+      soonSpeeches: "Read every speech live, in English or Spanish.",
+      soonFoot: "See you in Tepoztlán",
       back: "← seanandvaleria.com", eyebrow: "Live translation", broadcast: "Broadcast", view: "View", facing: "Face to face", facingSub: "Two people, one table", facingShort: "Across a table",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Both", bothSub: "Side by side", onlyEn: "Only English", onlyEs: "Only Spanish",
       swap: "Swap sides", swapSub: "Change which language is on top", tidy: "Tidy speech", tidySub: "Leave out um, uh, eh and words said twice",
@@ -43,6 +48,11 @@
       speakBoth: "Speak in English or Spanish · Habla en inglés o en español", stopped: "Paused after a quiet spell · Tap to continue",
     },
     es: {
+      soonTitle: "Próximamente", speeches: "Los discursos",
+      soonCopy: "El día de la boda, esta página traducirá entre inglés y español mientras la gente habla, para que todos puedan seguir la conversación.",
+      soonFacing: "Dos personas, un teléfono. Cada quien lee lo que dice el otro en su propio idioma.",
+      soonSpeeches: "Lee cada discurso en vivo, en inglés o en español.",
+      soonFoot: "Nos vemos en Tepoztlán",
       back: "← seanandvaleria.com", eyebrow: "Traducción en vivo", broadcast: "Transmitir", view: "Vista", facing: "Frente a frente", facingSub: "Dos personas, una mesa", facingShort: "En la mesa",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Ambos", bothSub: "Lado a lado", onlyEn: "Solo inglés", onlyEs: "Solo español",
       swap: "Cambiar lados", swapSub: "Elige qué idioma va arriba", tidy: "Limpiar el habla", tidySub: "Quita eh, em y palabras repetidas",
@@ -71,6 +81,9 @@
   body.classList.toggle("admin", ADMIN);
   $$("[data-t]").forEach((el) => { const v = T[el.dataset.t]; if (typeof v === "string") el.innerHTML = v; });
   $("#to-options").setAttribute("aria-label", T.options);
+
+  // Until it opens to guests, they see what it will do on the day and nothing connects.
+  if (!ADMIN && !window.TRANSLATE_FOR_GUESTS) { $("#soon").hidden = false; return; }
 
   let prefs = { size: 1, swapped: LANG === "en", tidy: true };
   try { prefs = { ...prefs, ...JSON.parse(store.get(PREF_STORE, "{}")) }; } catch {}
