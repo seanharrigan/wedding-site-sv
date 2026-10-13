@@ -1401,8 +1401,6 @@ passwordGateForm?.addEventListener('submit', async (event) => {
   }
 
   storeValue('wedding-access-v1', 'true');
-  // The photo gallery's server checks the invitation password itself, so keep it on this phone.
-  if (!adminMatch) storeValue('wedding-guest-v1', passwordInput.value);
   if (adminMatch) {
     // Kept on Sean's and Val's own phones: the translator shows it to the relay as proof.
     storeValue('wedding-admin-v1', passwordInput.value);

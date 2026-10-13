@@ -19,6 +19,9 @@
   const q = new URLSearchParams(location.search);
   const LANG = ["en", "es"].includes(q.get("lang")) ? q.get("lang") : store.get("wedding-language", "en") === "es" ? "es" : "en";
   const ADMIN_CODE = store.get("wedding-admin-v1", "");
+  // Anyone already into the site can use the gallery; no second password. This is the same
+  // fingerprint the site's own gate checks (accessHash in assets/gpt/site.js).
+  const SITE_KEY = "ecaf6dd0ad0c57473723257f3733a39aa525d0e226da7dcdd46c710ccbece8dc";
 
   // A random id for this phone, so it can delete or fix what it uploaded.
   let DEVICE = store.get("wedding-gallery-device", "");
@@ -45,8 +48,7 @@
       sharedBy: (n) => `Shared by ${n}`, byPhotographer: "From the photographer", someone: "a guest",
       approx: "time approximate", unknownTime: "Date unknown", camera: "Camera",
       download: "Download original", fixTime: "Fix the time", del: "Delete", delQ: "Delete this photo for everyone?",
-      timeQ: "When was this taken?", timeHint: "Mexico City time.", save: "Save", cancel: "Cancel",
-      codeQ: "Invitation password", codeHint: "Enter the password from your invitation once on this phone to see and share photos.", codeWrong: "That password doesn’t match.", enter: "Continue",
+      timeQ: "When was this taken?", timeHint: "Mexico City time.", save: "Save", cancel: "Cancel", enter: "Continue",
       preparing: "Getting ready…", uploading: (d, n) => `Sharing ${d} of ${n}`, uploaded: (n) => `${n} ${n === 1 ? "photo" : "photos"} shared`,
       tagThem: "Tap one to tag who’s in it.", failed: (n) => `${n} couldn’t be shared`, retry: "Try again",
       already: "already here", unreadable: "This phone can’t read that file", tooBig: "Too big (40 MB max)", offline: "Waiting for a connection…",
@@ -81,8 +83,7 @@
       sharedBy: (n) => `Compartida por ${n}`, byPhotographer: "Del fotógrafo", someone: "un invitado",
       approx: "hora aproximada", unknownTime: "Fecha desconocida", camera: "Cámara",
       download: "Descargar original", fixTime: "Corregir la hora", del: "Borrar", delQ: "¿Borrar esta foto para todos?",
-      timeQ: "¿Cuándo se tomó?", timeHint: "Hora de la Ciudad de México.", save: "Guardar", cancel: "Cancelar",
-      codeQ: "Contraseña de la invitación", codeHint: "Escribe una vez en este teléfono la contraseña de tu invitación para ver y compartir fotos.", codeWrong: "La contraseña no coincide.", enter: "Continuar",
+      timeQ: "¿Cuándo se tomó?", timeHint: "Hora de la Ciudad de México.", save: "Guardar", cancel: "Cancelar", enter: "Continuar",
       preparing: "Preparando…", uploading: (d, n) => `Compartiendo ${d} de ${n}`, uploaded: (n) => `${n} ${n === 1 ? "foto compartida" : "fotos compartidas"}`,
       tagThem: "Toca una para etiquetar a quien sale.", failed: (n) => `${n} no se pudieron compartir`, retry: "Reintentar",
       already: "ya estaba", unreadable: "Este teléfono no puede leer ese archivo", tooBig: "Muy grande (máx. 40 MB)", offline: "Esperando conexión…",
@@ -168,15 +169,13 @@
   class ApiError extends Error { constructor(status, code) { super(code); this.status = status; this.code = code; } }
   async function api(path, { method = "GET", json, body } = {}) {
     const headers = { "X-Device": DEVICE };
-    const code = store.get("wedding-guest-v1", "") || ADMIN_CODE;
-    if (code) headers["X-Guest-Code"] = code;
+    headers["X-Guest-Code"] = SITE_KEY;
     if (ADMIN_CODE) headers["X-Admin-Code"] = ADMIN_CODE;
     if (json) { headers["Content-Type"] = "application/json"; body = JSON.stringify(json); }
     let res;
     try { res = await fetch(API + path, { method, headers, body }); } catch { throw new ApiError(0, "network"); }
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      if (res.status === 401) askForCode();
       throw new ApiError(res.status, data.error || "error");
     }
     return data;
@@ -507,25 +506,6 @@
     const g = await namePicker({ q: T.byQ, counts, only: new Set(counts.keys()),
       footer: () => S.filter.by != null ? el("div", { class: "sheet-foot" }, el("button", { class: "btn", type: "button", text: T.clear, onclick: () => closeSheet(null) })) : null });
     if (g !== undefined) { S.filter.by = g ? g.id : null; render(); }
-  }
-
-  // Shown when the API refuses the code: guests who unlocked the site before the gallery
-  // existed never had the password stored on this phone.
-  let askingCode = false;
-  function askForCode() {
-    if (askingCode) return;
-    askingCode = true;
-    const err = el("p", { class: "err" });
-    const input = el("input", { class: "field", type: "password", autocomplete: "current-password", enterkeyhint: "go" });
-    const submit = async (e) => {
-      e?.preventDefault();
-      store.set("wedding-guest-v1", input.value.trim());
-      try { await api("/api/state"); askingCode = false; closeSheet(true); boot(); }
-      catch (x) { if (x.status === 401) { askingCode = true; err.textContent = T.codeWrong; input.select(); } else err.textContent = T.error; }
-    };
-    openSheet(() => [el("p", { class: "q", text: T.codeQ }), el("p", { class: "hint", text: T.codeHint }),
-      el("form", { onsubmit: submit, style: "display:flex;flex-direction:column;gap:12px" }, input, err,
-        el("div", { class: "sheet-foot" }, el("button", { class: "btn solid", type: "submit", text: T.enter })))], () => { askingCode = false; });
   }
 
   // ── lightbox ──────────────────────────────────────────────────────────────
@@ -921,7 +901,7 @@
     try {
       await Promise.all([loadState(), loadPhotos()]);
     } catch (err) {
-      if (err.status !== 401) { toast(T.error); }
+      toast(T.error);
       return;
     }
     renderHeader();
