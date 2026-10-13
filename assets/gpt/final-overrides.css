@@ -3094,3 +3094,11 @@ body.check-in-modal-open{overflow:hidden!important}
 
 /* A week in México: a second line under a day's title (the parade on the 31st, Lucha Libre on the 1st). */
 .week-note{display:block;margin-top:.28rem;color:#6a5648;font-family:var(--serif);font-size:clamp(.98rem,1.2vw,1.08rem);font-style:italic;line-height:1.25}
+
+/* Between the site and its own pages (Photos, Translate): dissolve into paper and back.
+   The pages do the same with assets/gpt/subpage.css. */
+.sp-cover{position:fixed;inset:0;z-index:9999;background:#eee5da;opacity:0;pointer-events:none;transition:opacity .28s ease}
+html.sp-leaving .sp-cover{opacity:1;pointer-events:auto}
+html.sp-return .sp-cover{animation:sp-return .65s ease .05s both}
+@keyframes sp-return{from{opacity:1}to{opacity:0}}
+@media (prefers-reduced-motion:reduce){.sp-cover{transition:none}html.sp-return .sp-cover{animation:none}}

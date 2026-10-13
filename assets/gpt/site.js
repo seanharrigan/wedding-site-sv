@@ -313,13 +313,27 @@ enterSite.addEventListener('keydown', (event) => {
 introClose.addEventListener('click', closeInvitation);
 invitationReplay.addEventListener('click', replayInvitation);
 syncTranslateButton();
+// Photos and Translate are their own pages; the site dissolves into paper on the way there.
+const leaveTo = (href) => {
+  document.documentElement.classList.add('sp-leaving');
+  try { sessionStorage.setItem('sv-sp', '1'); } catch {}
+  setTimeout(() => { location.href = href; }, reducedMotion ? 0 : 280);
+};
+addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  try { sessionStorage.removeItem('sv-sp'); } catch {}
+  const root = document.documentElement;
+  root.classList.remove('sp-leaving', 'sp-return');
+  void root.offsetWidth;
+  root.classList.add('sp-return');
+});
 navTranslate?.addEventListener('click', () => {
   setMenuOpen(false);
-  location.href = `translate/?lang=${currentLanguage}`;
+  leaveTo(`translate/?lang=${currentLanguage}`);
 });
 navPhotos?.addEventListener('click', () => {
   setMenuOpen(false);
-  location.href = `gallery/?lang=${currentLanguage}`;
+  leaveTo(`gallery/?lang=${currentLanguage}`);
 });
 
 menuToggle.addEventListener('click', () => {
