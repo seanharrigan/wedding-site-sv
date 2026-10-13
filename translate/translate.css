@@ -88,6 +88,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .broadcast-card.on small{color:var(--cream-soft)}
 body:not(.admin) .admin-only{display:none!important}
 body.broadcasting .local-only{display:none!important}
+/* during a broadcast an admin's screen always shows both languages: no language choice */
+body:not(.admin.broadcasting) .admin-bc-only{display:none!important}
+body.admin.broadcasting .choice[data-view=en],body.admin.broadcasting .choice[data-view=es],
+body.admin.broadcasting .views,body.admin.broadcasting .views-title{display:none!important}
 
 /* ── the subtitles ───────────────────────────────────────────────── */
 .app{display:grid;grid-template-rows:auto 1fr auto}

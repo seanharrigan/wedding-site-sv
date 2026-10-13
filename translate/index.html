@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="translate.css?v=20261012i">
+  <link rel="stylesheet" href="translate.css?v=20261012j">
 </head>
 <body>
 <div class="vignette" aria-hidden="true"></div>
@@ -48,6 +48,10 @@
     <p class="ask" id="ask"></p>
   </div>
   <div class="choices">
+    <button class="choice wide admin-bc-only" type="button" data-view="both">
+      <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
+      <span class="name" data-t="bothLong">Both languages</span>
+    </button>
     <button class="choice wide local-only" type="button" data-view="facing">
       <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
       <span class="name" data-t="facing">Face to face</span><span class="sub" data-t="facingSub">Two people, one table</span>
@@ -123,7 +127,7 @@
 
 <div class="scrim" id="scrim"></div>
 <aside class="sheet" id="sheet" aria-label="Menu" aria-hidden="true">
-  <h2 data-t="view">View</h2>
+  <h2 class="views-title" data-t="view">View</h2>
   <div class="views" role="group" aria-label="View">
     <button class="view local-only" type="button" data-view="facing" aria-pressed="false">
       <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
@@ -162,6 +166,6 @@
   <p class="key-legend" data-t="legend"><b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.</p>
 </aside>
 
-<script src="translate.js?v=20261012h"></script>
+<script src="translate.js?v=20261012k"></script>
 </body>
 </html>

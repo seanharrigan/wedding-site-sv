@@ -30,8 +30,8 @@
       swap: "Swap sides", swapSub: "Change which language is on top", tidy: "Tidy speech", tidySub: "Leave out um, uh, eh and words said twice",
       clear: "Clear text", demo: "Play demo", signOut: "Sign out of admin", fullscreen: "Full screen", done: "Done",
       legend: "<b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.",
-      askLocal: "How would you like to talk?", askBroadcast: "Which language would you like?", options: "Options",
-      bcOff: "Off · face to face for everyone", bcOn: "On · everyone sees your subtitles", bcOffline: "Can't reach the translation server",
+      askLocal: "How would you like to talk?", askBroadcast: "Which language would you like?", askBroadcastAdmin: "Everyone is reading along", bothLong: "Both languages", options: "Options",
+      bcOff: "Off · face to face for everyone", bcOn: "On", bcOffline: "Can't reach the translation server",
       listening: "Listening", connecting: "Connecting…", reconnecting: "Reconnecting…", tapStart: "Tap to start", live: "Live", waiting: "Waiting",
       speaking: "Speaking to everyone", phones: (n) => n + (n === 1 ? " phone" : " phones"), live_pill: "Live",
       broadcastStarted: "The speeches are being subtitled live · Los discursos se subtitulan en vivo",
@@ -48,8 +48,8 @@
       swap: "Cambiar lados", swapSub: "Elige qué idioma va arriba", tidy: "Limpiar el habla", tidySub: "Quita eh, em y palabras repetidas",
       clear: "Borrar texto", demo: "Ver demo", signOut: "Cerrar sesión de admin", fullscreen: "Pantalla completa", done: "Listo",
       legend: "Las líneas <b>rectas</b> son lo que se dijo; las <i>cursivas</i> son la traducción.",
-      askLocal: "¿Cómo quieres conversar?", askBroadcast: "¿En qué idioma quieres leer?", options: "Opciones",
-      bcOff: "Apagado · frente a frente para todos", bcOn: "Encendido · todos ven tus subtítulos", bcOffline: "No hay conexión con el servidor",
+      askLocal: "¿Cómo quieres conversar?", askBroadcast: "¿En qué idioma quieres leer?", askBroadcastAdmin: "Todos están leyendo", bothLong: "Ambos idiomas", options: "Opciones",
+      bcOff: "Apagado · frente a frente para todos", bcOn: "Encendido", bcOffline: "No hay conexión con el servidor",
       listening: "Escuchando", connecting: "Conectando…", reconnecting: "Reconectando…", tapStart: "Toca para empezar", live: "En vivo", waiting: "En espera",
       speaking: "Hablando a todos", phones: (n) => n + (n === 1 ? " teléfono" : " teléfonos"), live_pill: "En vivo",
       broadcastStarted: "Los discursos se subtitulan en vivo · The speeches are being subtitled live",
@@ -94,7 +94,9 @@
   }
   function setView(v) {
     if (!VIEWS.includes(v)) return;
-    if (broadcast && v === "facing") v = LANG;
+    // During a broadcast an admin always sees both languages; guests pick one.
+    if (broadcast && ADMIN) v = "both";
+    else if (broadcast && v === "facing") v = LANG;
     prefs.view = v;
     screen = "app";
     $("#choose").hidden = true;
@@ -132,7 +134,7 @@
     body.classList.toggle("broadcasting", broadcast);
     body.classList.toggle("no-mic", !canUseMic());
     $("#choose").classList.toggle("broadcasting", broadcast);
-    $("#ask").textContent = broadcast ? T.askBroadcast : T.askLocal;
+    $("#ask").textContent = broadcast ? (ADMIN ? T.askBroadcastAdmin : T.askBroadcast) : T.askLocal;
     const sub = !relayUp ? T.bcOffline : broadcast ? T.bcOn + (listeners != null ? " · " + T.phones(listeners) : "") : T.bcOff;
     $("#broadcast-sub").textContent = sub;
     $("#sheet-broadcast-sub").textContent = sub;
@@ -315,14 +317,15 @@
       // Speeches take over: a private session stops and the phone reads along instead.
       if (listening && !speaker) stop(true);
       rows = [];
-      if (prefs.view === "facing") prefs.view = LANG;
-      if (!ADMIN || !speaker) notice(T.broadcastStarted);
+      if (ADMIN) prefs.view = "both";
+      else { if (prefs.view === "facing") prefs.view = LANG; notice(T.broadcastStarted); }
     } else if (!on && was) {
       if (speaker) { speaker = false; if (listening) stop(); }
       notice(T.broadcastEnded);
     }
     applyMode();
     showStatus();
+    if (on && !was && ADMIN) setView("both"); // straight to the subtitles, no choosing
   }
 
   function sendRelay(msg) { if (sock && sock.readyState === 1) sock.send(JSON.stringify(msg)); }
