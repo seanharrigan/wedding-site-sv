@@ -38,6 +38,8 @@ const adminHash = '25688512fee107987b57aee0feef189470a3ee891ff776588ab62e1ba8d6a
 // Everyone with the invitation password sees Translate. Guests get a "coming soon" page until
 // TRANSLATE_FOR_GUESTS is switched on in translate/index.html; admins get the real thing.
 const navTranslate = document.getElementById('nav-translate');
+// Photos: everyone with the invitation password can see and add to the guest photo gallery.
+const navPhotos = document.getElementById('nav-photos');
 let headerToneFrame = 0;
 let invitationHideTimer = 0;
 let invitationFocusTimer = 0;
@@ -315,6 +317,10 @@ navTranslate?.addEventListener('click', () => {
   setMenuOpen(false);
   location.href = `translate/?lang=${currentLanguage}`;
 });
+navPhotos?.addEventListener('click', () => {
+  setMenuOpen(false);
+  location.href = `gallery/?lang=${currentLanguage}`;
+});
 
 menuToggle.addEventListener('click', () => {
   setMenuOpen(!body.classList.contains('menu-open'));
@@ -520,6 +526,7 @@ document.querySelectorAll('.timeline').forEach((timeline) => {
 
 const uiTranslations = {
   navTranslate: ['Translate', 'Traducir'],
+  navPhotos: ['Photos', 'Fotos'],
   navStory: ['Our story', 'Nuestra historia'], navSchedule: ['Schedule', 'Programa'], navTravel: ['Travel', 'Viaje'], navWelcome: ['Welcome', 'Bienvenidos'], navDate: ['The date', 'La fecha'], navDetails: ['Details', 'Detalles'], navCity: ['Explore', 'Explorar'], navCheckIn: ['Check-In', 'Registro'],
   openInvitationAria: ["Open Sean and Valeria's wedding invitation", 'Abrir la invitación de boda de Sean y Valeria'], invitationSuiteAria: ['Wedding invitation suite', 'Conjunto de invitación de boda'], backToTopAria: ['Sean and Valeria, back to top', 'Sean y Valeria, volver al inicio'], primaryNavigationAria: ['Primary navigation', 'Navegación principal'], neighbourhoodGalleryAria: ['Recommended Mexico City neighbourhoods', 'Colonias recomendadas de la Ciudad de México'], heroAria: ['Sean and Valeria by the coast', 'Sean y Valeria junto a la costa'], heroSealAlt: ['Sean and Valeria monogram wax seal', 'Sello de cera con el monograma de Sean y Valeria'], detailsPairAria: ['Venue and dress code details', 'Detalles del lugar y código de vestimenta'], fallPaletteAria: ['Suggested fall colour palette', 'Paleta de colores de otoño sugerida'], weatherAria: ['November weather in Tepoztlán', 'Clima de noviembre en Tepoztlán'], celebrationTimelineAria: ['Wedding day celebration timeline', 'Horario de la celebración de la boda'], weekItineraryAria: ['Suggested week itinerary', 'Itinerario sugerido para la semana'], neighbourhoodsAria: ['Recommended neighbourhoods', 'Colonias recomendadas'], specialAria: ['Special request and gifts', 'Petición especial y regalos'], closingAria: ['Thank you', 'Gracias'], romaPhotoAlt: ['A leafy street with historic architecture in Mexico City', 'Una calle arbolada con arquitectura histórica en la Ciudad de México'], condesaPhotoAlt: ['Art Deco homes and trees in Condesa, Mexico City', 'Casas art déco y árboles en Condesa, Ciudad de México'], reformaPhotoAlt: ['Paseo de la Reforma in Mexico City at golden hour', 'Paseo de la Reforma en la Ciudad de México al atardecer'], centroPhotoAlt: ['Historic arcades in Centro Histórico, Mexico City', 'Arcadas históricas en el Centro Histórico de la Ciudad de México'], bellasPhotoAlt: ['Palacio de Bellas Artes in Mexico City at golden hour', 'Palacio de Bellas Artes en la Ciudad de México durante la hora dorada'], conventPhotoAlt: ['A lush rooftop restaurant in Tepoztlán', 'Un frondoso restaurante en una azotea de Tepoztlán'], ridgePhotoAlt: ['Tepozteco mountain framed by flowers and Tepoztlán streets', 'La montaña del Tepozteco enmarcada por flores y calles de Tepoztlán'], accommodationPhotoAlt: ['Tall cacti and gardens at Hotel Piedra Viva with Tepoztlán mountains', 'Cactus altos y jardines en Hotel Piedra Viva con las montañas de Tepoztlán'], closingPhotoAlt: ['Sean kissing Valeria at sunset by the ocean', 'Sean besando a Valeria al atardecer junto al mar'], footerLogoAlt: ['Sean and Valeria monogram', 'Monograma de Sean y Valeria'],
   galleryAria: ['Gallery from Mexico City and Tepoztlán', 'Galería de la Ciudad de México y Tepoztlán'], galleryKicker: ['A little glimpse', 'Un pequeño vistazo'], galleryTitle: ['<span>Scenes from</span> <em>México.</em>', '<span>Escenas de</span> <em>México.</em>'], galleryCopy: ['A few corners of Mexico City and Tepoztlán to look forward to along the way.', 'Algunos rincones de la Ciudad de México y Tepoztlán para esperar con ilusión durante el viaje.'], galleryCeremonialAlt: ['Ceremonial dress in Tepoztlán', 'Vestimenta ceremonial en Tepoztlán'], galleryChurchAlt: ['A church street in Tepoztlán', 'Una calle junto a una iglesia en Tepoztlán'], galleryOfrendaAlt: ['A Día de Muertos altar in Mexico City', 'Una ofrenda de Día de Muertos en la Ciudad de México'], galleryReformaAlt: ['Ángel de la Independencia at dusk', 'El Ángel de la Independencia al atardecer'], galleryLaneAlt: ['A quiet lane in Tepoztlán', 'Una calle tranquila en Tepoztlán'], galleryStreetAlt: ['A historic Tepoztlán street', 'Una calle histórica de Tepoztlán'],
@@ -1394,6 +1401,8 @@ passwordGateForm?.addEventListener('submit', async (event) => {
   }
 
   storeValue('wedding-access-v1', 'true');
+  // The photo gallery's server checks the invitation password itself, so keep it on this phone.
+  if (!adminMatch) storeValue('wedding-guest-v1', passwordInput.value);
   if (adminMatch) {
     // Kept on Sean's and Val's own phones: the translator shows it to the relay as proof.
     storeValue('wedding-admin-v1', passwordInput.value);
