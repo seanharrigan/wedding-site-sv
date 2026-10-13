@@ -1,5 +1,4 @@
 /* Live translation: the wedding film's dark stage warmed to espresso, with the site's browns and type. */
-@font-face{font-family:"Pinyon Script";src:url("../assets/gpt/PinyonScript-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
 :root{
   --stage:#140e0b;
   --espresso:#241913;
@@ -16,7 +15,6 @@
   --cactus:#7f9469;        /* the site's #667956 cactus green, likewise */
   --serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
   --sans:"Montserrat",system-ui,sans-serif;
-  --script:"Pinyon Script","Great Vibes",cursive;
   --ease:cubic-bezier(.2,.8,.2,1);
   --size:clamp(1.55rem,4.6vw,3rem);
   --safe-b:env(safe-area-inset-bottom,0px);
@@ -45,7 +43,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .mark{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
 .mark.leaf{color:var(--leaf);stroke-width:1.3}
 .mark.cactus{color:var(--cactus);stroke-width:1.5}
-.mark.flip{transform:rotate(180deg)}
 .pair{display:inline-flex;gap:.35em}
 
 /* monogram and date lockup */
@@ -70,7 +67,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .choice:hover,.choice:focus-visible{background:rgba(100,66,47,.35);border-color:var(--clay);outline:none}
 .choice:active{transform:scale(.97)}
 .choice > .mark,.choice .pair{font-size:1.5rem}
-.choice .name{font-family:var(--script);font-size:2.1rem;color:var(--cream);line-height:1}
+.choice .name{font-family:var(--serif);font-weight:500;font-size:1.75rem;color:var(--cream);line-height:1.05}
 .choice .sub{font-family:var(--sans);font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;color:var(--cream-faint)}
 .choose.broadcasting .choice:not(.wide){padding-block:22px 20px}
 
@@ -99,7 +96,8 @@ body.view-en .v-single,body.view-es .v-single{display:grid}
 
 .label{display:flex;align-items:center;gap:10px;padding-bottom:4px}
 .label .mark{font-size:1.15rem}
-.label .name{font-family:var(--script);font-size:clamp(1.9rem,3.4vw,2.6rem);color:var(--clay);line-height:1.15}
+.label{padding:6px 0 8px}
+.label .name{font-family:var(--sans);font-weight:500;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--clay);line-height:1.6}
 
 /* both, side by side: one row per sentence, its translation level with it */
 .v-wide{position:relative;grid-template-rows:auto 1fr;padding:0 clamp(16px,4vw,64px)}
@@ -176,7 +174,7 @@ body.no-mic .mic{display:none}
   background:var(--sheet);border:1px solid var(--clay-soft);border-bottom:0;border-radius:22px 22px 0 0;padding:22px 20px calc(22px + var(--safe-b));max-height:90dvh;overflow:auto}
 body.sheet-open .scrim{opacity:1;pointer-events:auto}
 body.sheet-open .sheet{transform:translate(-50%,0)}
-.sheet h2{font-family:var(--script);font-weight:400;font-size:2.2rem;color:var(--clay);line-height:1;margin-bottom:14px}
+.sheet h2{font-family:var(--sans);font-weight:500;font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--clay);margin-bottom:14px}
 .sheet h3{font-family:var(--sans);font-weight:500;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--cream-faint);margin:26px 0 0;padding-top:18px;border-top:1px solid var(--clay-soft)}
 .views{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .view{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:12px 14px 13px;border:1px solid var(--clay-soft);border-radius:16px;text-align:left;transition:background .2s,border-color .2s}
