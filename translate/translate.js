@@ -648,7 +648,7 @@
   }
 
   /* ── menu and controls ─────────────────────────────────────────── */
-  function openMenu() { body.classList.add("sheet-open"); $("#sheet").setAttribute("aria-hidden", "false"); }
+  function openMenu() { $("#sheet").scrollTop = 0; body.classList.add("sheet-open"); $("#sheet").setAttribute("aria-hidden", "false"); }
   function closeMenu() { body.classList.remove("sheet-open"); $("#sheet").setAttribute("aria-hidden", "true"); }
 
   $$("[data-view]").forEach((b) => b.addEventListener("click", () => {
