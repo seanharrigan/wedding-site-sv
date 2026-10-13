@@ -21,9 +21,10 @@
 }
 
 /* ── the frame: the home page's beige backdrop and a paper card ───── */
-html.sp-on{background:#d6c8b5}
-html.sp-on body{background:radial-gradient(circle at 12% 8%,rgba(255,246,232,.95),transparent 42rem),
-  radial-gradient(circle at 88% 92%,rgba(196,176,154,.85),transparent 38rem),linear-gradient(150deg,#e4d8c8,#cdbfab) fixed}
+/* painted on the root, so the card's top margin can't open a seam above it */
+html.sp-on{background:radial-gradient(circle at 12% 8%,rgba(255,246,232,.95),transparent 42rem),
+  radial-gradient(circle at 88% 92%,rgba(196,176,154,.85),transparent 38rem),linear-gradient(150deg,#e4d8c8,#cdbfab) fixed #d6c8b5}
+html.sp-on body{background:transparent;display:flow-root}
 .sp-card,body[data-page=translate] :is(.soon,.choose){
   position:relative;width:var(--sp-canvas);margin:var(--sp-card-top) auto;background:#eee5da;
   border:1px solid rgba(255,249,239,.8);border-radius:var(--sp-card-radius);overflow:clip;
