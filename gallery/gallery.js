@@ -390,6 +390,8 @@
 
   function renderEmpty() {
     const box = $("#empty");
+    // No photos at all yet: nothing to filter, so no filter bar.
+    $("#bars").hidden = S.photos.length === 0;
     box.hidden = S.visible.length > 0;
     if (box.hidden) return;
     if (filtered()) {
@@ -399,7 +401,7 @@
       put(box, el("p", { text: T.emptyAll }),
         el("button", { class: "btn solid", type: "button", html: uploadBtn.innerHTML, onclick: () => uploadBtn.click() }));
     } else {
-      put(box, el("div", { class: "card" }, el("img", { src: SEAL, alt: "" }), el("p", {}, T.firstSoon)));
+      put(box, el("p", { text: T.firstSoon }));
     }
   }
 
