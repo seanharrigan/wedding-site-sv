@@ -64,23 +64,27 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .ask{font-size:1.45rem;font-weight:400;color:var(--cream);line-height:1.3}
 .notice-line{font-size:1.02rem;font-style:italic;color:var(--cream-soft);max-width:330px;line-height:1.45}
 
-/* the choices read like the site's language picker: mark, word, a short rule that widens on hover */
-.choices{display:flex;flex-direction:column;align-items:center;gap:6px;width:min(340px,100%)}
-.choice{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:14px;min-width:240px;padding:14px 18px;color:var(--off-white);
-  font-family:var(--serif);font-size:1.95rem;font-weight:400;letter-spacing:.01em;line-height:1;text-shadow:0 2px 18px rgba(24,15,10,.35);
-  transition:color .3s ease,transform .45s var(--ease)}
-.choice::after{content:"";position:absolute;right:18px;bottom:4px;left:18px;height:1px;background:currentColor;opacity:.28;transform:scaleX(.32);transition:opacity .35s ease,transform .5s var(--ease)}
-.choice:hover,.choice:focus-visible{color:var(--cream);transform:translateY(-1px);outline:none}
-.choice:hover::after,.choice:focus-visible::after{opacity:.5;transform:scaleX(.82)}
-.choice:active{transform:translateY(1px)}
-.choice > .mark,.choice .pair{font-size:.72em}
-.choice .name{font:inherit;color:inherit}
+/* every choice is the same pill; face to face is the solid cream one, like Submit Check-In */
+.choices{display:flex;flex-direction:column;gap:10px;width:min(340px,100%)}
+.choice{display:flex;align-items:center;justify-content:center;gap:14px;min-height:64px;padding:0 24px;border:1px solid var(--line);border-radius:999px;
+  background:var(--glass);box-shadow:inset 0 1px rgba(255,255,255,.07);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  transition:background .3s ease,border-color .3s ease,transform .45s var(--ease)}
+.choice:hover,.choice:focus-visible{background:var(--glass-hover);border-color:var(--line-strong);outline:none;transform:translateY(-1px)}
+.choice:active{transform:scale(.98)}
+.choice > .mark,.choice .pair{font-size:1.15rem}
+.choice .name{font-family:var(--serif);font-weight:500;font-size:1.6rem;color:var(--cream);line-height:1}
 .choice .sub{display:none}
+.choice.wide{border-color:transparent;background:var(--off-white);box-shadow:0 16px 40px rgba(10,6,4,.32),inset 0 1px rgba(255,255,255,.6)}
+.choice.wide:hover,.choice.wide:focus-visible{background:var(--cream);border-color:transparent}
+.choice.wide .name{color:var(--ink)}
+.choice.wide .mark.leaf{color:#a8473f}
+.choice.wide .mark.cactus{color:#627253}
 
-.broadcast-card{display:flex;align-items:center;justify-content:space-between;gap:16px;width:min(340px,100%);padding:14px 2px;border-block:1px solid var(--line);text-align:left}
-.broadcast-card b{display:block;font-size:.58rem;letter-spacing:.24em;color:var(--cream-soft)}
-.broadcast-card small{display:block;margin-top:5px;font-style:italic;font-size:1.02rem;color:var(--cream-faint);line-height:1.3}
-.broadcast-card.on b{color:var(--cream)}
+.broadcast-card{display:flex;align-items:center;justify-content:space-between;gap:16px;width:min(340px,100%);padding:12px 12px 12px 26px;border:1px solid var(--line);border-radius:999px;text-align:left;
+  background:var(--glass);box-shadow:inset 0 1px rgba(255,255,255,.07);transition:border-color .3s,background .3s}
+.broadcast-card b{display:block;font-size:.6rem;letter-spacing:.22em;color:var(--cream)}
+.broadcast-card small{display:block;margin-top:4px;font-style:italic;font-size:1.02rem;color:var(--cream-faint);line-height:1.3}
+.broadcast-card.on{border-color:var(--line-strong);background:var(--glass-hover)}
 .broadcast-card.on small{color:var(--cream-soft)}
 body:not(.admin) .admin-only{display:none!important}
 body.broadcasting .local-only{display:none!important}
@@ -189,17 +193,18 @@ body.sheet-open .scrim{opacity:1;pointer-events:auto}
 body.sheet-open .sheet{transform:translate(-50%,0)}
 .sheet h2{font-size:.6rem;letter-spacing:.27em;color:var(--cream-faint);margin-bottom:14px}
 .sheet h3{font-size:.6rem;letter-spacing:.27em;color:var(--cream-faint);margin:24px 0 0;padding-top:20px;border-top:1px solid var(--line)}
-/* views: a plain list like the site's mobile menu, the current one marked with a dot */
-.views{display:flex;flex-direction:column}
-.view{position:relative;display:flex;align-items:center;gap:14px;padding:10px 4px;border-bottom:1px solid var(--line);text-align:left;color:var(--cream-soft);transition:color .3s}
-.view:hover,.view:focus-visible{color:var(--cream);outline:none}
-.view > .mark,.view .pair{font-size:1.05rem;width:2.4em;justify-content:flex-start}
-.view > .mark{width:1em;margin-right:1.4em}
-.view b{font-weight:400;font-size:1.22rem;line-height:1.1}
-.view small{display:block;font-size:.46rem;letter-spacing:.18em;color:var(--cream-faint);margin-top:3px}
-.view::after{content:"";width:6px;height:6px;margin-left:auto;border-radius:50%;background:var(--cream);opacity:0;transform:scale(.4);transition:opacity .3s ease,transform .45s var(--ease)}
-.view[aria-pressed=true]{color:var(--cream)}
-.view[aria-pressed=true]::after{opacity:1;transform:none}
+/* the same pill as the options screen; the current view fills cream */
+.views{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.view{display:flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--glass);
+  transition:background .3s,border-color .3s,color .3s}
+.view:hover,.view:focus-visible{border-color:var(--line-strong);outline:none}
+.view[aria-pressed=true]{background:var(--off-white);border-color:transparent;color:var(--ink)}
+.view > .mark,.view .pair{font-size:1rem}
+.view .pair{gap:.3em}
+.view[aria-pressed=true] .mark.leaf{color:#a8473f}
+.view[aria-pressed=true] .mark.cactus{color:#627253}
+.view b{font-weight:500;font-size:1.2rem;line-height:1;white-space:nowrap}
+.view small{display:none}
 .opt{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0 4px;font-size:1.15rem}
 .opt small{display:block;font-size:.95rem;color:var(--cream-faint);font-style:italic}
 /* switches: a frosted track that fills cream when on */
