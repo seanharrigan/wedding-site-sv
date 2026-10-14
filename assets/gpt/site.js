@@ -322,8 +322,18 @@ enterSite.addEventListener('keydown', (event) => {
 introClose.addEventListener('click', closeInvitation);
 invitationReplay.addEventListener('click', replayInvitation);
 syncTranslateButton();
+// A skipped cross-fade (say, a click while the page is still loading) just means no fade; don't
+// let it surface as an error.
+for (const type of ['pageswap', 'pagereveal']) addEventListener(type, (event) => {
+  const transition = event.viewTransition;
+  if (transition) for (const step of ['ready', 'finished', 'updateCallbackDone']) transition[step]?.catch(() => {});
+});
 // Photos and Translate are their own pages; the site dissolves into paper on the way there.
 const leaveTo = (href) => {
+  // The next page starts its bar in the same spot, so the cross-fade has nothing to double.
+  try { sessionStorage.setItem('sv-bar-scrolled', header.classList.contains('scrolled') ? '1' : '0'); } catch {}
+  // With cross-document view transitions the browser cross-fades the page in place.
+  if ('CSSViewTransitionRule' in window) { location.href = href; return; }
   document.documentElement.classList.add('sp-leaving');
   try { sessionStorage.setItem('sv-sp', '1'); } catch {}
   setTimeout(() => { location.href = href; }, reducedMotion ? 0 : 280);
@@ -398,6 +408,17 @@ let lastHeroShift = -1;
 const refreshScrollMetrics = () => {
   cachedScrollMax = document.documentElement.scrollHeight - innerHeight;
 };
+// Arriving from Gallery or Translate, the bar starts where it was there, then settles once the
+// cross-fade is done (its own transition moves it).
+let holdBarSpotUntil = 0;
+try {
+  if (sessionStorage.getItem('sv-bar-scrolled') === '1') {
+    header.classList.add('scrolled');
+    holdBarSpotUntil = performance.now() + 600;
+    setTimeout(() => header.classList.toggle('scrolled', scrollY > 35), 620);
+  }
+  sessionStorage.removeItem('sv-bar-scrolled');
+} catch {}
 const updateScroll = () => {
   if (scrollFrame) return;
   scrollFrame = requestAnimationFrame(() => {
@@ -413,7 +434,7 @@ const updateScroll = () => {
       lastHeroShift = shift;
       document.documentElement.style.setProperty('--hero-shift', String(shift));
     }
-    header.classList.toggle('scrolled', scrollY > 35);
+    if (performance.now() > holdBarSpotUntil) header.classList.toggle('scrolled', scrollY > 35);
     syncHeaderTone();
   });
 };

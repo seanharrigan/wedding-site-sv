@@ -1,6 +1,7 @@
 /* Shared chrome for the site's own pages (Gallery, Translate), so they sit in the same frame as
-   the home page: the beige backdrop, a paper card over it, and a floating bar over the card's top
-   edge where the home header sits. Plus the soft paper fade between pages. Used with subpage.js. */
+   the home page: the beige backdrop and a paper card over it, the home page's own menu bar
+   (site-header.css, generated from the home stylesheets) with "Home" opening out to the home
+   sections, and a quiet cross-fade between pages. Used with subpage.js. */
 
 :root{
   /* the home page's canvas (final-overrides.css: "Desktop canvas") */
@@ -34,54 +35,39 @@ html.sp-on body{background:transparent;display:flow-root}
   .sp-card,body[data-page=translate] :is(.soon,.choose){box-shadow:0 26px 70px rgba(52,38,31,.3),0 8px 24px rgba(52,38,31,.16),0 0 0 1px rgba(255,255,255,.4)}
 }
 
-/* ── the bar: where the home header sits, over the card's top edge ── */
-.sp-bar{position:absolute;z-index:6;top:calc(var(--sp-card-top) + var(--sp-bar-top) + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
-  width:calc(var(--sp-canvas) - 2*var(--sp-bar-inset));height:62px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px 0 14px;
-  border-radius:999px;border:1px solid rgba(73,54,44,.14);background:rgba(250,245,238,.66);color:#30251f;
-  -webkit-backdrop-filter:blur(16px) saturate(120%);backdrop-filter:blur(16px) saturate(120%);
-  box-shadow:0 12px 34px rgba(56,38,24,.08),inset 0 1px rgba(255,255,255,.5);
-  font-family:"Montserrat",system-ui,sans-serif;transition:background .5s ease,border-color .5s ease,color .5s ease}
-.sp-home{display:grid;place-items:center;width:62px;height:46px;flex:none;border-radius:999px;transition:transform .35s cubic-bezier(.16,1,.3,1)}
-.sp-home:hover{transform:translateY(-1px) scale(1.04)}
-.sp-home img{width:56px;height:auto;display:block}
-.sp-links{display:flex;align-items:center;gap:clamp(0px,1.4vw,14px);margin-left:auto}
-.sp-links a,.sp-lang button{position:relative;display:inline-flex;align-items:center;min-height:44px;padding:0 clamp(7px,1.3vw,12px);
-  font:600 .56rem/1 "Montserrat",system-ui,sans-serif;letter-spacing:.17em;text-transform:uppercase;text-decoration:none;
-  color:rgba(48,37,31,.58);background:none;border:0;cursor:pointer;transition:color .25s ease}
-.sp-links a:hover,.sp-links a:focus-visible,.sp-lang button:hover{color:#30251f;outline:none}
-.sp-links a[aria-current=page]{color:#30251f}
-.sp-links a::after{content:"";position:absolute;left:50%;bottom:8px;width:0;height:1px;background:currentColor;transform:translateX(-50%);
-  transition:width .45s cubic-bezier(.16,1,.3,1)}
-.sp-links a[aria-current=page]::after{width:calc(100% - 2*clamp(7px,1.3vw,12px))}
-.sp-links a:not([aria-current]):hover::after{width:14px}
-.sp-lang{position:relative;display:flex;align-items:center;margin-left:clamp(2px,1vw,10px);padding-left:clamp(4px,1vw,10px)}
-.sp-lang::before{content:"";position:absolute;left:0;top:50%;width:1px;height:20px;margin-top:-10px;background:rgba(73,54,44,.18)}
-.sp-lang button{padding:0 9px}
-.sp-lang button[aria-pressed=true]{color:#30251f}
-.sp-lang .sep{width:1px;height:12px;background:rgba(73,54,44,.2)}
-@media (max-width:720px){
-  .sp-bar{height:58px;padding:0 4px 0 6px;border-radius:22px}
-  .sp-home{width:54px}
-  .sp-home img{width:48px}
+/* ── the home page's menu bar (site-header.css), as it sits over the home page ── */
+/* the type context the home page gives it (body text there is 18px, 16px on phones) */
+.site-header{font-family:"Cormorant Garamond","Iowan Old Style",Georgia,serif;font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+@media (max-width:720px){.site-header{font-size:16px}}
+/* the home page's own resets, at zero specificity so the header's rules win as they do there */
+:where(.site-header) :where(button){font:inherit}
+:where(.site-header) :where(a){color:inherit}
+:where(.site-header) :where(img){display:block;max-width:100%}
+
+/* Home opens out to the home sections, the way the EN/ES switch opens: on hover or keyboard focus
+   the sections widen in beside it (.48s on the site's easing), with the links' own hover. */
+@media (min-width:721px){
+  .nav-links>.nav-section{max-width:0;overflow:hidden;white-space:nowrap;padding-inline:0!important;margin-left:-4px;opacity:0;transform:scale(.8);pointer-events:none;
+    transition:max-width .48s cubic-bezier(.16,1,.3,1),padding .48s cubic-bezier(.16,1,.3,1),margin .48s cubic-bezier(.16,1,.3,1),opacity .22s ease,transform .42s cubic-bezier(.16,1,.3,1),color .25s ease,background .25s ease}
+  .nav-links:has(>:is(.nav-home,.nav-section):is(:hover,:focus-visible))>.nav-section{max-width:10rem;padding-inline:var(--sp-link-pad,.6rem)!important;margin-left:0;opacity:1;transform:none;pointer-events:auto}
 }
-@media (max-width:540px){
-  .sp-links .sp-to-home{display:none} /* the monogram is home */
-  .sp-links{gap:0}
-  .sp-links a,.sp-lang button{font-size:.52rem;letter-spacing:.14em;padding:0 8px}
-  .sp-lang{margin-left:2px;padding-left:2px}
-  .sp-lang button{padding:0 7px}
-}
+/* the current page (Gallery or Translate) carries the underline, as the current section does at home */
+.nav-translate[aria-current="page"]{opacity:1}
+/* over the full-screen subtitles there's no bar, as before */
+body[data-page=translate]:has(#app:not([hidden])) .site-header{display:none}
 
 /* the old corner link gives way to the bar; the bar carries the monogram, so each page
    opens with the same date line, eyebrow and title in the same place */
 html.sp-on .back{display:none!important}
 html.sp-on .lockup img{display:none}
 html.sp-on .lockup{margin-bottom:10px}
-:root{--sp-head-top:calc(var(--sp-bar-top) + 62px + 44px + env(safe-area-inset-top,0px))}
+:root{--sp-head-top:calc(var(--sp-bar-top) + 106px + env(safe-area-inset-top,0px))}
 
 /* Gallery */
 body[data-page=photos] .top{padding-top:var(--sp-head-top)}
-body[data-page=photos] .admin-pill{top:calc(var(--sp-bar-top) + 74px + env(safe-area-inset-top,0px))}
+body[data-page=photos] .admin-pill{top:calc(var(--sp-bar-top) + 84px + env(safe-area-inset-top,0px))}
+/* the filters stick just under the fixed bar */
+body[data-page=photos] .bars{top:var(--sp-header-bottom,92px)}
 /* the leaf shadows begin just below the bar */
 body[data-page=photos] .top::before{-webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 34%,transparent 96%);
   mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 34%,transparent 96%)}
@@ -105,25 +91,23 @@ body[data-page=translate] .soon .soon-copy{margin:6px 0 16px}
 body[data-page=translate] .choose .intro{margin-bottom:14px}
 body[data-page=translate] .choose .broadcast-card{order:3;margin-top:14px}
 body[data-page=translate] #app{background:var(--bg-grad)}
-body[data-page=translate]:has(#app:not([hidden])) .sp-bar{display:none}
 body.broadcasting{background:var(--bg-grad)!important}
 body.broadcasting :is(.soon,.choose){width:100%;height:100dvh;margin:0;border:0;border-radius:0;box-shadow:none;background:transparent}
-body.broadcasting .sp-bar{top:calc(14px + env(safe-area-inset-top,0px));width:calc(100% - 28px);
-  background:rgba(255,249,239,.06);border-color:rgba(255,249,239,.14);box-shadow:inset 0 1px rgba(255,255,255,.06)}
-body.broadcasting .sp-links a,body.broadcasting .sp-lang button{color:rgba(255,248,238,.55)}
-body.broadcasting .sp-links a:hover,body.broadcasting .sp-links a[aria-current=page],body.broadcasting .sp-lang button[aria-pressed=true]{color:#fff8ee}
-body.broadcasting .sp-lang::before{background:rgba(255,249,239,.2)}
-body.broadcasting .sp-lang .sep{background:rgba(255,249,239,.25)}
+/* ── between pages ─────────────────────────────────────────────────── */
+/* Where the browser supports it, the page cross-fades in place. The bar and the frame are
+   pixel-identical on all three pages, so they stay still through it and only what differs
+   dissolves (Home has the same rules in final-overrides.css). */
+@view-transition{navigation:auto}
+::view-transition-group(root){animation-duration:.45s;animation-timing-function:cubic-bezier(.16,1,.3,1)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
 
-/* ── between pages: dissolve into paper, and rise out of it ───────── */
+/* Elsewhere: dissolve into paper, and rise out of it. */
 .sp-cover{position:fixed;inset:0;z-index:9999;background:#e3d6c5;opacity:0;pointer-events:none;transition:opacity .28s ease}
 html.sp-leaving .sp-cover{opacity:1;pointer-events:auto}
 /* fade the page's own sections, not <body>: Safari mishandles whole-page opacity with blend modes */
 html.sp-arrive body[data-page=photos] .sp-card > :is(.top,.bars,.grid-wrap,.empty),
 html.sp-arrive body[data-page=translate] .screen{animation:sp-arrive .6s cubic-bezier(.16,1,.3,1) both}
-html.sp-arrive .sp-bar{animation:sp-bar-in .7s cubic-bezier(.16,1,.3,1) both}
 @keyframes sp-arrive{from{opacity:0}}
-@keyframes sp-bar-in{from{opacity:0;transform:translate(-50%,-8px)}}
 @media (prefers-reduced-motion:reduce){
   .sp-cover{transition:none}
   html.sp-arrive *{animation:none!important}

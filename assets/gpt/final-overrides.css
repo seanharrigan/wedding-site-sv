@@ -3109,3 +3109,16 @@ html.sp-leaving .sp-cover{opacity:1;pointer-events:auto}
 html.sp-return .sp-cover{animation:sp-return .65s ease .05s both}
 @keyframes sp-return{from{opacity:1}to{opacity:0}}
 @media (prefers-reduced-motion:reduce){.sp-cover{transition:none}html.sp-return .sp-cover{animation:none}}
+
+/* Between Home, Gallery and Translate: where the browser supports it, the page cross-fades in
+   place. The menu bar and the frame are pixel-identical on all three pages, so they stay still
+   through it; only what differs dissolves (the same rules are in assets/gpt/subpage.css).
+   Elsewhere the paper fade runs instead. */
+@view-transition{navigation:auto}
+::view-transition-group(root){animation-duration:.45s;animation-timing-function:cubic-bezier(.16,1,.3,1)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
+
+
+/* With the phone menu open the bar turns dark, so the current section's name stays light even
+   over a light section (it was dark-on-dark there). */
+body.menu-open .site-header .mobile-current{color:var(--off-white)!important}
