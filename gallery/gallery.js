@@ -33,7 +33,7 @@
   const T = {
     en: {
       back: "← seanandvaleria.com", eyebrow: "Gallery", title: "Our wedding, through your eyes",
-      lede: "Share your photos from the trip and the day. Tag who’s in them, and find every photo of you.",
+      lede: "Add your photos from the trip and the wedding, and tag who’s in them.",
       add: "Add photos", closed: "Uploads are closed. Thank you for sharing!", you: "You", pickName: "Who are you?",
       all: "All", ofMe: "Photos of me", people: "People", uploadedBy: "Shared by", photographer: "Photographer", guests: "Guests",
       photos: (n) => `${n} ${n === 1 ? "photo" : "photos"}`,
@@ -56,7 +56,7 @@
       saved: "Saved", deleted: "Deleted", error: "Something went wrong. Please try again.", closedNow: "Uploads are closed",
       adminTitle: "Admin", uploadsOpen: "Uploads open", uploadsClosed: "Uploads closed", openUploads: "Open uploads", closeUploads: "Close uploads",
       exportList: "Download list of originals", undated: "Date unknown",
-      titleHtml: "Our wedding, <em>through your eyes</em>",
+      titleHtml: "The <em>photos.</em>",
       opensKicker: "Coming soon", opensText: (d) => `Uploads open ${d}`, opensSub: "Until then, enjoy the photos already here.",
       closedKicker: "Thank you", closedText: "Uploads are closed", closedSub: "Thank you for sharing every moment with us.",
       firstSoon: "The first photos will appear here soon.",
@@ -68,7 +68,7 @@
     },
     es: {
       back: "← seanandvaleria.com", eyebrow: "Galería", title: "Nuestra boda, a través de sus ojos",
-      lede: "Compartan sus fotos del viaje y del día. Etiqueten a quien aparece y encuentren todas sus fotos.",
+      lede: "Suban sus fotos del viaje y de la boda, y etiqueten a quién sale en ellas.",
       add: "Subir fotos", closed: "Ya no se pueden subir fotos. ¡Gracias por compartir!", you: "Tú", pickName: "¿Quién eres?",
       all: "Todas", ofMe: "Fotos mías", people: "Personas", uploadedBy: "Compartidas por", photographer: "Fotógrafo", guests: "Invitados",
       photos: (n) => `${n} ${n === 1 ? "foto" : "fotos"}`,
@@ -91,7 +91,7 @@
       saved: "Guardado", deleted: "Borrada", error: "Algo salió mal. Inténtalo de nuevo.", closedNow: "Ya no se pueden subir fotos",
       adminTitle: "Admin", uploadsOpen: "Subidas abiertas", uploadsClosed: "Subidas cerradas", openUploads: "Abrir subidas", closeUploads: "Cerrar subidas",
       exportList: "Descargar lista de originales", undated: "Fecha desconocida",
-      titleHtml: "Nuestra boda, <em>a través de sus ojos</em>",
+      titleHtml: "Las <em>fotos.</em>",
       opensKicker: "Muy pronto", opensText: (d) => `Podrán subir fotos desde el ${d}`, opensSub: "Mientras tanto, disfruten las fotos que ya están aquí.",
       closedKicker: "Gracias", closedText: "Ya no se pueden subir fotos", closedSub: "Gracias por compartir cada momento con nosotros.",
       firstSoon: "Las primeras fotos aparecerán aquí muy pronto.",
