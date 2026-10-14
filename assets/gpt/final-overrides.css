@@ -3085,7 +3085,14 @@ body.check-in-modal-open{overflow:hidden!important}
   .nav-translate-label{display:inline-block;max-width:0;margin-left:0;overflow:hidden;white-space:nowrap;opacity:0;transform:scale(.8);
     transition:max-width .48s var(--ease-refined),margin-left .48s var(--ease-refined),opacity .22s ease,transform .42s var(--ease-refined)}
   .nav-translate:hover .nav-translate-label,.nav-translate:focus-visible .nav-translate-label{max-width:120px;margin-left:6px;opacity:1;transform:none}
-  .nav-translate:hover,.nav-translate:focus-visible{background:rgba(255,255,255,.08);transform:translateY(-1px)}
+  /* Open, the word reads and moves like the section links (site.css "Nav links: a clearer hover"):
+     the same lettering, a 2px lift, and a 1px underline drawn in from the left under the word. */
+  .site-header .nav-translate{position:relative}
+  .nav-translate-label{font-weight:600}
+  .nav-translate::before{content:"";position:absolute;left:calc(.6rem + 19px + 6px);right:.6rem;bottom:7px;height:1px;background:currentColor;opacity:.85;
+    transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease-refined),opacity .3s ease}
+  .nav-translate:hover,.nav-translate:focus-visible{background:transparent;transform:translateY(-2px)}
+  .nav-translate:hover::before,.nav-translate:focus-visible::before{transform:scaleX(1)}
 
   /* Room for whichever one opens (Translate, Gallery or EN/ES): the section links ease a
      little closer on the same timing, so nothing wraps or runs off the edge. */

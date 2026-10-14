@@ -29,7 +29,7 @@
       soonCopy: "On the wedding day, this page will translate between English and Spanish as people speak, so everyone can follow along.",
       soonFacing: "Two people, one phone. Each of you reads the other’s words in your own language.",
       soonSpeeches: "Read every speech live, in English or Spanish.",
-      soonFoot: "See you in Tepoztlán", soonTap: "Opens on the wedding day · 3 November",
+      soonFoot: "See you in Tepoztlán", soonTap: "Live translation opens on the wedding day.", soonTapKicker: "Tuesday · 3 November",
       back: "← seanandvaleria.com", eyebrow: "Live translation", broadcast: "Broadcast", view: "View", facing: "Face to face", facingSub: "Two people, one table", facingShort: "Across a table",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Both", bothSub: "Side by side", onlyEn: "Only English", onlyEs: "Only Spanish",
       swap: "Swap sides", swapSub: "Change which language is on top", tidy: "Tidy speech", tidySub: "Leave out um, uh, eh and words said twice",
@@ -52,7 +52,7 @@
       soonCopy: "El día de la boda, esta página traducirá entre inglés y español mientras la gente habla, para que todos puedan seguir la conversación.",
       soonFacing: "Dos personas, un teléfono. Cada quien lee lo que dice el otro en su propio idioma.",
       soonSpeeches: "Lee cada discurso en vivo, en inglés o en español.",
-      soonFoot: "Nos vemos en Tepoztlán", soonTap: "Disponible el día de la boda · 3 de noviembre",
+      soonFoot: "Nos vemos en Tepoztlán", soonTap: "La traducción en vivo abre el día de la boda.", soonTapKicker: "Martes · 3 de noviembre",
       back: "← seanandvaleria.com", eyebrow: "Traducción en vivo", broadcast: "Transmitir", view: "Vista", facing: "Frente a frente", facingSub: "Dos personas, una mesa", facingShort: "En la mesa",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Ambos", bothSub: "Lado a lado", onlyEn: "Solo inglés", onlyEs: "Solo español",
       swap: "Cambiar lados", swapSub: "Elige qué idioma va arriba", tidy: "Limpiar el habla", tidySub: "Quita eh, em y palabras repetidas",
@@ -89,7 +89,11 @@
     let soonTimer = 0;
     const soonTap = (li) => {
       const t = $("#toast");
-      t.textContent = T.soonTap;
+      const kicker = document.createElement("span");
+      kicker.className = "toast-kicker";
+      kicker.textContent = T.soonTapKicker;
+      t.replaceChildren(kicker, T.soonTap);
+      t.classList.add("toast-card");
       t.classList.add("show");
       li.classList.remove("nudge");
       void li.offsetWidth;
