@@ -116,7 +116,7 @@
     { key: "arrival", start: "2026-11-03T14:00", day: "wedding", title: L("Guest arrival", "Llegada de invitados"), time: "2:00 PM", rail: L("Arrival", "Llegada") },
     { key: "ceremony", start: "2026-11-03T14:40", day: "wedding", title: L("Ceremony", "Ceremonia"), time: "2:45 PM", rail: L("Ceremony", "Ceremonia") },
     { key: "cocktail", start: "2026-11-03T15:35", day: "wedding", title: L("Cocktail hour", "Hora del cóctel"), time: "4:00 PM", rail: L("Cocktail", "Cóctel") },
-    { key: "reception", start: "2026-11-03T17:15", day: "wedding", title: L("Reception", "Recepción"), time: "5:30 PM", rail: L("Reception", "Recepción") },
+    { key: "reception", start: "2026-11-03T17:15", day: "wedding", title: L("Reception", "Recepción"), time: "5:15 PM", rail: L("Reception", "Recepción") },
     { key: "dinner", start: "2026-11-03T18:00", day: "wedding", title: L("Dinner", "Cena"), time: "6:00 PM", rail: L("Dinner", "Cena") },
     { key: "party", start: "2026-11-03T19:30", day: "wedding", title: L("Party", "Fiesta"), time: "7:30 PM", rail: L("Party", "Fiesta") },
     { key: "antojitos", start: "2026-11-04T00:00", day: "wedding", title: L("Antojitos mexicanos", "Antojitos mexicanos"), time: "12:00 AM", rail: "Antojitos" },
