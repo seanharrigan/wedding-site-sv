@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#eee5da">
+  <title>Sean and Valeria · RSVP</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sean &amp; Valeria">
+  <meta property="og:title" content="RSVP · Sean &amp; Valeria">
+  <meta property="og:description" content="Tap your name and let us know if you’re coming. · Toca tu nombre y dinos si vienes.">
+  <meta property="og:image" content="https://seanandvaleria.com/assets/gpt/social-preview-v8.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" sizes="512x512" href="../assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
+  <link rel="apple-touch-icon" href="../assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
+  <!-- No invitation gate: an RSVP link opens straight from a group chat. A first visit takes the
+       phone's language; after that, the site's EN/ES choice. -->
+  <script>try{if(!localStorage.getItem('wedding-language')&&/^es\b/i.test(navigator.language||''))localStorage.setItem('wedding-language','es')}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/gpt/site-header.css?v=20261015h">
+  <link rel="stylesheet" href="../gallery/gallery.css?v=20261014b">
+  <link rel="stylesheet" href="rsvp.css?v=20261020a">
+  <link rel="stylesheet" href="../assets/gpt/subpage.css?v=20261015g">
+</head>
+<body data-page="rsvp">
+<div class="sp-card">
+<header class="top">
+  <a class="back" href="../" data-t="back">← seanandvaleria.com</a>
+  <button class="admin-pill" id="admin-pill" type="button" hidden>Admin</button>
+  <div class="lockup">
+    <img src="../assets/gpt/sv-logo-variants/solid/sv-logo-mocha-true-solid.png" alt="Sean &amp; Valeria" width="1536" height="1024">
+    <div class="date">3<span class="sep">·</span>11<span class="sep">·</span>2026</div>
+  </div>
+  <p class="eyebrow" id="eyebrow">RSVP</p>
+  <h1 class="title" id="title"></h1>
+  <p class="lede" id="lede"></p>
+</header>
+<main class="rsvp" id="main" aria-live="polite"></main>
+</div>
+
+<div class="sheet-wrap" id="sheet-wrap" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="../assets/gpt/subpage.js?v=20261020a"></script>
+<script src="rsvp.js?v=20261020a"></script>
+</body>
+</html>

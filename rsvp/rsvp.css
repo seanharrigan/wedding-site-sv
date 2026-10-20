@@ -1,0 +1,62 @@
+/* RSVP pages, on the gallery's stationery (gallery.css): an event card, one row of answers per
+   person, and who's coming as name tags. */
+.rsvp{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:18px;padding:0 16px calc(90px + var(--safe-b))}
+.rsvp>section{width:min(520px,100%)}
+.rsvp .hint{font-size:1.05rem;font-style:italic;color:var(--muted);text-align:center;line-height:1.35}
+textarea{font:inherit;color:inherit}
+.link{font-family:var(--sans);font-weight:600;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mocha);text-decoration:underline;text-underline-offset:3px;padding:6px 2px}
+.btn.big{width:100%;min-height:54px;font-size:.62rem}
+
+/* the details */
+.ev-card{display:flex;flex-direction:column;gap:12px;padding:20px 22px;background:var(--paper-light);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-soft)}
+.ev-place{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.ev-place b{display:block;font-weight:500;font-size:1.35rem;line-height:1.15}
+.ev-place small{display:block;font-size:1.02rem;font-style:italic;color:var(--muted);margin-top:2px}
+.ev-details{font-size:1.15rem;line-height:1.45;color:var(--ink-soft)}
+.ev-seats{font-family:var(--sans);font-weight:600;font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mocha)}
+
+/* the form: you, then your party */
+.ev-form{display:flex;flex-direction:column;gap:14px}
+.person{display:flex;flex-direction:column;gap:8px}
+.person-name{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:1.3rem;line-height:1.2}
+.person-name small{display:block;font-family:var(--sans);font-weight:600;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mocha);margin-bottom:3px}
+.person.mate .person-name{font-size:1.15rem;color:var(--ink-soft)}
+.group-q{font-size:1.1rem;font-style:italic;color:var(--muted);text-align:center;border-top:1px solid var(--line);padding-top:14px}
+.answer{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.answer button{min-height:52px;border-radius:16px;border:1px solid var(--line-strong);background:var(--paper-light);font-family:var(--sans);font-weight:600;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);
+  transition:background .2s,color .2s,border-color .2s,transform .25s var(--ease)}
+.answer button:active{transform:scale(.97)}
+.person.mate .answer button{min-height:44px}
+.answer button[aria-pressed=true]{color:var(--cream);border-color:transparent;box-shadow:0 8px 20px rgba(52,38,31,.18)}
+.answer .ans-yes[aria-pressed=true],.pill.ans-yes{background:var(--mocha)}
+.answer .ans-maybe[aria-pressed=true],.pill.ans-maybe{background:#8a7462}
+.answer .ans-no[aria-pressed=true],.pill.ans-no{background:#a39486}
+.ev-form .tag.add{align-self:center;font-size:1.05rem}
+.field.note{min-height:76px;padding:12px 16px;resize:vertical;line-height:1.35}
+
+/* who's coming */
+.ev-who,.ev-admin{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--line);padding-top:20px}
+.ev-who h2,.ev-admin h2{font-family:var(--sans);font-weight:600;font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mocha);text-align:center}
+.who-block .tags{margin-top:2px}
+.tag.me{border-color:var(--mocha)}
+details.who-block summary{cursor:pointer;list-style:none}
+details.who-block summary::-webkit-details-marker{display:none}
+details.who-block summary::after{content:" ▾"}
+details[open].who-block summary{margin-bottom:8px}
+.ev-note{font-size:1.08rem;line-height:1.35;color:var(--ink-soft);margin-top:6px}
+.ev-note b{font-weight:500;color:var(--ink)}
+.ev-all{font-size:1.08rem;font-style:italic;color:var(--muted);text-align:center}
+.ev-all a{color:var(--mocha)}
+
+/* every event */
+.ev-list{display:flex;flex-direction:column;gap:10px}
+.ev-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:var(--paper-light);border:1px solid var(--line);border-radius:20px;text-decoration:none;box-shadow:var(--shadow-soft);transition:box-shadow .3s,transform .4s var(--ease)}
+.ev-row:hover{box-shadow:var(--shadow-lift);transform:translateY(-1px)}
+.ev-row small{display:block;font-family:var(--sans);font-weight:600;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.ev-row b{display:block;font-weight:500;font-size:1.4rem;line-height:1.15;margin-top:4px}
+.ev-row em{display:block;font-size:1rem;color:var(--muted)}
+.ev-row-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.pill{font-family:var(--sans);font-weight:600;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cream);padding:6px 10px;border-radius:999px}
+
+/* the confirmation drops below the menu bar */
+.toast{z-index:1200;top:calc(96px + var(--safe-t))}

@@ -1,6 +1,6 @@
 // Shared chrome for the site's own pages (Gallery, Translate): the home page's own menu bar
 // (styles generated into site-header.css), with "Home" opening out to the home sections, and a
-// quiet transition between pages. Each page marks itself with <body data-page="photos|translate">.
+// quiet transition between pages. Each page marks itself with <body data-page="photos|translate|rsvp">.
 (() => {
   const store = {
     get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch { return d; } },
@@ -50,7 +50,7 @@
     `<a class="brand" href="../" data-sp-go data-sp-home aria-label="${T.brand}">` +
     `<img class="brand-logo brand-logo--dark" src="${LOGO}sv-logo-mocha-true-solid.png" alt="" width="1536" height="1024" decoding="sync" draggable="false">` +
     `<img class="brand-logo brand-logo--light" src="${LOGO}sv-logo-cream-solid.png" alt="" width="1536" height="1024" decoding="sync" draggable="false"></a>` +
-    `<div class="mobile-nav-controls"><span class="mobile-current" id="mobile-current" aria-live="polite">${here === "photos" ? T.photos : T.translate}</span>` +
+    `<div class="mobile-nav-controls"><span class="mobile-current" id="mobile-current" aria-live="polite">${{ photos: T.photos, translate: T.translate, rsvp: "RSVP" }[here]}</span>` +
     `<button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="${T.open}"><span></span><span></span></button></div>` +
     `<nav class="nav-links" id="nav-links" aria-label="${T.nav}">` +
     `<a class="nav-link nav-home" href="../" data-sp-go data-sp-home>${T.home}</a>` +
