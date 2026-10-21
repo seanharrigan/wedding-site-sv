@@ -2,7 +2,7 @@
    photos by day, the Save the Date leaf shadows behind the header, and photos open on espresso. */
 
 /* uploads not open yet: a stationery card with the wax seal */
-.card{position:relative;display:flex;align-items:center;gap:16px;width:min(420px,100%);margin-top:14px;padding:18px 22px 18px 18px;text-align:left;
+.card{position:relative;display:flex;align-items:center;gap:16px;width:min(520px,100%);margin-top:14px;padding:18px 22px 18px 18px;text-align:left;
   background:var(--paper-light);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-soft)}
 .card img{width:58px;height:58px;flex:none;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(56,38,24,.2))}
 .card-kicker{display:block;font-size:.52rem;letter-spacing:.22em;color:var(--mocha);margin-bottom:4px}

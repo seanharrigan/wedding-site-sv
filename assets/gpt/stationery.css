@@ -65,6 +65,8 @@ a{color:inherit}
 .eyebrow{font-size:.6rem;letter-spacing:.3em;color:var(--mocha)}
 .title{font-weight:400;font-size:clamp(2.3rem,8.4vw,3.9rem);line-height:1;letter-spacing:-.02em;max-width:14ch}
 .title em{font-style:italic}
+/* each page's title in the site's script, as the home page's section titles */
+.title.script{font-family:var(--script);font-weight:400;font-size:clamp(3.6rem,13vw,5.4rem);line-height:1.05;letter-spacing:0;max-width:none;padding:0 .1em}
 .lede{font-size:1.15rem;font-style:italic;color:var(--ink-soft);max-width:32ch;line-height:1.4}
 .actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:12px}
 

@@ -48,8 +48,7 @@ details[open].who-block summary{margin-bottom:8px}
 .ev-all{font-size:1.08rem;font-style:italic;color:var(--muted);text-align:center}
 .ev-all a{color:var(--mocha)}
 
-/* the itinerary: the title in the site's script, then each city, then each day over its plans */
-.title.script{font-family:var(--script);font-weight:400;font-size:clamp(3.6rem,13vw,5.4rem);line-height:1.05;letter-spacing:0;max-width:none;padding:0 .1em}
+/* the itinerary: each city, then each day over its plans */
 .itin{display:flex;flex-direction:column;gap:44px;width:min(520px,100%)}
 .itin-area{display:flex;flex-direction:column;gap:22px}
 .area-head{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
@@ -61,7 +60,7 @@ details[open].who-block summary{margin-bottom:8px}
 
 /* every event */
 .ev-list{display:flex;flex-direction:column;gap:10px}
-.ev-row{position:relative;display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--paper-light);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-soft);transition:box-shadow .3s,transform .4s var(--ease)}
+.ev-row{position:relative;display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--paper-light);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-soft);transition:box-shadow .3s,transform .4s var(--ease)}
 .ev-row:hover{box-shadow:var(--shadow-lift);transform:translateY(-1px)}
 .ev-row:has(.ev-link:focus-visible){outline:1px solid var(--mocha);outline-offset:3px}
 /* the whole card opens the plan; the ⓘ sits above that */
