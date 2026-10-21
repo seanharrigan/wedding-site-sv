@@ -11,7 +11,8 @@
 
 /* ── filters and the timeline rail ───────────────────────────────── */
 .bars{position:sticky;top:0;z-index:3;padding:10px 0 0;padding-top:calc(10px + var(--safe-t));
-  background:rgba(238,229,218,.97);-webkit-backdrop-filter:blur(16px) saturate(120%);backdrop-filter:blur(16px) saturate(120%);border-bottom:1px solid var(--line)}
+  background:rgba(238,229,218,.97);-webkit-backdrop-filter:blur(16px) saturate(120%);backdrop-filter:blur(16px) saturate(120%)}
+.bars::after{content:"";display:block;height:1px;margin:10px 16px 0;background:var(--line)}
 .filters,.rail{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 16px;scroll-padding-inline:16px}
 .filters::-webkit-scrollbar,.rail::-webkit-scrollbar{display:none}
 .rail{gap:18px;margin-top:6px}
@@ -29,9 +30,9 @@
 /* ── the photos: justified rows, grouped by day and by moment on the wedding day ── */
 .grid-wrap{position:relative;z-index:1;padding:6px 0 calc(130px + var(--safe-b))}
 .group{scroll-margin-top:calc(108px + var(--safe-t))}
-.group-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:30px 16px 12px}
-.group-head h2{font-weight:400;font-size:clamp(1.6rem,5vw,2.3rem);line-height:1.05;letter-spacing:-.01em}
-.group-head small{font-size:.52rem;letter-spacing:.18em;color:var(--muted);white-space:nowrap}
+.group-head{display:flex;flex-direction:column;gap:6px;padding:34px 16px 14px}
+.group-head h2{font-weight:400;font-size:clamp(1.6rem,4.4vw,2.1rem);line-height:1.05;letter-spacing:-.01em}
+.group-head small{font-size:.52rem;letter-spacing:.2em;color:var(--mocha)}
 .group.moment .group-head{padding-top:18px}
 .group.moment .group-head h2{font-size:clamp(1.3rem,4vw,1.7rem);font-style:italic;color:var(--ink-soft)}
 .day-intro{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:46px 16px 6px}
@@ -70,6 +71,7 @@
 /* ── lightbox: the photo on espresso, the details on paper ───────── */
 .lightbox{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;background:var(--espresso);animation:fade .25s var(--ease)}
 .lb-stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;touch-action:pan-y;padding-top:var(--safe-t)}
+.lightbox.has-strip .lb-stage{padding-bottom:86px}
 .lb-stage img{max-width:100%;max-height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;transition:transform .25s var(--ease),opacity .25s}
 .lb-nav,.lb-close{position:absolute;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:rgba(250,245,238,.12);color:var(--cream);font-size:1.9rem;line-height:1;
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,249,239,.18);transition:background .2s}
@@ -86,9 +88,19 @@
 .lb-actions{display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--line);padding-top:14px}
 @media (min-width:900px){
   .lightbox{flex-direction:row}
-  .lb-info{width:360px;max-height:none;border-radius:0;padding-top:calc(72px + var(--safe-t));box-shadow:-16px 0 40px rgba(0,0,0,.25)}
+  .lb-info{width:360px;max-height:none;border-radius:0;padding-top:calc(30px + var(--safe-t));box-shadow:-16px 0 40px rgba(0,0,0,.25)}
 }
 @media (hover:none){.lb-nav{display:none}}
+/* every photo along the bottom of the viewer; the current one lit */
+.lb-strip{position:absolute;left:0;right:0;bottom:14px;display:flex;gap:6px;padding:4px 16px;overflow-x:auto;scrollbar-width:none;overscroll-behavior:contain}
+.lb-strip::-webkit-scrollbar{display:none}
+.lightbox:not(.has-strip) .lb-strip{display:none}
+.lb-strip button{flex:none;width:56px;height:56px;border-radius:10px;overflow:hidden;opacity:.5;outline:2px solid transparent;outline-offset:2px;transition:opacity .2s,outline-color .2s,transform .3s var(--ease)}
+.lb-strip button:first-child{margin-left:auto}.lb-strip button:last-child{margin-right:auto}
+.lb-strip button:hover{opacity:.85}
+.lb-strip button.on{opacity:1;outline-color:var(--cream)}
+.lb-strip img{width:100%;height:100%;object-fit:cover;display:block}
+@media (max-width:899px){.lb-info{max-height:38dvh}.lb-strip button{width:48px;height:48px}.lightbox.has-strip .lb-stage{padding-bottom:76px}}
 
 
 /* ── upload tray: a paper card with polaroid thumbnails ─────────── */
@@ -109,6 +121,7 @@
 .tray-thumbs .state{position:absolute;inset:4px 4px 12px;display:grid;place-items:center;background:rgba(250,245,238,.6);font-family:var(--sans);font-size:.7rem;color:var(--mocha)}
 .tray-thumbs .done .state{display:none}
 .tray-thumbs .failed .state{background:rgba(143,58,44,.25);color:#8f3a2c}
+.tray-note .btn{font-style:normal}
 .tray-note{font-size:1.05rem;font-style:italic;color:var(--ink-soft);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 
 .grid-wrap:empty{display:none}

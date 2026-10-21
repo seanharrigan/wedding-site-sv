@@ -54,7 +54,8 @@ html.sp-on body{background:transparent;display:flow-root}
 .site-header .nav-links>.nav-translate[aria-current="page"],.site-header .nav-links>.nav-translate[aria-current="page"] .nav-translate-icon{color:inherit;opacity:1}
 @media (max-width:720px){.menu-open .nav-links>.nav-translate[aria-current="page"]{color:#f7efe4}}
 
-/* sheets (who are you, tag someone) cover the bar as well as the page */
+/* the photo viewer and sheets (who are you, tag someone, delete) cover the bar as well as the page */
+html.sp-on .lightbox{z-index:91}
 html.sp-on .sheet-wrap{z-index:92}
 /* notices sit just under the bar, above everything, rather than behind it */
 html.sp-on .toast{z-index:95;top:calc(var(--sp-header-bottom,112px) + 10px)}

@@ -47,10 +47,10 @@
       inPhoto: "In this photo", tagSomeone: "+ Tag someone", nobody: "No one tagged yet.",
       sharedBy: (n) => `Shared by ${n}`, byPhotographer: "From the photographer", someone: "a guest",
       approx: "time approximate", unknownTime: "Date unknown", camera: "Camera",
-      download: "Download original", fixTime: "Fix the time", del: "Delete", delQ: "Delete this photo for everyone?",
+      download: "Download original", fixTime: "Fix the time", del: "Delete",
       timeQ: "When was this taken?", timeHint: "Mexico City time.", save: "Save", cancel: "Cancel", enter: "Continue",
       preparing: "Getting ready…", uploading: (d, n) => `Sharing ${d} of ${n}`, uploaded: (n) => `${n} ${n === 1 ? "photo" : "photos"} shared`,
-      tagThem: "Tap one to tag who’s in it.", failed: (n) => `${n} couldn’t be shared`, retry: "Try again",
+      failed: (n) => `${n} couldn’t be shared`, retry: "Try again",
       already: "already here", unreadable: "This phone can’t read that file", tooBig: "Too big (40 MB max)", offline: "Waiting for a connection…",
       leaveWarn: "Photos are still uploading.", newPhotos: (n) => `${n} new ${n === 1 ? "photo" : "photos"} · Show`,
       saved: "Saved", deleted: "Deleted", error: "Something went wrong. Please try again.", closedNow: "Uploads are closed",
@@ -60,8 +60,9 @@
       opensKicker: "Coming soon", opensText: (d) => `Uploads open ${d}`, opensSub: "Until then, enjoy the photos already here.",
       closedKicker: "Thank you", closedText: "Uploads are closed", closedSub: "Thank you for sharing every moment with us.",
       firstSoon: "The first photos will appear here soon.",
-      dropHere: "Drop your photos here", whoIn: "Who’s in these?", whoInStep: (i, n) => `Photo ${i} of ${n} · tap everyone in it`,
-      next: "Next", finish: "Finish", tagNow: "Tag who’s in them",
+      dropHere: "Drop your photos here", whoIn: "Who’s in this photo?", whoInStep: (i, n) => n > 1 ? `Photo ${i} of ${n} · tap everyone in it` : "Tap everyone in it",
+      next: "Next", skipPhoto: "Skip", thanks: (n) => `${n === 1 ? "Your photo is" : `All ${n} photos are`} in. Thank you!`,
+      delTitle: "Delete this photo?", delHint: "It’s removed for everyone, and it can’t be undone.", keep: "Keep it",
       modeAuto: "Automatic", modeOpen: "Open now", modeClosed: "Closed",
       modeHint: { auto: (d) => `Guests can upload from ${d}. You can always upload.`, open: "Guests can upload now.", closed: "Guests can’t upload. You still can." },
       guestUploads: "Guest uploads",
@@ -82,10 +83,10 @@
       inPhoto: "En esta foto", tagSomeone: "+ Etiquetar", nobody: "Nadie etiquetado todavía.",
       sharedBy: (n) => `Compartida por ${n}`, byPhotographer: "Del fotógrafo", someone: "un invitado",
       approx: "hora aproximada", unknownTime: "Fecha desconocida", camera: "Cámara",
-      download: "Descargar original", fixTime: "Corregir la hora", del: "Borrar", delQ: "¿Borrar esta foto para todos?",
+      download: "Descargar original", fixTime: "Corregir la hora", del: "Borrar",
       timeQ: "¿Cuándo se tomó?", timeHint: "Hora de la Ciudad de México.", save: "Guardar", cancel: "Cancelar", enter: "Continuar",
       preparing: "Preparando…", uploading: (d, n) => `Compartiendo ${d} de ${n}`, uploaded: (n) => `${n} ${n === 1 ? "foto compartida" : "fotos compartidas"}`,
-      tagThem: "Toca una para etiquetar a quien sale.", failed: (n) => `${n} no se pudieron compartir`, retry: "Reintentar",
+      failed: (n) => `${n} no se pudieron compartir`, retry: "Reintentar",
       already: "ya estaba", unreadable: "Este teléfono no puede leer ese archivo", tooBig: "Muy grande (máx. 40 MB)", offline: "Esperando conexión…",
       leaveWarn: "Todavía se están subiendo fotos.", newPhotos: (n) => `${n} ${n === 1 ? "foto nueva" : "fotos nuevas"} · Ver`,
       saved: "Guardado", deleted: "Borrada", error: "Algo salió mal. Inténtalo de nuevo.", closedNow: "Ya no se pueden subir fotos",
@@ -95,8 +96,9 @@
       opensKicker: "Muy pronto", opensText: (d) => `Podrán subir fotos desde el ${d}`, opensSub: "Mientras tanto, disfruten las fotos que ya están aquí.",
       closedKicker: "Gracias", closedText: "Ya no se pueden subir fotos", closedSub: "Gracias por compartir cada momento con nosotros.",
       firstSoon: "Las primeras fotos aparecerán aquí muy pronto.",
-      dropHere: "Suelta tus fotos aquí", whoIn: "¿Quién sale en estas?", whoInStep: (i, n) => `Foto ${i} de ${n} · toca a todos los que salen`,
-      next: "Siguiente", finish: "Terminar", tagNow: "Etiquetar quién sale",
+      dropHere: "Suelta tus fotos aquí", whoIn: "¿Quién sale en esta foto?", whoInStep: (i, n) => n > 1 ? `Foto ${i} de ${n} · toca a todos los que salen` : "Toca a todos los que salen",
+      next: "Siguiente", skipPhoto: "Omitir", thanks: (n) => `¡Gracias! ${n === 1 ? "Tu foto ya está" : `Las ${n} fotos ya están`} aquí.`,
+      delTitle: "¿Borrar esta foto?", delHint: "Se borra para todos y no se puede deshacer.", keep: "Conservarla",
       modeAuto: "Automático", modeOpen: "Abiertas", modeClosed: "Cerradas",
       modeHint: { auto: (d) => `Los invitados podrán subir fotos desde el ${d}. Ustedes siempre pueden.`, open: "Los invitados ya pueden subir fotos.", closed: "Los invitados no pueden subir fotos. Ustedes sí." },
       guestUploads: "Fotos de invitados",
@@ -305,7 +307,9 @@
     if (row.length) rows.push({ items: row, h: Math.min(target, (width - gap * (row.length - 1)) / sum) });
     return rows.map((r) => ({ h: r.h, items: r.items.map((p) => ({ p, w: Math.floor(ratio(p) * r.h) })) }));
   }
-  const rowsWidth = () => Math.max(200, grid.clientWidth - (innerWidth > 720 ? 32 : 8));
+  // The grid is display:none while it's empty, so measure the card it sits in until it has width.
+  const gridWidth = () => grid.clientWidth || grid.parentElement.clientWidth;
+  const rowsWidth = () => Math.max(200, gridWidth() - (innerWidth > 720 ? 32 : 8));
   const PERSON = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.6 7-5.6s6.2 2 7 5.6"/></svg>';
 
   function render() {
@@ -319,7 +323,7 @@
     const ordered = [...SEGMENTS, UNDATED].filter((s) => groups.has(s));
     const frag = document.createDocumentFragment();
     const width = rowsWidth();
-    lastWidth = grid.clientWidth;
+    lastWidth = gridWidth();
     let index = 0;
     let weddingIntro = false;
     for (const seg of ordered) {
@@ -331,8 +335,8 @@
           el("small", { text: L("The wedding", "La boda") }), el("h2", { text: WEDDING_DAY[LANG] })));
       }
       const head = el("div", { class: "group-head" },
-        el("h2", {}, seg.title),
-        el("small", { text: [seg.date || seg.time, T.photos(photos.length)].filter(Boolean).join(" · ") }));
+        el("small", { text: [seg.date || seg.time, T.photos(photos.length)].filter(Boolean).join(" · ") }),
+        el("h2", {}, seg.title));
       const rows = justify(photos, width).map((r) => el("div", { class: "jrow", style: `height:${Math.round(r.h)}px` }, r.items.map(({ p, w }) => {
         const i = index++;
         return el("button", { class: "tile", type: "button", "data-i": i, "aria-label": seg.title, style: `width:${w}px;height:${Math.round(r.h)}px`, onclick: () => openLightbox(i) },
@@ -353,7 +357,7 @@
   let lastWidth = 0, resizeTimer = 0;
   addEventListener("resize", () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { if (S.photos.length && Math.abs(grid.clientWidth - lastWidth) > 8) render(); }, 150);
+    resizeTimer = setTimeout(() => { if (S.photos.length && Math.abs(gridWidth() - lastWidth) > 8) render(); }, 150);
   });
 
   function renderRail(ordered, groups) {
@@ -526,6 +530,7 @@
   function closeLightbox(fromPop = false) {
     if (lb.hidden) return;
     lb.hidden = true;
+    delete strip.dataset.ready;
     document.body.classList.remove("locked");
     const tile = grid.querySelector(`[data-i="${S.lbIndex}"]`);
     tile?.scrollIntoView({ block: "nearest" });
@@ -535,12 +540,30 @@
   }
   addEventListener("popstate", () => closeLightbox(true));
 
-  function step(d) {
-    const i = S.lbIndex + d;
-    if (i < 0 || i >= S.visible.length) return;
+  function goTo(i) {
+    if (i < 0 || i >= S.visible.length || i === S.lbIndex) return;
     S.lbIndex = i;
     history.replaceState({ lb: true }, "", "#" + S.visible[i].id);
     showPhoto();
+  }
+  const step = (d) => goTo(S.lbIndex + d);
+
+  // Every photo along the bottom, the current one lit and kept in the middle: tap one to jump.
+  const strip = $("#lb-strip");
+  let stripFor = null;
+  function renderStrip() {
+    if (stripFor !== S.visible) {
+      stripFor = S.visible;
+      put(strip, S.visible.map((p, i) => el("button", { type: "button", "aria-label": `${i + 1} / ${S.visible.length}`, onclick: () => goTo(i) },
+        el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async" }))));
+    }
+    lb.classList.toggle("has-strip", S.visible.length > 1);
+    strip.querySelector(".on")?.classList.remove("on");
+    const cur = strip.children[S.lbIndex];
+    if (!cur) return;
+    cur.classList.add("on");
+    strip.scrollTo({ left: cur.offsetLeft - (strip.clientWidth - cur.offsetWidth) / 2, behavior: strip.dataset.ready ? "smooth" : "auto" });
+    strip.dataset.ready = "1";
   }
 
   function showPhoto() {
@@ -554,6 +577,7 @@
     $("#lb-count").textContent = `${S.lbIndex + 1} / ${S.visible.length}`;
     $("#lb-prev").hidden = S.lbIndex === 0;
     $("#lb-next").hidden = S.lbIndex === S.visible.length - 1;
+    renderStrip();
     renderInfo(p);
   }
 
@@ -591,7 +615,7 @@
   {
     const stage = $("#lb-stage");
     let x0 = null, y0 = 0;
-    stage.addEventListener("pointerdown", (e) => { if (e.target.closest("button")) return; x0 = e.clientX; y0 = e.clientY; });
+    stage.addEventListener("pointerdown", (e) => { if (e.target.closest("button, .lb-strip")) return; x0 = e.clientX; y0 = e.clientY; });
     stage.addEventListener("pointermove", (e) => { if (x0 == null) return; lbImg.style.transform = `translateX(${(e.clientX - x0) * 0.6}px)`; });
     const end = (e) => {
       if (x0 == null) return;
@@ -641,7 +665,15 @@
     } catch { toast(T.error); }
   }
   async function remove(p) {
-    if (!confirm(T.delQ)) return;
+    const sure = await openSheet(() => [
+      el("img", { class: "preview", src: imgUrl("display", p.id), alt: "" }),
+      el("p", { class: "q", text: T.delTitle }),
+      el("p", { class: "hint", text: T.delHint }),
+      el("div", { class: "sheet-foot" },
+        el("button", { class: "btn", type: "button", text: T.keep, onclick: () => closeSheet(false) }),
+        el("button", { class: "btn solid danger", type: "button", text: T.del, onclick: () => closeSheet(true) })),
+    ]);
+    if (!sure) return;
     try {
       await api(`/api/photos/${p.id}`, { method: "DELETE" });
       S.photos = S.photos.filter((x) => x !== p);
@@ -766,8 +798,6 @@
       el("div", { class: "tray-thumbs" }, queue.map((it) => el("button", { type: "button", class: it.state, onclick: () => it.state === "done" && openById(it.id) },
         it.thumbUrl ? el("img", { src: it.thumbUrl, alt: "" }) : null,
         el("span", { class: "state", text: it.state === "failed" ? "!" : "…" })))),
-      !busy && done ? el("div", { class: "tray-note" }, el("span", { text: T.tagThem }),
-        el("button", { class: "btn small solid", type: "button", text: T.tagNow, onclick: () => tagBatch() })) : null,
       failed.length ? el("p", { class: "tray-note" }, `${T.failed(failed.length)}: ${reason(failed[0].error)} `,
         el("button", { class: "btn small", type: "button", text: T.retry, onclick: () => { failed.forEach((x) => { x.state = "waiting"; x.error = null; }); renderTray(); pump(); } })) : null,
     );
@@ -779,19 +809,34 @@
     wakeLock = null;
     try { await loadPhotos(); render(); } catch {}
     // Straight after sharing, walk through the new photos once to tag who's in them.
-    if (queue.some((x) => x.state === "done" && !x.existing) && lb.hidden && wrap.hidden) tagBatch();
+    if (queue.some((x) => x.state === "done" && !x.existing) && lb.hidden && wrap.hidden) await tagBatch();
+    finishBatch();
   }
 
+  // All shared: the tray gives way to a thank-you (it stays only to offer a retry).
+  function finishBatch() {
+    if (queue.some((x) => x.state === "waiting" || x.state === "working")) return;
+    const shared = queue.filter((x) => x.state === "done").length;
+    if (queue.some((x) => x.state === "failed")) return renderTray();
+    queue.length = 0;
+    renderTray();
+    if (shared) toast(T.thanks(shared));
+  }
+
+  // One photo at a time: tap who's in it, then Next (or Skip). Tapping outside stops for now;
+  // the rest can be tagged from each photo.
   async function tagBatch() {
     const ids = queue.filter((x) => x.state === "done").map((x) => x.id);
     const photos = ids.map((id) => S.photos.find((p) => p.id === id)).filter(Boolean);
+    tray.hidden = true;
     for (const [n, p] of photos.entries()) {
       const chosen = await namePicker({
         title: T.whoIn, q: fmtWhen(p.t || "2026-11-03T12:00:00").replace(/^\w/, (c) => c.toUpperCase()), hint: T.whoInStep(n + 1, photos.length),
         preview: imgUrl("display", p.id), multi: true, allowAdd: true, selected: new Set(p.tags),
-        okLabel: n + 1 < photos.length ? T.next : T.done, cancelLabel: T.finish, cancelValue: () => null,
+        okLabel: n + 1 < photos.length ? T.next : T.done, cancelLabel: T.skipPhoto, cancelValue: () => null,
       });
-      if (!chosen) break;
+      if (chosen === undefined) break;
+      if (chosen === null) continue;
       const add = [...chosen].filter((id) => !p.tags.includes(id));
       const drop = p.tags.filter((id) => !chosen.has(id));
       try {
