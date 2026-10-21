@@ -1,7 +1,7 @@
-/* Shared chrome for the site's own pages (Gallery, Translate), so they sit in the same frame as
-   the home page: the beige backdrop and a paper card over it, the home page's own menu bar
-   (site-header.css, generated from the home stylesheets) with "Home" opening out to the home
-   sections, and a quiet cross-fade between pages. Used with subpage.js. */
+/* Shared chrome for the site's own pages (Gallery, Translate, RSVP), so they sit in the same frame
+   as the home page: the beige backdrop and a paper card over it, the home page's own menu bar
+   (site-header.css, generated from the home stylesheets) with Home in place of the section links,
+   and a quiet cross-fade between pages. Used with subpage.js. */
 
 :root{
   /* the home page's canvas (final-overrides.css: "Desktop canvas") */
@@ -44,22 +44,20 @@ html.sp-on body{background:transparent;display:flow-root}
 :where(.site-header) :where(a){color:inherit}
 :where(.site-header) :where(img){display:block;max-width:100%}
 
-/* Home opens out to the home sections, the way the EN/ES switch opens: on hover or keyboard focus
-   the sections widen in beside it (.48s on the site's easing), with the links' own hover. */
-@media (min-width:721px){
-  .nav-links>.nav-section{max-width:0;overflow:hidden;white-space:nowrap;padding-inline:0!important;margin-left:-4px;opacity:0;transform:scale(.8);pointer-events:none;
-    transition:max-width .48s cubic-bezier(.16,1,.3,1),padding .48s cubic-bezier(.16,1,.3,1),margin .48s cubic-bezier(.16,1,.3,1),opacity .22s ease,transform .42s cubic-bezier(.16,1,.3,1),color .25s ease,background .25s ease}
-  .nav-links:has(>:is(.nav-home,.nav-section):is(:hover,:focus-visible))>.nav-section{max-width:10rem;padding-inline:var(--sp-link-pad,.6rem)!important;margin-left:0;opacity:1;transform:none;pointer-events:auto}
-}
-/* the current page (Gallery or Translate) carries the underline, as the current section does at home */
+/* On a computer, Home is a plain link with the section links' hover; the sections themselves
+   are in the phone menu. */
+@media (min-width:721px){.nav-links>.nav-section{display:none}}
+/* the current page (Gallery, Translate or RSVP) carries the underline, as the current section does at home */
 .nav-translate[aria-current="page"]{opacity:1}
 /* the current page reads at full strength, as the current section does at home (on phones,
    its icon stands where home's dot is) */
 .site-header .nav-links>.nav-translate[aria-current="page"],.site-header .nav-links>.nav-translate[aria-current="page"] .nav-translate-icon{color:inherit;opacity:1}
 @media (max-width:720px){.menu-open .nav-links>.nav-translate[aria-current="page"]{color:#f7efe4}}
 
-/* Translate's notices sit just under the bar, above everything, rather than behind it */
-body[data-page=translate] .toast{z-index:95;top:calc(var(--sp-header-bottom,112px) + 10px)}
+/* sheets (who are you, tag someone) cover the bar as well as the page */
+html.sp-on .sheet-wrap{z-index:92}
+/* notices sit just under the bar, above everything, rather than behind it */
+html.sp-on .toast{z-index:95;top:calc(var(--sp-header-bottom,112px) + 10px)}
 body[data-page=translate]:has(#app:not([hidden])) .toast{top:calc(66px + env(safe-area-inset-top,0px))}
 /* the coming-soon note: a small stationery card, the date in small capitals over an italic line */
 body[data-page=translate] .toast.toast-card{display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 24px 15px;border-radius:18px;
@@ -78,13 +76,13 @@ html.sp-on .lockup img{display:none}
 html.sp-on .lockup{margin-bottom:10px}
 :root{--sp-head-top:calc(var(--sp-bar-top) + 106px + env(safe-area-inset-top,0px))}
 
-/* Gallery */
-body[data-page=photos] .top{padding-top:var(--sp-head-top)}
-body[data-page=photos] .admin-pill{top:calc(var(--sp-bar-top) + 84px + env(safe-area-inset-top,0px))}
+/* Gallery and RSVP */
+body:is([data-page=photos],[data-page=rsvp]) .top{padding-top:var(--sp-head-top)}
+body:is([data-page=photos],[data-page=rsvp]) .admin-pill{top:calc(var(--sp-bar-top) + 84px + env(safe-area-inset-top,0px))}
 /* the filters stick just under the fixed bar */
 body[data-page=photos] .bars{top:var(--sp-header-bottom,92px)}
 /* the leaf shadows begin just below the bar */
-body[data-page=photos] .top::before{-webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 34%,transparent 96%);
+body:is([data-page=photos],[data-page=rsvp]) .top::before{-webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 34%,transparent 96%);
   mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 34%,transparent 96%)}
 
 /* Translate: the options and coming-soon screens are cards laid out from the top like the
@@ -121,6 +119,7 @@ body.broadcasting :is(.soon,.choose){width:100%;height:100dvh;margin:0;border:0;
 html.sp-leaving .sp-cover{opacity:1;pointer-events:auto}
 /* fade the page's own sections, not <body>: Safari mishandles whole-page opacity with blend modes */
 html.sp-arrive body[data-page=photos] .sp-card > :is(.top,.bars,.grid-wrap,.empty),
+html.sp-arrive body[data-page=rsvp] .sp-card > :is(.top,.rsvp),
 html.sp-arrive body[data-page=translate] .screen{animation:sp-arrive .6s cubic-bezier(.16,1,.3,1) both}
 @keyframes sp-arrive{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){

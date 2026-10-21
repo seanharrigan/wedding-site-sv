@@ -25,7 +25,8 @@
 
   const T = {
     en: {
-      back: "← seanandvaleria.com", indexTitle: "The <em>RSVPs.</em>", indexLede: "Let us know which plans you’re joining.",
+      back: "← seanandvaleria.com", indexTitle: "Itinerary", indexLede: "Let us know which plans you’re joining.",
+      areas: { CDMX: "Mexico City", "Tepoztlán": "Morelos" }, going: (n) => `${n} going`,
       yes: "Going", maybe: "Maybe", no: "Can’t go", noAnswer: "No answer yet",
       youAre: "You’re", answeringAs: "Answering as", change: "Change", pickName: "Tap your name",
       whoQ: "Who are you?", whoHint: "Pick your name once. This phone will remember it.",
@@ -33,7 +34,7 @@
       yourGroup: "Answering for your group too?", addSomeone: "+ Someone else", remove: "Remove",
       note: "Anything we should know? (optional)", send: "Send RSVP", update: "Update RSVP", sent: "Thank you! Your RSVP is in.", savedNow: "Saved",
       seats: (left, cap) => `${left} of ${cap} seats left`, full: (n) => n ? `Only ${n} ${n === 1 ? "seat" : "seats"} left` : "All the seats are taken",
-      closed: "RSVPs for this are closed.", draft: "Draft · only you two can see this", missing: "We couldn’t find that RSVP.", allLink: "See all RSVPs",
+      closed: "RSVPs for this are closed.", draft: "Draft · only you two can see this", missing: "We couldn’t find that RSVP.", allLink: "See the whole itinerary",
       error: "Something went wrong. Please try again.", map: "Map", whoComing: "Who’s coming", nobodyYet: "No one yet. Be the first!",
       pickFirst: "Tap your name first", pickAnswer: "Choose Going, Maybe or Can’t go",
       adminTitle: "Admin", csv: "Download CSV", share: "Share link", copied: "Link copied", notes: "Notes",
@@ -41,7 +42,8 @@
       until: "until", rsvpBy: (d) => `Please answer by ${d}`, tbc: "Date and place to come",
     },
     es: {
-      back: "← seanandvaleria.com", indexTitle: "Las <em>confirmaciones.</em>", indexLede: "Cuéntennos a qué planes se apuntan.",
+      back: "← seanandvaleria.com", indexTitle: "Itinerario", indexLede: "Cuéntennos a qué planes se apuntan.",
+      areas: { CDMX: "Ciudad de México", "Tepoztlán": "Morelos" }, going: (n) => `${n} ${n === 1 ? "va" : "van"}`,
       yes: "Voy", maybe: "Tal vez", no: "No puedo", noAnswer: "Sin respuesta",
       youAre: "Eres", answeringAs: "Respondes como", change: "Cambiar", pickName: "Toca tu nombre",
       whoQ: "¿Quién eres?", whoHint: "Elige tu nombre una vez. Este teléfono lo recordará.",
@@ -49,7 +51,7 @@
       yourGroup: "¿Respondes también por tu grupo?", addSomeone: "+ Otra persona", remove: "Quitar",
       note: "¿Algo que debamos saber? (opcional)", send: "Enviar respuesta", update: "Actualizar respuesta", sent: "¡Gracias! Ya tenemos tu respuesta.", savedNow: "Guardado",
       seats: (left, cap) => `Quedan ${left} de ${cap} lugares`, full: (n) => n ? `Solo ${n === 1 ? "queda 1 lugar" : `quedan ${n} lugares`}` : "Ya no hay lugares",
-      closed: "Ya no se reciben respuestas para esto.", draft: "Borrador · solo ustedes dos lo ven", missing: "No encontramos esa invitación.", allLink: "Ver todas",
+      closed: "Ya no se reciben respuestas para esto.", draft: "Borrador · solo ustedes dos lo ven", missing: "No encontramos esa invitación.", allLink: "Ver todo el itinerario",
       error: "Algo salió mal. Inténtalo de nuevo.", map: "Mapa", whoComing: "Quién va", nobodyYet: "Nadie todavía. ¡Sé el primero!",
       pickFirst: "Primero toca tu nombre", pickAnswer: "Elige Voy, Tal vez o No puedo",
       adminTitle: "Admin", csv: "Descargar CSV", share: "Compartir enlace", copied: "Enlace copiado", notes: "Notas",
@@ -129,12 +131,13 @@
   const fmtDay = (t) => asDate(t).toLocaleDateString(locale, { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" });
   const fmtTime = (t) => asDate(t).toLocaleTimeString("en-US", { timeZone: "UTC", hour: "numeric", minute: "2-digit" });
   const cap = (s) => s.replace(/^\p{L}/u, (c) => c.toUpperCase());
-  function when(e) {
-    if (!e.starts_local) return T.tbc;
-    const time = e.starts_local.slice(11) === "00:00" ? "" : fmtTime(e.starts_local);
+  // "2:00 PM – 5:30 PM", or nothing for an all-day plan
+  function hours(e) {
+    if (!e.starts_local || e.starts_local.slice(11) === "00:00") return "";
     const end = e.ends_local && e.ends_local.slice(0, 10) === e.starts_local.slice(0, 10) ? ` – ${fmtTime(e.ends_local)}` : "";
-    return [cap(fmtDay(e.starts_local)), time + end].filter(Boolean).join(" · ");
+    return fmtTime(e.starts_local) + end;
   }
+  const when = (e) => e.starts_local ? [cap(fmtDay(e.starts_local)), hours(e)].filter(Boolean).join(" · ") : T.tbc;
 
   // ── sheets (the gallery's name picker) ────────────────────────────────────
   const wrap = $("#sheet-wrap"), sheet = $("#sheet");
@@ -210,7 +213,7 @@
   function renderEvent() {
     const e = S.event;
     document.title = `${L(e, "title")} · RSVP · Sean & Valeria`;
-    $("#eyebrow").textContent = e.listed ? "RSVP" : T.draft;
+    $("#eyebrow").textContent = e.listed ? ["RSVP", e.area].filter(Boolean).join(" · ") : T.draft;
     $("#title").textContent = L(e, "title");
     $("#lede").textContent = when(e);
     $("#admin-pill").hidden = !S.admin;
@@ -331,26 +334,36 @@
     el("a", { href: URL.createObjectURL(blob), download: `rsvp-${e.slug}.csv` }).click();
   }
 
-  // ── every event ───────────────────────────────────────────────────────────
+  // ── every event: the itinerary, by city and then by day ───────────────────
   async function renderIndex() {
     const d = await api(`/api/events${meParam()}`);
     S.admin = d.admin;
-    $("#title").innerHTML = T.indexTitle;
+    $("#title").textContent = T.indexTitle;
+    $("#title").classList.add("script");
     $("#lede").textContent = T.indexLede;
     $("#admin-pill").hidden = !S.admin;
     const mineFor = (slug) => S.me && d.mine.find((m) => m.e === slug && m.g === S.me.id)?.a;
+    const row = (e) => {
+      const mine = mineFor(e.slug);
+      return el("a", { class: "ev-row", href: `./?e=${e.slug}&lang=${LANG}` },
+        el("span", {},
+          e.listed ? null : el("small", { text: T.draft }),
+          el("b", { text: L(e, "title") }),
+          el("em", { text: [hours(e), e.place].filter(Boolean).join(" · ") })),
+        el("span", { class: "ev-row-side" },
+          mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null,
+          e.counts.yes ? el("small", { text: T.going(e.counts.yes) }) : null));
+    };
+    // Map keeps the order the events come in (by sort), so cities and days read in date order.
+    const group = (list, key) => [...list.reduce((m, e) => m.set(key(e), [...(m.get(key(e)) || []), e]), new Map())];
     put(main,
-      el("section", { class: "ev-list" }, d.events.map((e) => {
-        const mine = mineFor(e.slug);
-        return el("a", { class: "ev-row", href: `./?e=${e.slug}&lang=${LANG}` },
-          el("span", {},
-            el("small", { text: e.listed ? when(e) : T.draft }),
-            el("b", { text: L(e, "title") }),
-            e.place ? el("em", { text: e.place }) : null),
-          el("span", { class: "ev-row-side" },
-            mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null,
-            e.counts.yes ? el("small", { text: `${e.counts.yes} ${T.yes.toLowerCase()}` }) : null));
-      })),
+      el("div", { class: "itin" }, group(d.events, (e) => e.area || "").map(([area, events]) =>
+        el("section", { class: "itin-area" },
+          area ? el("header", { class: "area-head" }, el("h2", { text: area }), T.areas[area] ? el("small", { text: T.areas[area] }) : null) : null,
+          group(events, (e) => e.starts_local?.slice(0, 10) || "").map(([day, list]) =>
+            el("div", { class: "itin-day" },
+              el("h3", { class: "day-head", text: day ? cap(fmtDay(day + "T12:00")) : T.tbc }),
+              el("div", { class: "ev-list" }, list.map(row))))))),
       S.me ? el("p", { class: "ev-all" }, `${T.youAre} ${S.me.name} · `, el("button", { class: "link", type: "button", text: T.change, onclick: async () => { const g = await namePicker({ q: T.whoQ, hint: T.whoHint }); if (g) { setMe(g); renderIndex(); } } })) : null);
   }
 

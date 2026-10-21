@@ -1,4 +1,4 @@
-/* RSVP pages, on the gallery's stationery (gallery.css): an event card, one row of answers per
+/* RSVP pages, on the site's stationery (assets/gpt/stationery.css): an event card, one row of answers per
    person, and who's coming as name tags. */
 .rsvp{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:18px;padding:0 16px calc(90px + var(--safe-b))}
 .rsvp>section{width:min(520px,100%)}
@@ -48,15 +48,23 @@ details[open].who-block summary{margin-bottom:8px}
 .ev-all{font-size:1.08rem;font-style:italic;color:var(--muted);text-align:center}
 .ev-all a{color:var(--mocha)}
 
+/* the itinerary: the title in the site's script, then each city, then each day over its plans */
+.title.script{font-family:var(--script);font-weight:400;font-size:clamp(3.6rem,13vw,5.4rem);line-height:1.05;letter-spacing:0;max-width:none;padding:0 .1em}
+.itin{display:flex;flex-direction:column;gap:44px}
+.itin-area{display:flex;flex-direction:column;gap:22px}
+.area-head{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.area-head h2{font-weight:500;font-size:clamp(1.9rem,6.4vw,2.35rem);line-height:1.1;letter-spacing:.16em;padding-left:.16em;text-transform:uppercase;color:var(--mocha-deep)}
+.area-head small{font-size:1.08rem;font-style:italic;color:var(--muted)}
+.itin-day{display:flex;flex-direction:column;gap:10px}
+.day-head{display:flex;align-items:center;gap:12px;font-family:var(--sans);font-weight:600;font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mocha)}
+.day-head::after{content:"";flex:1;height:1px;background:var(--line-strong)}
+
 /* every event */
 .ev-list{display:flex;flex-direction:column;gap:10px}
 .ev-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:var(--paper-light);border:1px solid var(--line);border-radius:20px;text-decoration:none;box-shadow:var(--shadow-soft);transition:box-shadow .3s,transform .4s var(--ease)}
 .ev-row:hover{box-shadow:var(--shadow-lift);transform:translateY(-1px)}
 .ev-row small{display:block;font-family:var(--sans);font-weight:600;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-.ev-row b{display:block;font-weight:500;font-size:1.4rem;line-height:1.15;margin-top:4px}
-.ev-row em{display:block;font-size:1rem;color:var(--muted)}
+.ev-row b{display:block;font-weight:500;font-size:1.4rem;line-height:1.15}
+.ev-row em{display:block;font-size:1.05rem;color:var(--muted);margin-top:2px}
 .ev-row-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
 .pill{font-family:var(--sans);font-weight:600;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cream);padding:6px 10px;border-radius:999px}
-
-/* the confirmation drops below the menu bar */
-.toast{z-index:1200;top:calc(96px + var(--safe-t))}

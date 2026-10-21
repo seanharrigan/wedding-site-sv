@@ -1,6 +1,6 @@
-// Shared chrome for the site's own pages (Gallery, Translate): the home page's own menu bar
-// (styles generated into site-header.css), with "Home" opening out to the home sections, and a
-// quiet transition between pages. Each page marks itself with <body data-page="photos|translate|rsvp">.
+// Shared chrome for the site's own pages (Gallery, Translate, RSVP): the home page's own menu bar
+// (styles generated into site-header.css), with Home in place of the section links (they're in
+// the phone menu), and a quiet transition between pages. Each page marks itself with <body data-page="photos|translate|rsvp">.
 (() => {
   const store = {
     get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch { return d; } },
@@ -18,25 +18,26 @@
   const T = {
     en: {
       home: "Home", welcome: "Welcome", details: "Details", travel: "Travel", faq: "FAQ", checkIn: "Check-In",
-      translate: "Translate", photos: "Gallery", nav: "Primary navigation", lang: "Choose website language",
+      translate: "Translate", photos: "Gallery", rsvp: "RSVP", nav: "Primary navigation", lang: "Choose website language",
       brand: "Sean and Valeria, back to the website", open: "Open navigation", close: "Close navigation",
     },
     es: {
       home: "Inicio", welcome: "Bienvenidos", details: "Detalles", travel: "Viaje", faq: "FAQ", checkIn: "Registro",
-      translate: "Traducir", photos: "Galería", nav: "Navegación principal", lang: "Elige el idioma del sitio",
+      translate: "Traducir", photos: "Galería", rsvp: "RSVP", nav: "Navegación principal", lang: "Elige el idioma del sitio",
       brand: "Sean y Valeria, volver al sitio", open: "Abrir menú", close: "Cerrar menú",
     },
   }[LANG];
 
-  // ── the home page's header, with Home and its sections in place of the section links ──
+  // ── the home page's header, with Home in place of the section links ──
   const LOGO = "../assets/gpt/sv-logo-variants/solid/";
   const section = (id, label, extra = "") => `<a class="nav-link nav-section${extra}" href="../#${id}" data-sp-go>${label}</a>`;
   const ICON_TRANSLATE = '<svg class="nav-translate-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.6c0-1 .8-1.8 1.8-1.8h7.4c1 0 1.8.8 1.8 1.8v4.6c0 1-.8 1.8-1.8 1.8H8.4l-3 2.4V12h-.1c-1 0-1.8-.8-1.8-1.8z"/><path d="M14.5 8.4h4.2c1 0 1.8.8 1.8 1.8v4.6c0 1-.8 1.8-1.8 1.8h-.1v2.4l-3-2.4h-4.3c-1 0-1.8-.8-1.8-1.8V14"/><path d="M6.6 7.9h4.8M13.4 12.6h4.2" opacity=".55"/></svg>';
   const ICON_CAMERA = '<svg class="nav-translate-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8 8.6c0-1 .8-1.8 1.8-1.8h2.2l1.5-2.2h5.4l1.5 2.2h2.2c1 0 1.8.8 1.8 1.8v8.6c0 1-.8 1.8-1.8 1.8H5.6c-1 0-1.8-.8-1.8-1.8z"/><circle cx="12" cy="12.6" r="3.4"/></svg>';
+  const ICON_RSVP = '<svg class="nav-translate-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8 7.6c0-1 .8-1.8 1.8-1.8h12.8c1 0 1.8.8 1.8 1.8v9.6c0 1-.8 1.8-1.8 1.8H5.6c-1 0-1.8-.8-1.8-1.8z"/><path d="M4.4 6.6l7.6 5.8 7.6-5.8" opacity=".55"/><path d="M9.2 15.4l1.9 1.8 3.7-3.8"/></svg>';
   const ICON_LEAF = '<svg class="nav-language-icon nav-language-icon--leaf" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.35l1.28 3.02 1.87-1.08-.42 2.96 2.9-.78-1.08 2.82 3.62.88-3.12 2.3 1.03 2.66-4.98-.93.35 6.45h-2.9l.35-6.45-4.98.93 1.03-2.66-3.12-2.3 3.62-.88-1.08-2.82 2.9.78-.42-2.96 1.87 1.08z"/></svg>';
   const ICON_CACTUS = '<svg class="nav-language-icon nav-language-icon--cactus" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.6 21V6.2a2.4 2.4 0 0 1 4.8 0V21"/><path d="M9.6 13.5H7.9a2 2 0 0 1-2-2V8.8"/><path d="M14.4 15.5h1.7a2 2 0 0 0 2-2V9.6"/><path d="M6.5 21h11"/></svg>';
   const pageButton = (page, id, icon, label) =>
-    `<button class="invitation-replay nav-translate${page === "photos" ? " nav-photos" : ""}" id="${id}" type="button" data-sp-page="${page}"${page === here ? ' aria-current="page"' : ""}>` +
+    `<button class="invitation-replay nav-translate nav-${page}" id="${id}" type="button" data-sp-page="${page}"${page === here ? ' aria-current="page"' : ""}>` +
     `<span class="nav-pill">${icon}<span class="nav-translate-label">${label}</span></span></button>`;
   const langButton = (code, icon, short, long) =>
     `<button class="nav-language-option nav-language-option--${code}${code === LANG ? " is-current" : ""}" type="button" data-nav-language="${code}" aria-label="${long}"${code === LANG ? ' aria-current="true"' : ""}>` +
@@ -50,13 +51,14 @@
     `<a class="brand" href="../" data-sp-go data-sp-home aria-label="${T.brand}">` +
     `<img class="brand-logo brand-logo--dark" src="${LOGO}sv-logo-mocha-true-solid.png" alt="" width="1536" height="1024" decoding="sync" draggable="false">` +
     `<img class="brand-logo brand-logo--light" src="${LOGO}sv-logo-cream-solid.png" alt="" width="1536" height="1024" decoding="sync" draggable="false"></a>` +
-    `<div class="mobile-nav-controls"><span class="mobile-current" id="mobile-current" aria-live="polite">${{ photos: T.photos, translate: T.translate, rsvp: "RSVP" }[here]}</span>` +
+    `<div class="mobile-nav-controls"><span class="mobile-current" id="mobile-current" aria-live="polite">${T[here]}</span>` +
     `<button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="${T.open}"><span></span><span></span></button></div>` +
     `<nav class="nav-links" id="nav-links" aria-label="${T.nav}">` +
     `<a class="nav-link nav-home" href="../" data-sp-go data-sp-home>${T.home}</a>` +
     section("welcome", T.welcome) + section("details", T.details) + section("travel", T.travel) + section("faq", T.faq) + section("check-in", T.checkIn, " nav-cta") +
     pageButton("translate", "nav-translate", ICON_TRANSLATE, T.translate) +
     pageButton("photos", "nav-photos", ICON_CAMERA, T.photos) +
+    pageButton("rsvp", "nav-rsvp", ICON_RSVP, T.rsvp) +
     `<div class="nav-language" id="nav-language" role="group" aria-label="${T.lang}">` +
     langButton("en", ICON_LEAF, "EN", "English") + `<span class="nav-language-divider" aria-hidden="true"></span>` + langButton("es", ICON_CACTUS, "ES", "Español") +
     `</div></nav>`;
@@ -99,15 +101,13 @@
   syncScrolled();
 
   // The underline sits under the current page's button, the way it sits under the home page's
-  // current section, and follows it when Home opens out.
+  // current section.
   const syncIndicator = () => {
     const current = nav.querySelector('[aria-current="page"]');
     if (!current || innerWidth <= 720) return;
     nav.style.setProperty("--nav-indicator-left", `${current.offsetLeft}px`);
     nav.style.setProperty("--nav-indicator-width", `${current.offsetWidth}px`);
   };
-  // Home's sections open to the same side padding as the home page's links at this width.
-  const syncLinkPadding = () => nav.style.setProperty("--sp-link-pad", getComputedStyle(nav.querySelector(".nav-home")).paddingLeft);
   let frame = 0;
   const resync = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => { syncIndicator(); syncHeaderBottom(); }); };
   // Gallery's sticky filters sit just under the fixed bar.
@@ -118,8 +118,7 @@
     ro.observe(header);
   }
   header.addEventListener("transitionend", resync);
-  addEventListener("resize", () => { syncLinkPadding(); resync(); });
-  syncLinkPadding();
+  addEventListener("resize", resync);
   resync();
 
   // A broadcast on Translate turns the page dark; the bar follows, as over the home page's photos.
@@ -157,7 +156,7 @@
   header.querySelectorAll("[data-sp-page]").forEach((b) => b.addEventListener("click", () => {
     const page = b.dataset.spPage;
     if (page === here) return setMenuOpen(false);
-    go(`../${page === "photos" ? "gallery" : "translate"}/?lang=${LANG}`);
+    go(`../${{ photos: "gallery", translate: "translate", rsvp: "rsvp" }[page]}/?lang=${LANG}`);
   }));
   header.querySelectorAll("[data-nav-language]").forEach((b) => b.addEventListener("click", () => {
     const lang = b.dataset.navLanguage;
