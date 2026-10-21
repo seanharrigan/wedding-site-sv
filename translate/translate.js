@@ -29,7 +29,7 @@
       soonCopy: "On the wedding day, this page will translate between English and Spanish as people speak, so everyone can follow along.",
       soonFacing: "Two people, one phone. Each of you reads the other’s words in your own language.",
       soonSpeeches: "Read every speech live, in English or Spanish.",
-      soonFoot: "See you in Tepoztlán", soonTap: "Live translation opens on the wedding day.", soonTapKicker: "Tuesday · 3 November",
+      soonFoot: "See you in Tepoztlán", soonOpens: "Opens on the wedding day · Tuesday 3 November",
       back: "← seanandvaleria.com", eyebrow: "Live translation", broadcast: "Broadcast", view: "View", facing: "Face to face", facingSub: "Two people, one table", facingShort: "Across a table",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Both", bothSub: "Side by side", onlyEn: "Only English", onlyEs: "Only Spanish",
       swap: "Swap sides", swapSub: "Change which language is on top", tidy: "Tidy speech", tidySub: "Leave out um, uh, eh and words said twice",
@@ -43,7 +43,7 @@
       broadcastEnded: "The live subtitles have ended · Terminaron los subtítulos en vivo",
       takenOver: "Another phone took over the speeches", micBlocked: "Microphone blocked: allow it in settings", noMic: "No microphone found",
       noRecord: "This browser can't record audio here", noServer: "Translation server not set up yet", lostConn: "Lost the connection · Tap to retry",
-      keyRefused: "Admin password not accepted", noCredit: "Soniox account out of credit", sonioxKey: "Soniox key not accepted", sonioxDown: "Translation service unavailable",
+      keyRefused: "Admin password not accepted", noCredit: "Soniox account out of credit", sonioxKey: "Soniox key not accepted", sonioxDown: "Translation service unavailable", noKey: "No Soniox key on the server yet",
       waitHere: "Subtitles will appear here when the speeches begin.", speak: "Speak in English or Spanish.",
       speakBoth: "Speak in English or Spanish · Habla en inglés o en español", stopped: "Paused after a quiet spell · Tap to continue",
     },
@@ -52,7 +52,7 @@
       soonCopy: "El día de la boda, esta página traducirá entre inglés y español mientras la gente habla, para que todos puedan seguir la conversación.",
       soonFacing: "Dos personas, un teléfono. Cada quien lee lo que dice el otro en su propio idioma.",
       soonSpeeches: "Lee cada discurso en vivo, en inglés o en español.",
-      soonFoot: "Nos vemos en Tepoztlán", soonTap: "La traducción en vivo abre el día de la boda.", soonTapKicker: "Martes · 3 de noviembre",
+      soonFoot: "Nos vemos en Tepoztlán", soonOpens: "Abre el día de la boda · martes 3 de noviembre",
       back: "← seanandvaleria.com", eyebrow: "Traducción en vivo", broadcast: "Transmitir", view: "Vista", facing: "Frente a frente", facingSub: "Dos personas, una mesa", facingShort: "En la mesa",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Ambos", bothSub: "Lado a lado", onlyEn: "Solo inglés", onlyEs: "Solo español",
       swap: "Cambiar lados", swapSub: "Elige qué idioma va arriba", tidy: "Limpiar el habla", tidySub: "Quita eh, em y palabras repetidas",
@@ -66,7 +66,7 @@
       broadcastEnded: "Terminaron los subtítulos en vivo · The live subtitles have ended",
       takenOver: "Otro teléfono tomó los discursos", micBlocked: "Micrófono bloqueado: permítelo en ajustes", noMic: "No se encontró micrófono",
       noRecord: "Este navegador no puede grabar aquí", noServer: "Falta configurar el servidor", lostConn: "Se perdió la conexión · Toca para reintentar",
-      keyRefused: "Contraseña de admin no aceptada", noCredit: "La cuenta de Soniox no tiene saldo", sonioxKey: "Soniox no aceptó la clave", sonioxDown: "Servicio de traducción no disponible",
+      keyRefused: "Contraseña de admin no aceptada", noCredit: "La cuenta de Soniox no tiene saldo", sonioxKey: "Soniox no aceptó la clave", sonioxDown: "Servicio de traducción no disponible", noKey: "Aún no hay clave de Soniox en el servidor",
       waitHere: "Los subtítulos aparecerán aquí cuando empiecen los discursos.", speak: "Habla en inglés o en español.",
       speakBoth: "Habla en inglés o en español · Speak in English or Spanish", stopped: "En pausa por silencio · Toca para seguir",
     },
@@ -85,21 +85,17 @@
   // Until it opens to guests, they see what it will do on the day and nothing connects.
   if (!ADMIN && !window.TRANSLATE_FOR_GUESTS) {
     $("#soon").hidden = false;
-    // The cards answer a tap, though there's nothing to open yet: a little nudge and a note.
-    let soonTimer = 0;
+    // The cards answer a tap, though there's nothing to open yet: a little nudge, and the card
+    // itself says when it opens (and keeps saying it), right where the finger is.
     const soonTap = (li) => {
-      const t = $("#toast");
-      const kicker = document.createElement("span");
-      kicker.className = "toast-kicker";
-      kicker.textContent = T.soonTapKicker;
-      t.replaceChildren(kicker, T.soonTap);
-      t.classList.add("toast-card");
-      t.classList.add("show");
       li.classList.remove("nudge");
       void li.offsetWidth;
       li.classList.add("nudge");
-      clearTimeout(soonTimer);
-      soonTimer = setTimeout(() => t.classList.remove("show"), 2600);
+      if (li.querySelector(".soon-when")) return;
+      const when = document.createElement("span");
+      when.className = "soon-when";
+      when.textContent = T.soonOpens;
+      li.lastElementChild.append(when);
     };
     document.querySelectorAll(".soon-list li").forEach((li) => {
       li.addEventListener("click", () => soonTap(li));
@@ -504,7 +500,7 @@
     } catch { throw new Error("noServer"); }
     const data = await res.json().catch(() => ({}));
     if (res.ok && data.api_key) return data.api_key;
-    throw new Error({ admin: ADMIN ? "keyRefused" : "sonioxDown", soniox_credit: "noCredit", soniox_key: "sonioxKey", not_configured: "sonioxDown" }[data.error] || "sonioxDown");
+    throw new Error({ admin: ADMIN ? "keyRefused" : "sonioxDown", soniox_credit: "noCredit", soniox_key: "sonioxKey", not_configured: "noKey" }[data.error] || "sonioxDown");
   }
 
   async function start() {

@@ -155,7 +155,8 @@
   });
   header.querySelectorAll("[data-sp-page]").forEach((b) => b.addEventListener("click", () => {
     const page = b.dataset.spPage;
-    if (page === here) return setMenuOpen(false);
+    // already here: close the menu and go back to the top of the page
+    if (page === here) { setMenuOpen(false); return scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }); }
     go(`../${{ photos: "gallery", translate: "translate", rsvp: "rsvp" }[page]}/?lang=${LANG}`);
   }));
   header.querySelectorAll("[data-nav-language]").forEach((b) => b.addEventListener("click", () => {
