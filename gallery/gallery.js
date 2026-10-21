@@ -398,8 +398,8 @@
       put(box, el("p", { text: T.empty }),
         el("button", { class: "btn", type: "button", text: T.clearFilters, onclick: () => { S.filter = { people: new Set(), by: null, src: null, mine: false }; render(); } }));
     } else if (canUpload()) {
-      put(box, el("p", { text: T.emptyAll }),
-        el("button", { class: "btn solid", type: "button", html: uploadBtn.innerHTML, onclick: () => uploadBtn.click() }));
+      // the header's Add photos is just above, so the note needs no button of its own
+      put(box, el("p", { text: T.emptyAll }));
     } else {
       put(box, el("p", { text: T.firstSoon }));
     }
