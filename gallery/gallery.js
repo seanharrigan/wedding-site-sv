@@ -126,9 +126,12 @@
     { key: "nov5", start: "2026-11-05T00:00", day: "nov5", title: L("Return to Mexico City", "Regreso a la Ciudad de México"), date: L("Thursday 5 November", "Jueves 5 de noviembre"), rail: L("Thu 5", "Jue 5") },
     { key: "after", start: "2026-11-06T00:00", day: "after", title: L("After the wedding", "Después de la boda"), rail: L("After", "Después") },
   ];
+  // Photos from August and September 2025 are the engagement shoot, shown ahead of "Before the trip".
+  const ENGAGEMENT = { key: "engagement", start: "2025-08-01T00:00", end: "2025-10-01T00:00", day: "before", title: L("Engagement", "Compromiso"), rail: L("Engagement", "Compromiso") };
   const UNDATED = { key: "undated", day: "undated", title: T.undated, rail: T.undated };
   const segmentOf = (t) => {
     if (!t) return UNDATED;
+    if (t >= ENGAGEMENT.start && t < ENGAGEMENT.end) return ENGAGEMENT;
     let seg = SEGMENTS[0];
     for (const s of SEGMENTS) if (t >= s.start) seg = s;
     return seg;
@@ -320,7 +323,7 @@
       const seg = segmentOf(p.t);
       (groups.get(seg) ?? groups.set(seg, []).get(seg)).push(p);
     }
-    const ordered = [...SEGMENTS, UNDATED].filter((s) => groups.has(s));
+    const ordered = [ENGAGEMENT, ...SEGMENTS, UNDATED].filter((s) => groups.has(s));
     const frag = document.createDocumentFragment();
     const width = rowsWidth();
     lastWidth = gridWidth();
