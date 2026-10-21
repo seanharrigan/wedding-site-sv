@@ -61,10 +61,31 @@ details[open].who-block summary{margin-bottom:8px}
 
 /* every event */
 .ev-list{display:flex;flex-direction:column;gap:10px}
-.ev-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:var(--paper-light);border:1px solid var(--line);border-radius:20px;text-decoration:none;box-shadow:var(--shadow-soft);transition:box-shadow .3s,transform .4s var(--ease)}
+.ev-row{position:relative;display:flex;align-items:center;gap:14px;padding:16px 14px 16px 18px;background:var(--paper-light);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-soft);transition:box-shadow .3s,transform .4s var(--ease)}
 .ev-row:hover{box-shadow:var(--shadow-lift);transform:translateY(-1px)}
+.ev-row:has(.ev-link:focus-visible){outline:1px solid var(--mocha);outline-offset:3px}
+/* the whole card opens the plan; the ⓘ sits above that */
+.ev-link{flex:1;min-width:0;text-decoration:none;outline:none}
+.ev-link::after{content:"";position:absolute;inset:0;border-radius:inherit}
 .ev-row small{display:block;font-family:var(--sans);font-weight:600;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .ev-row b{display:block;font-weight:500;font-size:1.4rem;line-height:1.15}
 .ev-row em{display:block;font-size:1.05rem;color:var(--muted);margin-top:2px}
 .ev-row-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.info-btn{position:relative;z-index:2;flex:none;display:grid;place-items:center;width:30px;height:30px;margin:-4px 0;border-radius:50%;border:1px solid var(--line-strong);
+  font-family:var(--serif);font-size:1.15rem;font-style:italic;font-weight:500;line-height:1;color:var(--mocha);background:transparent;transition:background .25s,color .25s,border-color .25s}
+.info-btn::before{content:"";position:absolute;inset:-8px}
+.ev-row.info-open .info-btn{background:var(--mocha);color:var(--cream);border-color:transparent}
+/* the details: a small card over the plans below, so nothing moves */
+.info-pop{position:absolute;z-index:3;top:calc(100% + 8px);left:0;right:0;padding:14px 18px 15px;border-radius:18px;background:var(--mocha);color:var(--cream);
+  box-shadow:0 18px 40px rgba(52,38,31,.28);font-size:1.08rem;line-height:1.4;text-align:left;
+  opacity:0;visibility:hidden;transform:translateY(-4px);pointer-events:none;transition:opacity .22s ease,transform .4s var(--ease),visibility 0s .22s}
+.info-pop small{color:#d8c2ad;margin-bottom:6px}
+.info-pop::before{content:"";position:absolute;top:-6px;right:24px;width:12px;height:12px;background:var(--mocha);transform:rotate(45deg);border-radius:2px}
+.ev-row.info-open .info-pop{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .22s ease,transform .4s var(--ease),visibility 0s}
+.ev-row.info-open{z-index:4}
+@media (hover:hover){
+  .info-btn:hover{border-color:var(--mocha)}
+  .ev-row:has(.info-btn:hover) .info-pop{opacity:1;visibility:visible;transform:none;transition:opacity .22s ease .1s,transform .4s var(--ease) .1s,visibility 0s .1s}
+  .ev-row:has(.info-btn:hover){z-index:4}
+}
 .pill{font-family:var(--sans);font-weight:600;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cream);padding:6px 10px;border-radius:999px}
