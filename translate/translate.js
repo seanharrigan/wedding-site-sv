@@ -175,7 +175,7 @@
     body.classList.toggle("no-mic", !canUseMic());
     $("#choose").classList.toggle("broadcasting", broadcast);
     $("#ask").textContent = broadcast ? (ADMIN ? T.askBroadcastAdmin : T.askBroadcast) : T.askLocal;
-    const sub = !relayUp ? T.bcOffline : broadcast ? T.bcOn + (listeners != null ? " · " + T.phones(listeners) : "") : T.bcOff;
+    const sub = !relayUp ? (refused ? T.keyRefused : T.bcOffline) : broadcast ? T.bcOn + (listeners != null ? " · " + T.phones(listeners) : "") : T.bcOff;
     $("#broadcast-sub").textContent = sub;
     $("#sheet-broadcast-sub").textContent = sub;
     $("#broadcast-card").classList.toggle("on", broadcast);
@@ -339,7 +339,7 @@
         render(); showStatus();
       } else if (m.t === "count") { listeners = m.n; applyMode(); showStatus(); }
       else if (m.t === "speaker" && m.you === false && speaker) { speaker = false; if (listening) stop(); notice(T.takenOver); applyMode(); }
-      else if (m.t === "refused") { refused = true; setStatus(T.keyRefused, "err"); }
+      else if (m.t === "refused") { refused = true; setStatus(T.keyRefused, "err"); applyMode(); }
     };
     s.onclose = () => {
       if (sock !== s) return;
