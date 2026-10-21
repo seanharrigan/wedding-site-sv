@@ -26,7 +26,7 @@
   const T = {
     en: {
       back: "← seanandvaleria.com", indexTitle: "Itinerary", indexLede: "Let us know which plans you’re joining.",
-      areas: { CDMX: "Mexico City", "Tepoztlán": "Morelos" }, going: (n) => `${n} going`, more: (t) => `More about ${t}`,
+      areas: { CDMX: "Mexico City", "Tepoztlán": "Morelos" },
       yes: "Going", maybe: "Maybe", no: "Can’t go", noAnswer: "No answer yet",
       youAre: "You’re", answeringAs: "Answering as", change: "Change", pickName: "Tap your name",
       whoQ: "Who are you?", whoHint: "Pick your name once. This phone will remember it.",
@@ -43,7 +43,7 @@
     },
     es: {
       back: "← seanandvaleria.com", indexTitle: "Itinerario", indexLede: "Cuéntennos a qué planes se apuntan.",
-      areas: { CDMX: "Ciudad de México", "Tepoztlán": "Morelos" }, going: (n) => `${n} ${n === 1 ? "va" : "van"}`, more: (t) => `Más sobre ${t}`,
+      areas: { CDMX: "Ciudad de México", "Tepoztlán": "Morelos" },
       yes: "Voy", maybe: "Tal vez", no: "No puedo", noAnswer: "Sin respuesta",
       youAre: "Eres", answeringAs: "Respondes como", change: "Cambiar", pickName: "Toca tu nombre",
       whoQ: "¿Quién eres?", whoHint: "Elige tu nombre una vez. Este teléfono lo recordará.",
@@ -343,24 +343,19 @@
     $("#lede").textContent = T.indexLede;
     $("#admin-pill").hidden = !S.admin;
     const mineFor = (slug) => S.me && d.mine.find((m) => m.e === slug && m.g === S.me.id)?.a;
-    // Each plan opens its own page; the ⓘ shows the details over the list, on hover with a mouse
-    // or a tap on a phone, without moving anything.
+    // Each plan opens its own page. With a mouse, resting on a plan shows its details on a card
+    // just below it, without moving anything.
     const row = (e) => {
       const mine = mineFor(e.slug);
       const details = L(e, "details");
-      const pop = details ? el("div", { class: "info-pop", id: `info-${e.slug}`, role: "note" },
-        e.address ? el("small", { text: e.address }) : null, el("p", { text: details })) : null;
-      const btn = details ? el("button", { class: "info-btn", type: "button", "aria-label": T.more(L(e, "title")), "aria-expanded": "false", "aria-controls": `info-${e.slug}`,
-        onclick: (ev) => { ev.stopPropagation(); toggleInfo(ev.currentTarget.closest(".ev-row")); } }, "i") : null;
       return el("div", { class: "ev-row" },
-        el("a", { class: "ev-link", href: `./?e=${e.slug}&lang=${LANG}` },
+        el("a", { class: "ev-link", href: `./?e=${e.slug}&lang=${LANG}`, "aria-describedby": details ? `info-${e.slug}` : null },
           e.listed ? null : el("small", { text: T.draft }),
           el("b", { text: L(e, "title") }),
           el("em", { text: [hours(e), e.place].filter(Boolean).join(" · ") })),
-        el("span", { class: "ev-row-side" },
-          mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null,
-          e.counts.yes ? el("small", { text: T.going(e.counts.yes) }) : null),
-        btn, pop);
+        mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null,
+        details ? el("div", { class: "info-pop", id: `info-${e.slug}`, role: "tooltip" },
+          e.address ? el("small", { text: e.address }) : null, el("p", { text: details })) : null);
     };
     // Map keeps the order the events come in (by sort), so cities and days read in date order.
     const group = (list, key) => [...list.reduce((m, e) => m.set(key(e), [...(m.get(key(e)) || []), e]), new Map())];
@@ -374,22 +369,6 @@
               el("div", { class: "ev-list" }, list.map(row))))))),
       S.me ? el("p", { class: "ev-all" }, `${T.youAre} ${S.me.name} · `, el("button", { class: "link", type: "button", text: T.change, onclick: async () => { const g = await namePicker({ q: T.whoQ, hint: T.whoHint }); if (g) { setMe(g); renderIndex(); } } })) : null);
   }
-
-  // one details card open at a time; a tap anywhere else or Escape closes it
-  function toggleInfo(row) {
-    const open = !row.classList.contains("info-open");
-    document.querySelectorAll(".ev-row.info-open").forEach(closeInfo);
-    if (!open) return;
-    row.classList.add("info-open");
-    row.querySelector(".info-btn").setAttribute("aria-expanded", "true");
-  }
-  function closeInfo(row) {
-    row.classList.remove("info-open");
-    row.querySelector(".info-btn")?.setAttribute("aria-expanded", "false");
-  }
-  // pointerdown, not click: iPhone Safari sends no click for a tap on plain page background
-  document.addEventListener("pointerdown", (e) => { if (!e.target.closest(".info-pop, .info-btn")) document.querySelectorAll(".ev-row.info-open").forEach(closeInfo); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape") document.querySelectorAll(".ev-row.info-open").forEach(closeInfo); });
 
   let toastTimer = 0;
   function toast(text) {
