@@ -30,7 +30,12 @@ html.sp-on body{background:transparent;display:flow-root}
   position:relative;width:var(--sp-canvas);margin:var(--sp-card-top) auto;background:#eee5da;
   border:1px solid rgba(255,249,239,.8);border-radius:var(--sp-card-radius);overflow:clip;
   box-shadow:0 46px 120px rgba(52,38,31,.28),0 14px 36px rgba(52,38,31,.14),0 0 0 1px rgba(255,255,255,.4)}
-.sp-card{min-height:calc(100dvh - 2*var(--sp-card-top))}
+/* The frame keeps one shape from page to page, as on the home page: it always runs on past the
+   bottom of the screen (by its corner radius), so its bottom edge never appears on one page and
+   vanishes on the next. The scrollbar's room is kept on every page, scrolling or not, so a
+   classic always-on scrollbar can't narrow some pages and not others. */
+html.sp-on{scrollbar-gutter:stable}
+.sp-card{min-height:calc(100dvh - var(--sp-card-top) + var(--sp-card-radius) + 2px)}
 @media (max-width:720px){
   .sp-card,body[data-page=translate] :is(.soon,.choose){box-shadow:0 26px 70px rgba(52,38,31,.3),0 8px 24px rgba(52,38,31,.16),0 0 0 1px rgba(255,255,255,.4)}
 }
@@ -82,7 +87,7 @@ body:is([data-page=photos],[data-page=rsvp]) .top::before{-webkit-mask-image:lin
 
 /* Translate: the options and coming-soon screens are cards laid out from the top like the
    Gallery; the subtitles stay full screen, and a broadcast is full screen and dark throughout */
-body[data-page=translate] :is(.soon,.choose){height:calc(100dvh - 2*var(--sp-card-top));justify-content:flex-start;gap:10px;
+body[data-page=translate] :is(.soon,.choose){height:calc(100dvh - var(--sp-card-top) + var(--sp-card-radius) + 2px);padding-bottom:calc(28px + var(--sp-card-radius) + env(safe-area-inset-bottom,0px));justify-content:flex-start;gap:10px;
   padding-top:var(--sp-head-top);background:radial-gradient(circle at 15% 0,rgba(255,255,255,.55),transparent 30rem),#eee5da}
 body[data-page=translate] :is(.soon,.choose) > .lockup{margin-bottom:10px}
 /* the leaf shadows sit inside the card, as on the Gallery, not on the backdrop */
