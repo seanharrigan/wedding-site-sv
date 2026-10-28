@@ -177,7 +177,7 @@ body.admin.broadcasting .views,body.admin.broadcasting .views-title{display:none
 .app{display:grid;grid-template-rows:auto 1fr auto}
 .bar{position:relative;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:8px 12px 0}
 .bar-mark{justify-self:center;width:44px;height:auto;opacity:.92}
-.bar-pill{position:absolute;right:62px;top:50%;transform:translateY(-30%);font-size:.5rem;letter-spacing:.2em;color:var(--fg);padding:6px 11px;border-radius:999px;background:var(--glass-hover);border:1px solid var(--line)}
+.bar-pill{position:absolute;right:62px;top:50%;transform:translateY(-30%);max-width:calc(50% - 92px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:.5rem;letter-spacing:.2em;color:var(--fg);padding:6px 11px;border-radius:999px;background:var(--glass-hover);border:1px solid var(--line)}
 main{min-height:0}
 .v-wide,.v-stack,.v-single{display:none;height:100%;min-height:0}
 body.view-both .v-wide{display:grid}

@@ -38,7 +38,7 @@
       askLocal: "How would you like to talk?", askBroadcast: "Which language would you like?", askBroadcastAdmin: "Everyone is reading along", bothLong: "Both languages", options: "Options",
       bcOff: "Off · face to face for everyone", bcOn: "On", bcOffline: "Can't reach the translation server",
       listening: "Listening", connecting: "Connecting…", reconnecting: "Reconnecting…", tapStart: "Tap to start", live: "Live", waiting: "Waiting",
-      speaking: "Speaking to everyone", phones: (n) => n + (n === 1 ? " phone" : " phones"), live_pill: "Live",
+      speaking: "Speaking to everyone", phones: (n) => n + (n === 1 ? " phone" : " phones"), live_pill: "Live", onair_pill: "On air",
       broadcastStarted: "The speeches are being subtitled live · Los discursos se subtitulan en vivo",
       broadcastEnded: "The live subtitles have ended · Terminaron los subtítulos en vivo",
       takenOver: "Another phone took over the speeches", micBlocked: "Microphone blocked: allow it in settings", noMic: "No microphone found",
@@ -61,7 +61,7 @@
       askLocal: "¿Cómo quieres conversar?", askBroadcast: "¿En qué idioma quieres leer?", askBroadcastAdmin: "Todos están leyendo", bothLong: "Ambos idiomas", options: "Opciones",
       bcOff: "Apagado · frente a frente para todos", bcOn: "Encendido", bcOffline: "No hay conexión con el servidor",
       listening: "Escuchando", connecting: "Conectando…", reconnecting: "Reconectando…", tapStart: "Toca para empezar", live: "En vivo", waiting: "En espera",
-      speaking: "Hablando a todos", phones: (n) => n + (n === 1 ? " teléfono" : " teléfonos"), live_pill: "En vivo",
+      speaking: "Hablando a todos", phones: (n) => n + (n === 1 ? " teléfono" : " teléfonos"), live_pill: "En vivo", onair_pill: "Al aire",
       broadcastStarted: "Los discursos se subtitulan en vivo · The speeches are being subtitled live",
       broadcastEnded: "Terminaron los subtítulos en vivo · The live subtitles have ended",
       takenOver: "Otro teléfono tomó los discursos", micBlocked: "Micrófono bloqueado: permítelo en ajustes", noMic: "No se encontró micrófono",
@@ -197,7 +197,8 @@
     $$("[data-broadcast]").forEach((s) => { s.setAttribute("aria-checked", String(broadcast)); s.disabled = !relayUp; });
     const pill = $("#bar-pill");
     pill.hidden = !broadcast;
-    pill.textContent = speaker ? T.speaking : T.live_pill;
+    // short, so it fits beside the monogram; the status line below says the rest
+    pill.textContent = speaker ? T.onair_pill : T.live_pill;
     if (screen === "app") applyPrefs();
   }
 
