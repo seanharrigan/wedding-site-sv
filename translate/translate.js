@@ -83,6 +83,10 @@
   $("#to-options").setAttribute("aria-label", T.options);
 
   // Until it opens to guests, they see what it will do on the day and nothing connects.
+  // SPEECHES_FOR_GUESTS opens just the speeches early: guests can read along with a broadcast
+  // (that costs nothing; only the speaking phone's mic uses Soniox), but face to face stays shut.
+  const SPEECHES_ONLY = !ADMIN && !window.TRANSLATE_FOR_GUESTS && !!window.SPEECHES_FOR_GUESTS;
+  body.classList.toggle("speeches-only", SPEECHES_ONLY);
   if (!ADMIN && !window.TRANSLATE_FOR_GUESTS) {
     $("#soon").hidden = false;
     // The cards answer a tap, though there's nothing to open yet: a little nudge, and the card
@@ -98,10 +102,19 @@
       li.lastElementChild.append(when);
     };
     document.querySelectorAll(".soon-list li").forEach((li) => {
-      li.addEventListener("click", () => soonTap(li));
-      li.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); soonTap(li); } });
+      const open = SPEECHES_ONLY && li.hasAttribute("data-speeches");
+      if (open) li.removeAttribute("aria-disabled");
+      const tap = () => (open ? enterSpeeches() : soonTap(li));
+      li.addEventListener("click", tap);
+      li.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tap(); } });
     });
-    return;
+    if (!SPEECHES_ONLY) return;
+  }
+  // The speeches, for a guest before the day: straight to the subtitles in their language.
+  function enterSpeeches(view = LANG) {
+    $("#soon").hidden = true;
+    connectRelay();
+    setView(view);
   }
 
   let prefs = { size: 1, swapped: LANG === "en", tidy: true };
@@ -114,7 +127,9 @@
      Otherwise the mic runs a private face-to-face session on this phone. */
   let broadcast = false, speakerElsewhere = false, relayUp = false, listeners = null, speaker = false;
   let screen = "choose";
-  const canUseMic = () => (broadcast ? ADMIN : true);
+  const canUseMic = () => (SPEECHES_ONLY ? false : broadcast ? ADMIN : true);
+  // reading along with the speeches (a broadcast is on, or this guest can only read)
+  const reading = () => broadcast || SPEECHES_ONLY;
 
   /* ── screens and views ─────────────────────────────────────────── */
   function showChoose() {
@@ -128,7 +143,7 @@
     if (!VIEWS.includes(v)) return;
     // During a broadcast an admin always sees both languages; guests pick one.
     if (broadcast && ADMIN) v = "both";
-    else if (broadcast && v === "facing") v = LANG;
+    else if (reading() && v === "facing") v = LANG;
     prefs.view = v;
     screen = "app";
     $("#choose").hidden = true;
@@ -150,9 +165,9 @@
       $("#single-label").lang = v;
     }
     const mic = canUseMic() && !(broadcast && !ADMIN);
-    for (const l of ["en", "es"]) document.querySelector(`.pane[data-lang=${l}] .empty`).textContent = broadcast && !speaker ? WAIT[l] : SPEAK[l];
-    $("#wide-empty").textContent = broadcast && !speaker ? WAIT.en + " · " + WAIT.es : mic ? T.speakBoth : WAIT.en;
-    if (v === "en" || v === "es") $("#single-empty").textContent = broadcast && !speaker ? WAIT[v] : SPEAK[v];
+    for (const l of ["en", "es"]) document.querySelector(`.pane[data-lang=${l}] .empty`).textContent = reading() && !speaker ? WAIT[l] : SPEAK[l];
+    $("#wide-empty").textContent = reading() && !speaker ? WAIT.en + " · " + WAIT.es : mic ? T.speakBoth : WAIT.en;
+    if (v === "en" || v === "es") $("#single-empty").textContent = reading() && !speaker ? WAIT[v] : SPEAK[v];
     // A different layout starts its lines afresh; anything else keeps them where they are.
     const layout = [v, prefs.swapped, prefs.size].join();
     if (layout !== lastLayout) { lastLayout = layout; resetStreams(); }
@@ -174,7 +189,7 @@
     applyTheme();
     body.classList.toggle("no-mic", !canUseMic());
     $("#choose").classList.toggle("broadcasting", broadcast);
-    $("#ask").textContent = broadcast ? (ADMIN ? T.askBroadcastAdmin : T.askBroadcast) : T.askLocal;
+    $("#ask").textContent = broadcast ? (ADMIN ? T.askBroadcastAdmin : T.askBroadcast) : SPEECHES_ONLY ? T.askBroadcast : T.askLocal;
     const sub = !relayUp ? (refused ? T.keyRefused : T.bcOffline) : broadcast ? T.bcOn + (listeners != null ? " · " + T.phones(listeners) : "") : T.bcOff;
     $("#broadcast-sub").textContent = sub;
     $("#sheet-broadcast-sub").textContent = sub;
@@ -291,7 +306,7 @@
     el.className = "status" + (status.kind === "err" ? " err" : "");
     el.textContent = "";
     let text = status.text, dot = status.kind === "live";
-    if (broadcast && !speaker && !listening && status.kind !== "err") {
+    if (reading() && !speaker && !listening && status.kind !== "err") {
       text = !relayUp ? T.reconnecting : speakerElsewhere ? T.live : T.waiting;
       dot = relayUp && speakerElsewhere;
     }
@@ -732,9 +747,12 @@
   });
 
   status = { text: T.tapStart, kind: "" };
-  connectRelay();
   // A QR code can open straight into a view: …/translate/?view=es
   const asked = q.get("view");
-  if (VIEWS.includes(asked)) setView(asked); else showChoose();
+  if (SPEECHES_ONLY) { if (VIEWS.includes(asked) && asked !== "facing") enterSpeeches(asked); }
+  else {
+    connectRelay();
+    if (VIEWS.includes(asked)) setView(asked); else showChoose();
+  }
   if (ADMIN && location.hash === "#demo") playDemo();
 })();

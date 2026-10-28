@@ -13,13 +13,14 @@
   <link rel="icon" type="image/png" sizes="512x512" href="../assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
   <link rel="apple-touch-icon" href="../assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
   <!-- Same cosmetic gate as the site: no invitation password, no translator.
-       Until TRANSLATE_FOR_GUESTS is true, guests see a "coming soon" page and only admins can use it. -->
-  <script>window.TRANSLATE_FOR_GUESTS=false;try{if(localStorage.getItem('wedding-access-v1')!=='true')location.replace('../')}catch(e){location.replace('../')}</script>
+       Until TRANSLATE_FOR_GUESTS is true, guests see a "coming soon" page and only admins can use it.
+       SPEECHES_FOR_GUESTS lets guests open the speeches (read-only) before then. -->
+  <script>window.TRANSLATE_FOR_GUESTS=false;window.SPEECHES_FOR_GUESTS=true;try{if(localStorage.getItem('wedding-access-v1')!=='true')location.replace('../')}catch(e){location.replace('../')}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/gpt/site-header.css?v=20261020b">
-  <link rel="stylesheet" href="translate.css?v=20261014b">
+  <link rel="stylesheet" href="translate.css?v=20261027a">
   <link rel="stylesheet" href="../assets/gpt/subpage.css?v=20261021j">
 </head>
 <body data-page="translate">
@@ -48,7 +49,7 @@
       <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
       <span><b data-t="facing">Face to face</b><small data-t="soonFacing"></small></span>
     </li>
-    <li tabindex="0" aria-disabled="true">
+    <li tabindex="0" aria-disabled="true" data-speeches>
       <svg class="mark mic-mark" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></svg>
       <span><b data-t="speeches">The speeches</b><small data-t="soonSpeeches"></small></span>
     </li>
@@ -195,6 +196,6 @@
 </aside>
 
 <script src="../assets/gpt/subpage.js?v=20261021h"></script>
-<script src="translate.js?v=20261021f"></script>
+<script src="translate.js?v=20261027a"></script>
 </body>
 </html>
