@@ -72,6 +72,9 @@ details[open].who-block summary{margin-bottom:8px}
 .ev-row .ev-link small{display:block;font-family:var(--sans);font-weight:600;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .ev-row .ev-link b{display:block;font-weight:500;font-size:1.4rem;line-height:1.15}
 .ev-row .ev-link em{display:block;font-size:1.05rem;color:var(--muted);margin-top:2px}
+/* $: a plan that costs something */
+.ev-cost{display:inline-grid;place-items:center;width:20px;height:20px;margin-left:8px;border-radius:50%;border:1px solid var(--line-strong);font-family:var(--sans);font-style:normal;font-weight:600;font-size:.62rem;color:var(--mocha);vertical-align:1px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .ev-mine:empty{display:none}
 /* the pill and the arrow are part of the button underneath */
 .ev-mine,.ev-chev{pointer-events:none}

@@ -39,7 +39,7 @@
       pickFirst: "Tap your name first", pickAnswer: "Choose Going, Maybe or Can’t go",
       adminTitle: "Admin", csv: "Download CSV", share: "Share link", copied: "Link copied", notes: "Notes",
       by: (n) => `answered by ${n}`, totals: (c) => `${c.yes} going · ${c.maybe} maybe · ${c.no} can’t go`,
-      until: "until", rsvpBy: (d) => `Please answer by ${d}`, tbc: "Date and place to come",
+      paid: "There’s a cost for this one", until: "until", rsvpBy: (d) => `Please answer by ${d}`, tbc: "Date and place to come",
     },
     es: {
       back: "← seanandvaleria.com", indexTitle: "Itinerario", indexLede: "Cuéntennos a qué planes se apuntan.",
@@ -56,7 +56,7 @@
       pickFirst: "Primero toca tu nombre", pickAnswer: "Elige Voy, Tal vez o No puedo",
       adminTitle: "Admin", csv: "Descargar CSV", share: "Compartir enlace", copied: "Enlace copiado", notes: "Notas",
       by: (n) => `respondió ${n}`, totals: (c) => `${c.yes} van · ${c.maybe} tal vez · ${c.no} no pueden`,
-      until: "hasta", rsvpBy: (d) => `Por favor respondan antes del ${d}`, tbc: "Fecha y lugar por confirmar",
+      paid: "Este plan tiene costo", until: "hasta", rsvpBy: (d) => `Por favor respondan antes del ${d}`, tbc: "Fecha y lugar por confirmar",
     },
   }[LANG];
   const L = (e, key) => e[`${key}_${LANG}`] || e[`${key}_en`] || "";
@@ -88,6 +88,8 @@
     extra: new Set(),  // people added with "+ Someone else"
     note: "",
     open: null,        // the plan opened in place on the itinerary
+    cache: new Map(),  // each plan as last loaded, so it opens at once
+    dirty: false,      // answers or a note on the form that haven't been sent
   };
   const nameOf = (id) => S.guestById.get(id)?.name;
   const partyOf = (id) => S.guestById.get(id)?.party;
@@ -123,6 +125,7 @@
 
   function setMe(g) {
     S.me = g ? { id: g.id, name: g.name } : null;
+    S.cache.clear();
     store.set("wedding-gallery-me", g ? JSON.stringify(S.me) : null);
   }
 
@@ -198,18 +201,32 @@
 
   // ── one event: its own page (?e=slug), or opened in place on the itinerary ──
   const main = $("#main");
-  async function loadEvent(slug = SLUG || S.event.slug) {
+  const fetchEvent = async (slug) => {
+    const key = slug + meParam();
     const d = await api(`/api/events/${encodeURIComponent(slug)}${meParam()}`);
+    S.cache.set(key, d);
+    return d;
+  };
+  async function loadEvent(slug = SLUG || S.event.slug) {
+    const d = await fetchEvent(slug);
     if (!SLUG && S.open !== slug) return; // closed, or another plan opened, while this one loaded
+    applyEvent(d);
+  }
+  // A quiet refresh of the open plan keeps anything tapped or typed but not yet sent.
+  function applyEvent(d, { keep = false } = {}) {
+    keep = keep && S.dirty && S.event?.slug === d.event.slug;
     S.event = d.event;
     S.counts = d.counts;
     S.answers = d.answers;
     S.admin = d.admin;
-    // Start the form from what's already been said for these people.
-    S.draft = new Map();
-    for (const a of S.answers) if (circle().includes(a.g)) S.draft.set(a.g, a.a);
-    const mine = S.me && S.answers.find((a) => a.g === S.me.id);
-    S.note = mine?.note || "";
+    if (!keep) {
+      // Start the form from what's already been said for these people.
+      S.draft = new Map();
+      for (const a of S.answers) if (circle().includes(a.g)) S.draft.set(a.g, a.a);
+      const mine = S.me && S.answers.find((a) => a.g === S.me.id);
+      S.note = mine?.note || "";
+      S.dirty = false;
+    }
     renderEvent();
   }
 
@@ -250,7 +267,8 @@
         e.map_url ? el("a", { class: "btn small", href: e.map_url, target: "_blank", rel: "noopener", text: T.map }) : null) : null,
       L(e, "details") ? el("p", { class: "ev-details", text: L(e, "details") }) : null,
       left != null ? el("p", { class: "ev-seats", text: left ? T.seats(left, e.capacity) : T.full(0) }) : null,
-      e.rsvp_by ? el("p", { class: "ev-seats", text: T.rsvpBy(cap(fmtDay(e.rsvp_by + "T12:00"))) }) : null);
+      e.rsvp_by ? el("p", { class: "ev-seats", text: T.rsvpBy(cap(fmtDay(e.rsvp_by + "T12:00"))) }) : null,
+      e.paid ? el("p", { class: "ev-seats", text: `$ · ${T.paid}` }) : null);
   }
 
   function renderForm() {
@@ -263,7 +281,7 @@
     const saved = new Map(S.answers.filter((a) => ids.includes(a.g)).map((a) => [a.g, a.a]));
     const choice = (id) => el("div", { class: "answer", role: "group", "aria-label": nameOf(id) },
       ["yes", "maybe", "no"].map((a) => el("button", { type: "button", class: "ans-" + a, "aria-pressed": String(S.draft.get(id) === a), text: T[a], "data-k": `${id}-${a}`,
-        onclick: () => { S.draft.get(id) === a && id !== S.me.id ? S.draft.delete(id) : S.draft.set(id, a); renderEvent(); } })));
+        onclick: () => { S.draft.get(id) === a && id !== S.me.id ? S.draft.delete(id) : S.draft.set(id, a); S.dirty = true; renderEvent(); } })));
     const person = (id, i) => el("div", { class: "person" + (i ? " mate" : "") },
       el("p", { class: "person-name" }, i ? nameOf(id) : el("span", {}, el("small", { text: T.answeringAs }), S.me.name),
         i ? null : el("button", { class: "link", type: "button", text: T.change, onclick: pickWho }),
@@ -272,7 +290,7 @@
 
     const changed = [...S.draft].some(([g, a]) => saved.get(g) !== a);
     const hasSaved = saved.has(S.me.id);
-    const noteBox = el("textarea", { class: "field note", rows: 2, maxlength: 500, placeholder: T.note, oninput: (ev) => { S.note = ev.target.value; sendBtn.disabled = false; } });
+    const noteBox = el("textarea", { class: "field note", rows: 2, maxlength: 500, placeholder: T.note, oninput: (ev) => { S.note = ev.target.value; S.dirty = true; sendBtn.disabled = false; } });
     noteBox.value = S.note;
     const sendBtn = el("button", { class: "btn solid big", type: "button", text: hasSaved ? T.update : T.send, onclick: send });
     sendBtn.disabled = hasSaved && !changed;
@@ -297,6 +315,7 @@
     try {
       await api(`/api/events/${encodeURIComponent(S.event.slug)}/rsvps`, { method: "PUT", json: { by: S.me.id, answers, note: S.note } });
       toast(T.sent);
+      S.dirty = false;
       await loadEvent();
     } catch (err) {
       if (err.data?.error === "full") toast(T.full(err.data.left));
@@ -376,7 +395,8 @@
           el("button", { class: "ev-link", id: `head-${e.slug}`, type: "button", "aria-expanded": String(open), "aria-controls": `plan-${e.slug}`, onclick: () => togglePlan(e.slug) },
             e.listed ? null : el("small", { text: T.draft }),
             el("b", { text: L(e, "title") }),
-            el("em", { text: [hours(e), e.place].filter(Boolean).join(" · ") })),
+            el("em", {}, [hours(e), e.place].filter(Boolean).join(" · "),
+              e.paid ? el("span", { class: "ev-cost", title: T.paid }, el("span", { "aria-hidden": "true" }, "$"), el("span", { class: "sr", text: T.paid })) : null)),
           el("span", { class: "ev-mine" }, mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null),
           el("span", { class: "ev-chev", "aria-hidden": "true" })),
         el("div", { class: "ev-panel", id: `plan-${e.slug}`, role: "region", "aria-labelledby": `head-${e.slug}`, hidden: !open }));
@@ -393,6 +413,8 @@
               el("div", { class: "ev-list" }, list.map(row))))))),
       S.me ? el("p", { class: "ev-all" }, `${T.youAre} ${S.me.name} · `, el("button", { class: "link", type: "button", text: T.change, onclick: async () => { const g = await namePicker({ q: T.whoQ, hint: T.whoHint }); if (g) { setMe(g); S.extra.clear(); renderIndex(); } } })) : null);
     if (S.open) await openPlan(S.open);
+    // load every plan now, so tapping one opens it at once
+    for (const e of d.events) if (!S.cache.has(e.slug + meParam())) fetchEvent(e.slug).catch(() => {});
   }
 
   async function togglePlan(slug) {
@@ -428,7 +450,14 @@
     r.querySelector(".ev-link").setAttribute("aria-expanded", "true");
     const panel = r.querySelector(".ev-panel");
     panel.hidden = false;
-    // what was here last time belongs to an earlier load: show nothing tappable until this one lands
+    const cached = S.cache.get(slug + meParam());
+    if (cached) {
+      // open at once from what's loaded, then quietly bring the names and counts up to date
+      applyEvent(cached);
+      try { const d = await fetchEvent(slug); if (S.open === slug) applyEvent(d, { keep: true }); } catch {}
+      return;
+    }
+    // not loaded yet: show nothing tappable until it lands
     panel.setAttribute("aria-busy", "true");
     put(panel, el("p", { class: "hint ev-loading", text: "…" }));
     try { await loadEvent(slug); } catch { toast(T.error); }
