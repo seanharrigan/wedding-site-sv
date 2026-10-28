@@ -43,7 +43,7 @@
       whoQ: "Who are you?", whoHint: "So your photos are credited to you, and you can find the ones you’re in.",
       search: "Search names", notListed: (s) => s ? `Add “${s}”` : "Not on the list? Type your name", skip: "Not now",
       peopleQ: "Show photos of…", peopleHint: "Pick more than one to find photos of them together.", done: "Done", clear: "Clear",
-      byQ: "Shared by", tagQ: "Who’s in this photo?", tagHint: "Tap a name to tag them.",
+      byQ: "Shared by", tagQ: "Who’s in this photo?", tagHint: "Tap everyone in it.",
       inPhoto: "In this photo", tagSomeone: "+ Tag someone", nobody: "No one tagged yet.",
       sharedBy: (n) => `Shared by ${n}`, byPhotographer: "From the photographer", someone: "a guest",
       approx: "time approximate", unknownTime: "Date unknown", camera: "Camera",
@@ -51,7 +51,11 @@
       timeQ: "When was this taken?", timeHint: "Mexico City time.", save: "Save", cancel: "Cancel", enter: "Continue",
       preparing: "Getting ready…", uploading: (d, n) => `Sharing ${d} of ${n}`, uploaded: (n) => `${n} ${n === 1 ? "photo" : "photos"} shared`,
       failed: (n) => `${n} couldn’t be shared`, retry: "Try again",
-      already: "already here", unreadable: "This phone can’t read that file", tooBig: "Too big (40 MB max)", offline: "Waiting for a connection…",
+      already: (n) => `${n} already here`, unreadable: "This phone can’t read that file", tooBig: "Too big (40 MB max)", offline: "Waiting for a connection…",
+      unreadableHere: "This browser can’t read that file", heicHere: "This browser can’t open HEIC photos. Try from your phone, or save them as JPEG.",
+      notImage: "That file isn’t a photo", tooMany: "That’s the limit for today. Please try again tomorrow.",
+      remove: (n) => `Remove ${n}`, untagged: (n) => `${n} untagged`, undo: "Undo", withNames: (s) => `with ${s}`,
+      viewer: "Photo viewer", prev: "Previous", nextPhoto: "Next", close: "Close",
       leaveWarn: "Photos are still uploading.", newPhotos: (n) => `${n} new ${n === 1 ? "photo" : "photos"} · Show`,
       saved: "Saved", deleted: "Deleted", error: "Something went wrong. Please try again.", closedNow: "Uploads are closed",
       adminTitle: "Admin", uploadsOpen: "Uploads open", uploadsClosed: "Uploads closed", openUploads: "Open uploads", closeUploads: "Close uploads",
@@ -79,7 +83,7 @@
       whoQ: "¿Quién eres?", whoHint: "Así tus fotos llevan tu nombre y puedes encontrar las fotos en las que sales.",
       search: "Buscar nombres", notListed: (s) => s ? `Agregar “${s}”` : "¿No estás en la lista? Escribe tu nombre", skip: "Ahora no",
       peopleQ: "Ver fotos de…", peopleHint: "Elige a más de una persona para ver fotos donde salen juntas.", done: "Listo", clear: "Borrar",
-      byQ: "Compartidas por", tagQ: "¿Quién sale en esta foto?", tagHint: "Toca un nombre para etiquetar.",
+      byQ: "Compartidas por", tagQ: "¿Quién sale en esta foto?", tagHint: "Toca a todos los que salen.",
       inPhoto: "En esta foto", tagSomeone: "+ Etiquetar", nobody: "Nadie etiquetado todavía.",
       sharedBy: (n) => `Compartida por ${n}`, byPhotographer: "Del fotógrafo", someone: "un invitado",
       approx: "hora aproximada", unknownTime: "Fecha desconocida", camera: "Cámara",
@@ -87,7 +91,11 @@
       timeQ: "¿Cuándo se tomó?", timeHint: "Hora de la Ciudad de México.", save: "Guardar", cancel: "Cancelar", enter: "Continuar",
       preparing: "Preparando…", uploading: (d, n) => `Compartiendo ${d} de ${n}`, uploaded: (n) => `${n} ${n === 1 ? "foto compartida" : "fotos compartidas"}`,
       failed: (n) => `${n} no se pudieron compartir`, retry: "Reintentar",
-      already: "ya estaba", unreadable: "Este teléfono no puede leer ese archivo", tooBig: "Muy grande (máx. 40 MB)", offline: "Esperando conexión…",
+      already: (n) => n === 1 ? "1 ya estaba aquí" : `${n} ya estaban aquí`, unreadable: "Este teléfono no puede leer ese archivo", tooBig: "Muy grande (máx. 40 MB)", offline: "Esperando conexión…",
+      unreadableHere: "Este navegador no puede leer ese archivo", heicHere: "Este navegador no abre fotos HEIC. Súbelas desde tu teléfono o guárdalas como JPEG.",
+      notImage: "Ese archivo no es una foto", tooMany: "Llegaste al límite de hoy. Inténtalo de nuevo mañana.",
+      remove: (n) => `Quitar a ${n}`, untagged: (n) => `Se quitó la etiqueta de ${n}`, undo: "Deshacer", withNames: (s) => `con ${s}`,
+      viewer: "Visor de fotos", prev: "Anterior", nextPhoto: "Siguiente", close: "Cerrar",
       leaveWarn: "Todavía se están subiendo fotos.", newPhotos: (n) => `${n} ${n === 1 ? "foto nueva" : "fotos nuevas"} · Ver`,
       saved: "Guardado", deleted: "Borrada", error: "Algo salió mal. Inténtalo de nuevo.", closedNow: "Ya no se pueden subir fotos",
       adminTitle: "Admin", uploadsOpen: "Subidas abiertas", uploadsClosed: "Subidas cerradas", openUploads: "Abrir subidas", closeUploads: "Cerrar subidas",
@@ -208,10 +216,14 @@
     S.admin = s.admin;
     if (S.me && !S.guestById.has(S.me.id)) setMe(null);
   }
-  async function loadPhotos() {
-    const d = await api("/api/photos");
-    S.photos = d.photos;
+  // Photos already on the page keep their objects (the viewer and its buttons hold on to them);
+  // only their details are brought up to date. Returns how many are new.
+  async function loadPhotos(d) {
+    d ??= await api("/api/photos");
+    const had = new Map(S.photos.map((p) => [p.id, p]));
+    S.photos = d.photos.map((p) => (had.has(p.id) ? Object.assign(had.get(p.id), p) : p));
     S.version = d.version;
+    return d.photos.filter((p) => !had.has(p.id)).length;
   }
 
   // ── header ────────────────────────────────────────────────────────────────
@@ -236,7 +248,9 @@
       $("#closed-text").textContent = m.text;
       $("#closed-sub").textContent = m.sub;
     }
-    put(meBtn, S.me ? el("span", { class: "me-name", text: S.me.name }) : el("span", { text: T.pickName }));
+    // a small person ahead of the name, so it reads as "this is you"
+    put(meBtn, el("span", { class: "me-ico", html: PERSON }), S.me ? el("span", { class: "me-name", text: S.me.name }) : el("span", { text: T.pickName }));
+    S.me ? meBtn.setAttribute("aria-label", `${T.you}: ${S.me.name}`) : meBtn.removeAttribute("aria-label");
     $("#admin-pill").hidden = !S.admin;
   }
   function setMe(g) {
@@ -275,20 +289,26 @@
     const chip = (label, on, onclick, n) => el("button", { class: "chip" + (on ? " on" : ""), type: "button", onclick }, label, n != null ? el("span", { class: "n", text: n }) : null);
     const mineCount = S.me ? S.photos.filter((p) => p.tags.includes(S.me.id)).length : null;
     const hasPhotographer = S.photos.some((p) => p.src === "p");
-    put($("#filters"), 
+    const bar = $("#filters"), had = [...bar.children].indexOf(document.activeElement);
+    put(bar,
       chip(T.all, !filtered(), () => { S.filter = { people: new Set(), by: null, src: null, mine: false }; render(); }),
-      S.me ? chip(T.ofMe, f.mine, () => { f.mine = !f.mine; render(); }, mineCount) : null,
+      // "Photos of me" only once there are some (or while it's on, so it can be turned off)
+      S.me && (mineCount || f.mine) ? chip(T.ofMe, f.mine, () => { f.mine = !f.mine; render(); }, mineCount) : null,
       chip(peopleLabel + " ▾", f.people.size > 0, () => pickPeople()),
       chip((f.by != null ? nameOf(f.by) : T.uploadedBy) + " ▾", f.by != null, () => pickUploader()),
       hasPhotographer ? chip(T.photographer, f.src === "p", () => { f.src = f.src === "p" ? null : "p"; render(); }) : null,
       hasPhotographer ? chip(T.guests, f.src === "g", () => { f.src = f.src === "g" ? null : "g"; render(); }) : null,
     );
+    if (had >= 0) bar.children[Math.min(had, bar.children.length - 1)]?.focus({ preventScroll: true });
   }
 
   // ── grid ──────────────────────────────────────────────────────────────────
   const grid = $("#grid");
   const imgUrl = (size, id) => `${API}/img/${size}/${id}`;
   const fadeIn = (e) => { e.target.classList.add("in"); e.target.parentNode.classList.add("loaded"); };
+  // A photo that won't load stops shimmering and shows a quiet placeholder instead.
+  const failed = (e) => e.target.parentNode.classList.add("loaded", "broken");
+  const smooth = () => (matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth");
   const SEAL = "../assets/gpt/wax-seal-sv-exact-transparent-v3.webp";
 
   // Justified rows: every photo keeps its shape, and each full row fills the width exactly.
@@ -315,15 +335,29 @@
   const rowsWidth = () => Math.max(200, gridWidth() - (innerWidth > 720 ? 32 : 8));
   const PERSON = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.6 7-5.6s6.2 2 7 5.6"/></svg>';
 
-  function render() {
-    S.visible = applyFilter();
-    renderFilters();
-    const groups = new Map(); // segment key → photos, in segment order
-    for (const p of S.visible) {
+  // Photos in timeline order, grouped by segment; the flat list matches the tile indices.
+  function arrange(photos) {
+    const groups = new Map(); // segment → photos, in segment order
+    for (const p of photos) {
       const seg = segmentOf(p.t);
       (groups.get(seg) ?? groups.set(seg, []).get(seg)).push(p);
     }
     const ordered = [ENGAGEMENT, ...SEGMENTS, UNDATED].filter((s) => groups.has(s));
+    return { groups, ordered, list: ordered.flatMap((s) => groups.get(s)) };
+  }
+  // What a screen reader hears for a tile: the moment, the time, and who's in it.
+  const tileLabel = (p) => {
+    const names = p.tags.map(nameOf).filter(Boolean);
+    return [segmentOf(p.t).title, p.t && fmtTime(p.t), names.length && T.withNames(names.join(", "))].filter(Boolean).join(", ");
+  };
+  const tagBadge = (p) => p.tags.length ? el("span", { class: "tagn", html: `${PERSON}${p.tags.length}` }) : null;
+
+  function render() {
+    newPill.hidden = true;
+    const { groups, ordered, list } = arrange(applyFilter());
+    // Visible order must match the tile indices used by the lightbox.
+    S.visible = list;
+    renderFilters();
     const frag = document.createDocumentFragment();
     const width = rowsWidth();
     lastWidth = gridWidth();
@@ -342,18 +376,35 @@
         el("h2", {}, seg.title));
       const rows = justify(photos, width).map((r) => el("div", { class: "jrow", style: `height:${Math.round(r.h)}px` }, r.items.map(({ p, w }) => {
         const i = index++;
-        return el("button", { class: "tile", type: "button", "data-i": i, "aria-label": seg.title, style: `width:${w}px;height:${Math.round(r.h)}px`, onclick: () => openLightbox(i) },
-          el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async", onload: fadeIn }),
+        return el("button", { class: "tile", type: "button", "data-i": i, "data-id": p.id, "data-seg": seg.key, "aria-label": tileLabel(p), style: `width:${w}px;height:${Math.round(r.h)}px`, onclick: () => openLightbox(i) },
+          el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async", onload: fadeIn, onerror: failed }),
           p.src === "p" ? el("span", { class: "badge", text: T.photographer }) : null,
-          p.tags.length ? el("span", { class: "tagn", html: `${PERSON}${p.tags.length}` }) : null);
+          tagBadge(p));
       })));
       frag.append(el("section", { class: "group" + (seg.day === "wedding" ? " moment" : ""), id: "seg-" + seg.key, "data-seg": seg.key }, head, el("div", { class: "rows" }, rows)));
     }
-    // Visible order must match the tile indices used by the lightbox.
-    S.visible = ordered.flatMap((s) => groups.get(s));
     put(grid, frag);
     renderRail(ordered, groups);
     renderEmpty();
+  }
+
+  // After tags or times change: when the same photos show in the same places, only the tag
+  // badges and labels are brought up to date; otherwise the grid is drawn again (or, under the
+  // viewer, once it closes).
+  function refresh() {
+    const { list } = arrange(applyFilter());
+    const tiles = grid.querySelectorAll(".tile");
+    const same = tiles.length === list.length && list.every((p, i) => tiles[i].dataset.id === p.id && tiles[i].dataset.seg === segmentOf(p.t).key);
+    if (!same) { if (lb.hidden) render(); else pendingRender = true; return; }
+    list.forEach((p, i) => (S.visible[i] = p)); // same array, so the viewer's strip stays as it is
+    renderFilters();
+    list.forEach((p, i) => {
+      const tile = tiles[i];
+      tile.setAttribute("aria-label", tileLabel(p));
+      tile.querySelector(".tagn")?.remove();
+      const b = tagBadge(p);
+      if (b) tile.append(b);
+    });
   }
 
   // Re-flow the rows when the width really changes (rotation, window resize), not on scroll.
@@ -363,37 +414,55 @@
     resizeTimer = setTimeout(() => { if (S.photos.length && Math.abs(gridWidth() - lastWidth) > 8) render(); }, 150);
   });
 
+  const rail = $("#rail");
   function renderRail(ordered, groups) {
-    const rail = $("#rail");
     const links = [];
     let lastDay = null;
     for (const seg of ordered) {
       if (lastDay && (seg.day === "wedding") !== (lastDay === "wedding")) links.push(el("span", { class: "sep" }));
       lastDay = seg.day;
       links.push(el("a", { href: "#seg-" + seg.key, class: seg.day === "wedding" ? "sub" : null, "data-seg": seg.key,
-        onclick: (e) => { e.preventDefault(); document.getElementById("seg-" + seg.key)?.scrollIntoView({ behavior: "smooth" }); } },
+        onclick: (e) => {
+          e.preventDefault();
+          // light the tapped section straight away, and keep it lit while the page scrolls there
+          railHold = Date.now() + 1200;
+          lightRail(seg.key);
+          document.getElementById("seg-" + seg.key)?.scrollIntoView({ behavior: smooth() });
+        } },
         seg.rail, el("span", { class: "n", text: groups.get(seg).length })));
     }
     put(rail, ...links);
     rail.hidden = ordered.length < 2;
-    watchSections();
+    litKey = null;
+    syncRail();
   }
 
-  let sectionObserver;
-  function watchSections() {
-    sectionObserver?.disconnect();
-    sectionObserver = new IntersectionObserver((entries) => {
-      for (const e of entries) if (e.isIntersecting) {
-        const key = e.target.dataset.seg;
-        for (const a of $("#rail").querySelectorAll("a")) {
-          const on = a.dataset.seg === key;
-          a.classList.toggle("on", on);
-          if (on) a.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
-        }
+  // The rail lights the section whose heading has reached the bottom of the sticky bars.
+  let litKey = null, railHold = 0, railFrame = 0;
+  function lightRail(key) {
+    if (key === litKey) return;
+    litKey = key;
+    for (const a of rail.querySelectorAll("a")) {
+      const on = a.dataset.seg === key;
+      a.classList.toggle("on", on);
+      // on phones the rail scrolls sideways: keep the lit one in view
+      if (on && rail.scrollWidth > rail.clientWidth) {
+        const r = a.getBoundingClientRect(), box = rail.getBoundingClientRect();
+        rail.scrollTo({ left: rail.scrollLeft + r.left - box.left - (box.width - r.width) / 2, behavior: smooth() });
       }
-    }, { rootMargin: "-40% 0px -55% 0px" });
-    grid.querySelectorAll(".group").forEach((g) => sectionObserver.observe(g));
+    }
   }
+  function syncRail() {
+    if (Date.now() < railHold || rail.hidden) return;
+    const line = $("#bars").getBoundingClientRect().bottom + 40;
+    let key = null;
+    for (const g of grid.querySelectorAll(".group")) {
+      if (key && g.getBoundingClientRect().top > line) break;
+      key = g.dataset.seg;
+    }
+    lightRail(key);
+  }
+  addEventListener("scroll", () => { cancelAnimationFrame(railFrame); railFrame = requestAnimationFrame(syncRail); }, { passive: true });
 
   function renderEmpty() {
     const box = $("#empty");
@@ -414,21 +483,40 @@
 
   // ── sheets ────────────────────────────────────────────────────────────────
   const wrap = $("#sheet-wrap"), sheet = $("#sheet");
-  let sheetClose = null;
+  let sheetClose = null, sheetReturn = null;
+  // While the viewer or a sheet is open, the page behind can't be reached by Tab or a screen
+  // reader; a sheet over the viewer shuts the viewer off too.
+  function syncInert() {
+    const open = !$("#lightbox").hidden || !wrap.hidden;
+    for (const n of [$(".sp-card"), $("#site-header"), $("#tray"), $("#new-pill")]) n?.toggleAttribute("inert", open);
+    $("#lightbox").toggleAttribute("inert", !wrap.hidden);
+  }
+  // Focus goes back where it came from, if that's still on the page.
+  const canFocus = (n) => n && n.isConnected && n !== document.body && !n.closest("[hidden],[inert]");
   function openSheet(build, onClose) {
+    const back = sheetClose ? sheetReturn : document.activeElement;
     sheetClose?.(undefined, true);
+    sheetReturn = back;
     put(sheet, ...build());
+    sheet.setAttribute("aria-label", sheet.querySelector(".q")?.textContent || "");
     wrap.hidden = false;
     document.body.classList.add("locked");
+    syncInert();
     return new Promise((resolve) => {
       sheetClose = (value, silent) => {
         sheetClose = null;
         wrap.hidden = true;
         if ($("#lightbox").hidden) document.body.classList.remove("locked");
-        if (!silent) onClose?.(value);
+        syncInert();
+        if (!silent) {
+          const to = canFocus(sheetReturn) ? sheetReturn : !$("#lightbox").hidden ? $("#lb-close") : null;
+          sheetReturn = null;
+          to?.focus({ preventScroll: true });
+          onClose?.(value);
+        }
         resolve(value);
       };
-      setTimeout(() => sheet.querySelector("input")?.focus({ preventScroll: true }), 60);
+      setTimeout(() => (sheet.querySelector("input") || sheet.querySelector("button"))?.focus({ preventScroll: true }), 60);
     });
   }
   const closeSheet = (v) => sheetClose?.(v);
@@ -442,7 +530,7 @@
     const chips = el("div", { class: "chosen" });
     const chosen = new Set(selected);
     const drawChips = () => put(chips, [...chosen].map((id) => el("span", { class: "tag" }, nameOf(id) || "—",
-      el("button", { type: "button", text: "×", onclick: () => { chosen.delete(id); draw(); } }))));
+      el("button", { type: "button", "aria-label": T.remove(nameOf(id) || "—"), text: "×", onclick: () => { chosen.delete(id); draw(); } }))));
     const draw = () => {
       if (multi) drawChips();
       const s = query.trim().toLowerCase();
@@ -519,27 +607,50 @@
 
   // ── lightbox ──────────────────────────────────────────────────────────────
   const lb = $("#lightbox"), lbImg = $("#lb-img"), lbInfo = $("#lb-info");
-  const fmtWhen = (t) => new Date(t + "Z").toLocaleString(LANG === "es" ? "es-MX" : "en-GB", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit", hour12: true });
+  lb.setAttribute("aria-label", T.viewer);
+  $("#lb-prev").setAttribute("aria-label", T.prev);
+  $("#lb-next").setAttribute("aria-label", T.nextPhoto);
+  $("#lb-close").setAttribute("aria-label", T.close);
+  // One way of writing times everywhere, as the timeline does: "2:00 PM".
+  const fmtTime = (t) => { const h = +t.slice(11, 13); return `${h % 12 || 12}:${t.slice(14, 16)} ${h < 12 ? "AM" : "PM"}`; };
+  const fmtDate = (t) => {
+    const d = new Date(t.slice(0, 10) + "T12:00:00Z");
+    const part = (k) => d.toLocaleDateString(LANG === "es" ? "es-MX" : "en-GB", { timeZone: "UTC", [k]: k === "day" ? "numeric" : "long" });
+    const s = LANG === "es" ? `${part("weekday")} ${part("day")} de ${part("month")}` : `${part("weekday")} ${part("day")} ${part("month")}`;
+    return s[0].toUpperCase() + s.slice(1);
+  };
+  const fmtWhen = (t) => `${fmtDate(t)} · ${fmtTime(t)}`;
 
+  let lbReturn = null;
   function openLightbox(i, push = true) {
     if (!S.visible[i]) return;
     S.lbIndex = i;
+    const opening = lb.hidden;
+    if (opening) lbReturn = document.activeElement;
     lb.hidden = false;
     document.body.classList.add("locked");
+    syncInert();
     if (push) history.pushState({ lb: true }, "", "#" + S.visible[i].id);
     else history.replaceState({ lb: true }, "", "#" + S.visible[i].id);
     showPhoto();
+    if (opening) $("#lb-close").focus({ preventScroll: true });
   }
   function closeLightbox(fromPop = false) {
     if (lb.hidden) return;
+    const id = S.visible[S.lbIndex]?.id;
     lb.hidden = true;
     delete strip.dataset.ready;
     document.body.classList.remove("locked");
-    const tile = grid.querySelector(`[data-i="${S.lbIndex}"]`);
-    tile?.scrollIntoView({ block: "nearest" });
+    syncInert();
     S.lbIndex = -1;
     if (!fromPop && history.state?.lb) history.back();
-    if (pendingRender) { pendingRender = false; render(); }
+    if (pendingRender) { pendingRender = false; refresh(); }
+    // Back to the photo last seen; focus returns to what opened the viewer, or to that photo.
+    const tile = id && grid.querySelector(`.tile[data-id="${id}"]`);
+    tile?.scrollIntoView({ block: "nearest" });
+    const back = lbReturn;
+    lbReturn = null;
+    (canFocus(back) && !back.classList.contains("tile") ? back : tile)?.focus({ preventScroll: true });
   }
   addEventListener("popstate", () => closeLightbox(true));
 
@@ -565,7 +676,7 @@
     const cur = strip.children[S.lbIndex];
     if (!cur) return;
     cur.classList.add("on");
-    strip.scrollTo({ left: cur.offsetLeft - (strip.clientWidth - cur.offsetWidth) / 2, behavior: strip.dataset.ready ? "smooth" : "auto" });
+    strip.scrollTo({ left: cur.offsetLeft - (strip.clientWidth - cur.offsetWidth) / 2, behavior: strip.dataset.ready ? smooth() : "auto" });
     strip.dataset.ready = "1";
   }
 
@@ -589,8 +700,9 @@
     const when = p.t ? fmtWhen(p.t) : T.unknownTime;
     const who = p.src === "p" ? T.byPhotographer : T.sharedBy(nameOf(p.by) || T.someone);
     const tags = p.tags.map((id) => el("span", { class: "tag" }, nameOf(id) || "—",
-      el("button", { type: "button", "aria-label": T.del, text: "×", onclick: () => untag(p, id) })));
-    put(lbInfo, 
+      el("button", { type: "button", "aria-label": T.remove(nameOf(id) || "—"), text: "×", onclick: () => untag(p, id) })));
+    const hadFocus = lbInfo.contains(document.activeElement);
+    put(lbInfo,
       el("div", {},
         el("p", { class: "lb-when" }, when, p.ts === "file" ? el("em", { text: ` · ${T.approx}` }) : null),
         el("p", { class: "lb-sub", text: [seg.title, who].join(" · ") })),
@@ -603,6 +715,8 @@
         isMine(p) ? el("button", { class: "btn small", type: "button", text: T.fixTime, onclick: () => fixTime(p) }) : null,
         isMine(p) ? el("button", { class: "btn small danger", type: "button", text: T.del, onclick: () => remove(p) }) : null),
     );
+    // the button that was focused has just been replaced: carry on from "+ Tag someone"
+    if (hadFocus) lbInfo.querySelector(".tag.add")?.focus({ preventScroll: true });
   }
 
   $("#lb-close").addEventListener("click", () => closeLightbox());
@@ -614,40 +728,61 @@
     else if (e.key === "ArrowRight") step(1);
     else if (e.key === "Escape") closeLightbox();
   });
-  // Swipe between photos; a downward swipe closes.
+  // Swipe between photos; a downward swipe closes. The photo itself takes every touch
+  // (touch-action:none), so the phone doesn't claim a downward drag as a page scroll.
   {
     const stage = $("#lb-stage");
     let x0 = null, y0 = 0;
-    stage.addEventListener("pointerdown", (e) => { if (e.target.closest("button, .lb-strip")) return; x0 = e.clientX; y0 = e.clientY; });
-    stage.addEventListener("pointermove", (e) => { if (x0 == null) return; lbImg.style.transform = `translateX(${(e.clientX - x0) * 0.6}px)`; });
-    const end = (e) => {
+    // the photo follows the finger, then springs back with its transition restored
+    const settle = () => { x0 = null; lbImg.style.transition = ""; lbImg.style.transform = ""; };
+    stage.addEventListener("pointerdown", (e) => {
+      if (e.button > 0 || e.target.closest("button, .lb-strip")) return;
+      x0 = e.clientX; y0 = e.clientY;
+      stage.setPointerCapture?.(e.pointerId);
+      lbImg.style.transition = "none";
+    });
+    stage.addEventListener("pointermove", (e) => {
       if (x0 == null) return;
       const dx = e.clientX - x0, dy = e.clientY - y0;
-      x0 = null;
-      lbImg.style.transform = "";
+      lbImg.style.transform = Math.abs(dx) >= Math.abs(dy) ? `translateX(${dx * 0.6}px)` : `translateY(${Math.max(0, dy) * 0.6}px)`;
+    });
+    stage.addEventListener("pointerup", (e) => {
+      if (x0 == null) return;
+      const dx = e.clientX - x0, dy = e.clientY - y0;
+      settle();
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
       else if (dy > 90 && Math.abs(dy) > Math.abs(dx)) closeLightbox();
-    };
-    stage.addEventListener("pointerup", end);
-    stage.addEventListener("pointercancel", () => { x0 = null; lbImg.style.transform = ""; });
+    });
+    stage.addEventListener("pointercancel", settle);
   }
 
+  // Everyone in the photo at once: tap names on and off, then Done.
   async function tagSomeone(p) {
-    const g = await namePicker({ title: T.tagSomeone.replace("+ ", ""), q: T.tagQ, hint: T.tagHint, allowAdd: true, exclude: new Set(p.tags) });
-    if (!g) return;
-    p.tags = [...p.tags, g.id];
-    renderInfo(p);
-    try { await api(`/api/photos/${p.id}/tags`, { method: "POST", json: { guestId: g.id, by: S.me?.id ?? null } }); }
-    catch { p.tags = p.tags.filter((x) => x !== g.id); renderInfo(p); toast(T.error); }
-    pendingRender = true;
+    const chosen = await namePicker({ title: T.tagSomeone.replace("+ ", ""), q: T.tagQ, hint: T.tagHint, multi: true, allowAdd: true,
+      selected: new Set(p.tags), okLabel: T.done, cancelLabel: T.cancel, cancelValue: () => null });
+    if (chosen) await setTags(p, chosen);
   }
   async function untag(p, id) {
+    const name = nameOf(id) || "—";
+    if (await setTags(p, new Set(p.tags.filter((x) => x !== id))))
+      toast(T.untagged(name), { label: T.undo, run: () => setTags(p, new Set([...p.tags, id])) });
+  }
+  // Apply a new set of tags: add who's new, drop who's gone. Shown at once, put back if it fails.
+  async function setTags(p, chosen) {
     const before = p.tags;
-    p.tags = p.tags.filter((x) => x !== id);
-    renderInfo(p);
-    try { await api(`/api/photos/${p.id}/tags/${id}`, { method: "DELETE" }); }
-    catch { p.tags = before; renderInfo(p); toast(T.error); }
-    pendingRender = true;
+    const add = [...chosen].filter((id) => !before.includes(id));
+    const drop = before.filter((id) => !chosen.has(id));
+    if (!add.length && !drop.length) return true;
+    const show = () => { if (!lb.hidden && S.visible[S.lbIndex] === p) renderInfo(p); refresh(); };
+    p.tags = [...chosen];
+    show();
+    try {
+      await Promise.all([
+        ...add.map((id) => api(`/api/photos/${p.id}/tags`, { method: "POST", json: { guestId: id, by: S.me?.id ?? null } })),
+        ...drop.map((id) => api(`/api/photos/${p.id}/tags/${id}`, { method: "DELETE" })),
+      ]);
+      return true;
+    } catch { p.tags = before; show(); toast(T.error); return false; }
   }
   async function fixTime(p) {
     const input = el("input", { class: "field", type: "datetime-local", step: 60, value: (p.t || "2026-11-03T12:00:00").slice(0, 16) });
@@ -694,8 +829,13 @@
   let active = 0, batchStart = 0, wakeLock = null;
   const tray = $("#tray");
 
+  // An emptied queue lets go of its thumbnails' memory.
+  function clearQueue() {
+    for (const it of queue) if (it.thumbUrl) URL.revokeObjectURL(it.thumbUrl);
+    queue.length = 0;
+  }
   function addFiles(files) {
-    if (!queue.some((it) => it.state === "waiting" || it.state === "working")) { queue.length = 0; batchStart = Date.now(); }
+    if (!queue.some((it) => it.state === "waiting" || it.state === "working")) { clearQueue(); batchStart = Date.now(); }
     for (const file of files) queue.push({ file, state: "waiting", thumbUrl: null, id: null, error: null });
     navigator.wakeLock?.request("screen").then((l) => (wakeLock = l)).catch(() => {});
     renderTray();
@@ -715,7 +855,7 @@
 
   async function upload(it) {
     if (it.file.size > MAX_BYTES) throw new Error("tooBig");
-    const prep = await prepare(it.file);
+    const prep = await prepareInTurn(it.file);
     it.thumbUrl = URL.createObjectURL(prep.thumb);
     renderTray();
     const onWait = () => { it.waiting = true; renderTray(); };
@@ -743,6 +883,15 @@
     const o = /^([+-])(\d\d):?(\d\d)$/.exec(offset || "");
     if (o) ms = ms - (o[1] === "-" ? -1 : 1) * (+o[2] * 60 + +o[3]) * 60000 + MX_OFFSET_MIN * 60000;
     return isoLocal(new Date(ms));
+  }
+
+  // Decoding and resizing a big photo takes a lot of memory on a phone, so photos are prepared
+  // one at a time; uploads still run two at once.
+  let prepTurn = Promise.resolve();
+  function prepareInTurn(file) {
+    const run = prepTurn.then(() => prepare(file));
+    prepTurn = run.catch(() => {});
+    return run;
   }
 
   async function prepare(file) {
@@ -793,24 +942,35 @@
     const failed = queue.filter((x) => x.state === "failed");
     const busy = queue.some((x) => x.state === "waiting" || x.state === "working");
     const waiting = queue.some((x) => x.waiting);
-    const head = busy ? (waiting ? T.offline : T.uploading(Math.min(done + 1, total), total)) : T.uploaded(done);
+    // photos that were already in the gallery are counted on their own, not as shared
+    const dup = queue.filter((x) => x.state === "done" && x.existing).length;
+    const head = busy ? (waiting ? T.offline : T.uploading(Math.min(done + 1, total), total))
+      : [done - dup || !dup ? T.uploaded(done - dup) : null, dup ? T.already(dup) : null].filter(Boolean).join(" · ");
     tray.hidden = false;
     put(tray, 
-      el("div", { class: "tray-head" }, el("span", { text: head }), busy ? null : el("button", { type: "button", "aria-label": T.done, text: "×", onclick: () => { queue.length = 0; renderTray(); } })),
+      el("div", { class: "tray-head" }, el("span", { text: head }), busy ? null : el("button", { type: "button", "aria-label": T.done, text: "×", onclick: () => { clearQueue(); renderTray(); } })),
       el("div", { class: "bar" }, el("i", { style: `width:${Math.round(((done + failed.length) / total) * 100)}%` })),
       el("div", { class: "tray-thumbs" }, queue.map((it) => el("button", { type: "button", class: it.state, onclick: () => it.state === "done" && openById(it.id) },
         it.thumbUrl ? el("img", { src: it.thumbUrl, alt: "" }) : null,
         el("span", { class: "state", text: it.state === "failed" ? "!" : "…" })))),
-      failed.length ? el("p", { class: "tray-note" }, `${T.failed(failed.length)}: ${reason(failed[0].error)} `,
+      failed.length ? el("p", { class: "tray-note" }, `${T.failed(failed.length)}: ${reason(failed[0])} `,
         el("button", { class: "btn small", type: "button", text: T.retry, onclick: () => { failed.forEach((x) => { x.state = "waiting"; x.error = null; }); renderTray(); pump(); } })) : null,
     );
   }
-  const reason = (err) => ({ tooBig: T.tooBig, unreadable: T.unreadable, uploads_closed: T.closedNow })[err?.code || err?.message] || T.error;
+  // Why a photo couldn't be shared, in words. A computer that can't open a HEIC says so, rather
+  // than blaming "this phone".
+  const PHONE = matchMedia("(pointer: coarse)").matches;
+  const isHeic = (f) => /hei[cf]/i.test(f.type) || /\.(heic|heif)$/i.test(f.name);
+  function reason(it) {
+    const code = it.error?.code || it.error?.message;
+    if (code === "unreadable") return PHONE ? T.unreadable : isHeic(it.file) ? T.heicHere : T.unreadableHere;
+    return { tooBig: T.tooBig, too_big: T.tooBig, not_an_image: T.notImage, too_many: T.tooMany, uploads_closed: T.closedNow }[code] || T.error;
+  }
 
   async function batchDone() {
     wakeLock?.release?.().catch(() => {});
     wakeLock = null;
-    try { await loadPhotos(); render(); } catch {}
+    try { await loadPhotos(); if (lb.hidden) render(); else pendingRender = true; } catch {}
     // Straight after sharing, walk through the new photos once to tag who's in them.
     if (queue.some((x) => x.state === "done" && !x.existing) && lb.hidden && wrap.hidden) await tagBatch();
     finishBatch();
@@ -819,36 +979,29 @@
   // All shared: the tray gives way to a thank-you (it stays only to offer a retry).
   function finishBatch() {
     if (queue.some((x) => x.state === "waiting" || x.state === "working")) return;
-    const shared = queue.filter((x) => x.state === "done").length;
+    const shared = queue.filter((x) => x.state === "done" && !x.existing).length;
+    const dup = queue.filter((x) => x.state === "done" && x.existing).length;
     if (queue.some((x) => x.state === "failed")) return renderTray();
-    queue.length = 0;
+    clearQueue();
     renderTray();
-    if (shared) toast(T.thanks(shared));
+    if (shared || dup) toast([shared ? T.thanks(shared) : null, dup ? T.already(dup) : null].filter(Boolean).join(" · "));
   }
 
   // One photo at a time: tap who's in it, then Next (or Skip). Tapping outside stops for now;
   // the rest can be tagged from each photo.
   async function tagBatch() {
-    const ids = queue.filter((x) => x.state === "done").map((x) => x.id);
+    const ids = queue.filter((x) => x.state === "done" && !x.existing).map((x) => x.id);
     const photos = ids.map((id) => S.photos.find((p) => p.id === id)).filter(Boolean);
     tray.hidden = true;
     for (const [n, p] of photos.entries()) {
       const chosen = await namePicker({
-        title: T.whoIn, q: fmtWhen(p.t || "2026-11-03T12:00:00").replace(/^\w/, (c) => c.toUpperCase()), hint: T.whoInStep(n + 1, photos.length),
+        title: T.whoIn, q: p.t ? fmtWhen(p.t) : T.unknownTime, hint: T.whoInStep(n + 1, photos.length),
         preview: imgUrl("display", p.id), multi: true, allowAdd: true, selected: new Set(p.tags),
         okLabel: n + 1 < photos.length ? T.next : T.done, cancelLabel: T.skipPhoto, cancelValue: () => null,
       });
       if (chosen === undefined) break;
       if (chosen === null) continue;
-      const add = [...chosen].filter((id) => !p.tags.includes(id));
-      const drop = p.tags.filter((id) => !chosen.has(id));
-      try {
-        await Promise.all([
-          ...add.map((id) => api(`/api/photos/${p.id}/tags`, { method: "POST", json: { guestId: id, by: S.me?.id ?? null } })),
-          ...drop.map((id) => api(`/api/photos/${p.id}/tags/${id}`, { method: "DELETE" })),
-        ]);
-        p.tags = [...chosen];
-      } catch { toast(T.error); }
+      await setTags(p, chosen);
     }
     render();
   }
@@ -867,17 +1020,13 @@
     try {
       const d = await api("/api/photos");
       if (d.version === S.version) return;
-      const known = new Set(S.photos.map((p) => p.id));
-      const added = d.photos.filter((p) => !known.has(p.id)).length;
-      S.photos = d.photos;
-      S.version = d.version;
+      const added = await loadPhotos(d);
       if (added && !lb.hidden) { pendingRender = true; return; }
       if (added) {
         // Don't shuffle the grid under someone's thumb; offer it instead.
         newPill.textContent = T.newPhotos(added);
         newPill.hidden = false;
-      } else if (lb.hidden) render();
-      else pendingRender = true;
+      } else refresh(); // tags or times changed: patched in place unless the photos shown change
     } catch {}
   }
   newPill.addEventListener("click", () => { newPill.hidden = true; render(); });
@@ -930,12 +1079,14 @@
 
   // ── toast ─────────────────────────────────────────────────────────────────
   let toastTimer = 0;
-  function toast(text) {
+  // action: { label, run } adds a button (Undo), and the notice stays a little longer.
+  function toast(text, action) {
     const t = $("#toast");
-    t.textContent = text;
+    put(t, el("span", { text }), action ? el("button", { type: "button", text: action.label, onclick: () => { t.classList.remove("show"); action.run(); } }) : null);
+    t.classList.toggle("act", !!action);
     t.classList.add("show");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+    toastTimer = setTimeout(() => t.classList.remove("show"), action ? 6000 : 2600);
   }
 
   // ── start ─────────────────────────────────────────────────────────────────
@@ -958,11 +1109,13 @@
     render();
     // A shared link (#<photo id>) opens that photo.
     const id = location.hash.slice(1);
-    if (/^[0-9a-f]{32}$/.test(id)) {
+    const shared = /^[0-9a-f]{32}$/.test(id);
+    if (shared) {
       history.replaceState(null, "", location.pathname + location.search);
       openById(id);
     }
-    if (!S.me && !store.get("wedding-gallery-skipped-who", "")) {
+    // Someone arriving from a shared photo sees the photo first; "Who are you?" can wait.
+    if (!shared && !S.me && !store.get("wedding-gallery-skipped-who", "")) {
       const picked = await pickWho();
       if (!picked) store.set("wedding-gallery-skipped-who", "1");
     }

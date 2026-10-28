@@ -79,7 +79,8 @@
   };
   menuToggle.addEventListener("click", () => setMenuOpen(!body.classList.contains("menu-open")));
   document.addEventListener("click", (e) => { if (body.classList.contains("menu-open") && !header.contains(e.target)) setMenuOpen(false); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape" && body.classList.contains("menu-open")) { setMenuOpen(false); menuToggle.focus(); } });
+  // Escape closes the menu and nothing else on the page underneath
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && body.classList.contains("menu-open")) { e.stopImmediatePropagation(); setMenuOpen(false); menuToggle.focus(); } });
 
   let lastScrolled = null, holdUntil = 0;
   const syncScrolled = () => {
@@ -110,12 +111,19 @@
   };
   let frame = 0;
   const resync = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => { syncIndicator(); syncHeaderBottom(); }); };
-  // Gallery's sticky filters sit just under the fixed bar.
-  const syncHeaderBottom = () => html.style.setProperty("--sp-header-bottom", `${Math.round(header.getBoundingClientRect().bottom + 8)}px`);
+  // Gallery's sticky filters sit just under the fixed bar; --bars-bottom is where they end.
+  const syncHeaderBottom = () => {
+    const bottom = Math.round(header.getBoundingClientRect().bottom + 8);
+    html.style.setProperty("--sp-header-bottom", `${bottom}px`);
+    const bars = document.getElementById("bars");
+    if (bars) html.style.setProperty("--bars-bottom", `${bottom + bars.offsetHeight}px`);
+  };
   if ("ResizeObserver" in window) {
     const ro = new ResizeObserver(resync);
     nav.querySelectorAll(":scope > *").forEach((item) => ro.observe(item, { box: "border-box" }));
     ro.observe(header);
+    const bars = document.getElementById("bars");
+    if (bars) ro.observe(bars);
   }
   header.addEventListener("transitionend", resync);
   addEventListener("resize", resync);
@@ -165,7 +173,7 @@
     store.set("wedding-language", lang);
     const next = new URLSearchParams(location.search);
     next.set("lang", lang);
-    go(location.pathname + "?" + next.toString());
+    go(location.pathname + "?" + next.toString() + location.hash);
   }));
 
   // A skipped cross-fade (say, a click while the page is still loading) just means no fade; don't

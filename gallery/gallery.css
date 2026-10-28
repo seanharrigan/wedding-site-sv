@@ -10,26 +10,31 @@
 .card p small{display:block;font-size:1rem;font-style:italic;color:var(--muted);margin-top:3px}
 
 /* ── filters and the timeline rail ───────────────────────────────── */
-.bars{position:sticky;top:0;z-index:3;padding:10px 0 0;padding-top:calc(10px + var(--safe-t));
-  background:rgba(238,229,218,.97);-webkit-backdrop-filter:blur(16px) saturate(120%);backdrop-filter:blur(16px) saturate(120%)}
+/* solid paper behind the sticky bars, so photos don't show through as they pass under */
+.bars{position:sticky;top:0;z-index:3;padding:10px 0 0;padding-top:calc(10px + var(--safe-t));background:var(--paper)}
+/* paper up to the menu bar too, so photos don't show through the gap above the bars */
+.bars{box-shadow:0 -8px 0 var(--paper)}
 .bars::after{content:"";display:block;height:1px;margin:10px 16px 0;background:var(--line)}
 .filters,.rail{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 16px;scroll-padding-inline:16px}
 .filters::-webkit-scrollbar,.rail::-webkit-scrollbar{display:none}
-.rail{gap:18px;margin-top:6px}
+.filters{padding-bottom:8px} /* room for the chosen chip's shadow */
+.rail{gap:18px}
+/* on a computer the whole timeline fits: it wraps rather than scrolling sideways */
+@media (min-width:721px){.rail{flex-wrap:wrap;row-gap:0}}
 .chip{flex:none;display:inline-flex;align-items:center;gap:7px;font-size:.54rem;letter-spacing:.14em;min-height:38px;padding:0 15px;border-radius:999px;
   border:1px solid var(--line);background:var(--paper-light);color:var(--ink-soft);transition:background .2s,color .2s,border-color .2s,box-shadow .2s}
-.chip:hover{border-color:var(--line-strong);color:var(--ink)}
 .chip.on{background:var(--mocha);color:var(--cream);border-color:transparent;box-shadow:0 6px 16px rgba(52,38,31,.18)}
 .chip .n{font-weight:500;opacity:.6}
 .rail a{flex:none;display:inline-flex;align-items:baseline;gap:6px;font-size:.5rem;letter-spacing:.16em;color:var(--muted);text-decoration:none;padding:10px 0 9px;border-bottom:1.5px solid transparent;transition:color .2s,border-color .2s}
-.rail a .n{font-family:var(--serif);font-size:.9rem;letter-spacing:0;font-weight:500;color:var(--faint)}
-.rail a.sub{color:rgba(116,103,95,.8)}
+.rail a .n{font-family:var(--serif);font-size:.9rem;letter-spacing:0;font-weight:500;color:var(--muted);font-variant-numeric:lining-nums tabular-nums}
+.rail a.sub{color:var(--muted)}
 .rail a.on{color:var(--ink);border-bottom-color:var(--mocha)}
 .rail .sep{flex:none;width:1px;background:var(--line-strong);margin:9px 0}
 
 /* ── the photos: justified rows, grouped by day and by moment on the wedding day ── */
 .grid-wrap{position:relative;z-index:1;padding:6px 0 calc(130px + var(--safe-b))}
-.group{scroll-margin-top:calc(108px + var(--safe-t))}
+/* a timeline jump lands each heading just under the menu bar and the sticky filters */
+.group{scroll-margin-top:calc(var(--bars-bottom,200px) + 8px)}
 .group-head{display:flex;flex-direction:column;gap:6px;padding:34px 16px 14px}
 .group-head h2{font-weight:400;font-size:clamp(1.6rem,4.4vw,2.1rem);line-height:1.05;letter-spacing:-.01em}
 .group-head small{font-size:.52rem;letter-spacing:.2em;color:var(--mocha)}
@@ -48,7 +53,8 @@
   background:linear-gradient(110deg,#e6dbcd 30%,#efe6da 45%,#e6dbcd 60%) 0 0/300% 100%;animation:shimmer 1.6s linear infinite;
   box-shadow:0 1px 2px rgba(56,38,24,.08);transition:box-shadow .3s,transform .4s var(--ease)}
 .tile.loaded{animation:none;background:#e6dbcd}
-.tile:hover{box-shadow:var(--shadow-lift);transform:translateY(-1px);z-index:1}
+/* a photo that wouldn't load: a quiet picture mark on paper, not an endless shimmer */
+.tile.broken{background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2374675f' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round' opacity='.55'%3E%3Crect x='3.5' y='5' width='17' height='14' rx='2'/%3E%3Ccircle cx='9' cy='10' r='1.6'/%3E%3Cpath d='M4.5 17.5l5-5 4 4 2.5-2.5 3.5 3.5'/%3E%3C/svg%3E") center/26px no-repeat}
 .tile img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .5s var(--ease)}
 .tile img.in{opacity:1}
 .tile .badge{position:absolute;left:6px;bottom:6px;font-family:var(--sans);font-size:.44rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:rgba(250,245,238,.86);color:var(--mocha)}
@@ -60,7 +66,7 @@
 .empty p{font-size:1.3rem;font-style:italic;color:var(--ink-soft);max-width:28ch;line-height:1.4}
 .empty .card p{font-style:normal;color:var(--ink);max-width:none}
 
-.new-pill{position:fixed;z-index:4;left:50%;top:calc(120px + var(--safe-t));transform:translateX(-50%);font-size:.54rem;letter-spacing:.16em;padding:12px 18px;border-radius:999px;
+.new-pill{position:fixed;z-index:4;left:50%;top:calc(var(--bars-bottom,200px) + 10px);transform:translateX(-50%);font-size:.54rem;letter-spacing:.16em;padding:12px 18px;border-radius:999px;
   background:var(--mocha);color:var(--cream);box-shadow:0 12px 30px rgba(52,38,31,.28);animation:fade .4s var(--ease)}
 
 /* drop photos anywhere on a computer */
@@ -71,11 +77,14 @@
 /* ── lightbox: the photo on espresso, the details on paper ───────── */
 .lightbox{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;background:var(--espresso);animation:fade .25s var(--ease)}
 .lb-stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;touch-action:pan-y;padding-top:var(--safe-t)}
+/* the photo takes every touch itself, so a downward swipe can close the viewer */
 .lightbox.has-strip .lb-stage{padding-bottom:86px}
-.lb-stage img{max-width:100%;max-height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;transition:transform .25s var(--ease),opacity .25s}
+.lb-stage img{max-width:100%;max-height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;touch-action:none;transition:transform .25s var(--ease),opacity .25s}
+/* focus shows in cream over the dark photo, and in mocha on the paper details */
+.lightbox :focus-visible{outline:2px solid var(--cream);outline-offset:2px}
+.lb-info :focus-visible{outline-color:var(--mocha)}
 .lb-nav,.lb-close{position:absolute;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:rgba(250,245,238,.12);color:var(--cream);font-size:1.9rem;line-height:1;
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,249,239,.18);transition:background .2s}
-.lb-nav:hover,.lb-close:hover{background:rgba(250,245,238,.22)}
 .lb-nav{top:50%;transform:translateY(-50%)}
 .lb-nav.prev{left:14px}.lb-nav.next{right:14px}
 .lb-close{top:calc(12px + var(--safe-t));right:12px;font-size:1.6rem}
@@ -97,7 +106,6 @@
 .lightbox:not(.has-strip) .lb-strip{display:none}
 .lb-strip button{flex:none;width:56px;height:56px;border-radius:10px;overflow:hidden;opacity:.5;outline:2px solid transparent;outline-offset:2px;transition:opacity .2s,outline-color .2s,transform .3s var(--ease)}
 .lb-strip button:first-child{margin-left:auto}.lb-strip button:last-child{margin-right:auto}
-.lb-strip button:hover{opacity:.85}
 .lb-strip button.on{opacity:1;outline-color:var(--cream)}
 .lb-strip img{width:100%;height:100%;object-fit:cover;display:block}
 @media (max-width:899px){.lb-info{max-height:38dvh}.lb-strip button{width:48px;height:48px}.lightbox.has-strip .lb-stage{padding-bottom:76px}}
@@ -115,7 +123,6 @@
 .tray-thumbs::-webkit-scrollbar{display:none}
 .tray-thumbs button{position:relative;flex:none;width:56px;padding:4px 4px 12px;background:#fff;border-radius:3px;box-shadow:0 2px 6px rgba(56,38,24,.16);transform:rotate(var(--r,0deg));transition:transform .3s var(--ease)}
 .tray-thumbs button:nth-child(3n+1){--r:-2deg}.tray-thumbs button:nth-child(3n+2){--r:1.5deg}.tray-thumbs button:nth-child(3n){--r:-.5deg}
-.tray-thumbs button:hover{transform:rotate(0) translateY(-2px)}
 .tray-thumbs .ph{display:block;width:48px;height:48px;background:var(--paper);overflow:hidden}
 .tray-thumbs img{width:100%;height:100%;object-fit:cover;display:block}
 .tray-thumbs .state{position:absolute;inset:4px 4px 12px;display:grid;place-items:center;background:rgba(250,245,238,.6);font-family:var(--sans);font-size:.7rem;color:var(--mocha)}
@@ -125,3 +132,23 @@
 .tray-note{font-size:1.05rem;font-style:italic;color:var(--ink-soft);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 
 .grid-wrap:empty{display:none}
+
+/* the person ahead of "who you are" in the header */
+.me-ico{display:inline-flex}.me-ico .i{width:16px;height:16px}
+/* removing a tag: a 32px target around the small × */
+.tag button{width:32px;height:32px;margin:-4px -2px -4px -4px;font-size:1.05rem}
+/* a notice with an Undo */
+.toast.show.act{pointer-events:auto}
+.toast span{vertical-align:middle}
+.toast button{min-height:32px;margin-left:12px;padding:0 4px;vertical-align:middle;font-family:var(--sans);font-weight:600;font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cream);text-decoration:underline;text-underline-offset:3px}
+.toast:not(.show) button{visibility:hidden}
+
+/* hover only where there's a pointer to hover with, so a tap doesn't leave things lifted */
+@media (hover:hover){
+  .chip:hover{border-color:var(--line-strong);color:var(--ink)}
+  .tile:hover{box-shadow:var(--shadow-lift);transform:translateY(-1px);z-index:1}
+  .lb-nav:hover,.lb-close:hover{background:rgba(250,245,238,.22)}
+  .lb-strip button:hover{opacity:.85}
+  .tray-thumbs button:hover{transform:rotate(0) translateY(-2px)}
+}

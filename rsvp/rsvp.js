@@ -30,9 +30,9 @@
       yes: "Going", maybe: "Maybe", no: "Can’t go", noAnswer: "No answer yet",
       youAre: "You’re", answeringAs: "Answering as", change: "Change", pickName: "Tap your name",
       whoQ: "Who are you?", whoHint: "Pick your name once. This phone will remember it.",
-      search: "Search names", notListed: (s) => s ? `Add “${s}”` : "Not on the list? Type your name", cancel: "Cancel",
+      search: "Search names", notListed: (s) => s ? `Add “${s}”` : "Not on the list? Type your name", notListedOther: (s) => s ? `Add “${s}”` : "Not on the list? Type their name", cancel: "Cancel",
       yourGroup: "Answering for your group too?", addSomeone: "+ Someone else", remove: "Remove",
-      note: "Anything we should know? (optional)", send: "Send RSVP", update: "Update RSVP", sent: "Thank you! Your RSVP is in.", savedNow: "Saved",
+      note: "Anything we should know? (optional)", saveNote: "Save note", saving: "Saving…", sent: "Thank you! Your RSVP is in.", savedNow: "Saved", retry: "Try again", tapToSave: "Tap an answer: it saves straight away.",
       seats: (left, cap) => `${left} of ${cap} seats left`, full: (n) => n ? `Only ${n} ${n === 1 ? "seat" : "seats"} left` : "All the seats are taken",
       closed: "RSVPs for this are closed.", draft: "Draft · only you two can see this", missing: "We couldn’t find that RSVP.", allLink: "See the whole itinerary",
       error: "Something went wrong. Please try again.", map: "Map", whoComing: "Who’s coming", nobodyYet: "No one yet. Be the first!",
@@ -47,9 +47,9 @@
       yes: "Voy", maybe: "Tal vez", no: "No puedo", noAnswer: "Sin respuesta",
       youAre: "Eres", answeringAs: "Respondes como", change: "Cambiar", pickName: "Toca tu nombre",
       whoQ: "¿Quién eres?", whoHint: "Elige tu nombre una vez. Este teléfono lo recordará.",
-      search: "Buscar nombres", notListed: (s) => s ? `Agregar “${s}”` : "¿No estás en la lista? Escribe tu nombre", cancel: "Cancelar",
+      search: "Buscar nombres", notListed: (s) => s ? `Agregar “${s}”` : "¿No estás en la lista? Escribe tu nombre", notListedOther: (s) => s ? `Agregar “${s}”` : "¿No está en la lista? Escribe su nombre", cancel: "Cancelar",
       yourGroup: "¿Respondes también por tu grupo?", addSomeone: "+ Otra persona", remove: "Quitar",
-      note: "¿Algo que debamos saber? (opcional)", send: "Enviar respuesta", update: "Actualizar respuesta", sent: "¡Gracias! Ya tenemos tu respuesta.", savedNow: "Guardado",
+      note: "¿Algo que debamos saber? (opcional)", saveNote: "Guardar nota", saving: "Guardando…", sent: "¡Gracias! Ya tenemos tu respuesta.", savedNow: "Guardado", retry: "Intentar de nuevo", tapToSave: "Toca una respuesta: se guarda al instante.",
       seats: (left, cap) => `Quedan ${left} de ${cap} lugares`, full: (n) => n ? `Solo ${n === 1 ? "queda 1 lugar" : `quedan ${n} lugares`}` : "Ya no hay lugares",
       closed: "Ya no se reciben respuestas para esto.", draft: "Borrador · solo ustedes dos lo ven", missing: "No encontramos esa invitación.", allLink: "Ver todo el itinerario",
       error: "Algo salió mal. Inténtalo de nuevo.", map: "Mapa", whoComing: "Quién va", nobodyYet: "Nadie todavía. ¡Sé el primero!",
@@ -85,10 +85,11 @@
     me: JSON.parse(store.get("wedding-gallery-me", "null") || "null"),
     event: null, counts: null, answers: [],
     draft: new Map(), // guest id → answer, for the people on this phone's form
-    extra: new Set(),  // people added with "+ Someone else"
+    extra: new Set(JSON.parse(store.get("wedding-rsvp-extra", "[]") || "[]")), // people added with "+ Someone else", remembered on this phone
     note: "",
     open: null,        // the plan opened in place on the itinerary
     cache: new Map(),  // each plan as last loaded, so it opens at once
+    loading: new Map(), // plans being loaded now, so a tap doesn't load one twice
     dirty: false,      // answers or a note on the form that haven't been sent
   };
   const nameOf = (id) => S.guestById.get(id)?.name;
@@ -123,6 +124,8 @@
   }
   const meParam = () => { const ids = circle(); return ids.length ? `?me=${ids.join(",")}` : ""; };
 
+  const saveExtra = () => store.set("wedding-rsvp-extra", S.extra.size ? JSON.stringify([...S.extra]) : null);
+  function clearExtra() { S.extra.clear(); saveExtra(); }
   function setMe(g) {
     S.me = g ? { id: g.id, name: g.name } : null;
     S.cache.clear();
@@ -146,21 +149,31 @@
   // ── sheets (the gallery's name picker) ────────────────────────────────────
   const wrap = $("#sheet-wrap"), sheet = $("#sheet");
   let sheetClose = null;
+  const behind = () => [$(".sp-card"), $("#site-header")].filter(Boolean);
   function openSheet(build) {
     sheetClose?.(undefined);
+    const opener = document.activeElement;
     put(sheet, ...build());
+    sheet.setAttribute("aria-labelledby", "sheet-q");
     wrap.hidden = false;
     document.body.classList.add("locked");
+    behind().forEach((n) => (n.inert = true));
     return new Promise((resolve) => {
-      sheetClose = (value) => { sheetClose = null; wrap.hidden = true; document.body.classList.remove("locked"); resolve(value); };
+      sheetClose = (value) => {
+        sheetClose = null; wrap.hidden = true; document.body.classList.remove("locked");
+        behind().forEach((n) => (n.inert = false));
+        resolve(value);
+        // back to whatever opened it (or the open plan, if that was redrawn meanwhile)
+        setTimeout(() => (opener?.isConnected && opener !== document.body ? opener : main.querySelector(".ev-row.open .ev-link"))?.focus({ preventScroll: true }), 0);
+      };
       setTimeout(() => sheet.querySelector("input")?.focus({ preventScroll: true }), 60);
     });
   }
   const closeSheet = (v) => sheetClose?.(v);
   wrap.addEventListener("click", (e) => { if (e.target === wrap) closeSheet(undefined); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape" && !wrap.hidden) closeSheet(undefined); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && !wrap.hidden) { e.stopImmediatePropagation(); closeSheet(undefined); } });
 
-  function namePicker({ q, hint, exclude = new Set() }) {
+  function namePicker({ q, hint, exclude = new Set(), other = false }) {
     let query = "";
     const list = el("div", { class: "list" });
     const norm = (x) => x.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -176,13 +189,13 @@
           if (!S.guestById.has(guest.id)) { S.guests.push(guest); S.guestById.set(guest.id, guest); }
           closeSheet(guest);
         } catch { toast(T.error); }
-      } }, T.notListed(query.trim())));
+      } }, (other ? T.notListedOther : T.notListed)(query.trim())));
       put(list, ...rows);
     };
     const input = el("input", { class: "field", type: "search", placeholder: T.search, autocomplete: "off", enterkeyhint: "search", oninput: (e) => { query = e.target.value; draw(); } });
     draw();
     return openSheet(() => [
-      el("p", { class: "q", text: q }),
+      el("p", { class: "q", id: "sheet-q", text: q }),
       hint ? el("p", { class: "hint", text: hint }) : null,
       input, list,
       el("div", { class: "sheet-foot" }, el("button", { class: "btn", type: "button", text: T.cancel, onclick: () => closeSheet(null) })),
@@ -193,7 +206,7 @@
     const g = await namePicker({ q: T.whoQ, hint: T.whoHint });
     if (!g) return false;
     setMe(g);
-    S.extra.clear();
+    clearExtra();
     // on the itinerary, every plan's pill changes with the name, so draw the list again
     if (SLUG) await loadEvent(); else await renderIndex();
     return true;
@@ -201,18 +214,21 @@
 
   // ── one event: its own page (?e=slug), or opened in place on the itinerary ──
   const main = $("#main");
-  const fetchEvent = async (slug) => {
+  const fetchEvent = (slug) => {
     const key = slug + meParam();
-    const d = await api(`/api/events/${encodeURIComponent(slug)}${meParam()}`);
-    S.cache.set(key, d);
-    return d;
+    if (S.loading.has(key)) return S.loading.get(key);
+    const p = api(`/api/events/${encodeURIComponent(slug)}${meParam()}`)
+      .then((d) => { S.cache.set(key, d); return d; })
+      .finally(() => S.loading.delete(key));
+    S.loading.set(key, p);
+    return p;
   };
   async function loadEvent(slug = SLUG || S.event.slug) {
     const d = await fetchEvent(slug);
     if (!SLUG && S.open !== slug) return; // closed, or another plan opened, while this one loaded
     applyEvent(d);
   }
-  // A quiet refresh of the open plan keeps anything tapped or typed but not yet sent.
+  // A quiet refresh of the open plan keeps a note being typed; answers are saved as they're tapped.
   function applyEvent(d, { keep = false } = {}) {
     keep = keep && S.dirty && S.event?.slug === d.event.slug;
     S.event = d.event;
@@ -239,8 +255,22 @@
     $("#lede").textContent = when(e);
     $("#admin-pill").hidden = !S.admin;
 
-    put(main, renderDetails(), renderForm(), renderWho(), S.admin ? renderAdmin() : null,
-      el("p", { class: "ev-all" }, el("a", { href: `./?lang=${LANG}`, text: T.allLink })));
+    redraw(main, () => [renderDetails(), renderForm(), renderWho(), S.admin ? renderAdmin() : null,
+      el("p", { class: "ev-all" }, el("a", { href: `./?lang=${LANG}#${e.slug}`, text: T.allLink }))]);
+  }
+
+  // Redraw a plan. While its note is being typed, only "Who's coming" changes, so the keyboard
+  // stays up; otherwise focus goes back to the same answer (or the note, or the plan's button).
+  function redraw(box, build, fallback) {
+    const a = document.activeElement, had = box.contains(a), k = had && a.dataset.k;
+    if (k === "note") {
+      const who = box.querySelector(".ev-who"), next = renderWho();
+      if (who && next) who.replaceWith(next);
+      const btn = box.querySelector(".note-save"); if (btn) btn.hidden = !noteChanged();
+      return;
+    }
+    put(box, ...build());
+    if (had) ((k && box.querySelector(`[data-k="${k}"]`)) || fallback)?.focus({ preventScroll: true });
   }
 
   // The plan opened on the itinerary: the same details, answers and names, inside its card.
@@ -249,11 +279,8 @@
     const row = main.querySelector(`.ev-row[data-slug="${e.slug}"]`);
     if (!row || S.open !== e.slug) return;
     const panel = row.querySelector(".ev-panel");
-    // a tap redraws the card; keep focus on the same answer, or the plan's own button
-    const had = panel.contains(document.activeElement), k = had && document.activeElement.dataset.k;
-    put(panel, renderDetails(), renderForm(), renderWho(), S.admin ? renderAdmin() : null);
+    redraw(panel, () => [renderDetails(), renderForm(), renderWho(), S.admin ? renderAdmin() : null], row.querySelector(".ev-link"));
     panel.removeAttribute("aria-busy");
-    if (had) ((k && panel.querySelector(`[data-k="${k}"]`)) || row.querySelector(".ev-link")).focus({ preventScroll: true });
     const mine = S.me && S.answers.find((a) => a.g === S.me.id)?.a;
     put(row.querySelector(".ev-mine"), mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null);
   }
@@ -278,49 +305,63 @@
       el("button", { class: "btn solid big", type: "button", text: T.pickName, onclick: pickWho }));
 
     const ids = circle();
-    const saved = new Map(S.answers.filter((a) => ids.includes(a.g)).map((a) => [a.g, a.a]));
     const choice = (id) => el("div", { class: "answer", role: "group", "aria-label": nameOf(id) },
       ["yes", "maybe", "no"].map((a) => el("button", { type: "button", class: "ans-" + a, "aria-pressed": String(S.draft.get(id) === a), text: T[a], "data-k": `${id}-${a}`,
-        onclick: () => { S.draft.get(id) === a && id !== S.me.id ? S.draft.delete(id) : S.draft.set(id, a); S.dirty = true; renderEvent(); } })));
+        onclick: () => { if (S.draft.get(id) === a) return; S.draft.set(id, a); renderEvent(); save(); } })));
     const person = (id, i) => el("div", { class: "person" + (i ? " mate" : "") },
       el("p", { class: "person-name" }, i ? nameOf(id) : el("span", {}, el("small", { text: T.answeringAs }), S.me.name),
         i ? null : el("button", { class: "link", type: "button", text: T.change, onclick: pickWho }),
-        S.extra.has(id) ? el("button", { class: "link", type: "button", text: T.remove, onclick: () => { S.extra.delete(id); S.draft.delete(id); renderEvent(); } }) : null),
+        S.extra.has(id) ? el("button", { class: "link", type: "button", text: T.remove, onclick: () => { S.extra.delete(id); saveExtra(); S.draft.delete(id); renderEvent(); } }) : null),
       choice(id));
 
-    const changed = [...S.draft].some(([g, a]) => saved.get(g) !== a);
-    const hasSaved = saved.has(S.me.id);
-    const noteBox = el("textarea", { class: "field note", rows: 2, maxlength: 500, placeholder: T.note, oninput: (ev) => { S.note = ev.target.value; S.dirty = true; sendBtn.disabled = false; } });
+    const noteBox = el("textarea", { class: "field note", rows: 2, maxlength: 500, placeholder: T.note, "data-k": "note",
+      oninput: (ev) => { S.note = ev.target.value; S.dirty = noteChanged(); noteBtn.hidden = !S.dirty; } });
     noteBox.value = S.note;
-    const sendBtn = el("button", { class: "btn solid big", type: "button", text: hasSaved ? T.update : T.send, onclick: send });
-    sendBtn.disabled = hasSaved && !changed;
+    const noteBtn = el("button", { class: "btn small note-save", type: "button", text: S.saving ? T.saving : T.saveNote, "data-k": "note-save", onclick: save });
+    noteBtn.hidden = !noteChanged();
+    noteBtn.disabled = S.saving;
     return el("section", { class: "ev-form" },
+      S.answers.some((x) => x.g === S.me.id) ? null : el("p", { class: "hint", text: T.tapToSave }),
       person(ids[0], 0),
       ids.length > 1 ? el("p", { class: "group-q", text: T.yourGroup }) : null,
       ids.slice(1).map((id, i) => person(id, i + 1)),
-      el("button", { class: "tag add", type: "button", text: T.addSomeone, onclick: async () => {
-        const g = await namePicker({ q: T.addSomeone.replace("+ ", ""), exclude: new Set(ids) });
+      el("button", { class: "tag add", type: "button", text: T.addSomeone, "data-k": "add", onclick: async () => {
+        const g = await namePicker({ q: T.addSomeone.replace("+ ", ""), exclude: new Set(ids), other: true });
         if (!g) return;
-        S.extra.add(g.id);
+        S.extra.add(g.id); saveExtra();
         renderEvent();
       } }),
-      noteBox, sendBtn);
+      el("div", { class: "note-row" }, noteBox, noteBtn));
   }
 
-  async function send() {
+  const savedNote = () => (S.me && S.answers.find((a) => a.g === S.me.id)?.note) || "";
+  const noteChanged = () => S.note.trim() !== savedNote().trim();
+
+  // Saves everyone on the form who has an answer, with the note. Taps while a save is on the way
+  // are sent together straight after it.
+  let again = false;
+  async function save() {
     if (!SLUG && S.open !== S.event.slug) return;
     if (!S.me) return toast(T.pickFirst);
-    if (!S.draft.has(S.me.id) && !S.draft.size) return toast(T.pickAnswer);
-    const answers = [...S.draft].map(([guestId, answer]) => ({ guestId, answer }));
+    if (!S.draft.size) return toast(T.pickAnswer);
+    if (S.saving) { again = true; return; }
+    const slug = S.event.slug, first = !S.answers.some((a) => a.g === S.me.id);
+    S.saving = true; again = false; renderEvent();
     try {
-      await api(`/api/events/${encodeURIComponent(S.event.slug)}/rsvps`, { method: "PUT", json: { by: S.me.id, answers, note: S.note } });
-      toast(T.sent);
+      const answers = [...S.draft].map(([guestId, answer]) => ({ guestId, answer }));
+      await api(`/api/events/${encodeURIComponent(slug)}/rsvps`, { method: "PUT", json: { by: S.me.id, answers, note: S.note } });
+      S.saving = false;
+      if (again) return save();
+      toast(first ? T.sent : T.savedNow);
       S.dirty = false;
-      await loadEvent();
+      await loadEvent(slug);
     } catch (err) {
+      S.saving = false; S.dirty = false;
       if (err.data?.error === "full") toast(T.full(err.data.left));
       else if (err.data?.error === "closed") toast(T.closed);
       else toast(T.error);
+      // show what's really saved
+      loadEvent(slug).catch(() => renderEvent());
     }
   }
 
@@ -332,14 +373,14 @@
     const block = (a, ids) => el("div", { class: "who-block" }, el("span", { class: "meta-label", text: `${T[a] || T.noAnswer} · ${ids.length}` }), ids.length ? tags(ids) : null);
     if (!e.show_guests && !S.admin) return null;
     const going = by("yes"), maybe = by("maybe");
-    const blocks = [going.length || maybe.length || S.admin ? block("yes", going) : null, maybe.length ? block("maybe", maybe) : null];
+    const blocks = [going.length || S.admin ? block("yes", going) : null, maybe.length ? block("maybe", maybe) : null];
     if (S.admin) {
       const answered = new Set(S.answers.map((x) => x.g));
       blocks.push(block("no", by("no")));
       const none = S.guests.filter((g) => !answered.has(g.id) && !g.added).map((g) => g.id).sort((x, y) => nameOf(x).localeCompare(nameOf(y)));
       blocks.push(el("details", { class: "who-block" }, el("summary", { class: "meta-label", text: `${T.noAnswer} · ${none.length}` }), tags(none)));
     }
-    return el("section", { class: "ev-who" }, el("h2", { text: T.whoComing }),
+    return el("section", { class: "ev-who" }, el(SLUG ? "h2" : "h4", { text: T.whoComing }),
       !going.length && !maybe.length && !S.admin ? el("p", { class: "hint", text: T.nobodyYet }) : null, blocks);
   }
 
@@ -348,7 +389,7 @@
     const notes = S.answers.filter((a) => a.note);
     const link = `${SITE}?e=${e.slug}`;
     return el("section", { class: "ev-admin" },
-      el("h2", { text: T.adminTitle }),
+      el(SLUG ? "h2" : "h4", { text: T.adminTitle }),
       el("p", { class: "hint", text: T.totals(S.counts) }),
       notes.length ? el("div", { class: "who-block" }, el("span", { class: "meta-label", text: T.notes }),
         notes.map((a) => el("p", { class: "ev-note" }, el("b", { text: nameOf(a.g) || "—" }), ` ${a.note}`))) : null,
@@ -377,8 +418,8 @@
   }
 
   // ── every event: the itinerary, by city and then by day ───────────────────
-  async function renderIndex() {
-    const d = await api(`/api/events${meParam()}`);
+  async function renderIndex(d) {
+    d ||= await api(`/api/events${meParam()}`);
     S.admin = d.admin;
     $("#title").textContent = T.indexTitle;
     $("#title").classList.add("script");
@@ -411,7 +452,7 @@
             el("div", { class: "itin-day" },
               el("h3", { class: "day-head", text: day ? cap(fmtDay(day + "T12:00")) : T.tbc }),
               el("div", { class: "ev-list" }, list.map(row))))))),
-      S.me ? el("p", { class: "ev-all" }, `${T.youAre} ${S.me.name} · `, el("button", { class: "link", type: "button", text: T.change, onclick: async () => { const g = await namePicker({ q: T.whoQ, hint: T.whoHint }); if (g) { setMe(g); S.extra.clear(); renderIndex(); } } })) : null);
+      S.me ? el("p", { class: "ev-all" }, `${T.youAre} ${S.me.name} · `, el("button", { class: "link", type: "button", text: T.change, onclick: async () => { const g = await namePicker({ q: T.whoQ, hint: T.whoHint }); if (g) { setMe(g); clearExtra(); await renderIndex(); main.querySelector(".ev-all .link")?.focus(); } } })) : null);
     if (S.open) await openPlan(S.open);
     // load every plan now, so tapping one opens it at once
     for (const e of d.events) if (!S.cache.has(e.slug + meParam())) fetchEvent(e.slug).catch(() => {});
@@ -443,7 +484,6 @@
   async function openPlan(slug) {
     const r = main.querySelector(`.ev-row[data-slug="${slug}"]`);
     if (!r) return;
-    if (S.event?.slug !== slug) S.extra.clear();
     S.open = slug;
     history.replaceState(null, "", `${location.pathname}${location.search}#${slug}`);
     r.classList.add("open");
@@ -460,7 +500,12 @@
     // not loaded yet: show nothing tappable until it lands
     panel.setAttribute("aria-busy", "true");
     put(panel, el("p", { class: "hint ev-loading", text: "…" }));
-    try { await loadEvent(slug); } catch { toast(T.error); }
+    try { await loadEvent(slug); }
+    catch {
+      if (S.open !== slug) return;
+      panel.removeAttribute("aria-busy");
+      put(panel, el("p", { class: "hint" }, T.error, " ", el("button", { class: "link", type: "button", text: T.retry, onclick: () => openPlan(slug) })));
+    }
   }
   // Escape closes the open plan (not while typing a note, and not over a sheet)
   addEventListener("keydown", (ev) => {
@@ -482,20 +527,23 @@
 
   $("#admin-pill").addEventListener("click", () => $(".ev-admin")?.scrollIntoView({ behavior: "smooth" }));
   async function boot() {
+    // the itinerary's heading shows at once, while the plans load
+    if (!SLUG) { $("#title").textContent = T.indexTitle; $("#title").classList.add("script"); $("#lede").textContent = T.indexLede; }
     try {
-      await loadGuests();
-      if (SLUG) await loadEvent();
+      if (SLUG) { await loadGuests(); await loadEvent(); }
       else {
         const h = decodeURIComponent(location.hash.slice(1));
         if (/^[\w-]+$/.test(h)) S.open = h;
-        await renderIndex();
+        // the guest list and the plans load together
+        const [, d] = await Promise.all([loadGuests(), api(`/api/events${meParam()}`)]);
+        await renderIndex(d);
         if (S.open) main.querySelector(`.ev-row[data-slug="${S.open}"]`)?.scrollIntoView({ block: "start" });
       }
     } catch (err) {
       if (err.status === 404) {
         $("#title").textContent = "RSVP";
         put(main, el("p", { class: "ev-all" }, T.missing, " ", el("a", { href: `./?lang=${LANG}`, text: T.allLink })));
-      } else toast(T.error);
+      } else put(main, el("p", { class: "ev-all" }, T.error, " ", el("button", { class: "link", type: "button", text: T.retry, onclick: boot })));
     }
   }
   boot();

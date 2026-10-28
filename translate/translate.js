@@ -19,6 +19,7 @@
   const SIZES = ["clamp(1.3rem,3.6vw,2.4rem)", "clamp(1.55rem,4.6vw,3rem)", "clamp(1.9rem,5.8vw,3.8rem)", "clamp(2.3rem,7vw,4.8rem)"];
   const VIEWS = ["en", "es", "both", "facing"];
   const SHOW_ROWS = 14, SEND_ROWS = 10, SEND_EVERY_MS = 120, LOCAL_IDLE_MS = 3 * 60 * 1000;
+  const KEEP_TURNS = 30, KEEP_SENTENCES = 20; // how much of a long speech is kept to re-split
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const q = new URLSearchParams(location.search);
@@ -35,17 +36,23 @@
       swap: "Swap sides", swapSub: "Change which language is on top", tidy: "Tidy speech", tidySub: "Leave out um, uh, eh and words said twice",
       clear: "Clear text", demo: "Play demo", signOut: "Sign out of admin", fullscreen: "Full screen", done: "Done",
       legend: "<b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.",
-      askLocal: "How would you like to talk?", askBroadcast: "Which language would you like?", askBroadcastAdmin: "Everyone is reading along", bothLong: "Both languages", options: "Options",
+      askLocal: "How would you like to talk?", askBroadcast: "Which language would you like?", options: "Options",
       bcOff: "Off · face to face for everyone", bcOn: "On", bcOffline: "Can't reach the translation server",
-      listening: "Listening", connecting: "Connecting…", reconnecting: "Reconnecting…", tapStart: "Tap to start", live: "Live", waiting: "Waiting",
-      speaking: "Speaking to everyone", phones: (n) => n + (n === 1 ? " phone" : " phones"), live_pill: "Live", onair_pill: "On air",
+      listening: "Listening", connecting: "Connecting…", reconnecting: "Reconnecting…", tapStart: "Tap to start", waiting: "Waiting",
+      phones: (n) => n + (n === 1 ? " phone" : " phones"), live_pill: "Live", onair_pill: "On air",
       broadcastStarted: "The speeches are being subtitled live · Los discursos se subtitulan en vivo",
       broadcastEnded: "The live subtitles have ended · Terminaron los subtítulos en vivo",
       takenOver: "Another phone took over the speeches", micBlocked: "Microphone blocked: allow it in settings", noMic: "No microphone found",
-      noRecord: "This browser can't record audio here", noServer: "Translation server not set up yet", lostConn: "Lost the connection · Tap to retry",
+      noRecord: "This browser can't record audio here", noServer: "Can't reach the translation server", lostConn: "Lost the connection · Tap to retry",
       keyRefused: "Admin password not accepted", noCredit: "Soniox account out of credit", sonioxKey: "Soniox key not accepted", sonioxDown: "Translation service unavailable", noKey: "No Soniox key on the server yet",
       waitHere: "Subtitles will appear here when the speeches begin.", speak: "Speak in English or Spanish.",
       speakBoth: "Speak in English or Spanish · Habla en inglés o en español", stopped: "Paused after a quiet spell · Tap to continue",
+      micStopped: "The microphone stopped · Tap to continue",
+      // the admin's options screen while the speeches are on
+      liveTitle: "The speeches are live", liveElsewhere: "Live · another phone is speaking", nobodySpeaking: "No one is speaking yet",
+      backToSubs: "Back to the subtitles", stopSpeaking: "Stop speaking", endBroadcast: "End broadcast", cancel: "Cancel",
+      endAsk: (n) => (n ? `End the live subtitles on ${n} ${n === 1 ? "phone" : "phones"}?` : "End the live subtitles?"),
+      clearAsk: "Clear the subtitles on every phone?", takeOverAsk: "Another phone is speaking. Take over the speeches?", takeOver: "Take over",
     },
     es: {
       soonTitle: "Próximamente", speeches: "Los discursos",
@@ -58,17 +65,22 @@
       swap: "Cambiar lados", swapSub: "Elige qué idioma va arriba", tidy: "Limpiar el habla", tidySub: "Quita eh, em y palabras repetidas",
       clear: "Borrar texto", demo: "Ver demo", signOut: "Cerrar sesión de admin", fullscreen: "Pantalla completa", done: "Listo",
       legend: "Las líneas <b>rectas</b> son lo que se dijo; las <i>cursivas</i> son la traducción.",
-      askLocal: "¿Cómo quieres conversar?", askBroadcast: "¿En qué idioma quieres leer?", askBroadcastAdmin: "Todos están leyendo", bothLong: "Ambos idiomas", options: "Opciones",
+      askLocal: "¿Cómo quieres conversar?", askBroadcast: "¿En qué idioma quieres leer?", options: "Opciones",
       bcOff: "Apagado · frente a frente para todos", bcOn: "Encendido", bcOffline: "No hay conexión con el servidor",
-      listening: "Escuchando", connecting: "Conectando…", reconnecting: "Reconectando…", tapStart: "Toca para empezar", live: "En vivo", waiting: "En espera",
-      speaking: "Hablando a todos", phones: (n) => n + (n === 1 ? " teléfono" : " teléfonos"), live_pill: "En vivo", onair_pill: "Al aire",
+      listening: "Escuchando", connecting: "Conectando…", reconnecting: "Reconectando…", tapStart: "Toca para empezar", waiting: "En espera",
+      phones: (n) => n + (n === 1 ? " teléfono" : " teléfonos"), live_pill: "En vivo", onair_pill: "Al aire",
       broadcastStarted: "Los discursos se subtitulan en vivo · The speeches are being subtitled live",
       broadcastEnded: "Terminaron los subtítulos en vivo · The live subtitles have ended",
       takenOver: "Otro teléfono tomó los discursos", micBlocked: "Micrófono bloqueado: permítelo en ajustes", noMic: "No se encontró micrófono",
-      noRecord: "Este navegador no puede grabar aquí", noServer: "Falta configurar el servidor", lostConn: "Se perdió la conexión · Toca para reintentar",
+      noRecord: "Este navegador no puede grabar aquí", noServer: "No se puede conectar con el servidor de traducción", lostConn: "Se perdió la conexión · Toca para reintentar",
       keyRefused: "Contraseña de admin no aceptada", noCredit: "La cuenta de Soniox no tiene saldo", sonioxKey: "Soniox no aceptó la clave", sonioxDown: "Servicio de traducción no disponible", noKey: "Aún no hay clave de Soniox en el servidor",
       waitHere: "Los subtítulos aparecerán aquí cuando empiecen los discursos.", speak: "Habla en inglés o en español.",
       speakBoth: "Habla en inglés o en español · Speak in English or Spanish", stopped: "En pausa por silencio · Toca para seguir",
+      micStopped: "El micrófono se detuvo · Toca para seguir",
+      liveTitle: "Los discursos están en vivo", liveElsewhere: "En vivo · otro teléfono está hablando", nobodySpeaking: "Nadie está hablando todavía",
+      backToSubs: "Volver a los subtítulos", stopSpeaking: "Dejar de hablar", endBroadcast: "Terminar transmisión", cancel: "Cancelar",
+      endAsk: (n) => (n ? `¿Terminar los subtítulos en vivo en ${n} ${n === 1 ? "teléfono" : "teléfonos"}?` : "¿Terminar los subtítulos en vivo?"),
+      clearAsk: "¿Borrar los subtítulos en todos los teléfonos?", takeOverAsk: "Otro teléfono está hablando. ¿Tomar los discursos?", takeOver: "Tomar los discursos",
     },
   }[LANG];
   const WAIT = { en: "Subtitles will appear here when the speeches begin.", es: "Los subtítulos aparecerán aquí cuando empiecen los discursos." };
@@ -99,11 +111,12 @@
       const when = document.createElement("span");
       when.className = "soon-when";
       when.textContent = T.soonOpens;
-      li.lastElementChild.append(when);
+      li.querySelector("b").parentElement.append(when);
     };
     document.querySelectorAll(".soon-list li").forEach((li) => {
       const open = SPEECHES_ONLY && li.hasAttribute("data-speeches");
-      if (open) li.removeAttribute("aria-disabled");
+      // the one that opens is a button, and its chevron shows
+      if (open) { li.removeAttribute("aria-disabled"); li.setAttribute("role", "button"); li.classList.add("opens"); }
       const tap = () => (open ? enterSpeeches() : soonTap(li));
       li.addEventListener("click", tap);
       li.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tap(); } });
@@ -133,9 +146,13 @@
 
   /* ── screens and views ─────────────────────────────────────────── */
   function showChoose() {
+    // A private conversation would go on listening out of sight, so it stops; the speeches carry
+    // on, and the options screen says so and offers Stop speaking.
+    if (listening && !speaker) stop();
     screen = "choose";
     closeMenu();
     $("#choose").hidden = false;
+    $("#choose").scrollTop = 0;
     $("#app").hidden = true;
     applyMode();
   }
@@ -182,14 +199,25 @@
   function applyTheme() {
     const dark = broadcast;
     document.querySelectorAll("img[data-logo]").forEach((img) => { const src = dark ? LOGO.dark : LOGO.light; if (!img.src.endsWith(src.slice(2))) img.src = src; });
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#140e0b" : "#eee5da");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#2c1a13" : "#eee5da");
   }
   function applyMode() {
     body.classList.toggle("broadcasting", broadcast);
     applyTheme();
     body.classList.toggle("no-mic", !canUseMic());
     $("#choose").classList.toggle("broadcasting", broadcast);
-    $("#ask").textContent = broadcast ? (ADMIN ? T.askBroadcastAdmin : T.askBroadcast) : SPEECHES_ONLY ? T.askBroadcast : T.askLocal;
+    // While the speeches are on, an admin's options screen is their control card.
+    const control = ADMIN && broadcast;
+    $("#ask").textContent = control ? T.liveTitle : broadcast || SPEECHES_ONLY ? T.askBroadcast : T.askLocal;
+    $("#ask").classList.toggle("script", control);
+    if (control) {
+      const cs = $("#control-status");
+      cs.textContent = "";
+      if (relayUp && (speaker || speakerElsewhere)) { const d = document.createElement("span"); d.className = "dot"; cs.append(d); }
+      cs.append(!relayUp ? T.reconnecting : speaker ? T.onair_pill + (listeners != null ? " · " + T.phones(listeners) : "") : speakerElsewhere ? T.liveElsewhere : T.nobodySpeaking);
+      $("#stop-speaking").hidden = !speaker;
+      $("#end-broadcast").disabled = !relayUp;
+    }
     const sub = !relayUp ? (refused ? T.keyRefused : T.bcOffline) : broadcast ? T.bcOn + (listeners != null ? " · " + T.phones(listeners) : "") : T.bcOff;
     $("#broadcast-sub").textContent = sub;
     $("#sheet-broadcast-sub").textContent = sub;
@@ -308,10 +336,13 @@
     el.textContent = "";
     let text = status.text, dot = status.kind === "live";
     if (reading() && !speaker && !listening && status.kind !== "err") {
-      text = !relayUp ? T.reconnecting : speakerElsewhere ? T.live : T.waiting;
-      dot = relayUp && speakerElsewhere;
+      // The pill already says Live, so the line doesn't: admins see who's reading, guests nothing.
+      const count = ADMIN && listeners != null ? T.phones(listeners) : "";
+      text = !relayUp ? T.reconnecting : speakerElsewhere ? count : count ? T.waiting + " · " + count : T.waiting;
+      dot = relayUp && speakerElsewhere && !!count;
     }
-    if (speaker && listening && listeners != null && status.kind !== "err") text = T.speaking + " · " + T.phones(listeners);
+    // On air, the pill says so; the line just counts the phones reading along.
+    if (speaker && listening && listeners != null && status.kind === "live") text = T.phones(listeners);
     if (dot) { const d = document.createElement("span"); d.className = "dot"; el.append(d); }
     el.append(text || "");
   }
@@ -324,10 +355,23 @@
     el.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove("show"), 5200);
-    const line = $("#choose-notice");
-    line.textContent = text;
-    line.hidden = false;
   }
+
+  // A small yes-or-no card over the page, for anything that reaches every phone.
+  const confirmBox = $("#confirm");
+  let onConfirm = null;
+  function ask(text, yes, then) {
+    $("#confirm-text").textContent = text;
+    $("#confirm-yes").textContent = yes;
+    onConfirm = then;
+    if (!confirmBox.open) confirmBox.showModal();
+    $("#confirm-no").focus();
+  }
+  $("#confirm-no").addEventListener("click", () => confirmBox.close());
+  $("#confirm-yes").addEventListener("click", () => { const then = onConfirm; confirmBox.close(); if (then) then(); });
+  confirmBox.addEventListener("close", () => (onConfirm = null));
+  // a tap outside the card is a no
+  confirmBox.addEventListener("click", (e) => { if (e.target === confirmBox) confirmBox.close(); });
 
   let wakeLock = null;
   async function keepAwake() {
@@ -336,10 +380,11 @@
   }
 
   /* ── relay: broadcast state, and the speeches when they're on ───── */
-  let sock = null, sockRetry = 0, sockTimer = 0, refused = false, sendTimer = 0, lastSent = 0;
+  let sock = null, sockRetry = 0, sockTimer = 0, refused = false, sendTimer = 0, lastSent = 0, relayWanted = false, stateSeen = false;
   const piece = (p) => (Array.isArray(p) ? { f: String(p[0] || ""), l: String(p[1] || "") } : null);
 
   function connectRelay() {
+    relayWanted = true;
     clearTimeout(sockTimer);
     if (!RELAY || refused || (sock && sock.readyState <= 1)) return;
     let s;
@@ -379,9 +424,15 @@
       if (speaker) { speaker = false; if (listening) stop(); }
       notice(T.broadcastEnded);
     }
-    applyMode();
-    showStatus();
-    if (on && !was && ADMIN) setView("both"); // straight to the subtitles, no choosing
+    const apply = () => {
+      applyMode();
+      showStatus();
+      if (on && !was && ADMIN) setView("both"); // straight to the subtitles, no choosing
+    };
+    // Light to dark and back cross-fades rather than cutting (not on the first word from the relay).
+    const fade = stateSeen && on !== was && document.startViewTransition && !reducedMotion && document.visibilityState === "visible";
+    stateSeen = true;
+    if (fade) document.startViewTransition(apply); else apply();
   }
 
   function sendRelay(msg) { if (sock && sock.readyState === 1) sock.send(JSON.stringify(msg)); }
@@ -438,7 +489,7 @@
     } else {
       const lang = t.language === "en" || t.language === "es" ? t.language : turns.at(-1)?.lang || "en";
       let turn = turns.at(-1);
-      if (!turn || turn.lang !== lang) { turn = { id: ++turnIds, lang, said: { f: "", l: "" }, tr: { f: "", l: "" } }; turns.push(turn); }
+      if (!turn || turn.lang !== lang) { turn = { id: ++turnIds, base: 0, lang, said: { f: "", l: "" }, tr: { f: "", l: "" } }; turns.push(turn); }
       turn.said[key] += t.text;
     }
   }
@@ -447,6 +498,12 @@
   function onTokens(tokens) {
     clearLive();
     for (const t of tokens) addToken(t);
+    // Only the latest turns can still be on screen or still be taking translation; older ones go.
+    if (turns.length > KEEP_TURNS) {
+      const n = turns.length - KEEP_TURNS;
+      turns.splice(0, n);
+      for (const l of ["en", "es"]) { ptr[l] = Math.max(0, ptr[l] - n); lastTr[l] = Math.max(-1, lastTr[l] - n); }
+    }
     if (tokens.some((t) => t.text && t.text.trim())) heardAt = Date.now();
     rows = buildRows();
     render();
@@ -454,7 +511,8 @@
   }
 
   const ABBR = /(?:^|\s)(?:Mr|Mrs|Ms|Dr|St|Sr|Sra|Srta|Lic|Ing|Dra)\.$/;
-  // Split final+live text into sentences, keeping which part of each is still provisional.
+  // Split final+live text into sentences, keeping which part of each is still provisional
+  // (and where each ends in the raw text, e).
   function sentences(f, l) {
     const s = f + l, out = [];
     const re = /[.?!…]+["'”’»)]*\s+/g;
@@ -466,8 +524,8 @@
     }
     if (a < s.length) out.push([a, s.length]);
     return out
-      .map(([a, b]) => ({ f: s.slice(a, Math.min(b, f.length)), l: s.slice(Math.max(a, f.length), b) }))
-      .map((p) => (p.f.trim() ? { f: p.f.replace(/^\s+/, ""), l: p.l } : { f: "", l: p.l.replace(/^\s+/, "") }))
+      .map(([a, b]) => ({ f: s.slice(a, Math.min(b, f.length)), l: s.slice(Math.max(a, f.length), b), e: b }))
+      .map((p) => (p.f.trim() ? { f: p.f.replace(/^\s+/, ""), l: p.l, e: p.e } : { f: "", l: p.l.replace(/^\s+/, ""), e: p.e }))
       .filter((p) => (p.f + p.l).trim());
   }
 
@@ -489,7 +547,7 @@
   }
   const tidyPiece = (p) => {
     const f = tidy(p.f, true), l = tidy(p.l, !f.trim());
-    return (f + l).trim() ? { f, l } : null;
+    return (f + l).trim() ? { f, l, e: p.e } : null;
   };
 
   // Turns become rows: one sentence of what was said, level with one sentence of its translation.
@@ -498,7 +556,18 @@
     for (const t of turns) {
       const S = sentences(t.said.f, t.said.l).map(tidyPiece).filter(Boolean);
       const Tr = sentences(t.tr.f, t.tr.l).map(tidyPiece).filter(Boolean);
-      for (let i = 0; i < Math.max(S.length, Tr.length); i++) out.push({ k: t.id + "." + i, s: t.lang, [t.lang]: S[i] || null, [other(t.lang)]: Tr[i] || null });
+      // One long speech in one language is one long turn. Once a sentence and its translation are
+      // both final and well out of sight, they're cut off, so each message doesn't re-split the
+      // whole speech; base keeps the remaining rows' keys (and so their lines) where they were.
+      const cut = Math.min(S.length, Tr.length) - KEEP_SENTENCES;
+      if (cut > 0 && S[cut - 1].e <= t.said.f.length && Tr[cut - 1].e <= t.tr.f.length) {
+        t.said.f = t.said.f.slice(S[cut - 1].e);
+        t.tr.f = t.tr.f.slice(Tr[cut - 1].e);
+        t.base += cut;
+        S.splice(0, cut); Tr.splice(0, cut);
+      }
+      const row = (p) => (p ? { f: p.f, l: p.l } : null);
+      for (let i = 0; i < Math.max(S.length, Tr.length); i++) out.push({ k: t.id + "." + (t.base + i), s: t.lang, [t.lang]: row(S[i]), [other(t.lang)]: row(Tr[i]) });
     }
     return out;
   }
@@ -539,6 +608,9 @@
       return;
     }
     if (!listening) { stream.getTracks().forEach((t) => t.stop()); return; }
+    // The mic can go away under us (unplugged, or taken by a call): stop, and say so.
+    const track = stream.getAudioTracks()[0];
+    if (track) track.onended = () => { if (listening && stream && stream.getAudioTracks()[0] === track) { stop(); setStatus(T.micStopped, "err"); } };
     startMeter();
     keepAwake();
     heardAt = Date.now();
@@ -707,8 +779,22 @@
   }
 
   /* ── menu and controls ─────────────────────────────────────────── */
-  function openMenu() { $("#sheet").scrollTop = 0; body.classList.add("sheet-open"); $("#sheet").setAttribute("aria-hidden", "false"); }
-  function closeMenu() { body.classList.remove("sheet-open"); $("#sheet").setAttribute("aria-hidden", "true"); }
+  // Closed, the sheet is inert, so Tab can't wander into it; focus goes in on open and back on close.
+  function openMenu() {
+    const sheet = $("#sheet");
+    sheet.scrollTop = 0;
+    sheet.inert = false;
+    sheet.setAttribute("aria-hidden", "false");
+    body.classList.add("sheet-open");
+    $("#close-menu").focus({ preventScroll: true });
+  }
+  function closeMenu() {
+    const was = body.classList.contains("sheet-open");
+    body.classList.remove("sheet-open");
+    $("#sheet").setAttribute("aria-hidden", "true");
+    $("#sheet").inert = true;
+    if (was && screen === "app") $("#open-menu").focus({ preventScroll: true });
+  }
 
   $$("[data-view]").forEach((b) => b.addEventListener("click", () => {
     const fromOptions = screen === "choose";
@@ -721,30 +807,50 @@
     if (s.dataset.opt === "tidy" && turns.length) { rows = buildRows(); queueSend(); }
     applyPrefs();
   }));
-  $$("[data-broadcast]").forEach((s) => s.addEventListener("click", () => setBroadcast(!broadcast)));
+  // Turning the speeches off reaches every phone, so it asks first.
+  const askEnd = () => ask(T.endAsk(listeners || 0), T.endBroadcast, () => setBroadcast(false));
+  $$("[data-broadcast]").forEach((s) => s.addEventListener("click", () => (broadcast ? askEnd() : setBroadcast(true))));
+  $("#end-broadcast").addEventListener("click", askEnd);
+  $("#stop-speaking").addEventListener("click", () => { if (listening) stop(); });
   $("#size").addEventListener("click", () => { prefs.size = (prefs.size + 1) % SIZES.length; savePrefs(); applyPrefs(); });
-  $("#mic").addEventListener("click", () => (listening ? stop() : start()));
+  $("#mic").addEventListener("click", () => {
+    if (listening) return stop();
+    // Starting while another phone speaks takes the speeches from it, so that asks first.
+    if (broadcast && ADMIN && speakerElsewhere) return ask(T.takeOverAsk, T.takeOver, start);
+    start();
+  });
   $("#to-options").addEventListener("click", showChoose);
   $("#open-menu").addEventListener("click", openMenu);
   $("#close-menu").addEventListener("click", closeMenu);
   $("#scrim").addEventListener("click", closeMenu);
-  $("#clear").addEventListener("click", () => { stopDemo(); clearText(); closeMenu(); });
+  $("#clear").addEventListener("click", () => {
+    const clear = () => { stopDemo(); clearText(); closeMenu(); };
+    // on air, clearing empties every phone's screen
+    if (speaker && broadcast) ask(T.clearAsk, T.clear, clear); else clear();
+  });
   $("#demo").addEventListener("click", playDemo);
   $("#sign-out").addEventListener("click", () => {
     if (listening) stop();
     store.set("wedding-admin-v1", null);
     location.replace("../");
   });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+  // Escape in the yes-or-no card closes just the card.
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !confirmBox.open) closeMenu(); });
   const fs = $("#fullscreen");
   if (document.documentElement.requestFullscreen) {
     fs.hidden = false;
     fs.addEventListener("click", () => { closeMenu(); document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); });
   }
+  // Phones drop sockets while the screen sleeps, sometimes without telling us. After more than a
+  // few seconds away, start a fresh one; the relay sends the state and the latest lines again.
+  let hiddenAt = 0;
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState !== "visible") return;
+    if (document.visibilityState !== "visible") { hiddenAt = Date.now(); return; }
     keepAwake();
-    connectRelay(); // phones drop sockets while the screen sleeps
+    if (!relayWanted) return; // a guest still on the coming-soon screen hasn't connected
+    if (sock && hiddenAt && Date.now() - hiddenAt > 20000) { const s = sock; sock = null; try { s.close(); } catch {} }
+    hiddenAt = 0;
+    connectRelay();
   });
 
   status = { text: T.tapStart, kind: "" };

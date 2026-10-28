@@ -20,8 +20,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/gpt/site-header.css?v=20261020b">
-  <link rel="stylesheet" href="translate.css?v=20261027b">
-  <link rel="stylesheet" href="../assets/gpt/subpage.css?v=20261021j">
+  <link rel="stylesheet" href="translate.css?v=20261028a">
+  <link rel="stylesheet" href="../assets/gpt/subpage.css?v=20261028a">
 </head>
 <body data-page="translate">
 <div class="vignette" aria-hidden="true"></div>
@@ -52,6 +52,7 @@
     <li tabindex="0" aria-disabled="true" data-speeches>
       <svg class="mark mic-mark" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></svg>
       <span><b data-t="speeches">The speeches</b><small data-t="soonSpeeches"></small></span>
+      <svg class="soon-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg>
     </li>
   </ul>
   <p class="soon-foot" data-t="soonFoot"></p>
@@ -70,15 +71,15 @@
     <button class="switch" role="switch" aria-checked="false" data-broadcast aria-label="Broadcast"></button>
   </div>
 
-  <p class="notice-line" id="choose-notice" hidden></p>
   <div class="intro">
     <p class="eyebrow" data-t="eyebrow">Live translation</p>
     <p class="ask" id="ask"></p>
+    <!-- an admin's control card while the speeches are on: who is speaking, and to how many -->
+    <p class="control-status admin-bc-only" id="control-status" role="status"></p>
   </div>
   <div class="choices">
     <button class="choice wide admin-bc-only" type="button" data-view="both">
-      <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
-      <span class="name" data-t="bothLong">Both languages</span>
+      <span class="name" data-t="backToSubs">Back to the subtitles</span>
     </button>
     <button class="choice wide local-only" type="button" data-view="facing">
       <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
@@ -92,6 +93,10 @@
       <svg class="mark cactus" aria-hidden="true"><use href="#i-cactus"/></svg>
       <span class="name">Español</span><span class="sub" data-t="esSub">Subtítulos</span>
     </button>
+  </div>
+  <div class="control admin-bc-only">
+    <button class="btn" id="stop-speaking" type="button" data-t="stopSpeaking" hidden>Stop speaking</button>
+    <button class="btn quiet" id="end-broadcast" type="button" data-t="endBroadcast">End broadcast</button>
   </div>
 </section>
 
@@ -155,7 +160,7 @@
 </div>
 
 <div class="scrim" id="scrim"></div>
-<aside class="sheet" id="sheet" aria-label="Menu" aria-hidden="true">
+<aside class="sheet" id="sheet" aria-label="Menu" aria-hidden="true" inert>
   <h2 class="views-title" data-t="view">View</h2>
   <div class="views" role="group" aria-label="View">
     <button class="view local-only" type="button" data-view="facing" aria-pressed="false">
@@ -195,7 +200,18 @@
   <p class="key-legend" data-t="legend"><b>Upright</b> lines are what was said; <i>italic</i> lines are the translation.</p>
 </aside>
 
-<script src="../assets/gpt/subpage.js?v=20261021h"></script>
-<script src="translate.js?v=20261027b"></script>
+<!-- yes or no, before anything that reaches every phone -->
+<dialog class="confirm" id="confirm" aria-labelledby="confirm-text">
+  <div class="confirm-box">
+    <p id="confirm-text"></p>
+    <div class="confirm-actions">
+      <button class="btn" id="confirm-no" type="button" data-t="cancel">Cancel</button>
+      <button class="btn solid" id="confirm-yes" type="button"></button>
+    </div>
+  </div>
+</dialog>
+
+<script src="../assets/gpt/subpage.js?v=20261028a"></script>
+<script src="translate.js?v=20261028a"></script>
 </body>
 </html>

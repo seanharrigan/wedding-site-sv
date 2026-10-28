@@ -64,7 +64,8 @@ html.sp-on .lightbox{z-index:91}
 html.sp-on .sheet-wrap{z-index:92}
 /* notices sit just under the bar, above everything, rather than behind it */
 html.sp-on .toast{z-index:95;top:calc(var(--sp-header-bottom,112px) + 10px)}
-body[data-page=translate]:has(#app:not([hidden])) .toast{top:calc(66px + env(safe-area-inset-top,0px))}
+/* over the subtitles: just under the language labels, where the older lines have faded */
+body[data-page=translate]:has(#app:not([hidden])) .toast{top:calc(96px + env(safe-area-inset-top,0px))}
 
 /* over the full-screen subtitles there's no bar, as before */
 body[data-page=translate]:has(#app:not([hidden])) .site-header{display:none}
@@ -86,9 +87,13 @@ body:is([data-page=photos],[data-page=rsvp]) .top::before{-webkit-mask-image:lin
   mask-image:linear-gradient(180deg,transparent 0,transparent 64px,#000 150px,#000 34%,transparent 96%)}
 
 /* Translate: the options and coming-soon screens are cards laid out from the top like the
-   Gallery; the subtitles stay full screen, and a broadcast is full screen and dark throughout */
-body[data-page=translate] :is(.soon,.choose){height:calc(100dvh - var(--sp-card-top) + var(--sp-card-radius) + 2px);padding-bottom:calc(28px + var(--sp-card-radius) + env(safe-area-inset-bottom,0px));justify-content:flex-start;gap:10px;
+   Gallery, and scroll inside the card on short screens; the subtitles stay full screen */
+body[data-page=translate] :is(.soon,.choose){height:calc(100dvh - var(--sp-card-top) + var(--sp-card-radius) + 2px);padding-bottom:0;justify-content:flex-start;gap:10px;
+  overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
   padding-top:var(--sp-head-top);background:radial-gradient(circle at 15% 0,rgba(255,255,255,.55),transparent 30rem),#eee5da}
+/* room at the end for the part of the card below the screen: a spacer, since Safari leaves a
+   flex column's bottom padding out of what scrolls (the gap above it is 10px) */
+body[data-page=translate] :is(.soon,.choose)::after{content:"";order:99;flex:none;height:calc(18px + var(--sp-card-radius) + env(safe-area-inset-bottom,0px))}
 body[data-page=translate] :is(.soon,.choose) > .lockup{margin-bottom:10px}
 /* the leaf shadows sit inside the card, as on the Gallery, not on the backdrop */
 body[data-page=translate] :is(.soon,.choose){isolation:isolate}
@@ -106,7 +111,7 @@ body[data-page=translate]:not(.broadcasting) :is(.soon,.choose) .date{font-size:
 body[data-page=translate]:not(.broadcasting) :is(.soon,.choose) .date::before,
 body[data-page=translate]:not(.broadcasting) :is(.soon,.choose) .date::after{background:rgba(73,54,44,.3)}
 body[data-page=translate]:not(.broadcasting) :is(.soon,.choose) .eyebrow{font-size:.6rem;letter-spacing:.3em;color:#49362c}
-body[data-page=translate]:not(.broadcasting) .soon-title{font-family:"Pinyon Script","Snell Roundhand",cursive;font-weight:400;font-size:clamp(3.6rem,13vw,5.4rem);line-height:1.05;letter-spacing:0;padding:0 .1em;color:#30251f}
+body[data-page=translate]:not(.broadcasting) .soon-title{font-family:"Pinyon Script","Snell Roundhand",cursive;font-weight:400;font-size:clamp(3rem,15vw,5.4rem);line-height:1.05;letter-spacing:0;padding:0 .1em;color:#30251f}
 body[data-page=translate]:not(.broadcasting) .soon-copy{max-width:32ch;font-size:1.15rem;font-style:italic;line-height:1.4;color:#52443a}
 body[data-page=translate]:not(.broadcasting) .soon-list{width:min(520px,100%)}
 body[data-page=translate]:not(.broadcasting) .soon-list li{padding:16px 18px;border:1px solid rgba(73,54,44,.15);border-radius:22px;background:#faf5ee;
@@ -123,8 +128,10 @@ body[data-page=translate] .soon .soon-copy{margin:-6px 0 16px}
 body[data-page=translate] .choose .intro{margin-bottom:14px}
 body[data-page=translate] .choose .broadcast-card{order:3;margin-top:14px}
 body[data-page=translate] #app{background:var(--bg-grad)}
-body.broadcasting{background:var(--bg-grad)!important}
-body.broadcasting :is(.soon,.choose){width:100%;height:100dvh;margin:0;border:0;border-radius:0;box-shadow:none;background:transparent}
+/* a broadcast keeps the frame and recolours it: a dark cocoa card on a darker backdrop */
+html.sp-on:has(> body[data-page=translate].broadcasting){background:radial-gradient(circle at 12% 8%,rgba(84,54,38,.5),transparent 42rem),linear-gradient(150deg,#2c1a13,#140c09) fixed #1c110d}
+body[data-page=translate].broadcasting :is(.soon,.choose){background:linear-gradient(140deg,#342017,#24140f 62%,#1c110d);border-color:rgba(255,249,239,.14);
+  box-shadow:0 46px 120px rgba(0,0,0,.45),0 14px 36px rgba(0,0,0,.25),0 0 0 1px rgba(255,249,239,.04)}
 /* ── between pages ─────────────────────────────────────────────────── */
 /* Where the browser supports it, the page cross-fades in place. The bar and the frame are
    pixel-identical on all three pages, so they stay still through it and only what differs
