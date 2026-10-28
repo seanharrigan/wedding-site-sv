@@ -26,6 +26,7 @@
   const T = {
     en: {
       back: "← seanandvaleria.com", indexTitle: "Itinerary", indexLede: "Let us know which plans you’re joining.",
+      soonTitle: "Check back soon", soonLede: "The wedding week’s plans, and the RSVPs for them, will be here soon.",
       areas: { CDMX: "Mexico City", "Tepoztlán": "Morelos" },
       yes: "Going", maybe: "Maybe", no: "Can’t go", noAnswer: "No answer yet",
       youAre: "You’re", answeringAs: "Answering as", change: "Change", pickName: "Tap your name",
@@ -43,6 +44,7 @@
     },
     es: {
       back: "← seanandvaleria.com", indexTitle: "Itinerario", indexLede: "Cuéntennos a qué planes se apuntan.",
+      soonTitle: "Vuelvan pronto", soonLede: "Muy pronto encontrarán aquí los planes de la semana de la boda y podrán confirmar su asistencia.",
       areas: { CDMX: "Ciudad de México", "Tepoztlán": "Morelos" },
       yes: "Voy", maybe: "Tal vez", no: "No puedo", noAnswer: "Sin respuesta",
       youAre: "Eres", answeringAs: "Respondes como", change: "Cambiar", pickName: "Toca tu nombre",
@@ -526,6 +528,15 @@
   }
 
   $("#admin-pill").addEventListener("click", () => $(".ev-admin")?.scrollIntoView({ behavior: "smooth" }));
+  // Until RSVP_FOR_GUESTS is true (rsvp/index.html), only Sean and Val see the itinerary;
+  // everyone else, shared plan links included, is asked to check back soon.
+  if (!ADMIN_CODE && !window.RSVP_FOR_GUESTS) {
+    $("#title").textContent = T.soonTitle;
+    $("#title").classList.add("script");
+    $("#lede").textContent = T.soonLede;
+    return;
+  }
+
   async function boot() {
     // the itinerary's heading shows at once, while the plans load
     if (!SLUG) { $("#title").textContent = T.indexTitle; $("#title").classList.add("script"); $("#lede").textContent = T.indexLede; }
