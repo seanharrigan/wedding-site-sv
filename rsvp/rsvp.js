@@ -231,7 +231,12 @@
     const e = S.event;
     const row = main.querySelector(`.ev-row[data-slug="${e.slug}"]`);
     if (!row || S.open !== e.slug) return;
-    put(row.querySelector(".ev-panel"), renderDetails(), renderForm(), renderWho(), S.admin ? renderAdmin() : null);
+    const panel = row.querySelector(".ev-panel");
+    // a tap redraws the card; keep focus on the same answer, or the plan's own button
+    const had = panel.contains(document.activeElement), k = had && document.activeElement.dataset.k;
+    put(panel, renderDetails(), renderForm(), renderWho(), S.admin ? renderAdmin() : null);
+    panel.removeAttribute("aria-busy");
+    if (had) ((k && panel.querySelector(`[data-k="${k}"]`)) || row.querySelector(".ev-link")).focus({ preventScroll: true });
     const mine = S.me && S.answers.find((a) => a.g === S.me.id)?.a;
     put(row.querySelector(".ev-mine"), mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null);
   }
@@ -244,7 +249,7 @@
         el("span", {}, el("b", { text: e.place || "" }), e.address ? el("small", { text: e.address }) : null),
         e.map_url ? el("a", { class: "btn small", href: e.map_url, target: "_blank", rel: "noopener", text: T.map }) : null) : null,
       L(e, "details") ? el("p", { class: "ev-details", text: L(e, "details") }) : null,
-      left != null ? el("p", { class: "ev-seats", text: T.seats(left, e.capacity) }) : null,
+      left != null ? el("p", { class: "ev-seats", text: left ? T.seats(left, e.capacity) : T.full(0) }) : null,
       e.rsvp_by ? el("p", { class: "ev-seats", text: T.rsvpBy(cap(fmtDay(e.rsvp_by + "T12:00"))) }) : null);
   }
 
@@ -257,7 +262,7 @@
     const ids = circle();
     const saved = new Map(S.answers.filter((a) => ids.includes(a.g)).map((a) => [a.g, a.a]));
     const choice = (id) => el("div", { class: "answer", role: "group", "aria-label": nameOf(id) },
-      ["yes", "maybe", "no"].map((a) => el("button", { type: "button", class: "ans-" + a, "aria-pressed": String(S.draft.get(id) === a), text: T[a],
+      ["yes", "maybe", "no"].map((a) => el("button", { type: "button", class: "ans-" + a, "aria-pressed": String(S.draft.get(id) === a), text: T[a], "data-k": `${id}-${a}`,
         onclick: () => { S.draft.get(id) === a && id !== S.me.id ? S.draft.delete(id) : S.draft.set(id, a); renderEvent(); } })));
     const person = (id, i) => el("div", { class: "person" + (i ? " mate" : "") },
       el("p", { class: "person-name" }, i ? nameOf(id) : el("span", {}, el("small", { text: T.answeringAs }), S.me.name),
@@ -285,6 +290,7 @@
   }
 
   async function send() {
+    if (!SLUG && S.open !== S.event.slug) return;
     if (!S.me) return toast(T.pickFirst);
     if (!S.draft.has(S.me.id) && !S.draft.size) return toast(T.pickAnswer);
     const answers = [...S.draft].map(([guestId, answer]) => ({ guestId, answer }));
@@ -307,7 +313,7 @@
     const block = (a, ids) => el("div", { class: "who-block" }, el("span", { class: "meta-label", text: `${T[a] || T.noAnswer} · ${ids.length}` }), ids.length ? tags(ids) : null);
     if (!e.show_guests && !S.admin) return null;
     const going = by("yes"), maybe = by("maybe");
-    const blocks = [block("yes", going), maybe.length ? block("maybe", maybe) : null];
+    const blocks = [going.length || maybe.length || S.admin ? block("yes", going) : null, maybe.length ? block("maybe", maybe) : null];
     if (S.admin) {
       const answered = new Set(S.answers.map((x) => x.g));
       blocks.push(block("no", by("no")));
@@ -367,13 +373,13 @@
       const open = S.open === e.slug;
       return el("div", { class: "ev-row" + (open ? " open" : ""), "data-slug": e.slug },
         el("div", { class: "ev-head" },
-          el("button", { class: "ev-link", type: "button", "aria-expanded": String(open), "aria-controls": `plan-${e.slug}`, onclick: () => togglePlan(e.slug) },
+          el("button", { class: "ev-link", id: `head-${e.slug}`, type: "button", "aria-expanded": String(open), "aria-controls": `plan-${e.slug}`, onclick: () => togglePlan(e.slug) },
             e.listed ? null : el("small", { text: T.draft }),
             el("b", { text: L(e, "title") }),
             el("em", { text: [hours(e), e.place].filter(Boolean).join(" · ") })),
           el("span", { class: "ev-mine" }, mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null),
           el("span", { class: "ev-chev", "aria-hidden": "true" })),
-        el("div", { class: "ev-panel", id: `plan-${e.slug}`, hidden: !open }));
+        el("div", { class: "ev-panel", id: `plan-${e.slug}`, role: "region", "aria-labelledby": `head-${e.slug}`, hidden: !open }));
     };
     // Map keeps the order the events come in (by sort), so cities and days read in date order.
     const group = (list, key) => [...list.reduce((m, e) => m.set(key(e), [...(m.get(key(e)) || []), e]), new Map())];
@@ -391,26 +397,50 @@
 
   async function togglePlan(slug) {
     const was = S.open;
+    // Closing a card above this one would pull the tapped card up and out of sight: keep it
+    // where it was on screen.
+    const tapped = main.querySelector(`.ev-row[data-slug="${slug}"]`);
+    const top = tapped?.getBoundingClientRect().top;
+    closePlans();
+    if (was !== slug) openPlan(slug);
+    else history.replaceState(null, "", location.pathname + location.search);
+    if (tapped) {
+      scrollBy(0, tapped.getBoundingClientRect().top - top);
+      const bar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--sp-header-bottom")) || 100;
+      if (tapped.getBoundingClientRect().top < bar) scrollBy(0, tapped.getBoundingClientRect().top - bar - 4);
+    }
+  }
+  function closePlans() {
     S.open = null;
     for (const r of main.querySelectorAll(".ev-row.open")) {
       r.classList.remove("open");
       r.querySelector(".ev-link").setAttribute("aria-expanded", "false");
       r.querySelector(".ev-panel").hidden = true;
     }
-    if (was !== slug) await openPlan(slug);
   }
   async function openPlan(slug) {
     const r = main.querySelector(`.ev-row[data-slug="${slug}"]`);
     if (!r) return;
     if (S.event?.slug !== slug) S.extra.clear();
     S.open = slug;
+    history.replaceState(null, "", `${location.pathname}${location.search}#${slug}`);
     r.classList.add("open");
     r.querySelector(".ev-link").setAttribute("aria-expanded", "true");
     const panel = r.querySelector(".ev-panel");
     panel.hidden = false;
-    if (!panel.firstChild) put(panel, el("p", { class: "hint", text: "…" }));
+    // what was here last time belongs to an earlier load: show nothing tappable until this one lands
+    panel.setAttribute("aria-busy", "true");
+    put(panel, el("p", { class: "hint ev-loading", text: "…" }));
     try { await loadEvent(slug); } catch { toast(T.error); }
   }
+  // Escape closes the open plan (not while typing a note, and not over a sheet)
+  addEventListener("keydown", (ev) => {
+    if (ev.key !== "Escape" || SLUG || !S.open || !wrap.hidden || ev.target.matches?.("textarea,input")) return;
+    const head = main.querySelector(`#head-${S.open}`);
+    closePlans();
+    history.replaceState(null, "", location.pathname + location.search);
+    head?.focus();
+  });
 
   let toastTimer = 0;
   function toast(text) {
@@ -426,7 +456,12 @@
     try {
       await loadGuests();
       if (SLUG) await loadEvent();
-      else await renderIndex();
+      else {
+        const h = decodeURIComponent(location.hash.slice(1));
+        if (/^[\w-]+$/.test(h)) S.open = h;
+        await renderIndex();
+        if (S.open) main.querySelector(`.ev-row[data-slug="${S.open}"]`)?.scrollIntoView({ block: "start" });
+      }
     } catch (err) {
       if (err.status === 404) {
         $("#title").textContent = "RSVP";

@@ -4,7 +4,7 @@
 .rsvp>section{width:min(520px,100%)}
 .rsvp .hint{font-size:1.05rem;font-style:italic;color:var(--muted);text-align:center;line-height:1.35}
 textarea{font:inherit;color:inherit}
-.link{font-family:var(--sans);font-weight:600;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mocha);text-decoration:underline;text-underline-offset:3px;padding:6px 2px}
+.link{display:inline-flex;align-items:center;min-height:32px;font-family:var(--sans);font-weight:600;font-style:normal;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mocha);text-decoration:underline;text-underline-offset:3px;padding:6px 2px}
 .btn.big{width:100%;min-height:54px;font-size:.62rem}
 
 /* the details */
@@ -29,8 +29,8 @@ textarea{font:inherit;color:inherit}
 .person.mate .answer button{min-height:44px}
 .answer button[aria-pressed=true]{color:var(--cream);border-color:transparent;box-shadow:0 8px 20px rgba(52,38,31,.18)}
 .answer .ans-yes[aria-pressed=true],.pill.ans-yes{background:var(--mocha)}
-.answer .ans-maybe[aria-pressed=true],.pill.ans-maybe{background:#8a7462}
-.answer .ans-no[aria-pressed=true],.pill.ans-no{background:#a39486}
+.answer .ans-maybe[aria-pressed=true],.pill.ans-maybe{background:#6b5546}
+.answer .ans-no[aria-pressed=true],.pill.ans-no{background:#7a695a}
 .ev-form .tag.add{align-self:center;font-size:1.05rem}
 .field.note{min-height:76px;padding:12px 16px;resize:vertical;line-height:1.35}
 
@@ -64,7 +64,8 @@ details[open].who-block summary{margin-bottom:8px}
 .ev-row:not(.open):hover{box-shadow:var(--shadow-lift);transform:translateY(-1px)}
 .ev-row.open{border-color:var(--line-strong);box-shadow:var(--shadow-lift)}
 .ev-head{position:relative;display:flex;align-items:center;gap:12px;padding:16px 18px}
-.ev-head:has(.ev-link:focus-visible){outline:1px solid var(--mocha);outline-offset:3px;border-radius:22px}
+/* the focus ring goes round the whole card, open or closed */
+.ev-row:has(> .ev-head .ev-link:focus-visible){outline:1.5px solid var(--mocha);outline-offset:3px}
 /* the whole top of the card is the button */
 .ev-link{flex:1;min-width:0;text-align:left;outline:none}
 .ev-link::after{content:"";position:absolute;inset:0;border-radius:22px}
@@ -72,10 +73,16 @@ details[open].who-block summary{margin-bottom:8px}
 .ev-row .ev-link b{display:block;font-weight:500;font-size:1.4rem;line-height:1.15}
 .ev-row .ev-link em{display:block;font-size:1.05rem;color:var(--muted);margin-top:2px}
 .ev-mine:empty{display:none}
-.ev-chev{flex:none;width:9px;height:9px;margin:0 4px 4px 2px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg);transition:transform .35s var(--ease)}
-.ev-row.open .ev-chev{transform:rotate(-135deg);margin-bottom:-4px}
+/* the pill and the arrow are part of the button underneath */
+.ev-mine,.ev-chev{pointer-events:none}
+.ev-chev{flex:none;width:9px;height:9px;margin:0 4px 0 2px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-2px) rotate(45deg);transition:transform .35s var(--ease)}
+.ev-row.open .ev-chev{transform:translateY(2px) rotate(-135deg)}
 /* inside: the details, your answers and who's going, as on the plan's own page */
 .ev-panel{display:flex;flex-direction:column;gap:18px;margin:0 18px;padding:16px 0 20px;border-top:1px solid var(--line);animation:fade .3s var(--ease)}
 .ev-panel .ev-card{padding:0;background:none;border:0;box-shadow:none}
+/* the head already names the place; here it's the address line's lead */
+.ev-panel .ev-place b{font-size:1.12rem}
+.ev-panel .ev-loading{min-height:160px;display:grid;place-items:center}
+.ev-row{scroll-margin-top:calc(var(--sp-header-bottom,100px) + 4px)}
 .ev-panel .ev-who,.ev-panel .ev-admin{padding-top:16px}
 .pill{font-family:var(--sans);font-weight:600;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cream);padding:6px 10px;border-radius:999px}
