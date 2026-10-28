@@ -87,6 +87,7 @@
     draft: new Map(), // guest id → answer, for the people on this phone's form
     extra: new Set(),  // people added with "+ Someone else"
     note: "",
+    open: null,        // the plan opened in place on the itinerary
   };
   const nameOf = (id) => S.guestById.get(id)?.name;
   const partyOf = (id) => S.guestById.get(id)?.party;
@@ -190,14 +191,16 @@
     if (!g) return false;
     setMe(g);
     S.extra.clear();
-    await loadEvent();
+    // on the itinerary, every plan's pill changes with the name, so draw the list again
+    if (SLUG) await loadEvent(); else await renderIndex();
     return true;
   }
 
-  // ── one event ─────────────────────────────────────────────────────────────
+  // ── one event: its own page (?e=slug), or opened in place on the itinerary ──
   const main = $("#main");
-  async function loadEvent() {
-    const d = await api(`/api/events/${encodeURIComponent(SLUG)}${meParam()}`);
+  async function loadEvent(slug = SLUG || S.event.slug) {
+    const d = await api(`/api/events/${encodeURIComponent(slug)}${meParam()}`);
+    if (!SLUG && S.open !== slug) return; // closed, or another plan opened, while this one loaded
     S.event = d.event;
     S.counts = d.counts;
     S.answers = d.answers;
@@ -211,6 +214,7 @@
   }
 
   function renderEvent() {
+    if (!SLUG) return renderPlan();
     const e = S.event;
     document.title = `${L(e, "title")} · RSVP · Sean & Valeria`;
     $("#eyebrow").textContent = e.listed ? ["RSVP", e.area].filter(Boolean).join(" · ") : T.draft;
@@ -218,17 +222,30 @@
     $("#lede").textContent = when(e);
     $("#admin-pill").hidden = !S.admin;
 
+    put(main, renderDetails(), renderForm(), renderWho(), S.admin ? renderAdmin() : null,
+      el("p", { class: "ev-all" }, el("a", { href: `./?lang=${LANG}`, text: T.allLink })));
+  }
+
+  // The plan opened on the itinerary: the same details, answers and names, inside its card.
+  function renderPlan() {
+    const e = S.event;
+    const row = main.querySelector(`.ev-row[data-slug="${e.slug}"]`);
+    if (!row || S.open !== e.slug) return;
+    put(row.querySelector(".ev-panel"), renderDetails(), renderForm(), renderWho(), S.admin ? renderAdmin() : null);
+    const mine = S.me && S.answers.find((a) => a.g === S.me.id)?.a;
+    put(row.querySelector(".ev-mine"), mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null);
+  }
+
+  function renderDetails() {
+    const e = S.event;
     const left = e.capacity ? Math.max(0, e.capacity - S.counts.yes) : null;
-    const details = el("section", { class: "ev-card" },
+    return el("section", { class: "ev-card" },
       e.place || e.address ? el("p", { class: "ev-place" },
         el("span", {}, el("b", { text: e.place || "" }), e.address ? el("small", { text: e.address }) : null),
         e.map_url ? el("a", { class: "btn small", href: e.map_url, target: "_blank", rel: "noopener", text: T.map }) : null) : null,
       L(e, "details") ? el("p", { class: "ev-details", text: L(e, "details") }) : null,
       left != null ? el("p", { class: "ev-seats", text: T.seats(left, e.capacity) }) : null,
       e.rsvp_by ? el("p", { class: "ev-seats", text: T.rsvpBy(cap(fmtDay(e.rsvp_by + "T12:00"))) }) : null);
-
-    put(main, details, renderForm(), renderWho(), S.admin ? renderAdmin() : null,
-      el("p", { class: "ev-all" }, el("a", { href: `./?lang=${LANG}`, text: T.allLink })));
   }
 
   function renderForm() {
@@ -272,7 +289,7 @@
     if (!S.draft.has(S.me.id) && !S.draft.size) return toast(T.pickAnswer);
     const answers = [...S.draft].map(([guestId, answer]) => ({ guestId, answer }));
     try {
-      await api(`/api/events/${encodeURIComponent(SLUG)}/rsvps`, { method: "PUT", json: { by: S.me.id, answers, note: S.note } });
+      await api(`/api/events/${encodeURIComponent(S.event.slug)}/rsvps`, { method: "PUT", json: { by: S.me.id, answers, note: S.note } });
       toast(T.sent);
       await loadEvent();
     } catch (err) {
@@ -343,19 +360,20 @@
     $("#lede").textContent = T.indexLede;
     $("#admin-pill").hidden = !S.admin;
     const mineFor = (slug) => S.me && d.mine.find((m) => m.e === slug && m.g === S.me.id)?.a;
-    // Each plan opens its own page. With a mouse, resting on a plan shows its details on a card
-    // just below it, without moving anything.
+    // Tapping a plan opens it in place: its details, your answer and your party's, and who's
+    // going. Tapping it again closes it. (A shared ?e= link still opens the plan on its own page.)
     const row = (e) => {
       const mine = mineFor(e.slug);
-      const details = L(e, "details");
-      return el("div", { class: "ev-row" },
-        el("a", { class: "ev-link", href: `./?e=${e.slug}&lang=${LANG}`, "aria-describedby": details ? `info-${e.slug}` : null },
-          e.listed ? null : el("small", { text: T.draft }),
-          el("b", { text: L(e, "title") }),
-          el("em", { text: [hours(e), e.place].filter(Boolean).join(" · ") })),
-        mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null,
-        details ? el("div", { class: "info-pop", id: `info-${e.slug}`, role: "tooltip" },
-          e.address ? el("small", { text: e.address }) : null, el("p", { text: details })) : null);
+      const open = S.open === e.slug;
+      return el("div", { class: "ev-row" + (open ? " open" : ""), "data-slug": e.slug },
+        el("div", { class: "ev-head" },
+          el("button", { class: "ev-link", type: "button", "aria-expanded": String(open), "aria-controls": `plan-${e.slug}`, onclick: () => togglePlan(e.slug) },
+            e.listed ? null : el("small", { text: T.draft }),
+            el("b", { text: L(e, "title") }),
+            el("em", { text: [hours(e), e.place].filter(Boolean).join(" · ") })),
+          el("span", { class: "ev-mine" }, mine ? el("span", { class: "pill ans-" + mine, text: T[mine] }) : null),
+          el("span", { class: "ev-chev", "aria-hidden": "true" })),
+        el("div", { class: "ev-panel", id: `plan-${e.slug}`, hidden: !open }));
     };
     // Map keeps the order the events come in (by sort), so cities and days read in date order.
     const group = (list, key) => [...list.reduce((m, e) => m.set(key(e), [...(m.get(key(e)) || []), e]), new Map())];
@@ -367,7 +385,31 @@
             el("div", { class: "itin-day" },
               el("h3", { class: "day-head", text: day ? cap(fmtDay(day + "T12:00")) : T.tbc }),
               el("div", { class: "ev-list" }, list.map(row))))))),
-      S.me ? el("p", { class: "ev-all" }, `${T.youAre} ${S.me.name} · `, el("button", { class: "link", type: "button", text: T.change, onclick: async () => { const g = await namePicker({ q: T.whoQ, hint: T.whoHint }); if (g) { setMe(g); renderIndex(); } } })) : null);
+      S.me ? el("p", { class: "ev-all" }, `${T.youAre} ${S.me.name} · `, el("button", { class: "link", type: "button", text: T.change, onclick: async () => { const g = await namePicker({ q: T.whoQ, hint: T.whoHint }); if (g) { setMe(g); S.extra.clear(); renderIndex(); } } })) : null);
+    if (S.open) await openPlan(S.open);
+  }
+
+  async function togglePlan(slug) {
+    const was = S.open;
+    S.open = null;
+    for (const r of main.querySelectorAll(".ev-row.open")) {
+      r.classList.remove("open");
+      r.querySelector(".ev-link").setAttribute("aria-expanded", "false");
+      r.querySelector(".ev-panel").hidden = true;
+    }
+    if (was !== slug) await openPlan(slug);
+  }
+  async function openPlan(slug) {
+    const r = main.querySelector(`.ev-row[data-slug="${slug}"]`);
+    if (!r) return;
+    if (S.event?.slug !== slug) S.extra.clear();
+    S.open = slug;
+    r.classList.add("open");
+    r.querySelector(".ev-link").setAttribute("aria-expanded", "true");
+    const panel = r.querySelector(".ev-panel");
+    panel.hidden = false;
+    if (!panel.firstChild) put(panel, el("p", { class: "hint", text: "…" }));
+    try { await loadEvent(slug); } catch { toast(T.error); }
   }
 
   let toastTimer = 0;
