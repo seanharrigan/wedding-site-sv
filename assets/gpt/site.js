@@ -253,7 +253,9 @@ const keepWebsiteAtTop = () => scrollTo({ top: 0, left: 0, behavior: 'auto' });
 const isAdmin = () => !!readStoredValue('wedding-admin-v1');
 // seanandvaleria.com/?admin reopens the gate on a phone that already has guest access.
 const adminRequested = new URLSearchParams(location.search).has('admin') && !isAdmin();
-const accessGranted = readStoredValue('wedding-access-v1') === 'true' && !adminRequested;
+// Wedding day: no invitation password for guests. The gate still opens with ?admin, for Sean and Val.
+const accessGranted = !adminRequested;
+if (accessGranted) storeValue('wedding-access-v1', 'true');
 
 const syncTranslateButton = () => {
   if (!navTranslate) return;

@@ -27,7 +27,7 @@
   <link rel="apple-touch-icon" href="/assets/gpt/favicon-social-preview-rounded.png?v=20260830b">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <script>try{const admin=!!localStorage.getItem('wedding-admin-v1'),access=localStorage.getItem('wedding-access-v1')==='true'&&!(!admin&&/[?&]admin(=|&|$)/.test(location.search));if(admin)document.documentElement.classList.add('is-admin');document.documentElement.classList.add(access?'access-granted':'access-required');if(access&&localStorage.getItem('wedding-invitation-seen')==='true')document.documentElement.classList.add('returning-visitor')}catch(e){document.documentElement.classList.add('access-required')}</script>
+  <script>try{const admin=!!localStorage.getItem('wedding-admin-v1'),access=!(!admin&&/[?&]admin(=|&|$)/.test(location.search));if(access)localStorage.setItem('wedding-access-v1','true');if(admin)document.documentElement.classList.add('is-admin');document.documentElement.classList.add(access?'access-granted':'access-required');if(access&&localStorage.getItem('wedding-invitation-seen')==='true')document.documentElement.classList.add('returning-visitor')}catch(e){document.documentElement.classList.add('access-required')}</script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Great+Vibes&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/gpt/invitation-envelope-closed-mobile-v1.webp" media="(max-width: 720px)">
   <link rel="preload" as="image" href="assets/gpt/invitation-envelope-closed-desktop-v1.webp" media="(min-width: 721px)">
@@ -264,6 +264,6 @@
     <footer class="footer" data-header-tone="dark"><img class="footer-logo" src="assets/gpt/sv-logo-variants/solid/sv-logo-cream-solid.png" data-i18n-alt="footerLogoAlt" alt="Sean and Valeria monogram"><div class="footer-signoff"><strong>Sean &amp; Valeria</strong><span>03 · 11 · 2026 · Tepoztlán</span></div></footer>
   </main>
   <div class="sp-cover" aria-hidden="true"></div>
-  <script src="assets/gpt/site.js?v=20261103a"></script>
+  <script src="assets/gpt/site.js?v=20261103b"></script>
 </body>
 </html>
