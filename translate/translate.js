@@ -17,7 +17,7 @@
   const ADMIN = !!ADMIN_CODE;
   const PREF_STORE = "wedding-translate-prefs";
   const SIZES = ["clamp(1.3rem,3.6vw,2.4rem)", "clamp(1.55rem,4.6vw,3rem)", "clamp(1.9rem,5.8vw,3.8rem)", "clamp(2.3rem,7vw,4.8rem)"];
-  const VIEWS = ["en", "es", "both", "facing"];
+  const VIEWS = ["en", "es", "both", "facing", "auto"];
   const SHOW_ROWS = 14, SEND_ROWS = 10, SEND_EVERY_MS = 120, LOCAL_IDLE_MS = 3 * 60 * 1000;
   const KEEP_TURNS = 30, KEEP_SENTENCES = 20; // how much of a long speech is kept to re-split
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -26,10 +26,12 @@
   const LANG = ["en", "es"].includes(q.get("lang")) ? q.get("lang") : store.get("wedding-language", "en") === "es" ? "es" : "en";
   const T = {
     en: {
-      soonTitle: "Coming soon", speeches: "The speeches",
+      soonTitle: "Translation", speeches: "The speeches",
       soonCopy: "On the wedding day, this page will translate between English and Spanish as people speak, so everyone can follow along.",
       soonFacing: "Two people, one phone. Each of you reads the other’s words in your own language.",
-      soonSpeeches: "Read every speech live, in English or Spanish.",
+      soonSpeeches: "Opens by itself when the speeches begin.",
+      speechesNotOn: "Come back when the speeches are on", faceNotOpen: "Not open yet",
+      autoName: "Translation", autoView: "Translated", autoSub: "Each line in the other language",
       soonFoot: "See you in Tepoztlán", soonOpens: "Opens on the wedding day · Tuesday 3 November",
       back: "← seanandvaleria.com", eyebrow: "Live translation", broadcast: "Broadcast", view: "View", facing: "Face to face", facingSub: "Two people, one table", facingShort: "Across a table",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Both", bothSub: "Side by side", onlyEn: "Only English", onlyEs: "Only Spanish",
@@ -55,10 +57,12 @@
       clearAsk: "Clear the subtitles on every phone?", takeOverAsk: "Another phone is speaking. Take over the speeches?", takeOver: "Take over",
     },
     es: {
-      soonTitle: "Próximamente", speeches: "Los discursos",
+      soonTitle: "Traducción", speeches: "Los discursos",
       soonCopy: "El día de la boda, esta página traducirá entre inglés y español mientras la gente habla, para que todos puedan seguir la conversación.",
       soonFacing: "Dos personas, un teléfono. Cada quien lee lo que dice el otro en su propio idioma.",
-      soonSpeeches: "Lee cada discurso en vivo, en inglés o en español.",
+      soonSpeeches: "Se abre sola cuando empiecen los discursos.",
+      speechesNotOn: "Vuelve cuando empiecen los discursos", faceNotOpen: "Aún no está disponible",
+      autoName: "Traducción", autoView: "Traducido", autoSub: "Cada línea en el otro idioma",
       soonFoot: "Nos vemos en Tepoztlán", soonOpens: "Abre el día de la boda · martes 3 de noviembre",
       back: "← seanandvaleria.com", eyebrow: "Traducción en vivo", broadcast: "Transmitir", view: "Vista", facing: "Frente a frente", facingSub: "Dos personas, una mesa", facingShort: "En la mesa",
       enSub: "Subtitles", esSub: "Subtítulos", both: "Ambos", bothSub: "Lado a lado", onlyEn: "Solo inglés", onlyEs: "Solo español",
@@ -99,36 +103,46 @@
   // (that costs nothing; only the speaking phone's mic uses Soniox), but face to face stays shut.
   const SPEECHES_ONLY = !ADMIN && !window.TRANSLATE_FOR_GUESTS && !!window.SPEECHES_FOR_GUESTS;
   body.classList.toggle("speeches-only", SPEECHES_ONLY);
+  // Where a guest was when the speeches pulled them here (seanandvaleria.com sends them with
+  // ?from=), so they go back there when the speeches end.
+  const FROM = (() => { const f = q.get("from"); return f && f.startsWith("/") && !f.startsWith("//") ? f : null; })();
   if (!ADMIN && !window.TRANSLATE_FOR_GUESTS) {
     $("#soon").hidden = false;
-    // The cards answer a tap, though there's nothing to open yet: a little nudge, and the card
-    // itself says when it opens (and keeps saying it), right where the finger is.
-    const soonTap = (li) => {
+    // A card that can't open says why, right where the finger is, with a little nudge.
+    const say = (li, text) => {
       li.classList.remove("nudge");
       void li.offsetWidth;
       li.classList.add("nudge");
-      if (li.querySelector(".soon-when")) return;
-      const when = document.createElement("span");
-      when.className = "soon-when";
-      when.textContent = T.soonOpens;
-      li.querySelector("b").parentElement.append(when);
+      let when = li.querySelector(".soon-when");
+      if (!when) { when = document.createElement("span"); when.className = "soon-when"; li.querySelector("b").parentElement.append(when); }
+      when.textContent = text;
     };
     document.querySelectorAll(".soon-list li").forEach((li) => {
-      const open = SPEECHES_ONLY && li.hasAttribute("data-speeches");
-      // the one that opens is a button, and its chevron shows
-      if (open) { li.removeAttribute("aria-disabled"); li.setAttribute("role", "button"); li.classList.add("opens"); }
-      const tap = () => (open ? enterSpeeches() : soonTap(li));
+      const speeches = SPEECHES_ONLY && li.hasAttribute("data-speeches");
+      // the speeches card is a button, and its chevron shows
+      if (speeches) { li.removeAttribute("aria-disabled"); li.setAttribute("role", "button"); li.classList.add("opens"); }
+      const tap = () => (!speeches ? say(li, T.faceNotOpen) : broadcast ? enterSpeeches() : say(li, T.speechesNotOn));
       li.addEventListener("click", tap);
       li.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tap(); } });
     });
     if (!SPEECHES_ONLY) return;
   }
-  // The speeches, for a guest before the day: straight to the subtitles in their language.
-  function enterSpeeches(view = LANG) {
+  // The speeches, for a guest: straight to the subtitles, each line in the other language.
+  function enterSpeeches(view = "auto") {
     $("#soon").hidden = true;
     connectRelay();
     setView(view);
   }
+  // When the speeches end, a guest goes back to where they were, or to the Translation screen.
+  function leaveSpeeches() {
+    if (FROM) return location.replace(FROM);
+    screen = "soon";
+    closeMenu();
+    document.querySelectorAll(".soon-when").forEach((n) => n.remove());
+    $("#app").hidden = true;
+    $("#soon").hidden = false;
+  }
+  let leaveTimer = 0;
 
   let prefs = { size: 1, swapped: LANG === "en", tidy: true };
   try { prefs = { ...prefs, ...JSON.parse(store.get(PREF_STORE, "{}")) }; } catch {}
@@ -175,6 +189,8 @@
     document.documentElement.style.setProperty("--size", SIZES[prefs.size] || SIZES[1]);
     $$(".view").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === v)));
     $$(".switch[data-opt]").forEach((s) => s.setAttribute("aria-checked", String(!!prefs[s.dataset.opt])));
+    $("#single-label").classList.toggle("auto", v === "auto");
+    if (v === "auto") { $("#single-name").textContent = T.autoName; $("#single-label").lang = LANG; }
     if (v === "en" || v === "es") {
       $("#single-name").textContent = v === "en" ? "English" : "Español";
       $("#single-mark").setAttribute("href", v === "en" ? "#i-leaf" : "#i-cactus");
@@ -185,6 +201,7 @@
     for (const l of ["en", "es"]) document.querySelector(`.pane[data-lang=${l}] .empty`).textContent = reading() && !speaker ? WAIT[l] : SPEAK[l];
     $("#wide-empty").textContent = reading() && !speaker ? WAIT.en + " · " + WAIT.es : mic ? T.speakBoth : WAIT.en;
     if (v === "en" || v === "es") $("#single-empty").textContent = reading() && !speaker ? WAIT[v] : SPEAK[v];
+    if (v === "auto") $("#single-empty").textContent = WAIT[LANG];
     // A different layout starts its lines afresh; anything else keeps them where they are.
     const layout = [v, prefs.swapped, prefs.size].join();
     if (layout !== lastLayout) { lastLayout = layout; resetStreams(); }
@@ -318,6 +335,12 @@
         pane.querySelector(".empty").hidden = mine.length > 0;
       }
     }
+    if (v === "auto") {
+      const other = (r) => (r.s === "en" ? "es" : "en");
+      const mine = rows.filter((r) => r[other(r)]).slice(-SHOW_ROWS);
+      sync($("#single"), mine.map((r, i) => ({ key: r.k, cls: "line" + age(i, mine.length), build: (el) => { el.lang = other(r); fill(el, r[other(r)]); } })));
+      $("#single-empty").hidden = mine.length > 0;
+    }
     if (v === "en" || v === "es") {
       const mine = rows.filter((r) => r[v]).slice(-SHOW_ROWS);
       sync($("#single"), mine.map((r, i) => ({ key: r.k, cls: "line" + age(i, mine.length), build: (el) => fill(el, r[v]) })));
@@ -424,10 +447,16 @@
       if (speaker) { speaker = false; if (listening) stop(); }
       notice(T.broadcastEnded);
     }
+    if (on) clearTimeout(leaveTimer);
+    else try { sessionStorage.removeItem("wedding-bc-exit"); } catch {}
     const apply = () => {
       applyMode();
       showStatus();
       if (on && !was && ADMIN) setView("both"); // straight to the subtitles, no choosing
+      // A guest goes straight into the speeches while they're on, and back out when they end
+      // (at once if they were never on, after the notice if they just ended).
+      if (SPEECHES_ONLY && on && screen !== "app") enterSpeeches();
+      if (SPEECHES_ONLY && !on && screen === "app") { clearTimeout(leaveTimer); leaveTimer = setTimeout(leaveSpeeches, was ? 3500 : 0); }
     };
     // Light to dark and back cross-fades rather than cutting (not on the first word from the relay).
     const fade = stateSeen && on !== was && document.startViewTransition && !reducedMotion && document.visibilityState === "visible";
@@ -856,10 +885,21 @@
   status = { text: T.tapStart, kind: "" };
   // A QR code can open straight into a view: …/translate/?view=es
   const asked = q.get("view");
-  if (SPEECHES_ONLY) { if (VIEWS.includes(asked) && asked !== "facing") enterSpeeches(asked); }
+  if (SPEECHES_ONLY) {
+    // Guests listen for the speeches from the start, so they open by themselves.
+    connectRelay();
+    if (q.has("speeches")) enterSpeeches();
+    else if (VIEWS.includes(asked) && asked !== "facing") enterSpeeches(asked);
+  }
   else {
     connectRelay();
     if (VIEWS.includes(asked)) setView(asked); else showChoose();
   }
   if (ADMIN && location.hash === "#demo") playDemo();
+  // Sean and Val are kept on the subtitles while the speeches are on, until they leave this page
+  // themselves; then the rest of the site lets them be until the broadcast ends.
+  if (ADMIN) {
+    try { sessionStorage.removeItem("wedding-bc-exit"); } catch {}
+    addEventListener("pagehide", () => { if (broadcast) try { sessionStorage.setItem("wedding-bc-exit", "1"); } catch {} });
+  }
 })();

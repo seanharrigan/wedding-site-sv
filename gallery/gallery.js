@@ -1010,6 +1010,8 @@
     if (i < 0 && filtered()) { S.filter = { people: new Set(), by: null, src: null, mine: false }; render(); i = S.visible.findIndex((p) => p.id === id); }
     if (i >= 0) openLightbox(i);
   }
+  // the speeches taking over the site (speech-watch.js) wait for uploads to finish
+  window.svHoldTakeover = () => queue.some((x) => x.state === "waiting" || x.state === "working");
   addEventListener("beforeunload", (e) => { if (queue.some((x) => x.state === "waiting" || x.state === "working")) { e.preventDefault(); e.returnValue = T.leaveWarn; } });
 
   // ── new photos from everyone else ─────────────────────────────────────────

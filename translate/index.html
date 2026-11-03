@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/gpt/site-header.css?v=20261020b">
-  <link rel="stylesheet" href="translate.css?v=20261028a">
+  <link rel="stylesheet" href="translate.css?v=20261103a">
   <link rel="stylesheet" href="../assets/gpt/subpage.css?v=20261028a">
 </head>
 <body data-page="translate">
@@ -37,13 +37,11 @@
   <a class="back" href="../" data-t="back">← seanandvaleria.com</a>
   <header class="lockup">
     <img data-logo src="../assets/gpt/sv-logo-variants/solid/sv-logo-mocha-true-solid.png" alt="Sean &amp; Valeria" width="1536" height="1024">
-    <div class="date">3<span class="sep">·</span>11<span class="sep">·</span>2026</div>
+    <div class="date">Languages<span class="sep">·</span><span lang="es">Idiomas</span></div>
   </header>
   <div class="intro">
-    <p class="eyebrow" data-t="eyebrow">Live translation</p>
-    <h1 class="soon-title" data-t="soonTitle">Coming soon</h1>
+    <h1 class="soon-title" data-t="soonTitle">Translation</h1>
   </div>
-  <p class="soon-copy" data-t="soonCopy"></p>
   <ul class="soon-list">
     <li tabindex="0" aria-disabled="true">
       <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
@@ -55,7 +53,6 @@
       <svg class="soon-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg>
     </li>
   </ul>
-  <p class="soon-foot" data-t="soonFoot"></p>
 </section>
 
 <!-- Options: how to use the translator right now -->
@@ -163,6 +160,10 @@
 <aside class="sheet" id="sheet" aria-label="Menu" aria-hidden="true" inert>
   <h2 class="views-title" data-t="view">View</h2>
   <div class="views" role="group" aria-label="View">
+    <button class="view reader-only" type="button" data-view="auto" aria-pressed="false">
+      <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
+      <span><b data-t="autoView">Translated</b><small data-t="autoSub">Each line in the other language</small></span>
+    </button>
     <button class="view local-only" type="button" data-view="facing" aria-pressed="false">
       <span class="pair" aria-hidden="true"><svg class="mark leaf"><use href="#i-leaf"/></svg><svg class="mark cactus"><use href="#i-cactus"/></svg></span>
       <span><b data-t="facing">Face to face</b><small data-t="facingShort">Across a table</small></span>
@@ -212,6 +213,6 @@
 </dialog>
 
 <script src="../assets/gpt/subpage.js?v=20261103a"></script>
-<script src="translate.js?v=20261028a"></script>
+<script src="translate.js?v=20261103a"></script>
 </body>
 </html>

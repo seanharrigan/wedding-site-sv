@@ -79,7 +79,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
   background:url("../assets/gpt/save-date-botanical-shadow-mobile-v3.webp") center 20%/cover no-repeat;
   -webkit-mask-image:linear-gradient(180deg,#000 10%,transparent 70%);mask-image:linear-gradient(180deg,#000 10%,transparent 70%)}
 @media (min-width:721px){body::before{background-image:url("../assets/gpt/save-date-botanical-shadow-desktop-v3.webp")}}
-body.listening::before,body.view-en::before,body.view-es::before,body.view-both::before,body.view-facing::before{opacity:0}
+body.listening::before,body.view-en::before,body.view-es::before,body.view-auto::before,body.view-both::before,body.view-facing::before{opacity:0}
 body::after{content:"";position:fixed;inset:0;z-index:5;pointer-events:none;opacity:.06;mix-blend-mode:multiply;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 body.broadcasting::after{opacity:0}
@@ -199,7 +199,7 @@ main{min-height:0}
 .v-wide,.v-stack,.v-single{display:none;height:100%;min-height:0}
 body.view-both .v-wide{display:grid}
 body.view-facing .v-stack{display:grid}
-body.view-en .v-single,body.view-es .v-single{display:grid}
+body.view-en .v-single,body.view-es .v-single,body.view-auto .v-single{display:grid}
 @media (max-aspect-ratio:4/5){
   body.view-both .v-wide{display:none}
   body.view-both .v-stack{display:grid}
@@ -317,7 +317,7 @@ body.sheet-open .sheet{transform:translate(-50%,0);visibility:visible;transition
 .switch[aria-checked=true]{background:var(--solid-bg);border-color:transparent}
 .switch[aria-checked=true]::after{transform:translateX(20px);background:var(--solid-fg)}
 .switch:disabled{opacity:.4;cursor:default}
-body.view-en .two-only,body.view-es .two-only,body.no-mic .mic-only{display:none}
+body.view-en .two-only,body.view-es .two-only,body.view-auto .two-only,body.no-mic .mic-only{display:none}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .pair-row{display:grid;grid-template-columns:1fr 1fr}
 .pair-row .btn{width:100%}
@@ -347,3 +347,10 @@ body.view-en .two-only,body.view-es .two-only,body.no-mic .mic-only{display:none
   body.sheet-open .sheet{transition:none}
   .soon-list li.nudge,:is(.status,.control-status) .dot,.confirm[open]{animation:none}
 }
+
+/* Guests' own view: each line in the language it wasn't said in. Only for those reading along,
+   and while the speeches are on there's no way back out to the site. */
+body.admin .reader-only{display:none!important}
+#single-label.auto .mark{display:none}
+body.broadcasting:not(.admin) #to-options{visibility:hidden}
+#soon .date{text-transform:uppercase}
