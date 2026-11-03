@@ -1,6 +1,6 @@
-// Shared chrome for the site's own pages (Gallery, Translate, RSVP): the home page's own menu bar
+// Shared chrome for the site's own pages (Gallery, Translate): the home page's own menu bar
 // (styles generated into site-header.css), with Home in place of the section links (they're in
-// the phone menu), and a quiet transition between pages. Each page marks itself with <body data-page="photos|translate|rsvp">.
+// the phone menu), and a quiet transition between pages. Each page marks itself with <body data-page="photos|translate">.
 (() => {
   const store = {
     get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch { return d; } },
@@ -18,12 +18,12 @@
   const T = {
     en: {
       home: "Home", welcome: "Welcome", details: "Details", travel: "Travel", faq: "FAQ", checkIn: "Check-In",
-      translate: "Translate", photos: "Gallery", rsvp: "RSVP", nav: "Primary navigation", lang: "Choose website language",
+      translate: "Translate", photos: "Gallery", nav: "Primary navigation", lang: "Choose website language",
       brand: "Sean and Valeria, back to the website", open: "Open navigation", close: "Close navigation",
     },
     es: {
       home: "Inicio", welcome: "Bienvenidos", details: "Detalles", travel: "Viaje", faq: "FAQ", checkIn: "Registro",
-      translate: "Traducir", photos: "Galería", rsvp: "RSVP", nav: "Navegación principal", lang: "Elige el idioma del sitio",
+      translate: "Traducir", photos: "Galería", nav: "Navegación principal", lang: "Elige el idioma del sitio",
       brand: "Sean y Valeria, volver al sitio", open: "Abrir menú", close: "Cerrar menú",
     },
   }[LANG];
@@ -33,7 +33,6 @@
   const section = (id, label, extra = "") => `<a class="nav-link nav-section${extra}" href="../#${id}" data-sp-go>${label}</a>`;
   const ICON_TRANSLATE = '<svg class="nav-translate-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8 6.2c0-1 .8-1.8 1.8-1.8h7.6c1 0 1.8.8 1.8 1.8v4.6c0 1-.8 1.8-1.8 1.8H8.6l-3 2.4v-2.4c-1 0-1.8-.8-1.8-1.8z"/><path d="M15 9h3.4c1 0 1.8.8 1.8 1.8v4.6c0 1-.8 1.8-1.8 1.8v2.4l-3-2.4h-4c-1 0-1.8-.8-1.8-1.8v-1.8"/></svg>';
   const ICON_CAMERA = '<svg class="nav-translate-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8 8.6c0-1 .8-1.8 1.8-1.8h2.2l1.5-2.2h5.4l1.5 2.2h2.2c1 0 1.8.8 1.8 1.8v8.6c0 1-.8 1.8-1.8 1.8H5.6c-1 0-1.8-.8-1.8-1.8z"/><circle cx="12" cy="12.6" r="3.4"/></svg>';
-  const ICON_RSVP = '<svg class="nav-translate-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8 7.8c0-1 .8-1.8 1.8-1.8h12.8c1 0 1.8.8 1.8 1.8v8.8c0 1-.8 1.8-1.8 1.8H5.6c-1 0-1.8-.8-1.8-1.8z"/><path d="M4.3 7l6.4 5M19.7 7l-6.4 5"/><circle cx="12" cy="12.9" r="1.9"/></svg>';
   const ICON_LEAF = '<svg class="nav-language-icon nav-language-icon--leaf" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.35l1.28 3.02 1.87-1.08-.42 2.96 2.9-.78-1.08 2.82 3.62.88-3.12 2.3 1.03 2.66-4.98-.93.35 6.45h-2.9l.35-6.45-4.98.93 1.03-2.66-3.12-2.3 3.62-.88-1.08-2.82 2.9.78-.42-2.96 1.87 1.08z"/></svg>';
   const ICON_CACTUS = '<svg class="nav-language-icon nav-language-icon--cactus" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.6 21V6.2a2.4 2.4 0 0 1 4.8 0V21"/><path d="M9.6 13.5H7.9a2 2 0 0 1-2-2V8.8"/><path d="M14.4 15.5h1.7a2 2 0 0 0 2-2V9.6"/><path d="M6.5 21h11"/></svg>';
   const pageButton = (page, id, icon, label) =>
@@ -58,7 +57,6 @@
     section("welcome", T.welcome) + section("details", T.details) + section("travel", T.travel) + section("faq", T.faq) + section("check-in", T.checkIn, " nav-cta") +
     pageButton("translate", "nav-translate", ICON_TRANSLATE, T.translate) +
     pageButton("photos", "nav-photos", ICON_CAMERA, T.photos) +
-    pageButton("rsvp", "nav-rsvp", ICON_RSVP, T.rsvp) +
     `<div class="nav-language" id="nav-language" role="group" aria-label="${T.lang}">` +
     langButton("en", ICON_LEAF, "EN", "English") + `<span class="nav-language-divider" aria-hidden="true"></span>` + langButton("es", ICON_CACTUS, "ES", "Español") +
     `</div></nav>`;
@@ -165,7 +163,7 @@
     const page = b.dataset.spPage;
     // already here: close the menu and go back to the top of the page
     if (page === here) { setMenuOpen(false); return scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }); }
-    go(`../${{ photos: "gallery", translate: "translate", rsvp: "rsvp" }[page]}/?lang=${LANG}`);
+    go(`../${{ photos: "gallery", translate: "translate" }[page]}/?lang=${LANG}`);
   }));
   header.querySelectorAll("[data-nav-language]").forEach((b) => b.addEventListener("click", () => {
     const lang = b.dataset.navLanguage;
