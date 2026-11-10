@@ -11,7 +11,7 @@
   const API = local ? `http://${location.hostname}:8933` : API_PROD;
   const MAX_BYTES = 40 * 1024 * 1024;
   // the Worker's limits (VIDEO_MAX in sv-gallery); a video goes up in pieces of PART
-  const VIDEO_MAX = 2 * 1024 ** 3, VIDEO_MAX_ADMIN = 20 * 1024 ** 3;
+  const VIDEO_MAX = 4 * 1024 ** 3, VIDEO_MAX_ADMIN = 20 * 1024 ** 3;
   const PART = 8 * 1024 * 1024;
   const DISPLAY_EDGE = 2048, THUMB_EDGE = 640;
   const CONCURRENCY = 2;
@@ -50,7 +50,10 @@
       peopleQ: "Show photos of…", peopleHint: "Pick more than one to find photos of them together.", done: "Done", clear: "Clear",
       byQ: "Shared by", tagQ: "Who’s in this photo?", tagHint: "Tap everyone in it.",
       inPhoto: "In this photo", inVideo: "In this video", tagSomeone: "+ Tag someone", nobody: "No one tagged yet.",
-      sharedBy: (n) => `Shared by ${n}`, byPhotographer: "From the photographer", someone: "a guest",
+      sharedBy: (n) => `Shared by ${n}`, byPhotographer: "From the photographer", byVideographer: "From the videographer", byBooth: "From the photo booth", someone: "a guest",
+      onlyPhotos: "Photos", onlyVideos: "Videos", uploads: "Uploads", pro: "Professional", booth: "Photo booth",
+      showAs: "Shown under", countAs: "What you upload goes under", countAsHint: "Only you can choose this. Guests’ photos always go under Uploads.",
+      uploadingAs: (s) => `as ${s}`,
       approx: "time approximate", unknownTime: "Date unknown", camera: "Camera",
       download: "Download original", downloadVideo: "Download video", fixTime: "Fix the time", del: "Delete",
       timeQ: "When was this taken?", timeHint: "Mexico City time.", save: "Save", cancel: "Cancel", enter: "Continue",
@@ -58,7 +61,7 @@
       failed: (n) => `${n} couldn’t be shared`, retry: "Try again",
       already: (n) => `${n} already here`, unreadable: "This phone can’t read that file", tooBig: "Too big (40 MB max)", offline: "Waiting for a connection…",
       tooBigVideo: (gb) => `Too big (${gb} GB max for a video)`,
-      unreadableHere: "This browser can’t read that file", heicHere: "This browser can’t open HEIC photos. Try from your phone, or save them as JPEG.",
+      unreadableHere: "This browser can’t read that file", heicPhone: "This browser can’t open HEIC photos. Try sharing them as JPEG.", heicHere: "This browser can’t open HEIC photos. Try from your phone, or save them as JPEG.",
       notImage: "That file isn’t a photo or a video", tooMany: "That’s the limit for today. Please try again tomorrow.",
       remove: (n) => `Remove ${n}`, untagged: (n) => `${n} untagged`, undo: "Undo", withNames: (s) => `with ${s}`,
       viewer: "Photo viewer", prev: "Previous", nextPhoto: "Next", close: "Close",
@@ -92,7 +95,10 @@
       peopleQ: "Ver fotos de…", peopleHint: "Elige a más de una persona para ver fotos donde salen juntas.", done: "Listo", clear: "Borrar",
       byQ: "Compartidas por", tagQ: "¿Quién sale en esta foto?", tagHint: "Toca a todos los que salen.",
       inPhoto: "En esta foto", inVideo: "En este video", tagSomeone: "+ Etiquetar", nobody: "Nadie etiquetado todavía.",
-      sharedBy: (n) => `Compartida por ${n}`, byPhotographer: "Del fotógrafo", someone: "un invitado",
+      sharedBy: (n) => `Compartida por ${n}`, byPhotographer: "Del fotógrafo", byVideographer: "Del videógrafo", byBooth: "De la cabina de fotos", someone: "un invitado",
+      onlyPhotos: "Fotos", onlyVideos: "Videos", uploads: "De invitados", pro: "Profesional", booth: "Cabina de fotos",
+      showAs: "Aparece en", countAs: "Lo que subas aparece en", countAsHint: "Solo ustedes pueden elegir esto. Las fotos de los invitados siempre van en De invitados.",
+      uploadingAs: (s) => `como ${s}`,
       approx: "hora aproximada", unknownTime: "Fecha desconocida", camera: "Cámara",
       download: "Descargar original", downloadVideo: "Descargar video", fixTime: "Corregir la hora", del: "Borrar",
       timeQ: "¿Cuándo se tomó?", timeHint: "Hora de la Ciudad de México.", save: "Guardar", cancel: "Cancelar", enter: "Continuar",
@@ -100,7 +106,7 @@
       failed: (n) => `${n} no se pudieron compartir`, retry: "Reintentar",
       already: (n) => n === 1 ? "1 ya estaba aquí" : `${n} ya estaban aquí`, unreadable: "Este teléfono no puede leer ese archivo", tooBig: "Muy grande (máx. 40 MB)", offline: "Esperando conexión…",
       tooBigVideo: (gb) => `Muy grande (máx. ${gb} GB por video)`,
-      unreadableHere: "Este navegador no puede leer ese archivo", heicHere: "Este navegador no abre fotos HEIC. Súbelas desde tu teléfono o guárdalas como JPEG.",
+      unreadableHere: "Este navegador no puede leer ese archivo", heicPhone: "Este navegador no abre fotos HEIC. Intenta compartirlas como JPEG.", heicHere: "Este navegador no abre fotos HEIC. Súbelas desde tu teléfono o guárdalas como JPEG.",
       notImage: "Ese archivo no es una foto ni un video", tooMany: "Llegaste al límite de hoy. Inténtalo de nuevo mañana.",
       remove: (n) => `Quitar a ${n}`, untagged: (n) => `Se quitó la etiqueta de ${n}`, undo: "Deshacer", withNames: (s) => `con ${s}`,
       viewer: "Visor de fotos", prev: "Anterior", nextPhoto: "Siguiente", close: "Cerrar",
@@ -175,10 +181,12 @@
   $("#title").innerHTML = T.titleHtml;
 
   // ── state ─────────────────────────────────────────────────────────────────
+  // src: "g" guests' uploads, "p" the professionals, "b" the photo booth; kind: "p" photos, "v" videos
+  function noFilter() { return { people: new Set(), by: null, src: null, kind: null, mine: false }; }
   const S = {
     guests: [], guestById: new Map(), photos: [], version: 0, uploadsOpen: false, admin: false,
     me: JSON.parse(store.get("wedding-gallery-me", "null") || "null"),
-    filter: { people: new Set(), by: null, src: null, mine: false },
+    filter: noFilter(),
     visible: [], lbIndex: -1, devicePrefix: "",
   };
   crypto.subtle?.digest("SHA-256", new TextEncoder().encode(DEVICE)).then((b) => {
@@ -200,14 +208,21 @@
 
   // ── API ───────────────────────────────────────────────────────────────────
   class ApiError extends Error { constructor(status, code) { super(code); this.status = status; this.code = code; } }
+  // A request that hangs (Wi-Fi that stops passing data without dropping) is given up after a
+  // while and counts as a network error, so it's tried again rather than stalling the upload.
   async function api(path, { method = "GET", json, body } = {}) {
     const headers = { "X-Device": DEVICE };
     headers["X-Guest-Code"] = SITE_KEY;
     if (ADMIN_CODE) headers["X-Admin-Code"] = ADMIN_CODE;
     if (json) { headers["Content-Type"] = "application/json"; body = JSON.stringify(json); }
-    let res;
-    try { res = await fetch(API + path, { method, headers, body }); } catch { throw new ApiError(0, "network"); }
-    const data = await res.json().catch(() => ({}));
+    const stop = new AbortController();
+    // a file gets a minute plus the time it takes at a very slow 20 KB/s, so only a real hang ends it
+    const timer = setTimeout(() => stop.abort(), body instanceof Blob ? 60000 + body.size / 20 : 30000);
+    let res, data;
+    try {
+      res = await fetch(API + path, { method, headers, body, signal: stop.signal });
+      data = await res.json().catch(() => ({}));
+    } catch { throw new ApiError(0, "network"); } finally { clearTimeout(timer); }
     if (!res.ok) {
       throw new ApiError(res.status, data.error || "error");
     }
@@ -215,11 +230,11 @@
   }
 
   // Network trouble is retried with backoff, waiting for the phone to come back online.
-  async function withRetry(fn, onWait) {
+  async function withRetry(fn, onWait, tries = 8) {
     for (let attempt = 0; ; attempt++) {
       try { return await fn(); } catch (err) {
         const transient = err.status === 0 || err.status >= 500 || err.status === 408;
-        if (!transient || attempt >= 7) throw err;
+        if (!transient || attempt >= tries - 1) throw err;
         if (!navigator.onLine) { onWait?.(); await new Promise((r) => addEventListener("online", r, { once: true })); }
         else await new Promise((r) => setTimeout(r, Math.min(30000, 1000 * 2 ** attempt)));
       }
@@ -295,29 +310,40 @@
     const f = S.filter;
     return S.photos.filter((p) => {
       if (f.src && p.src !== f.src) return false;
+      if (f.kind && (f.kind === "v") !== isVid(p)) return false;
       if (f.by != null && p.by !== f.by) return false;
       if (f.mine && !(S.me && p.tags.includes(S.me.id))) return false;
       for (const id of f.people) if (!p.tags.includes(id)) return false;
       return true;
     });
   }
-  const filtered = () => S.filter.people.size || S.filter.by != null || S.filter.src || S.filter.mine;
+  const filtered = () => S.filter.people.size || S.filter.by != null || S.filter.src || S.filter.kind || S.filter.mine;
 
   function renderFilters() {
     const f = S.filter;
     const peopleLabel = f.people.size === 1 ? nameOf([...f.people][0]) : f.people.size ? `${T.people} · ${f.people.size}` : T.people;
     const chip = (label, on, onclick, n) => el("button", { class: "chip" + (on ? " on" : ""), type: "button", onclick }, label, n != null ? el("span", { class: "n", text: n }) : null);
     const mineCount = S.me ? S.photos.filter((p) => p.tags.includes(S.me.id)).length : null;
-    const hasPhotographer = S.photos.some((p) => p.src === "p");
+    // Photos and Videos once there are both; Uploads, Professional and Photo booth once there's
+    // more than one of them. A chip that's on always shows, so it can be turned off.
+    const vids = S.photos.filter(isVid).length, stills = S.photos.length - vids;
+    const bySrc = { g: 0, p: 0, b: 0 };
+    for (const p of S.photos) bySrc[p.src] = (bySrc[p.src] || 0) + 1;
+    const sources = Object.values(bySrc).filter(Boolean).length;
+    const kindChip = (k, label, n) => (vids && stills) || f.kind === k ? chip(label, f.kind === k, () => { f.kind = f.kind === k ? null : k; render(); }, n) : null;
+    const srcChip = (k, label) => (sources > 1 && bySrc[k]) || f.src === k ? chip(label, f.src === k, () => { f.src = f.src === k ? null : k; render(); }, bySrc[k]) : null;
+    const kinds = [kindChip("p", T.onlyPhotos, stills), kindChip("v", T.onlyVideos, vids)].filter(Boolean);
+    const srcs = [srcChip("g", T.uploads), srcChip("p", T.pro), srcChip("b", T.booth)].filter(Boolean);
+    const sep = () => el("span", { class: "sep", "aria-hidden": "true" });
     const bar = $("#filters"), had = [...bar.children].indexOf(document.activeElement);
     put(bar,
-      chip(T.all, !filtered(), () => { S.filter = { people: new Set(), by: null, src: null, mine: false }; render(); }),
+      chip(T.all, !filtered(), () => { S.filter = noFilter(); render(); }),
+      kinds, kinds.length ? sep() : null,
+      srcs, srcs.length ? sep() : null,
       // "Photos of me" only once there are some (or while it's on, so it can be turned off)
       S.me && (mineCount || f.mine) ? chip(T.ofMe, f.mine, () => { f.mine = !f.mine; render(); }, mineCount) : null,
       chip(peopleLabel + " ▾", f.people.size > 0, () => pickPeople()),
       chip((f.by != null ? nameOf(f.by) : T.uploadedBy) + " ▾", f.by != null, () => pickUploader()),
-      hasPhotographer ? chip(T.photographer, f.src === "p", () => { f.src = f.src === "p" ? null : "p"; render(); }) : null,
-      hasPhotographer ? chip(T.guests, f.src === "g", () => { f.src = f.src === "g" ? null : "g"; render(); }) : null,
     );
     if (had >= 0) bar.children[Math.min(had, bar.children.length - 1)]?.focus({ preventScroll: true });
   }
@@ -400,7 +426,7 @@
         const i = index++;
         return el("button", { class: "tile", type: "button", "data-i": i, "data-id": p.id, "data-seg": seg.key, "aria-label": tileLabel(p), style: `width:${w}px;height:${Math.round(r.h)}px`, onclick: () => openLightbox(i) },
           el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async", onload: fadeIn, onerror: failed }),
-          p.src === "p" ? el("span", { class: "badge", text: T.photographer }) : null,
+          p.src !== "g" ? el("span", { class: "badge", text: p.src === "b" ? T.booth : T.pro }) : null,
           videoBadge(p),
           tagBadge(p));
       })));
@@ -495,7 +521,7 @@
     if (box.hidden) return;
     if (filtered()) {
       put(box, el("p", { text: T.empty }),
-        el("button", { class: "btn", type: "button", text: T.clearFilters, onclick: () => { S.filter = { people: new Set(), by: null, src: null, mine: false }; render(); } }));
+        el("button", { class: "btn", type: "button", text: T.clearFilters, onclick: () => { S.filter = noFilter(); render(); } }));
     } else if (canUpload()) {
       // the header's Add photos is just above, so the note needs no button of its own
       put(box, el("p", { text: T.emptyAll }));
@@ -742,7 +768,7 @@
   function renderInfo(p) {
     const seg = segmentOf(p.t);
     const when = p.t ? fmtWhen(p.t) : T.unknownTime;
-    const who = p.src === "p" ? T.byPhotographer : T.sharedBy(nameOf(p.by) || T.someone);
+    const who = p.src === "b" ? T.byBooth : p.src === "p" ? (isVid(p) ? T.byVideographer : T.byPhotographer) : T.sharedBy(nameOf(p.by) || T.someone);
     const tags = p.tags.map((id) => el("span", { class: "tag" }, nameOf(id) || "—",
       el("button", { type: "button", "aria-label": T.remove(nameOf(id) || "—"), text: "×", onclick: () => untag(p, id) })));
     const hadFocus = lbInfo.contains(document.activeElement);
@@ -754,6 +780,7 @@
         el("span", { class: "meta-label", text: isVid(p) ? T.inVideo : T.inPhoto }),
         el("div", { class: "tags" }, ...tags, el("button", { class: "tag add", type: "button", text: T.tagSomeone, onclick: () => tagSomeone(p) }))),
       p.cam ? el("div", {}, el("span", { class: "meta-label", text: T.camera }), el("p", { class: "lb-sub", text: p.cam })) : null,
+      S.admin ? el("div", {}, el("span", { class: "meta-label", text: T.showAs }), sourceTabs(p.src, (k) => setSource(p, k))) : null,
       el("div", { class: "lb-actions" },
         el("a", { class: "btn small", href: imgUrl("orig", p.id) + "?dl=1", download: "" }, isVid(p) ? T.downloadVideo : T.download),
         isMine(p) ? el("button", { class: "btn small", type: "button", text: T.fixTime, onclick: () => fixTime(p) }) : null,
@@ -761,6 +788,21 @@
     );
     // the button that was focused has just been replaced: carry on from "+ Tag someone"
     if (hadFocus) lbInfo.querySelector(".tag.add")?.focus({ preventScroll: true });
+  }
+
+  // Uploads · Professional · Photo booth, as three tabs (admins only)
+  const SOURCES = [["g", "guest"], ["p", "photographer"], ["b", "booth"]];
+  const sourceTabs = (on, pick) => el("div", { class: "seg-tabs" }, SOURCES.map(([k]) =>
+    el("button", { type: "button", "aria-pressed": String(on === k), text: { g: T.uploads, p: T.pro, b: T.booth }[k], onclick: () => pick(k) })));
+  async function setSource(p, k) {
+    const before = p.src;
+    if (k === before) return;
+    p.src = k;
+    renderInfo(p);
+    try {
+      await api(`/api/photos/${p.id}`, { method: "PATCH", json: { source: Object.fromEntries(SOURCES)[k] } });
+      pendingRender = true; // badges and chips, once the viewer closes
+    } catch { p.src = before; renderInfo(p); toast(T.error); }
   }
 
   $("#lb-close").addEventListener("click", () => closeLightbox());
@@ -880,18 +922,42 @@
   let active = 0, batchStart = 0, wakeLock = null;
   const tray = $("#tray");
 
-  // An emptied queue lets go of its thumbnails' memory.
-  function clearQueue() {
-    for (const it of queue) if (it.thumbUrl) URL.revokeObjectURL(it.thumbUrl);
-    queue.length = 0;
+  let finishing = false; // between the last upload ending and the thank-you (tagging runs here)
+  const busyNow = () => queue.some((x) => x.state === "waiting" || x.state === "working");
+  // Items leave the queue (and let go of their thumbnails' memory) unless keep() says not to.
+  function clearQueue(keep = () => false) {
+    for (let i = queue.length - 1; i >= 0; i--) {
+      if (keep(queue[i])) continue;
+      if (queue[i].thumbUrl) URL.revokeObjectURL(queue[i].thumbUrl);
+      queue.splice(i, 1);
+    }
   }
+  // Failures that trying again can't fix.
+  const FINAL = new Set(["tooBig", "tooBigVideo", "too_big", "unreadable", "not_an_image", "not_a_video", "too_many", "uploads_closed"]);
+  const retryable = (it) => !FINAL.has(it.error?.code || it.error?.message);
+  const sameFile = (a, b) => a.name === b.name && a.size === b.size && a.lastModified === b.lastModified;
   function addFiles(files) {
-    if (!queue.some((it) => it.state === "waiting" || it.state === "working")) { clearQueue(); batchStart = Date.now(); }
-    for (const file of files) queue.push({ file, state: "waiting", thumbUrl: null, id: null, error: null });
-    navigator.wakeLock?.request("screen").then((l) => (wakeLock = l)).catch(() => {});
+    // A new batch: what's already shared makes way, but anything that failed stays, to retry.
+    if (!busyNow() && !finishing) { clearQueue((it) => it.state === "failed"); batchStart = Date.now(); }
+    for (const file of files) {
+      // the same file picked again (unsure it went) isn't sent twice; a failed one is retried
+      const known = queue.find((it) => sameFile(it.file, file));
+      if (known) { if (known.state === "failed" && retryable(known)) { known.state = "waiting"; known.error = null; } continue; }
+      queue.push({ file, state: "waiting", thumbUrl: null, id: null, error: null });
+    }
+    holdScreen();
     renderTray();
     pump();
   }
+
+  // Keep the screen on while sharing: a phone that locks pauses the upload. The browser lets go
+  // of this whenever the page is hidden, so it's asked for again on the way back.
+  async function holdScreen() {
+    if (wakeLock && !wakeLock.released) return;
+    try { wakeLock = (await navigator.wakeLock?.request("screen")) || null; } catch {}
+  }
+  function releaseScreen() { wakeLock?.release?.().catch(() => {}); wakeLock = null; }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && busyNow()) holdScreen(); });
 
   function pump() {
     while (active < CONCURRENCY) {
@@ -899,12 +965,13 @@
       if (!it) break;
       active++;
       it.state = "working";
+      it.waiting = false;
       upload(it).catch((err) => { it.state = "failed"; it.error = err; })
-        .finally(() => { active--; renderTray(); pump(); if (!active && !queue.some((x) => x.state === "waiting")) batchDone(); });
+        .finally(() => { it.waiting = false; active--; renderTray(); pump(); if (!active && !queue.some((x) => x.state === "waiting")) batchDone(); });
     }
   }
 
-  const isVideoFile = (f) => /^video\//.test(f.type) || /\.(mov|mp4|m4v|webm)$/i.test(f.name);
+  const isVideoFile = (f) => /^video\//.test(f.type) || /\.(mov|mp4|m4v|webm|3gp|3g2)$/i.test(f.name);
   const isPhotoFile = (f) => /^image\//.test(f.type) || /\.(heic|heif)$/i.test(f.name);
 
   async function upload(it) {
@@ -915,40 +982,67 @@
     it.thumbUrl = URL.createObjectURL(prep.thumb);
     renderTray();
     const onWait = () => { it.waiting = true; renderTray(); };
+    const arrived = () => { if (it.waiting) { it.waiting = false; renderTray(); } };
     const created = await withRetry(() => api("/api/photos", { method: "POST", json: {
       sha256: prep.sha256, takenLocal: prep.takenLocal, timeSource: prep.timeSource, camera: prep.camera,
       width: prep.width, height: prep.height, bytes: it.file.size, origType: it.file.type || null, uploaderId: S.me?.id ?? null,
-      kind: video ? "video" : "photo", duration: prep.duration ?? null,
+      kind: video ? "video" : "photo", duration: prep.duration ?? null, source: Object.fromEntries(SOURCES)[adminSource()],
     } }), onWait);
+    arrived();
     it.id = created.id;
     it.existing = created.existing && !created.missing.length;
+    // the same photo picked twice under different names: the other copy is already sending it
+    if (queue.some((x) => x !== it && x.id === it.id && x.state === "working")) it.existing = true;
     const bodies = { orig: it.file, display: prep.display, thumb: prep.thumb };
-    // a video's still goes first, then the long part: the file itself, piece by piece
-    for (const size of [...created.missing].sort((a, b) => (a === "orig") - (b === "orig"))) {
-      if (video && size === "orig") await sendVideo(it, created.id, onWait);
-      else await withRetry(() => api(`/api/photos/${created.id}/${size}`, { method: "PUT", body: bodies[size] }), onWait);
+    try {
+      // a video's still goes first, then the long part: the file itself, piece by piece
+      if (!it.existing) for (const size of [...created.missing].sort((a, b) => (a === "orig") - (b === "orig"))) {
+        if (video && size === "orig") await sendVideo(it, created.id, onWait, arrived);
+        else { await withRetry(() => api(`/api/photos/${created.id}/${size}`, { method: "PUT", body: bodies[size] }), onWait); arrived(); }
+      }
+    } catch (err) {
+      // another phone has taken this file over and is sending it: it's in good hands
+      if (err.code !== "not_yours") throw err;
+      it.existing = true;
     }
-    it.waiting = false;
     it.state = "done";
   }
 
   // The video in equal pieces, one after another: a dropped connection only costs a piece.
-  async function sendVideo(it, id, onWait) {
+  // What's been sent is remembered on this phone, so "Try again" (or picking the video again
+  // after the page was closed) carries on from the last piece rather than starting over.
+  async function sendVideo(it, id, onWait, arrived) {
     const file = it.file, count = Math.max(1, Math.ceil(file.size / PART));
-    const parts = [];
-    let uploadId = null;
-    it.sent = 0;
-    for (let n = 1; n <= count; n++) {
-      const piece = file.slice((n - 1) * PART, Math.min(file.size, n * PART));
-      const q = `n=${n}` + (uploadId ? `&upload=${encodeURIComponent(uploadId)}` : "");
-      const r = await withRetry(() => api(`/api/photos/${id}/orig/part?${q}`, { method: "PUT", body: piece }), onWait);
-      uploadId = r.upload;
-      parts.push(r.part);
-      it.sent = Math.min(file.size, n * PART);
-      it.waiting = false;
+    const key = `wedding-gallery-upload-${id}`;
+    const fresh = () => ({ size: file.size, part: PART, upload: null, parts: [] });
+    let saved = null;
+    try { saved = JSON.parse(store.get(key, "null")); } catch {}
+    if (!saved || saved.size !== file.size || saved.part !== PART || !Array.isArray(saved.parts)) saved = fresh();
+    const save = () => store.set(key, JSON.stringify(saved));
+    for (let n = saved.parts.length + 1; n <= count; n++) {
+      it.sent = Math.min(file.size, (n - 1) * PART);
       renderTray();
+      const piece = file.slice((n - 1) * PART, Math.min(file.size, n * PART));
+      const q = `n=${n}` + (saved.upload ? `&upload=${encodeURIComponent(saved.upload)}` : "");
+      let r;
+      try {
+        // a long video gets more patience per piece than a photo does
+        r = await withRetry(() => api(`/api/photos/${id}/orig/part?${q}`, { method: "PUT", body: piece }), onWait, 16);
+      } catch (err) {
+        // The upload it was adding to has gone (R2 drops unfinished ones after a week): start
+        // over, once.
+        if (err.code === "upload" && saved.upload && !it.restarted) { it.restarted = true; saved = fresh(); save(); n = 0; continue; }
+        throw err;
+      }
+      arrived();
+      saved.upload = r.upload;
+      saved.parts.push(r.part);
+      save();
     }
-    await withRetry(() => api(`/api/photos/${id}/orig/complete`, { method: "POST", json: { upload: uploadId, parts } }), onWait);
+    it.sent = file.size;
+    renderTray();
+    await withRetry(() => api(`/api/photos/${id}/orig/complete`, { method: "POST", json: { upload: saved.upload, parts: saved.parts } }), onWait, 16);
+    store.set(key, null);
   }
 
   // EXIF time → Mexico City wall time. With an offset (most phones) the instant is exact;
@@ -974,6 +1068,12 @@
     return run;
   }
 
+  // A phone often stamps a picked file with the moment it was picked (or re-encoded), which
+  // would file it under today. A time from the last few minutes is no time at all: the photo
+  // goes under "Date unknown", where whoever shared it can set it.
+  const RECENT_MS = 10 * 60 * 1000;
+  const fileTimeUseful = (file) => !!file.lastModified && Date.now() - file.lastModified > RECENT_MS;
+
   async function prepare(file) {
     const [exif, buf] = await Promise.all([
       // The lite build can't use exifr's `pick`; naming the fields per block reads only those.
@@ -983,7 +1083,7 @@
     const e = exif || {};
     let takenLocal = exifTime(e.DateTimeOriginal || e.CreateDate, e.OffsetTimeOriginal || e.OffsetTime);
     let timeSource = "exif";
-    if (!takenLocal && file.lastModified) { takenLocal = isoLocal(new Date(file.lastModified + MX_OFFSET_MIN * 60000)); timeSource = "file"; }
+    if (!takenLocal && fileTimeUseful(file)) { takenLocal = isoLocal(new Date(file.lastModified + MX_OFFSET_MIN * 60000)); timeSource = "file"; }
     const make = (e.Make || "").trim(), model = (e.Model || "").trim();
     const camera = (model.toLowerCase().startsWith(make.toLowerCase()) ? model : [make, model].join(" ")).trim() || null;
 
@@ -994,7 +1094,11 @@
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.src = url;
-    try { await img.decode(); } catch { URL.revokeObjectURL(url); throw new Error("unreadable"); }
+    try { await img.decode(); } catch {
+      // Safari's decode() can turn down a very large photo that still loads the ordinary way
+      if (!img.naturalWidth) await new Promise((resolve) => { img.onload = img.onerror = resolve; setTimeout(resolve, 20000); if (img.complete) resolve(); });
+      if (!img.naturalWidth) { URL.revokeObjectURL(url); throw new Error("unreadable"); }
+    }
     const width = img.naturalWidth, height = img.naturalHeight;
     const display = await scaled(img, width, height, DISPLAY_EDGE, 0.85);
     URL.revokeObjectURL(url);
@@ -1008,7 +1112,7 @@
   async function prepareVideo(file) {
     const meta = await videoMeta(file).catch(() => ({}));
     let takenLocal = meta.taken || null, timeSource = "exif";
-    if (!takenLocal && file.lastModified) { takenLocal = isoLocal(new Date(file.lastModified + MX_OFFSET_MIN * 60000)); timeSource = "file"; }
+    if (!takenLocal && fileTimeUseful(file)) { takenLocal = isoLocal(new Date(file.lastModified + MX_OFFSET_MIN * 60000)); timeSource = "file"; }
     const sha256 = await sampleHash(file);
     // A browser that can't play the file (a computer without the codec) still shares it,
     // with a plain still; anyone whose browser can play it still can.
@@ -1139,7 +1243,7 @@
       const dur = v1 ? Number(moov.getBigUint64(mvhd.at + 24)) : moov.getUint32(mvhd.at + 16);
       if (scale) out.duration = dur / scale;
       const ms = (created - 2082844800) * 1000; // seconds since 1904
-      if (ms > Date.UTC(2000, 0, 1) && ms < Date.UTC(2100, 0, 1)) out.taken = isoLocal(new Date(ms + MX_OFFSET_MIN * 60000));
+      if (ms > Date.UTC(2000, 0, 1) && ms < Date.UTC(2100, 0, 1) && Math.abs(Date.now() - ms) > RECENT_MS) out.taken = isoLocal(new Date(ms + MX_OFFSET_MIN * 60000));
     }
 
     // QuickTime metadata: moov/meta holds 'keys' (names) and 'ilst' (values, by key number).
@@ -1190,14 +1294,15 @@
     const done = queue.filter((x) => x.state === "done").length;
     const failed = queue.filter((x) => x.state === "failed");
     const busy = queue.some((x) => x.state === "waiting" || x.state === "working");
-    const waiting = queue.some((x) => x.waiting);
+    const waiting = queue.some((x) => x.state === "working" && x.waiting);
     // photos that were already in the gallery are counted on their own, not as shared
     const dup = queue.filter((x) => x.state === "done" && x.existing).length;
     // a video takes a while: its share of the bar fills as its pieces go, with a percentage
     const going = queue.filter((x) => x.state === "working" && x.video && x.sent);
     const partly = going.reduce((sum, x) => sum + x.sent / x.file.size, 0);
     const pct = going.length ? ` · ${Math.floor((going[0].sent / going[0].file.size) * 100)}%` : "";
-    const head = busy ? (waiting ? T.offline : T.uploading(Math.min(done + 1, total), total) + pct)
+    const as = adminSource() !== "g" ? ` · ${T.uploadingAs({ p: T.pro, b: T.booth }[adminSource()])}` : "";
+    const head = busy ? (waiting ? T.offline : T.uploading(Math.min(done + 1, total), total) + pct + as)
       : [done - dup || !dup ? sharedText(queue.filter((x) => x.state === "done" && !x.existing)) : null, dup ? T.already(dup) : null].filter(Boolean).join(" · ");
     tray.hidden = false;
     put(tray, 
@@ -1206,8 +1311,12 @@
       el("div", { class: "tray-thumbs" }, queue.map((it) => el("button", { type: "button", class: it.state + (it.video ? " v" : ""), onclick: () => it.state === "done" && openById(it.id) },
         it.thumbUrl ? el("img", { src: it.thumbUrl, alt: "" }) : null,
         el("span", { class: "state", text: it.state === "failed" ? "!" : "…" })))),
-      failed.length ? el("p", { class: "tray-note" }, `${T.failed(failed.length)}: ${reason(failed[0])} `,
-        el("button", { class: "btn small", type: "button", text: T.retry, onclick: () => { failed.forEach((x) => { x.state = "waiting"; x.error = null; }); renderTray(); pump(); } })) : null,
+      // the reason that matters: one that trying again might fix, if there is one
+      failed.length ? el("p", { class: "tray-note" }, `${T.failed(failed.length)}: ${reason(failed.find(retryable) || failed[0])} `,
+        failed.some(retryable) ? el("button", { class: "btn small", type: "button", text: T.retry, onclick: () => {
+          failed.filter(retryable).forEach((x) => { x.state = "waiting"; x.error = null; });
+          holdScreen(); renderTray(); pump();
+        } }) : null) : null,
     );
   }
   // Why a photo couldn't be shared, in words. A computer that can't open a HEIC says so, rather
@@ -1216,19 +1325,24 @@
   const isHeic = (f) => /hei[cf]/i.test(f.type) || /\.(heic|heif)$/i.test(f.name);
   function reason(it) {
     const code = it.error?.code || it.error?.message;
-    if (code === "unreadable") return PHONE ? T.unreadable : isHeic(it.file) ? T.heicHere : T.unreadableHere;
+    if (code === "unreadable") return isHeic(it.file) ? (PHONE ? T.heicPhone : T.heicHere) : PHONE ? T.unreadable : T.unreadableHere;
     const videoMax = T.tooBigVideo(Math.round((S.admin ? VIDEO_MAX_ADMIN : VIDEO_MAX) / 1024 ** 3));
     if (code === "tooBigVideo" || (code === "too_big" && it.video)) return videoMax;
     return { tooBig: T.tooBig, too_big: T.tooBig, not_an_image: T.notImage, not_a_video: T.notImage, too_many: T.tooMany, uploads_closed: T.closedNow }[code] || T.error;
   }
 
   async function batchDone() {
-    wakeLock?.release?.().catch(() => {});
-    wakeLock = null;
-    try { await loadPhotos(); if (lb.hidden) render(); else pendingRender = true; } catch {}
-    // Straight after sharing, walk through the new photos once to tag who's in them.
-    if (queue.some((x) => x.state === "done" && !x.existing) && lb.hidden && wrap.hidden) await tagBatch();
+    if (finishing) return;
+    finishing = true;
+    try {
+      releaseScreen();
+      try { await loadPhotos(); if (lb.hidden) render(); else pendingRender = true; } catch {}
+      // Straight after sharing, walk through the new photos once to tag who's in them.
+      if (queue.some((x) => x.state === "done" && !x.existing && !x.tagged) && lb.hidden && wrap.hidden) await tagBatch();
+    } finally { finishing = false; }
     finishBatch();
+    // more were added while tagging, and have finished meanwhile
+    if (!active && queue.some((x) => x.state === "done" && !x.existing && !x.tagged)) batchDone();
   }
 
   // All shared: the tray gives way to a thank-you (it stays only to offer a retry).
@@ -1252,7 +1366,10 @@
   // One photo at a time: tap who's in it, then Next (or Skip). Tapping outside stops for now;
   // the rest can be tagged from each photo.
   async function tagBatch() {
-    const ids = queue.filter((x) => x.state === "done" && !x.existing).map((x) => x.id);
+    // each photo is offered once: "Try again" later doesn't walk through these again
+    const items = queue.filter((x) => x.state === "done" && !x.existing && !x.tagged);
+    items.forEach((x) => (x.tagged = true));
+    const ids = items.map((x) => x.id);
     const photos = ids.map((id) => S.photos.find((p) => p.id === id)).filter(Boolean);
     tray.hidden = true;
     for (const [n, p] of photos.entries()) {
@@ -1269,7 +1386,7 @@
   }
   function openById(id) {
     let i = S.visible.findIndex((p) => p.id === id);
-    if (i < 0 && filtered()) { S.filter = { people: new Set(), by: null, src: null, mine: false }; render(); i = S.visible.findIndex((p) => p.id === id); }
+    if (i < 0 && filtered()) { S.filter = noFilter(); render(); i = S.visible.findIndex((p) => p.id === id); }
     if (i >= 0) openLightbox(i);
   }
   // the speeches taking over the site (speech-watch.js) wait for uploads to finish
@@ -1298,6 +1415,9 @@
   document.addEventListener("visibilitychange", () => { if (!document.hidden) poll(); });
 
   // ── admin ─────────────────────────────────────────────────────────────────
+  // Where an admin's own uploads go (the photo booth's pictures, the professionals'); guests'
+  // always go under Uploads.
+  const adminSource = () => (S.admin && ["p", "b"].includes(store.get("wedding-gallery-admin-source", "")) ? store.get("wedding-gallery-admin-source", "") : "g");
   $("#admin-pill").addEventListener("click", () => {
     const setMode = async (mode) => {
       try { await api("/api/settings", { method: "PATCH", json: { uploads: mode } }); await loadState(); renderHeader(); renderEmpty(); closeSheet(); toast(T.saved); }
@@ -1310,6 +1430,9 @@
       el("div", { class: "seg-tabs" }, [["auto", T.modeAuto], ["open", T.modeOpen], ["closed", T.modeClosed]].map(([m, label]) =>
         el("button", { type: "button", "aria-pressed": String(S.uploadsMode === m), text: label, onclick: () => setMode(m) }))),
       el("p", { class: "hint", text: modeHint }),
+      el("p", { class: "q", text: T.countAs }),
+      sourceTabs(adminSource(), (k) => { store.set("wedding-gallery-admin-source", k === "g" ? null : k); closeSheet(); toast(T.saved); }),
+      el("p", { class: "hint", text: T.countAsHint }),
       el("p", { class: "hint", text: `${countText(S.photos)} · ${S.guests.length} ${LANG === "es" ? "nombres" : "names"}` }),
       el("div", { class: "sheet-foot" },
         el("button", { class: "btn", type: "button", text: T.exportList, onclick: () => {
