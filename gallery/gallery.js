@@ -405,6 +405,12 @@
   const tagBadge = (p) => p.tags.length ? el("span", { class: "tagn", html: `${PERSON}${p.tags.length}` }) : null;
   const PLAY = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>';
   const videoBadge = (p) => isVid(p) ? el("span", { class: "vid", html: PLAY }, p.dur ? fmtDur(p.dur) : null) : null;
+  // a frosted play button in the middle, so a video reads as a video at a glance
+  const playMark = (p) => isVid(p) ? el("span", { class: "play", html: PLAY }) : null;
+  // The thumb (640 px on its long side) for small tiles, the display size (2048) where a tile
+  // is big enough, or the screen sharp enough, to need it: the browser picks from the widths.
+  const edgeWidth = (p, edge) => (p.w && p.h ? Math.round(Math.min(p.w, edge * Math.min(1, p.w / p.h))) : edge);
+  const tileSrc = (p) => ({ src: pic("thumb", p), srcset: `${pic("thumb", p)} ${edgeWidth(p, 640)}w, ${pic("display", p)} ${edgeWidth(p, 2048)}w` });
 
   function render() {
     newPill.hidden = true;
@@ -431,7 +437,8 @@
       const rows = justify(photos, width).map((r) => el("div", { class: "jrow", style: `height:${Math.round(r.h)}px` }, r.items.map(({ p, w }) => {
         const i = index++;
         return el("button", { class: "tile", type: "button", "data-i": i, "data-id": p.id, "data-seg": seg.key, "aria-label": tileLabel(p), style: `width:${w}px;height:${Math.round(r.h)}px`, onclick: () => openLightbox(i) },
-          el("img", { src: pic("thumb", p), alt: "", loading: "lazy", decoding: "async", onload: fadeIn, onerror: failed }),
+          el("img", { ...tileSrc(p), sizes: `${w}px`, alt: "", loading: "lazy", decoding: "async", onload: fadeIn, onerror: failed }),
+          playMark(p),
           p.src !== "g" ? el("span", { class: "badge", text: p.src === "b" ? T.booth : T.pro }) : null,
           videoBadge(p),
           tagBadge(p));
@@ -1170,17 +1177,28 @@
       await wait("loadedmetadata", remote ? 30000 : 10000);
       const duration = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : null;
       // Seeking makes even iPhone Safari, which won't load a video it isn't playing, fetch a frame.
-      v.currentTime = duration ? Math.min(1, duration / 3) : 0.001;
-      await wait("seeked", remote ? 30000 : 10000);
-      await painted(600);
+      const seek = async (t) => { v.currentTime = t; await wait("seeked", remote ? 30000 : 10000); await painted(600); };
+      await seek(duration ? Math.min(1, duration / 3) : 0.001);
       const width = v.videoWidth, height = v.videoHeight;
       if (!width || !height) throw new Error("unreadable");
       // Safari can hand over a black frame for a paused video; playing it a moment fixes that.
-      if (isBlank(v, width, height)) {
+      if (frameLook(v, width, height).blank) {
         await v.play().catch(() => {});
         await painted(1500);
         v.pause();
-        if (isBlank(v, width, height)) throw new Error("unreadable");
+        if (frameLook(v, width, height).blank) throw new Error("unreadable");
+      }
+      // A second in is right for a phone clip; an edited film often opens on black or a title.
+      // Further in (15%, 30%, half way) until a frame has some light and something in it.
+      if (duration && !frameLook(v, width, height).good) {
+        let best = { score: frameLook(v, width, height).score, t: v.currentTime };
+        for (const t of [0.15, 0.3, 0.5].map((f) => duration * f)) {
+          await seek(t);
+          const look = frameLook(v, width, height);
+          if (look.score > best.score) best = { score: look.score, t };
+          if (look.good) break;
+        }
+        if (!frameLook(v, width, height).good && Math.abs(v.currentTime - best.t) > 0.01) await seek(best.t);
       }
       const display = await scaled(v, width, height, DISPLAY_EDGE, 0.85);
       const dispImg = await createImageBitmap(display).catch(() => null);
@@ -1194,15 +1212,24 @@
       if (!remote) URL.revokeObjectURL(url);
     }
   }
-  // Pure black, as an undecoded frame is (even a dark dance floor has some light in it).
-  function isBlank(source, w, h) {
+  // How a frame looks, from a 24×24 sample:
+  //  - blank: pure black, as an undecoded frame is (even a dark dance floor has some light in it);
+  //  - good: bright enough and varied enough to show something (not black, a fade or a flat card).
+  function frameLook(source, w, h) {
     const c = document.createElement("canvas");
     c.width = c.height = 24;
     const ctx = c.getContext("2d", { willReadFrequently: true });
     ctx.drawImage(source, 0, 0, w, h, 0, 0, 24, 24);
     const px = ctx.getImageData(0, 0, 24, 24).data;
-    for (let i = 0; i < px.length; i += 4) if (px[i] > 2 || px[i + 1] > 2 || px[i + 2] > 2) return false;
-    return true;
+    let max = 0, sum = 0, sq = 0;
+    const n = px.length / 4;
+    for (let i = 0; i < px.length; i += 4) {
+      max = Math.max(max, px[i], px[i + 1], px[i + 2]);
+      const y = 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+      sum += y; sq += y * y;
+    }
+    const mean = sum / n, spread = Math.sqrt(Math.max(0, sq / n - mean * mean));
+    return { blank: max <= 2, good: mean > 30 && spread > 14, score: Math.min(mean, 120) + spread * 2 };
   }
 
   // espresso with a cream play mark, 16:9
@@ -1438,7 +1465,7 @@
           const r = await withRetry(() => api(`/api/photos/${p.id}`, { method: "PATCH", json: { still: { width: still.width, height: still.height } } }));
           Object.assign(p, { ns: undefined, sv: r.still, w: still.width, h: still.height });
           made++;
-          grid.querySelectorAll(`.tile[data-id="${p.id}"] img`).forEach((img) => (img.src = pic("thumb", p)));
+          grid.querySelectorAll(`.tile[data-id="${p.id}"] img`).forEach((img) => Object.assign(img, tileSrc(p)));
         } catch { cantHere.add(p.id); }
       }
     } finally { repairing = false; }

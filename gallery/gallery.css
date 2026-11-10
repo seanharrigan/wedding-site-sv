@@ -168,3 +168,12 @@
 /* a thin rule between the groups of filters: kind · source · people */
 .filters .sep{flex:none;width:1px;align-self:stretch;margin:7px 2px 15px;background:var(--line-strong)}
 .lb-info .seg-tabs{margin-top:6px}
+
+/* a frosted, see-through play button in the middle of a video's tile */
+.tile .play{position:absolute;left:50%;top:50%;width:56px;height:56px;transform:translate(-50%,-50%);display:grid;place-items:center;border-radius:50%;
+  background:rgba(250,245,238,.26);-webkit-backdrop-filter:blur(12px) saturate(1.4);backdrop-filter:blur(12px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.5);box-shadow:0 8px 24px rgba(30,20,14,.22),inset 0 1px 0 rgba(255,255,255,.35);color:#fff;pointer-events:none;
+  transition:transform .3s var(--ease),background .3s}
+.tile .play .i{width:22px;height:22px;margin-left:3px;fill:currentColor;stroke:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
+@media (max-width:720px){.tile .play{width:42px;height:42px}.tile .play .i{width:17px;height:17px;margin-left:2px}}
+@media (hover:hover){.tile:hover .play{transform:translate(-50%,-50%) scale(1.08);background:rgba(250,245,238,.36)}}
