@@ -152,3 +152,15 @@
   .lb-strip button:hover{opacity:.85}
   .tray-thumbs button:hover{transform:rotate(0) translateY(-2px)}
 }
+
+/* ── videos: a play mark and the length on the tile; the player in the viewer ── */
+.tile .vid{position:absolute;right:6px;top:6px;display:flex;align-items:center;gap:3px;font-family:var(--sans);font-size:.5rem;font-weight:600;font-variant-numeric:tabular-nums;
+  padding:4px 7px 4px 5px;border-radius:999px;background:rgba(43,31,25,.62);color:var(--cream);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.tile .vid .i{width:11px;height:11px;fill:currentColor;stroke:none}
+.lb-stage video{max-width:100%;max-height:100%;display:block;background:#000;touch-action:none;transition:transform .25s var(--ease)}
+.lb-stage video[hidden],.lb-stage img[hidden]{display:none}
+/* a small play mark on video thumbnails in the viewer's strip and the upload tray */
+.lb-strip button.v,.tray-thumbs button.v{position:relative}
+.lb-strip button.v::after,.tray-thumbs button.v::after{content:"";position:absolute;left:50%;top:50%;width:0;height:0;transform:translate(-35%,-50%);
+  border-style:solid;border-width:7px 0 7px 11px;border-color:transparent transparent transparent rgba(250,245,238,.95);filter:drop-shadow(0 1px 3px rgba(0,0,0,.5));pointer-events:none}
+.tray-thumbs button.v::after{top:calc(50% - 4px)}

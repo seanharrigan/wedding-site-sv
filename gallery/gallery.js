@@ -2,12 +2,17 @@
 // Photos live in the sv-gallery Worker (Cloudflare R2 + D1). This page makes the display and
 // thumbnail sizes on the phone, reads each photo's time from EXIF, and places it on the
 // wedding week's timeline. Anyone with the invitation password can upload and tag.
+// Videos go in the same list: the file is sent in pieces, a still from it stands in as its
+// display and thumb sizes, and its time comes from the video's own metadata.
 (() => {
   const local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
   // Set after the Worker is deployed (npm run deploy in ../sv-gallery prints the address).
   const API_PROD = "https://sv-gallery.valeriaandseanharrigan.workers.dev";
   const API = local ? `http://${location.hostname}:8933` : API_PROD;
   const MAX_BYTES = 40 * 1024 * 1024;
+  // the Worker's limits (VIDEO_MAX in sv-gallery); a video goes up in pieces of PART
+  const VIDEO_MAX = 2 * 1024 ** 3, VIDEO_MAX_ADMIN = 20 * 1024 ** 3;
+  const PART = 8 * 1024 * 1024;
   const DISPLAY_EDGE = 2048, THUMB_EDGE = 640;
   const CONCURRENCY = 2;
   const POLL_MS = 45000;
@@ -33,10 +38,10 @@
   const T = {
     en: {
       back: "← seanandvaleria.com", eyebrow: "Gallery", title: "Our wedding, through your eyes",
-      lede: "Add your photos from the trip and the wedding, and tag who’s in them.",
+      lede: "Add your photos and videos from the trip and the wedding, and tag who’s in them.",
       add: "Add photos", closed: "Uploads are closed. Thank you for sharing!", you: "You", pickName: "Who are you?",
       all: "All", ofMe: "Photos of me", people: "People", uploadedBy: "Shared by", photographer: "Photographer", guests: "Guests",
-      photos: (n) => `${n} ${n === 1 ? "photo" : "photos"}`,
+      photos: (n) => `${n} ${n === 1 ? "photo" : "photos"}`, videos: (n) => `${n} ${n === 1 ? "video" : "videos"}`, video: "Video",
       soon: "The photo gallery opens soon.",
       empty: "No photos here yet.", emptyAll: "No photos yet. Be the first to share one from the trip!",
       clearFilters: "Show all photos",
@@ -44,16 +49,17 @@
       search: "Search names", notListed: (s) => s ? `Add “${s}”` : "Not on the list? Type your name", skip: "Not now",
       peopleQ: "Show photos of…", peopleHint: "Pick more than one to find photos of them together.", done: "Done", clear: "Clear",
       byQ: "Shared by", tagQ: "Who’s in this photo?", tagHint: "Tap everyone in it.",
-      inPhoto: "In this photo", tagSomeone: "+ Tag someone", nobody: "No one tagged yet.",
+      inPhoto: "In this photo", inVideo: "In this video", tagSomeone: "+ Tag someone", nobody: "No one tagged yet.",
       sharedBy: (n) => `Shared by ${n}`, byPhotographer: "From the photographer", someone: "a guest",
       approx: "time approximate", unknownTime: "Date unknown", camera: "Camera",
-      download: "Download original", fixTime: "Fix the time", del: "Delete",
+      download: "Download original", downloadVideo: "Download video", fixTime: "Fix the time", del: "Delete",
       timeQ: "When was this taken?", timeHint: "Mexico City time.", save: "Save", cancel: "Cancel", enter: "Continue",
       preparing: "Getting ready…", uploading: (d, n) => `Sharing ${d} of ${n}`, uploaded: (n) => `${n} ${n === 1 ? "photo" : "photos"} shared`,
       failed: (n) => `${n} couldn’t be shared`, retry: "Try again",
       already: (n) => `${n} already here`, unreadable: "This phone can’t read that file", tooBig: "Too big (40 MB max)", offline: "Waiting for a connection…",
+      tooBigVideo: (gb) => `Too big (${gb} GB max for a video)`,
       unreadableHere: "This browser can’t read that file", heicHere: "This browser can’t open HEIC photos. Try from your phone, or save them as JPEG.",
-      notImage: "That file isn’t a photo", tooMany: "That’s the limit for today. Please try again tomorrow.",
+      notImage: "That file isn’t a photo or a video", tooMany: "That’s the limit for today. Please try again tomorrow.",
       remove: (n) => `Remove ${n}`, untagged: (n) => `${n} untagged`, undo: "Undo", withNames: (s) => `with ${s}`,
       viewer: "Photo viewer", prev: "Previous", nextPhoto: "Next", close: "Close",
       leaveWarn: "Photos are still uploading.", newPhotos: (n) => `${n} new ${n === 1 ? "photo" : "photos"} · Show`,
@@ -64,19 +70,20 @@
       opensKicker: "Coming soon", opensText: (d) => `Uploads open ${d}`, opensSub: "Until then, enjoy the photos already here.",
       closedKicker: "Thank you", closedText: "Uploads are closed", closedSub: "Thank you for sharing every moment with us.",
       firstSoon: "The first photos will appear here soon.",
-      dropHere: "Drop your photos here", whoIn: "Who’s in this photo?", whoInStep: (i, n) => n > 1 ? `Photo ${i} of ${n} · tap everyone in it` : "Tap everyone in it",
+      dropHere: "Drop your photos and videos here", whoIn: "Who’s in this photo?", whoInVideo: "Who’s in this video?", whoInStep: (i, n) => n > 1 ? `${i} of ${n} · tap everyone in it` : "Tap everyone in it",
       next: "Next", skipPhoto: "Skip", thanks: (n) => `${n === 1 ? "Your photo is" : `All ${n} photos are`} in. Thank you!`,
-      delTitle: "Delete this photo?", delHint: "It’s removed for everyone, and it can’t be undone.", keep: "Keep it",
+      thanksMix: (what) => `All in (${what}). Thank you!`, sharedMix: (what) => `${what} shared`,
+      delTitle: "Delete this photo?", delTitleVideo: "Delete this video?", delHint: "It’s removed for everyone, and it can’t be undone.", keep: "Keep it",
       modeAuto: "Automatic", modeOpen: "Open now", modeClosed: "Closed",
       modeHint: { auto: (d) => `Guests can upload from ${d}. You can always upload.`, open: "Guests can upload now.", closed: "Guests can’t upload. You still can." },
       guestUploads: "Guest uploads",
     },
     es: {
       back: "← seanandvaleria.com", eyebrow: "Galería", title: "Nuestra boda, a través de sus ojos",
-      lede: "Suban sus fotos del viaje y de la boda, y etiqueten a quién sale en ellas.",
+      lede: "Suban sus fotos y videos del viaje y de la boda, y etiqueten a quién sale en ellos.",
       add: "Subir fotos", closed: "Ya no se pueden subir fotos. ¡Gracias por compartir!", you: "Tú", pickName: "¿Quién eres?",
       all: "Todas", ofMe: "Fotos mías", people: "Personas", uploadedBy: "Compartidas por", photographer: "Fotógrafo", guests: "Invitados",
-      photos: (n) => `${n} ${n === 1 ? "foto" : "fotos"}`,
+      photos: (n) => `${n} ${n === 1 ? "foto" : "fotos"}`, videos: (n) => `${n} ${n === 1 ? "video" : "videos"}`, video: "Video",
       soon: "La galería de fotos abrirá pronto.",
       empty: "Todavía no hay fotos aquí.", emptyAll: "Todavía no hay fotos. ¡Sé el primero en compartir una del viaje!",
       clearFilters: "Ver todas las fotos",
@@ -84,16 +91,17 @@
       search: "Buscar nombres", notListed: (s) => s ? `Agregar “${s}”` : "¿No estás en la lista? Escribe tu nombre", skip: "Ahora no",
       peopleQ: "Ver fotos de…", peopleHint: "Elige a más de una persona para ver fotos donde salen juntas.", done: "Listo", clear: "Borrar",
       byQ: "Compartidas por", tagQ: "¿Quién sale en esta foto?", tagHint: "Toca a todos los que salen.",
-      inPhoto: "En esta foto", tagSomeone: "+ Etiquetar", nobody: "Nadie etiquetado todavía.",
+      inPhoto: "En esta foto", inVideo: "En este video", tagSomeone: "+ Etiquetar", nobody: "Nadie etiquetado todavía.",
       sharedBy: (n) => `Compartida por ${n}`, byPhotographer: "Del fotógrafo", someone: "un invitado",
       approx: "hora aproximada", unknownTime: "Fecha desconocida", camera: "Cámara",
-      download: "Descargar original", fixTime: "Corregir la hora", del: "Borrar",
+      download: "Descargar original", downloadVideo: "Descargar video", fixTime: "Corregir la hora", del: "Borrar",
       timeQ: "¿Cuándo se tomó?", timeHint: "Hora de la Ciudad de México.", save: "Guardar", cancel: "Cancelar", enter: "Continuar",
       preparing: "Preparando…", uploading: (d, n) => `Compartiendo ${d} de ${n}`, uploaded: (n) => `${n} ${n === 1 ? "foto compartida" : "fotos compartidas"}`,
       failed: (n) => `${n} no se pudieron compartir`, retry: "Reintentar",
       already: (n) => n === 1 ? "1 ya estaba aquí" : `${n} ya estaban aquí`, unreadable: "Este teléfono no puede leer ese archivo", tooBig: "Muy grande (máx. 40 MB)", offline: "Esperando conexión…",
+      tooBigVideo: (gb) => `Muy grande (máx. ${gb} GB por video)`,
       unreadableHere: "Este navegador no puede leer ese archivo", heicHere: "Este navegador no abre fotos HEIC. Súbelas desde tu teléfono o guárdalas como JPEG.",
-      notImage: "Ese archivo no es una foto", tooMany: "Llegaste al límite de hoy. Inténtalo de nuevo mañana.",
+      notImage: "Ese archivo no es una foto ni un video", tooMany: "Llegaste al límite de hoy. Inténtalo de nuevo mañana.",
       remove: (n) => `Quitar a ${n}`, untagged: (n) => `Se quitó la etiqueta de ${n}`, undo: "Deshacer", withNames: (s) => `con ${s}`,
       viewer: "Visor de fotos", prev: "Anterior", nextPhoto: "Siguiente", close: "Cerrar",
       leaveWarn: "Todavía se están subiendo fotos.", newPhotos: (n) => `${n} ${n === 1 ? "foto nueva" : "fotos nuevas"} · Ver`,
@@ -104,9 +112,10 @@
       opensKicker: "Muy pronto", opensText: (d) => `Podrán subir fotos desde el ${d}`, opensSub: "Mientras tanto, disfruten las fotos que ya están aquí.",
       closedKicker: "Gracias", closedText: "Ya no se pueden subir fotos", closedSub: "Gracias por compartir cada momento con nosotros.",
       firstSoon: "Las primeras fotos aparecerán aquí muy pronto.",
-      dropHere: "Suelta tus fotos aquí", whoIn: "¿Quién sale en esta foto?", whoInStep: (i, n) => n > 1 ? `Foto ${i} de ${n} · toca a todos los que salen` : "Toca a todos los que salen",
+      dropHere: "Suelta tus fotos y videos aquí", whoIn: "¿Quién sale en esta foto?", whoInVideo: "¿Quién sale en este video?", whoInStep: (i, n) => n > 1 ? `${i} de ${n} · toca a todos los que salen` : "Toca a todos los que salen",
       next: "Siguiente", skipPhoto: "Omitir", thanks: (n) => `¡Gracias! ${n === 1 ? "Tu foto ya está" : `Las ${n} fotos ya están`} aquí.`,
-      delTitle: "¿Borrar esta foto?", delHint: "Se borra para todos y no se puede deshacer.", keep: "Conservarla",
+      thanksMix: (what) => `¡Gracias! Ya está todo aquí (${what}).`, sharedMix: (what) => `Compartido: ${what}`,
+      delTitle: "¿Borrar esta foto?", delTitleVideo: "¿Borrar este video?", delHint: "Se borra para todos y no se puede deshacer.", keep: "Conservarla",
       modeAuto: "Automático", modeOpen: "Abiertas", modeClosed: "Cerradas",
       modeHint: { auto: (d) => `Los invitados podrán subir fotos desde el ${d}. Ustedes siempre pueden.`, open: "Los invitados ya pueden subir fotos.", closed: "Los invitados no pueden subir fotos. Ustedes sí." },
       guestUploads: "Fotos de invitados",
@@ -177,6 +186,17 @@
   });
   const isMine = (p) => S.admin || (!!S.devicePrefix && p.d === S.devicePrefix);
   const nameOf = (id) => S.guestById.get(id)?.name;
+  const isVid = (p) => p.k === "v";
+  // "12 photos", or "10 photos · 2 videos" once there are videos among them
+  const countText = (list) => {
+    const v = list.filter(isVid).length;
+    return [list.length - v || !v ? T.photos(list.length - v) : null, v ? T.videos(v) : null].filter(Boolean).join(" · ");
+  };
+  // 0:42, 12:05, 1:02:10
+  const fmtDur = (sec) => {
+    const s = Math.max(0, Math.round(sec || 0)), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = String(s % 60).padStart(2, "0");
+    return h ? `${h}:${String(m).padStart(2, "0")}:${r}` : `${m}:${r}`;
+  };
 
   // ── API ───────────────────────────────────────────────────────────────────
   class ApiError extends Error { constructor(status, code) { super(code); this.status = status; this.code = code; } }
@@ -348,9 +368,11 @@
   // What a screen reader hears for a tile: the moment, the time, and who's in it.
   const tileLabel = (p) => {
     const names = p.tags.map(nameOf).filter(Boolean);
-    return [segmentOf(p.t).title, p.t && fmtTime(p.t), names.length && T.withNames(names.join(", "))].filter(Boolean).join(", ");
+    return [isVid(p) && `${T.video} ${fmtDur(p.dur)}`, segmentOf(p.t).title, p.t && fmtTime(p.t), names.length && T.withNames(names.join(", "))].filter(Boolean).join(", ");
   };
   const tagBadge = (p) => p.tags.length ? el("span", { class: "tagn", html: `${PERSON}${p.tags.length}` }) : null;
+  const PLAY = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>';
+  const videoBadge = (p) => isVid(p) ? el("span", { class: "vid", html: PLAY }, p.dur ? fmtDur(p.dur) : null) : null;
 
   function render() {
     newPill.hidden = true;
@@ -372,13 +394,14 @@
           el("small", { text: L("The wedding", "La boda") }), el("h2", { text: WEDDING_DAY[LANG] })));
       }
       const head = el("div", { class: "group-head" },
-        el("small", { text: [seg.date || seg.time, T.photos(photos.length)].filter(Boolean).join(" · ") }),
+        el("small", { text: [seg.date || seg.time, countText(photos)].filter(Boolean).join(" · ") }),
         el("h2", {}, seg.title));
       const rows = justify(photos, width).map((r) => el("div", { class: "jrow", style: `height:${Math.round(r.h)}px` }, r.items.map(({ p, w }) => {
         const i = index++;
         return el("button", { class: "tile", type: "button", "data-i": i, "data-id": p.id, "data-seg": seg.key, "aria-label": tileLabel(p), style: `width:${w}px;height:${Math.round(r.h)}px`, onclick: () => openLightbox(i) },
           el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async", onload: fadeIn, onerror: failed }),
           p.src === "p" ? el("span", { class: "badge", text: T.photographer }) : null,
+          videoBadge(p),
           tagBadge(p));
       })));
       frag.append(el("section", { class: "group" + (seg.day === "wedding" ? " moment" : ""), id: "seg-" + seg.key, "data-seg": seg.key }, head, el("div", { class: "rows" }, rows)));
@@ -606,7 +629,17 @@
   }
 
   // ── lightbox ──────────────────────────────────────────────────────────────
-  const lb = $("#lightbox"), lbImg = $("#lb-img"), lbInfo = $("#lb-info");
+  const lb = $("#lightbox"), lbImg = $("#lb-img"), lbVideo = $("#lb-video"), lbInfo = $("#lb-info");
+  // what's on show in the viewer: the photo, or the video player
+  const lbMedia = () => (lbVideo.hidden ? lbImg : lbVideo);
+  // Leaving a video stops it, and stops it downloading.
+  function stopVideo() {
+    if (!lbVideo.getAttribute("src")) return;
+    lbVideo.pause();
+    lbVideo.removeAttribute("src");
+    lbVideo.removeAttribute("poster");
+    lbVideo.load();
+  }
   lb.setAttribute("aria-label", T.viewer);
   $("#lb-prev").setAttribute("aria-label", T.prev);
   $("#lb-next").setAttribute("aria-label", T.nextPhoto);
@@ -638,6 +671,7 @@
   function closeLightbox(fromPop = false) {
     if (lb.hidden) return;
     const id = S.visible[S.lbIndex]?.id;
+    stopVideo();
     lb.hidden = true;
     delete strip.dataset.ready;
     document.body.classList.remove("locked");
@@ -668,7 +702,7 @@
   function renderStrip() {
     if (stripFor !== S.visible) {
       stripFor = S.visible;
-      put(strip, S.visible.map((p, i) => el("button", { type: "button", "aria-label": `${i + 1} / ${S.visible.length}`, onclick: () => goTo(i) },
+      put(strip, S.visible.map((p, i) => el("button", { type: "button", class: isVid(p) ? "v" : null, "aria-label": `${i + 1} / ${S.visible.length}`, onclick: () => goTo(i) },
         el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async" }))));
     }
     lb.classList.toggle("has-strip", S.visible.length > 1);
@@ -683,10 +717,20 @@
   function showPhoto() {
     const p = S.visible[S.lbIndex];
     if (!p) return closeLightbox();
-    lbImg.style.opacity = ".35";
-    lbImg.onload = () => (lbImg.style.opacity = "1");
-    lbImg.src = imgUrl("display", p.id);
-    lbImg.alt = segmentOf(p.t).title;
+    stopVideo();
+    lbImg.hidden = isVid(p);
+    lbVideo.hidden = !isVid(p);
+    if (isVid(p)) {
+      // the still shows until it plays; the file streams in only once play is pressed
+      lbVideo.poster = imgUrl("display", p.id);
+      lbVideo.src = imgUrl("orig", p.id);
+      lbVideo.setAttribute("aria-label", `${T.video} · ${segmentOf(p.t).title}`);
+    } else {
+      lbImg.style.opacity = ".35";
+      lbImg.onload = () => (lbImg.style.opacity = "1");
+      lbImg.src = imgUrl("display", p.id);
+      lbImg.alt = segmentOf(p.t).title;
+    }
     for (const n of [S.visible[S.lbIndex + 1], S.visible[S.lbIndex - 1]]) if (n) new Image().src = imgUrl("display", n.id);
     $("#lb-count").textContent = `${S.lbIndex + 1} / ${S.visible.length}`;
     $("#lb-prev").hidden = S.lbIndex === 0;
@@ -707,11 +751,11 @@
         el("p", { class: "lb-when" }, when, p.ts === "file" ? el("em", { text: ` · ${T.approx}` }) : null),
         el("p", { class: "lb-sub", text: [seg.title, who].join(" · ") })),
       el("div", {},
-        el("span", { class: "meta-label", text: T.inPhoto }),
+        el("span", { class: "meta-label", text: isVid(p) ? T.inVideo : T.inPhoto }),
         el("div", { class: "tags" }, ...tags, el("button", { class: "tag add", type: "button", text: T.tagSomeone, onclick: () => tagSomeone(p) }))),
       p.cam ? el("div", {}, el("span", { class: "meta-label", text: T.camera }), el("p", { class: "lb-sub", text: p.cam })) : null,
       el("div", { class: "lb-actions" },
-        el("a", { class: "btn small", href: imgUrl("orig", p.id) + "?dl=1", download: "" }, T.download),
+        el("a", { class: "btn small", href: imgUrl("orig", p.id) + "?dl=1", download: "" }, isVid(p) ? T.downloadVideo : T.download),
         isMine(p) ? el("button", { class: "btn small", type: "button", text: T.fixTime, onclick: () => fixTime(p) }) : null,
         isMine(p) ? el("button", { class: "btn small danger", type: "button", text: T.del, onclick: () => remove(p) }) : null),
     );
@@ -724,6 +768,8 @@
   $("#lb-next").addEventListener("click", () => step(1));
   addEventListener("keydown", (e) => {
     if (lb.hidden || !wrap.hidden) { if (e.key === "Escape" && !wrap.hidden) closeSheet(undefined); return; }
+    // with the player focused, the arrows move through the video rather than to the next photo
+    if (document.activeElement === lbVideo && e.key.startsWith("Arrow")) return;
     if (e.key === "ArrowLeft") step(-1);
     else if (e.key === "ArrowRight") step(1);
     else if (e.key === "Escape") closeLightbox();
@@ -734,17 +780,22 @@
     const stage = $("#lb-stage");
     let x0 = null, y0 = 0;
     // the photo follows the finger, then springs back with its transition restored
-    const settle = () => { x0 = null; lbImg.style.transition = ""; lbImg.style.transform = ""; };
+    let moving = lbImg;
+    const settle = () => { x0 = null; moving.style.transition = ""; moving.style.transform = ""; };
     stage.addEventListener("pointerdown", (e) => {
       if (e.button > 0 || e.target.closest("button, .lb-strip")) return;
+      // On a video, only a finger swipes, and not along the bottom where the player's own
+      // controls are; a mouse there is working the player, so the stage leaves it alone.
+      if (e.target === lbVideo && (e.pointerType !== "touch" || e.clientY > lbVideo.getBoundingClientRect().bottom - 64)) return;
       x0 = e.clientX; y0 = e.clientY;
-      stage.setPointerCapture?.(e.pointerId);
-      lbImg.style.transition = "none";
+      moving = lbMedia();
+      if (e.target !== lbVideo) stage.setPointerCapture?.(e.pointerId);
+      moving.style.transition = "none";
     });
     stage.addEventListener("pointermove", (e) => {
       if (x0 == null) return;
       const dx = e.clientX - x0, dy = e.clientY - y0;
-      lbImg.style.transform = Math.abs(dx) >= Math.abs(dy) ? `translateX(${dx * 0.6}px)` : `translateY(${Math.max(0, dy) * 0.6}px)`;
+      moving.style.transform = Math.abs(dx) >= Math.abs(dy) ? `translateX(${dx * 0.6}px)` : `translateY(${Math.max(0, dy) * 0.6}px)`;
     });
     stage.addEventListener("pointerup", (e) => {
       if (x0 == null) return;
@@ -758,7 +809,7 @@
 
   // Everyone in the photo at once: tap names on and off, then Done.
   async function tagSomeone(p) {
-    const chosen = await namePicker({ title: T.tagSomeone.replace("+ ", ""), q: T.tagQ, hint: T.tagHint, multi: true, allowAdd: true,
+    const chosen = await namePicker({ title: T.tagSomeone.replace("+ ", ""), q: isVid(p) ? T.whoInVideo : T.tagQ, hint: T.tagHint, multi: true, allowAdd: true,
       selected: new Set(p.tags), okLabel: T.done, cancelLabel: T.cancel, cancelValue: () => null });
     if (chosen) await setTags(p, chosen);
   }
@@ -805,7 +856,7 @@
   async function remove(p) {
     const sure = await openSheet(() => [
       el("img", { class: "preview", src: imgUrl("display", p.id), alt: "" }),
-      el("p", { class: "q", text: T.delTitle }),
+      el("p", { class: "q", text: isVid(p) ? T.delTitleVideo : T.delTitle }),
       el("p", { class: "hint", text: T.delHint }),
       el("div", { class: "sheet-foot" },
         el("button", { class: "btn", type: "button", text: T.keep, onclick: () => closeSheet(false) }),
@@ -853,22 +904,51 @@
     }
   }
 
+  const isVideoFile = (f) => /^video\//.test(f.type) || /\.(mov|mp4|m4v|webm)$/i.test(f.name);
+  const isPhotoFile = (f) => /^image\//.test(f.type) || /\.(heic|heif)$/i.test(f.name);
+
   async function upload(it) {
-    if (it.file.size > MAX_BYTES) throw new Error("tooBig");
-    const prep = await prepareInTurn(it.file);
+    const video = (it.video = isVideoFile(it.file));
+    if (video && it.file.size > (S.admin ? VIDEO_MAX_ADMIN : VIDEO_MAX)) throw new Error("tooBigVideo");
+    if (!video && it.file.size > MAX_BYTES) throw new Error("tooBig");
+    const prep = await prepareInTurn(it.file, video);
     it.thumbUrl = URL.createObjectURL(prep.thumb);
     renderTray();
     const onWait = () => { it.waiting = true; renderTray(); };
     const created = await withRetry(() => api("/api/photos", { method: "POST", json: {
       sha256: prep.sha256, takenLocal: prep.takenLocal, timeSource: prep.timeSource, camera: prep.camera,
       width: prep.width, height: prep.height, bytes: it.file.size, origType: it.file.type || null, uploaderId: S.me?.id ?? null,
+      kind: video ? "video" : "photo", duration: prep.duration ?? null,
     } }), onWait);
     it.id = created.id;
     it.existing = created.existing && !created.missing.length;
     const bodies = { orig: it.file, display: prep.display, thumb: prep.thumb };
-    for (const size of created.missing) await withRetry(() => api(`/api/photos/${created.id}/${size}`, { method: "PUT", body: bodies[size] }), onWait);
+    // a video's still goes first, then the long part: the file itself, piece by piece
+    for (const size of [...created.missing].sort((a, b) => (a === "orig") - (b === "orig"))) {
+      if (video && size === "orig") await sendVideo(it, created.id, onWait);
+      else await withRetry(() => api(`/api/photos/${created.id}/${size}`, { method: "PUT", body: bodies[size] }), onWait);
+    }
     it.waiting = false;
     it.state = "done";
+  }
+
+  // The video in equal pieces, one after another: a dropped connection only costs a piece.
+  async function sendVideo(it, id, onWait) {
+    const file = it.file, count = Math.max(1, Math.ceil(file.size / PART));
+    const parts = [];
+    let uploadId = null;
+    it.sent = 0;
+    for (let n = 1; n <= count; n++) {
+      const piece = file.slice((n - 1) * PART, Math.min(file.size, n * PART));
+      const q = `n=${n}` + (uploadId ? `&upload=${encodeURIComponent(uploadId)}` : "");
+      const r = await withRetry(() => api(`/api/photos/${id}/orig/part?${q}`, { method: "PUT", body: piece }), onWait);
+      uploadId = r.upload;
+      parts.push(r.part);
+      it.sent = Math.min(file.size, n * PART);
+      it.waiting = false;
+      renderTray();
+    }
+    await withRetry(() => api(`/api/photos/${id}/orig/complete`, { method: "POST", json: { upload: uploadId, parts } }), onWait);
   }
 
   // EXIF time → Mexico City wall time. With an offset (most phones) the instant is exact;
@@ -888,8 +968,8 @@
   // Decoding and resizing a big photo takes a lot of memory on a phone, so photos are prepared
   // one at a time; uploads still run two at once.
   let prepTurn = Promise.resolve();
-  function prepareInTurn(file) {
-    const run = prepTurn.then(() => prepare(file));
+  function prepareInTurn(file, video) {
+    const run = prepTurn.then(() => (video ? prepareVideo(file) : prepare(file)));
     prepTurn = run.catch(() => {});
     return run;
   }
@@ -924,6 +1004,175 @@
     return { sha256, takenLocal, timeSource, camera, width, height, display, thumb };
   }
 
+  // ── videos: a still, the time and the camera, without reading the whole file ──
+  async function prepareVideo(file) {
+    const meta = await videoMeta(file).catch(() => ({}));
+    let takenLocal = meta.taken || null, timeSource = "exif";
+    if (!takenLocal && file.lastModified) { takenLocal = isoLocal(new Date(file.lastModified + MX_OFFSET_MIN * 60000)); timeSource = "file"; }
+    const sha256 = await sampleHash(file);
+    // A browser that can't play the file (a computer without the codec) still shares it,
+    // with a plain still; anyone whose browser can play it still can.
+    const still = (await videoStill(file).catch(() => null)) || (await blankStill());
+    return { sha256, takenLocal, timeSource, camera: meta.camera || null, ...still, duration: still.duration ?? meta.duration ?? null };
+  }
+
+  // A video can be gigabytes, too much to read into a phone's memory just to recognise it
+  // later. Its size and three 2 MB samples (start, middle, end) are enough.
+  async function sampleHash(file) {
+    const SAMPLE = 2 * 1024 * 1024;
+    const pieces = file.size <= 3 * SAMPLE ? [file]
+      : [file.slice(0, SAMPLE), file.slice(Math.floor(file.size / 2 - SAMPLE / 2), Math.floor(file.size / 2 + SAMPLE / 2)), file.slice(file.size - SAMPLE)];
+    const buf = await new Blob([`video:${file.size}:`, ...pieces]).arrayBuffer();
+    const d = await crypto.subtle.digest("SHA-256", buf);
+    return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  // A frame a moment in (past any fade from black), at the size photos get.
+  async function videoStill(file) {
+    const url = URL.createObjectURL(file);
+    const v = document.createElement("video");
+    v.muted = true; v.playsInline = true; v.preload = "auto";
+    v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
+    // in the page but out of sight: Safari only paints frames for a video that's in the page
+    v.style.cssText = "position:fixed;left:-10px;top:0;width:2px;height:2px;opacity:0;pointer-events:none";
+    const wait = (ev, ms) => new Promise((resolve, reject) => {
+      const t = setTimeout(() => reject(new Error("unreadable")), ms);
+      v.addEventListener(ev, () => { clearTimeout(t); resolve(); }, { once: true });
+      v.addEventListener("error", () => { clearTimeout(t); reject(new Error("unreadable")); }, { once: true });
+    });
+    // the next frame actually painted, where the browser can say so
+    const painted = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); v.requestVideoFrameCallback?.(() => resolve()); });
+    try {
+      document.body.append(v);
+      v.src = url;
+      await wait("loadedmetadata", 20000);
+      const duration = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : null;
+      // Seeking makes even iPhone Safari, which won't load a video it isn't playing, fetch a frame.
+      v.currentTime = duration ? Math.min(1, duration / 3) : 0.001;
+      await wait("seeked", 20000);
+      await painted(600);
+      const width = v.videoWidth, height = v.videoHeight;
+      if (!width || !height) throw new Error("unreadable");
+      // Safari can hand over a black frame for a paused video; playing it a moment fixes that.
+      if (isBlank(v, width, height)) {
+        await v.play().catch(() => {});
+        await painted(1500);
+        v.pause();
+        if (isBlank(v, width, height)) throw new Error("unreadable");
+      }
+      const display = await scaled(v, width, height, DISPLAY_EDGE, 0.85);
+      const dispImg = await createImageBitmap(display).catch(() => null);
+      const thumb = dispImg ? await scaled(dispImg, dispImg.width, dispImg.height, THUMB_EDGE, 0.78) : await scaled(v, width, height, THUMB_EDGE, 0.78);
+      dispImg?.close?.();
+      return { width, height, display, thumb, duration };
+    } finally {
+      v.removeAttribute("src");
+      v.load();
+      v.remove();
+      URL.revokeObjectURL(url);
+    }
+  }
+  // Pure black, as an undecoded frame is (even a dark dance floor has some light in it).
+  function isBlank(source, w, h) {
+    const c = document.createElement("canvas");
+    c.width = c.height = 24;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(source, 0, 0, w, h, 0, 0, 24, 24);
+    const px = ctx.getImageData(0, 0, 24, 24).data;
+    for (let i = 0; i < px.length; i += 4) if (px[i] > 2 || px[i + 1] > 2 || px[i + 2] > 2) return false;
+    return true;
+  }
+
+  // espresso with a cream play mark, 16:9
+  async function blankStill() {
+    const c = document.createElement("canvas");
+    c.width = 1280; c.height = 720;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#3a2a22";
+    ctx.fillRect(0, 0, 1280, 720);
+    ctx.fillStyle = "rgba(250,245,238,.85)";
+    ctx.beginPath(); ctx.moveTo(590, 300); ctx.lineTo(590, 420); ctx.lineTo(690, 360); ctx.closePath(); ctx.fill();
+    const display = await scaled(c, 1280, 720, DISPLAY_EDGE, 0.85);
+    const thumb = await scaled(c, 1280, 720, THUMB_EDGE, 0.78);
+    return { width: 1280, height: 720, display, thumb, duration: null };
+  }
+
+  // When it was filmed, and on what, from the MP4/QuickTime boxes. Only the top-level box
+  // headers and the 'moov' box (the index, at the start or the end of the file) are read.
+  //  - an iPhone's com.apple.quicktime.creationdate has local time and its offset: exact;
+  //  - otherwise mvhd's creation time, which cameras write in UTC (some write 0: ignored).
+  async function videoMeta(file) {
+    const view = async (from, to) => new DataView(await file.slice(from, to).arrayBuffer());
+    const four = (dv, at) => String.fromCharCode(dv.getUint8(at), dv.getUint8(at + 1), dv.getUint8(at + 2), dv.getUint8(at + 3));
+    let off = 0, moov = null;
+    for (let i = 0; i < 100 && off + 8 <= file.size; i++) {
+      const h = await view(off, off + 16);
+      let size = h.getUint32(0), head = 8;
+      const type = four(h, 4);
+      if (size === 1) { size = Number(h.getBigUint64(8)); head = 16; } else if (size === 0) size = file.size - off;
+      if (size < head) break;
+      if (type === "moov") { if (size <= 64 * 1024 * 1024) moov = await view(off + head, off + size); break; }
+      off += size;
+    }
+    if (!moov) return {};
+    // the boxes inside dv from start to end, as { type, at (content start), end }
+    const boxes = (dv, start, end) => {
+      const out = [];
+      for (let at = start; at + 8 <= end; ) {
+        let size = dv.getUint32(at), head = 8;
+        if (size === 1 && at + 16 <= end) { size = Number(dv.getBigUint64(at + 8)); head = 16; } else if (size === 0) size = end - at;
+        if (size < head || at + size > end) break;
+        out.push({ type: four(dv, at + 4), at: at + head, end: at + size });
+        at += size;
+      }
+      return out;
+    };
+    const find = (dv, list, type) => list.find((b) => b.type === type);
+    const top = boxes(moov, 0, moov.byteLength);
+    const out = {};
+
+    const mvhd = find(moov, top, "mvhd");
+    if (mvhd) {
+      const v1 = moov.getUint8(mvhd.at) === 1;
+      const created = v1 ? Number(moov.getBigUint64(mvhd.at + 4)) : moov.getUint32(mvhd.at + 4);
+      const scale = moov.getUint32(mvhd.at + (v1 ? 20 : 12));
+      const dur = v1 ? Number(moov.getBigUint64(mvhd.at + 24)) : moov.getUint32(mvhd.at + 16);
+      if (scale) out.duration = dur / scale;
+      const ms = (created - 2082844800) * 1000; // seconds since 1904
+      if (ms > Date.UTC(2000, 0, 1) && ms < Date.UTC(2100, 0, 1)) out.taken = isoLocal(new Date(ms + MX_OFFSET_MIN * 60000));
+    }
+
+    // QuickTime metadata: moov/meta holds 'keys' (names) and 'ilst' (values, by key number).
+    // In a QuickTime file 'meta' is a plain box; in an MP4 it has 4 bytes of version first.
+    const metaBox = find(moov, top, "meta");
+    if (metaBox) {
+      const start = four(moov, metaBox.at + 4) === "hdlr" ? metaBox.at : metaBox.at + 4;
+      const inner = boxes(moov, start, metaBox.end);
+      const keys = find(moov, inner, "keys"), ilst = find(moov, inner, "ilst");
+      if (keys && ilst) {
+        const names = [];
+        for (let at = keys.at + 8, n = moov.getUint32(keys.at + 4); n-- > 0 && at + 8 <= keys.end; ) {
+          const size = moov.getUint32(at);
+          if (size < 8) break;
+          names.push(new TextDecoder().decode(new Uint8Array(moov.buffer, moov.byteOffset + at + 8, size - 8)));
+          at += size;
+        }
+        const values = {};
+        for (const item of boxes(moov, ilst.at, ilst.end)) {
+          const name = names[moov.getUint32(item.at - 4) - 1];
+          const data = boxes(moov, item.at, item.end).find((b) => b.type === "data");
+          if (!name || !data || data.end - data.at < 8) continue;
+          values[name] = new TextDecoder().decode(new Uint8Array(moov.buffer, moov.byteOffset + data.at + 8, data.end - data.at - 8));
+        }
+        const m = /^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)(?:\.\d+)?(Z|[+-]\d\d:?\d\d)?/.exec(values["com.apple.quicktime.creationdate"] || "");
+        if (m) out.taken = exifTime(`${m[1]}:${m[2]}:${m[3]} ${m[4]}:${m[5]}:${m[6]}`, m[7] === "Z" ? "+00:00" : m[7]) || out.taken;
+        const make = (values["com.apple.quicktime.make"] || "").trim(), model = (values["com.apple.quicktime.model"] || "").trim();
+        out.camera = (model.toLowerCase().startsWith(make.toLowerCase()) ? model : [make, model].join(" ")).trim() || null;
+      }
+    }
+    return out;
+  }
+
   function scaled(source, w, h, edge, quality) {
     const k = Math.min(1, edge / Math.max(w, h));
     const c = document.createElement("canvas");
@@ -944,13 +1193,17 @@
     const waiting = queue.some((x) => x.waiting);
     // photos that were already in the gallery are counted on their own, not as shared
     const dup = queue.filter((x) => x.state === "done" && x.existing).length;
-    const head = busy ? (waiting ? T.offline : T.uploading(Math.min(done + 1, total), total))
-      : [done - dup || !dup ? T.uploaded(done - dup) : null, dup ? T.already(dup) : null].filter(Boolean).join(" · ");
+    // a video takes a while: its share of the bar fills as its pieces go, with a percentage
+    const going = queue.filter((x) => x.state === "working" && x.video && x.sent);
+    const partly = going.reduce((sum, x) => sum + x.sent / x.file.size, 0);
+    const pct = going.length ? ` · ${Math.floor((going[0].sent / going[0].file.size) * 100)}%` : "";
+    const head = busy ? (waiting ? T.offline : T.uploading(Math.min(done + 1, total), total) + pct)
+      : [done - dup || !dup ? sharedText(queue.filter((x) => x.state === "done" && !x.existing)) : null, dup ? T.already(dup) : null].filter(Boolean).join(" · ");
     tray.hidden = false;
     put(tray, 
       el("div", { class: "tray-head" }, el("span", { text: head }), busy ? null : el("button", { type: "button", "aria-label": T.done, text: "×", onclick: () => { clearQueue(); renderTray(); } })),
-      el("div", { class: "bar" }, el("i", { style: `width:${Math.round(((done + failed.length) / total) * 100)}%` })),
-      el("div", { class: "tray-thumbs" }, queue.map((it) => el("button", { type: "button", class: it.state, onclick: () => it.state === "done" && openById(it.id) },
+      el("div", { class: "bar" }, el("i", { style: `width:${Math.round(((done + failed.length + partly) / total) * 100)}%` })),
+      el("div", { class: "tray-thumbs" }, queue.map((it) => el("button", { type: "button", class: it.state + (it.video ? " v" : ""), onclick: () => it.state === "done" && openById(it.id) },
         it.thumbUrl ? el("img", { src: it.thumbUrl, alt: "" }) : null,
         el("span", { class: "state", text: it.state === "failed" ? "!" : "…" })))),
       failed.length ? el("p", { class: "tray-note" }, `${T.failed(failed.length)}: ${reason(failed[0])} `,
@@ -964,7 +1217,9 @@
   function reason(it) {
     const code = it.error?.code || it.error?.message;
     if (code === "unreadable") return PHONE ? T.unreadable : isHeic(it.file) ? T.heicHere : T.unreadableHere;
-    return { tooBig: T.tooBig, too_big: T.tooBig, not_an_image: T.notImage, too_many: T.tooMany, uploads_closed: T.closedNow }[code] || T.error;
+    const videoMax = T.tooBigVideo(Math.round((S.admin ? VIDEO_MAX_ADMIN : VIDEO_MAX) / 1024 ** 3));
+    if (code === "tooBigVideo" || (code === "too_big" && it.video)) return videoMax;
+    return { tooBig: T.tooBig, too_big: T.tooBig, not_an_image: T.notImage, not_a_video: T.notImage, too_many: T.tooMany, uploads_closed: T.closedNow }[code] || T.error;
   }
 
   async function batchDone() {
@@ -982,9 +1237,16 @@
     const shared = queue.filter((x) => x.state === "done" && !x.existing).length;
     const dup = queue.filter((x) => x.state === "done" && x.existing).length;
     if (queue.some((x) => x.state === "failed")) return renderTray();
+    const items = queue.filter((x) => x.state === "done" && !x.existing).map((x) => ({ k: x.video ? "v" : undefined }));
+    const thanks = items.some(isVid) ? T.thanksMix(countText(items)) : T.thanks(shared);
     clearQueue();
     renderTray();
-    if (shared || dup) toast([shared ? T.thanks(shared) : null, dup ? T.already(dup) : null].filter(Boolean).join(" · "));
+    if (shared || dup) toast([shared ? thanks : null, dup ? T.already(dup) : null].filter(Boolean).join(" · "));
+  }
+  // "3 photos shared", or with videos among them "2 photos · 1 video shared"
+  function sharedText(items) {
+    const list = items.map((x) => ({ k: x.video ? "v" : undefined }));
+    return list.some(isVid) ? T.sharedMix(countText(list)) : T.uploaded(list.length);
   }
 
   // One photo at a time: tap who's in it, then Next (or Skip). Tapping outside stops for now;
@@ -995,7 +1257,7 @@
     tray.hidden = true;
     for (const [n, p] of photos.entries()) {
       const chosen = await namePicker({
-        title: T.whoIn, q: p.t ? fmtWhen(p.t) : T.unknownTime, hint: T.whoInStep(n + 1, photos.length),
+        title: isVid(p) ? T.whoInVideo : T.whoIn, q: p.t ? fmtWhen(p.t) : T.unknownTime, hint: T.whoInStep(n + 1, photos.length),
         preview: imgUrl("display", p.id), multi: true, allowAdd: true, selected: new Set(p.tags),
         okLabel: n + 1 < photos.length ? T.next : T.done, cancelLabel: T.skipPhoto, cancelValue: () => null,
       });
@@ -1048,7 +1310,7 @@
       el("div", { class: "seg-tabs" }, [["auto", T.modeAuto], ["open", T.modeOpen], ["closed", T.modeClosed]].map(([m, label]) =>
         el("button", { type: "button", "aria-pressed": String(S.uploadsMode === m), text: label, onclick: () => setMode(m) }))),
       el("p", { class: "hint", text: modeHint }),
-      el("p", { class: "hint", text: `${T.photos(S.photos.length)} · ${S.guests.length} ${LANG === "es" ? "nombres" : "names"}` }),
+      el("p", { class: "hint", text: `${countText(S.photos)} · ${S.guests.length} ${LANG === "es" ? "nombres" : "names"}` }),
       el("div", { class: "sheet-foot" },
         el("button", { class: "btn", type: "button", text: T.exportList, onclick: () => {
           const lines = S.photos.map((p) => `${imgUrl("orig", p.id)}?dl=1`).join("\n");
@@ -1072,7 +1334,7 @@
       depth = 0;
       drop.hidden = true;
       if (!canUpload()) return;
-      const files = [...e.dataTransfer.files].filter((f) => f.type.startsWith("image/") || /\.(heic|heif)$/i.test(f.name));
+      const files = [...e.dataTransfer.files].filter((f) => isPhotoFile(f) || isVideoFile(f));
       if (!files.length) return;
       if (!S.me && !(await pickWho())) return;
       addFiles(files);
