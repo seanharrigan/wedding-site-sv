@@ -163,6 +163,10 @@
   };
 
   const $ = (s, root = document) => root.querySelector(s);
+  // the keyboard or a pointer, whichever was used last
+  let usingKeys = false;
+  addEventListener("keydown", (e) => { if (e.key === "Tab" || e.key.startsWith("Arrow") || e.key === "Enter" || e.key === " ") usingKeys = true; }, true);
+  addEventListener("pointerdown", () => { usingKeys = false; }, true);
   const el = (tag, attrs = {}, ...kids) => {
     const n = document.createElement(tag);
     for (const [k, v] of Object.entries(attrs)) {
@@ -348,7 +352,9 @@
       chip(peopleLabel + " ▾", f.people.size > 0, () => pickPeople()),
       chip((f.by != null ? nameOf(f.by) : T.uploadedBy) + " ▾", f.by != null, () => pickUploader()),
     );
-    if (had >= 0) bar.children[Math.min(had, bar.children.length - 1)]?.focus({ preventScroll: true });
+    // Someone working the filters from the keyboard keeps their place; after a tap or a click
+    // nothing is focused, so no focus ring is left on the chip.
+    if (had >= 0 && usingKeys) bar.children[Math.min(had, bar.children.length - 1)]?.focus({ preventScroll: true });
   }
 
   // ── grid ──────────────────────────────────────────────────────────────────
@@ -495,9 +501,18 @@
     }
     put(rail, ...links);
     rail.hidden = ordered.length < 2;
+    railFade();
     litKey = null;
     syncRail();
   }
+
+  // The fade at the timeline's far edge shows only while there's more of it to scroll to.
+  function railFade() {
+    rail.classList.toggle("more", rail.scrollWidth > rail.clientWidth + 2);
+    rail.classList.toggle("end", rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 2);
+  }
+  rail.addEventListener("scroll", railFade, { passive: true });
+  addEventListener("resize", railFade);
 
   // The rail lights the section whose heading has reached the bottom of the sticky bars.
   let litKey = null, railHold = 0, railFrame = 0;
@@ -524,7 +539,14 @@
     }
     lightRail(key);
   }
-  addEventListener("scroll", () => { cancelAnimationFrame(railFrame); railFrame = requestAnimationFrame(syncRail); }, { passive: true });
+  addEventListener("scroll", () => { cancelAnimationFrame(railFrame); railFrame = requestAnimationFrame(() => { syncRail(); syncStuck(); }); }, { passive: true });
+  // Once the filters stick under the menu bar, paper fills in behind the bar too, so photos
+  // don't show around and through it as they scroll up (.bars.stuck in gallery.css).
+  const bars = $("#bars");
+  function syncStuck() {
+    const top = parseFloat(getComputedStyle(bars).top) || 0;
+    bars.classList.toggle("stuck", !bars.hidden && bars.getBoundingClientRect().top <= top + 0.5);
+  }
 
   function renderEmpty() {
     const box = $("#empty");

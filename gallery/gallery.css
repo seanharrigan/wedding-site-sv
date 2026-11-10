@@ -177,3 +177,22 @@
 .tile .play .i{width:22px;height:22px;margin-left:3px;fill:currentColor;stroke:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
 @media (max-width:720px){.tile .play{width:42px;height:42px}.tile .play .i{width:17px;height:17px;margin-left:2px}}
 @media (hover:hover){.tile:hover .play{transform:translate(-50%,-50%) scale(1.08);background:rgba(250,245,238,.36)}}
+
+/* Stuck under the menu bar: paper runs up behind the bar to the top of the screen, and a soft
+   shadow under the filters, so photos slide away under one clean edge. */
+.bars::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:var(--sp-header-bottom,92px);background:var(--paper);opacity:0;pointer-events:none;transition:opacity .2s}
+.bars.stuck::before{opacity:1}
+.bars{transition:box-shadow .25s}
+.bars.stuck{box-shadow:0 -8px 0 var(--paper),0 14px 22px -18px rgba(52,38,31,.32)}
+/* a chip's focus ring only for the keyboard, and drawn round the chip's own shape */
+.chip:focus-visible{outline:2px solid var(--mocha);outline-offset:2px}
+.chip:focus:not(:focus-visible){outline:none}
+/* a chip that's on keeps its colours under the pointer (hover would otherwise darken its text) */
+@media (hover:hover){.chip.on:hover{color:var(--cream);border-color:transparent;background:var(--mocha-deep,#34261f)}}
+/* the timeline a little tighter on a computer, so it more often fits on one line */
+@media (min-width:721px){.rail{gap:14px}.rail .sep{margin:9px 2px}}
+/* The timeline stays one line everywhere: when it's longer than the card it scrolls sideways,
+   with its far edge fading out to say there's more. */
+@media (min-width:721px){.rail{flex-wrap:nowrap}}
+.rail.more{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 56px),transparent)}
+.rail.more.end{-webkit-mask-image:none;mask-image:none}
