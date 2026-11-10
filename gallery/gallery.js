@@ -131,6 +131,7 @@
   }[LANG];
 
   // The wedding week, in Mexico City time. Each segment runs from its start to the next one's.
+  // Everything from the morning after the wedding on is one group, "After the wedding".
   // Days follow the site's week itinerary; the wedding day follows its timeline.
   const L = (en, es) => (LANG === "es" ? es : en);
   const WEDDING_DAY = { en: "Tuesday 3 November", es: "Martes 3 de noviembre" };
@@ -147,9 +148,7 @@
     { key: "dinner", start: "2026-11-03T18:00", day: "wedding", title: L("Dinner", "Cena"), time: "6:00 PM", rail: L("Dinner", "Cena") },
     { key: "party", start: "2026-11-03T19:30", day: "wedding", title: L("Party", "Fiesta"), time: "7:30 PM", rail: L("Party", "Fiesta") },
     { key: "antojitos", start: "2026-11-04T00:00", day: "wedding", title: L("Antojitos mexicanos", "Antojitos mexicanos"), time: "12:00 AM", rail: "Antojitos" },
-    { key: "nov4", start: "2026-11-04T05:00", day: "nov4", title: L("Pool day or hike", "Día de alberca o caminata"), date: L("Wednesday 4 November", "Miércoles 4 de noviembre"), rail: L("Wed 4", "Mié 4") },
-    { key: "nov5", start: "2026-11-05T00:00", day: "nov5", title: L("Return to Mexico City", "Regreso a la Ciudad de México"), date: L("Thursday 5 November", "Jueves 5 de noviembre"), rail: L("Thu 5", "Jue 5") },
-    { key: "after", start: "2026-11-06T00:00", day: "after", title: L("After the wedding", "Después de la boda"), rail: L("After", "Después") },
+    { key: "after", start: "2026-11-04T05:00", day: "after", title: L("After the wedding", "Después de la boda"), rail: L("After", "Después") },
   ];
   // Photos from August and September 2025 are the engagement shoot, shown ahead of "Before the trip".
   const ENGAGEMENT = { key: "engagement", start: "2025-08-01T00:00", end: "2025-10-01T00:00", day: "before", title: L("Engagement", "Compromiso"), rail: L("Engagement", "Compromiso") };
