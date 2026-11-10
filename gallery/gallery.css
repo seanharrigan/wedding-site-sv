@@ -276,3 +276,14 @@
 .lb-close:active,.lb-nav:active{transform:scale(.94)}
 .lb-nav:active{transform:translateY(-50%) scale(.94)}
 @media (max-width:720px){.lb-close{top:calc(12px + var(--safe-t));right:12px;width:42px;height:42px}.lb-count{top:calc(20px + var(--safe-t));left:12px}}
+
+/* In a sheet only the list of names gives way when space is short: the chosen names, the
+   search box and the buttons keep their full height (the chosen names were being squeezed
+   under the search box). Many chosen names scroll in their own short row. */
+.sheet > :not(.list){flex:none}
+/* the chosen names: one tidy row of small chips, sliding sideways when there are many */
+.sheet .chosen{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;padding:2px 2px 4px;margin:0 -2px;
+  -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+.sheet .chosen::-webkit-scrollbar{display:none}
+.sheet .chosen .tag{flex:none;font-size:.98rem;padding:2px 2px 2px 12px}
+.sheet .chosen .tag button{width:28px;height:28px;margin:-2px -2px -2px -4px}
