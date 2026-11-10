@@ -411,8 +411,11 @@
   const tagBadge = (p) => p.tags.length ? el("span", { class: "tagn", html: `${PERSON}${p.tags.length}` }) : null;
   const PLAY = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>';
   const videoBadge = (p) => isVid(p) ? el("span", { class: "vid", html: PLAY }, p.dur ? fmtDur(p.dur) : null) : null;
-  // a frosted play button in the middle, so a video reads as a video at a glance
-  const playMark = (p) => isVid(p) ? el("span", { class: "play", html: PLAY }) : null;
+  // a frosted play triangle in the middle, so a video reads as a video at a glance
+  // (a soft shadow under it keeps it visible on bright photos)
+  const TRI = "M5.2 1.5C2.7 .1 0 1.6 0 4.5v33c0 2.9 2.7 4.4 5.2 3L33.8 24c2.9-1.6 2.9-4.4 0-6Z";
+  const playMark = (p) => isVid(p) ? el("span", { class: "play", "aria-hidden": "true",
+    html: `<svg class="shade" viewBox="-6 -6 48 54"><path d="${TRI}"/></svg><span class="frost"></span>` }) : null;
   // The thumb (640 px on its long side) for small tiles, the display size (2048) where a tile
   // is big enough, or the screen sharp enough, to need it: the browser picks from the widths.
   const edgeWidth = (p, edge) => (p.w && p.h ? Math.round(Math.min(p.w, edge * Math.min(1, p.w / p.h))) : edge);
@@ -705,6 +708,11 @@
   $("#lb-prev").setAttribute("aria-label", T.prev);
   $("#lb-next").setAttribute("aria-label", T.nextPhoto);
   $("#lb-close").setAttribute("aria-label", T.close);
+  // crisp drawn icons rather than text characters, which sit off-centre in the round buttons
+  const ICON = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
+  $("#lb-close").innerHTML = ICON("M6.5 6.5l11 11M17.5 6.5l-11 11");
+  $("#lb-prev").innerHTML = ICON("M14.5 5.5L8 12l6.5 6.5");
+  $("#lb-next").innerHTML = ICON("M9.5 5.5L16 12l-6.5 6.5");
   // One way of writing times everywhere, as the timeline does: "2:00 PM".
   const fmtTime = (t) => { const h = +t.slice(11, 13); return `${h % 12 || 12}:${t.slice(14, 16)} ${h < 12 ? "AM" : "PM"}`; };
   const fmtDate = (t) => {
@@ -719,33 +727,42 @@
   function openLightbox(i, push = true) {
     if (!S.visible[i]) return;
     S.lbIndex = i;
-    const opening = lb.hidden;
-    if (opening) lbReturn = document.activeElement;
+    const opening = lb.hidden || lb.classList.contains("closing");
+    if (lb.hidden) lbReturn = document.activeElement;
+    clearTimeout(closeTimer);
+    lb.classList.remove("closing");
     lb.hidden = false;
     document.body.classList.add("locked");
     syncInert();
     if (push) history.pushState({ lb: true }, "", "#" + S.visible[i].id);
     else history.replaceState({ lb: true }, "", "#" + S.visible[i].id);
     showPhoto();
-    if (opening) $("#lb-close").focus({ preventScroll: true });
+    // from the keyboard, focus lands on Close; after a tap, on the viewer itself (no ring)
+    if (opening) (usingKeys ? $("#lb-close") : lb).focus({ preventScroll: true });
   }
+  // The viewer fades away (a moment, unless motion is turned down) before it's hidden.
+  let closeTimer = 0;
   function closeLightbox(fromPop = false) {
-    if (lb.hidden) return;
+    if (lb.hidden || lb.classList.contains("closing")) return;
     const id = S.visible[S.lbIndex]?.id;
     stopVideo();
-    lb.hidden = true;
     delete strip.dataset.ready;
     document.body.classList.remove("locked");
-    syncInert();
     S.lbIndex = -1;
     if (!fromPop && history.state?.lb) history.back();
-    if (pendingRender) { pendingRender = false; refresh(); }
-    // Back to the photo last seen; focus returns to what opened the viewer, or to that photo.
-    const tile = id && grid.querySelector(`.tile[data-id="${id}"]`);
-    tile?.scrollIntoView({ block: "nearest" });
-    const back = lbReturn;
-    lbReturn = null;
-    (canFocus(back) && !back.classList.contains("tile") ? back : tile)?.focus({ preventScroll: true });
+    lb.classList.add("closing");
+    closeTimer = setTimeout(() => {
+      lb.classList.remove("closing");
+      lb.hidden = true;
+      syncInert();
+      if (pendingRender) { pendingRender = false; refresh(); }
+      // Back to the photo last seen; focus returns to what opened the viewer, or to that photo.
+      const tile = id && grid.querySelector(`.tile[data-id="${id}"]`);
+      tile?.scrollIntoView({ block: "nearest" });
+      const back = lbReturn;
+      lbReturn = null;
+      (canFocus(back) && !back.classList.contains("tile") ? back : tile)?.focus({ preventScroll: true });
+    }, smooth() === "auto" ? 0 : 200);
   }
   addEventListener("popstate", () => closeLightbox(true));
 
@@ -800,7 +817,19 @@
     $("#lb-next").hidden = S.lbIndex === S.visible.length - 1;
     renderStrip();
     renderInfo(p);
+    // the details ease in with each new photo (not when only its tags change)
+    lbInfo.classList.remove("swap");
+    void lbInfo.offsetWidth;
+    lbInfo.classList.add("swap");
+    clearTimeout(swapTimer);
+    swapTimer = setTimeout(() => lbInfo.classList.remove("swap"), 500);
+    // and so does the photo, as it arrives
+    const media = lbMedia();
+    media.classList.remove("arrive");
+    void media.offsetWidth;
+    media.classList.add("arrive");
   }
+  let swapTimer = 0;
 
   function renderInfo(p) {
     const seg = segmentOf(p.t);
@@ -816,12 +845,12 @@
       el("div", {},
         el("span", { class: "meta-label", text: isVid(p) ? T.inVideo : T.inPhoto }),
         el("div", { class: "tags" }, ...tags, el("button", { class: "tag add", type: "button", text: T.tagSomeone, onclick: () => tagSomeone(p) }))),
-      p.cam ? el("div", {}, el("span", { class: "meta-label", text: T.camera }), el("p", { class: "lb-sub", text: p.cam })) : null,
       S.admin ? el("div", {}, el("span", { class: "meta-label", text: T.showAs }), sourceTabs(p.src, (k) => setSource(p, k))) : null,
       el("div", { class: "lb-actions" },
         el("a", { class: "btn small", href: imgUrl("orig", p.id) + "?dl=1", download: "" }, isVid(p) ? T.downloadVideo : T.download),
         isMine(p) ? el("button", { class: "btn small", type: "button", text: T.fixTime, onclick: () => fixTime(p) }) : null,
         isMine(p) ? el("button", { class: "btn small danger", type: "button", text: T.del, onclick: () => remove(p) }) : null),
+      p.cam ? el("p", { class: "lb-cam", text: p.cam }) : null,
     );
     // the button that was focused has just been replaced: carry on from "+ Tag someone"
     if (hadFocus) lbInfo.querySelector(".tag.add")?.focus({ preventScroll: true });
