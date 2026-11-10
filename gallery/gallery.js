@@ -65,6 +65,7 @@
       notImage: "That file isn’t a photo or a video", tooMany: "That’s the limit for today. Please try again tomorrow.",
       remove: (n) => `Remove ${n}`, untagged: (n) => `${n} untagged`, undo: "Undo", withNames: (s) => `with ${s}`,
       viewer: "Photo viewer", prev: "Previous", nextPhoto: "Next", close: "Close",
+      makingStills: (d, n) => `Making video thumbnails · ${d} of ${n}`, stillsDone: (n) => `${n} video ${n === 1 ? "thumbnail" : "thumbnails"} made`,
       leaveWarn: "Photos are still uploading.", newPhotos: (n) => `${n} new ${n === 1 ? "photo" : "photos"} · Show`,
       saved: "Saved", deleted: "Deleted", error: "Something went wrong. Please try again.", closedNow: "Uploads are closed",
       adminTitle: "Admin", uploadsOpen: "Uploads open", uploadsClosed: "Uploads closed", openUploads: "Open uploads", closeUploads: "Close uploads",
@@ -110,6 +111,7 @@
       notImage: "Ese archivo no es una foto ni un video", tooMany: "Llegaste al límite de hoy. Inténtalo de nuevo mañana.",
       remove: (n) => `Quitar a ${n}`, untagged: (n) => `Se quitó la etiqueta de ${n}`, undo: "Deshacer", withNames: (s) => `con ${s}`,
       viewer: "Visor de fotos", prev: "Anterior", nextPhoto: "Siguiente", close: "Cerrar",
+      makingStills: (d, n) => `Creando miniaturas de video · ${d} de ${n}`, stillsDone: (n) => `${n} ${n === 1 ? "miniatura lista" : "miniaturas listas"}`,
       leaveWarn: "Todavía se están subiendo fotos.", newPhotos: (n) => `${n} ${n === 1 ? "foto nueva" : "fotos nuevas"} · Ver`,
       saved: "Guardado", deleted: "Borrada", error: "Algo salió mal. Inténtalo de nuevo.", closedNow: "Ya no se pueden subir fotos",
       adminTitle: "Admin", uploadsOpen: "Subidas abiertas", uploadsClosed: "Subidas cerradas", openUploads: "Abrir subidas", closeUploads: "Cerrar subidas",
@@ -256,7 +258,8 @@
   async function loadPhotos(d) {
     d ??= await api("/api/photos");
     const had = new Map(S.photos.map((p) => [p.id, p]));
-    S.photos = d.photos.map((p) => (had.has(p.id) ? Object.assign(had.get(p.id), p) : p));
+    // (keys the list leaves out when they don't apply are cleared, not left as they were)
+    S.photos = d.photos.map((p) => (had.has(p.id) ? Object.assign(had.get(p.id), { ns: undefined, sv: undefined, k: undefined, dur: undefined }, p) : p));
     S.version = d.version;
     return d.photos.filter((p) => !had.has(p.id)).length;
   }
@@ -351,6 +354,9 @@
   // ── grid ──────────────────────────────────────────────────────────────────
   const grid = $("#grid");
   const imgUrl = (size, id) => `${API}/img/${size}/${id}`;
+  // a photo's display or thumb size; a video whose still was remade gets a new address for it,
+  // or browsers would keep showing the placeholder they've cached
+  const pic = (size, p) => imgUrl(size, p.id) + (p.sv ? `?s=${encodeURIComponent(p.sv)}` : "");
   const fadeIn = (e) => { e.target.classList.add("in"); e.target.parentNode.classList.add("loaded"); };
   // A photo that won't load stops shimmering and shows a quiet placeholder instead.
   const failed = (e) => e.target.parentNode.classList.add("loaded", "broken");
@@ -425,7 +431,7 @@
       const rows = justify(photos, width).map((r) => el("div", { class: "jrow", style: `height:${Math.round(r.h)}px` }, r.items.map(({ p, w }) => {
         const i = index++;
         return el("button", { class: "tile", type: "button", "data-i": i, "data-id": p.id, "data-seg": seg.key, "aria-label": tileLabel(p), style: `width:${w}px;height:${Math.round(r.h)}px`, onclick: () => openLightbox(i) },
-          el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async", onload: fadeIn, onerror: failed }),
+          el("img", { src: pic("thumb", p), alt: "", loading: "lazy", decoding: "async", onload: fadeIn, onerror: failed }),
           p.src !== "g" ? el("span", { class: "badge", text: p.src === "b" ? T.booth : T.pro }) : null,
           videoBadge(p),
           tagBadge(p));
@@ -729,7 +735,7 @@
     if (stripFor !== S.visible) {
       stripFor = S.visible;
       put(strip, S.visible.map((p, i) => el("button", { type: "button", class: isVid(p) ? "v" : null, "aria-label": `${i + 1} / ${S.visible.length}`, onclick: () => goTo(i) },
-        el("img", { src: imgUrl("thumb", p.id), alt: "", loading: "lazy", decoding: "async" }))));
+        el("img", { src: pic("thumb", p), alt: "", loading: "lazy", decoding: "async" }))));
     }
     lb.classList.toggle("has-strip", S.visible.length > 1);
     strip.querySelector(".on")?.classList.remove("on");
@@ -747,17 +753,19 @@
     lbImg.hidden = isVid(p);
     lbVideo.hidden = !isVid(p);
     if (isVid(p)) {
-      // the still shows until it plays; the file streams in only once play is pressed
-      lbVideo.poster = imgUrl("display", p.id);
+      // Opening a video plays it (with sound: the tap that opened it allows that). If the
+      // browser holds back, the still and the play button wait for a tap instead.
+      lbVideo.poster = p.ns ? "" : pic("display", p);
       lbVideo.src = imgUrl("orig", p.id);
       lbVideo.setAttribute("aria-label", `${T.video} · ${segmentOf(p.t).title}`);
+      lbVideo.play().catch(() => {});
     } else {
       lbImg.style.opacity = ".35";
       lbImg.onload = () => (lbImg.style.opacity = "1");
-      lbImg.src = imgUrl("display", p.id);
+      lbImg.src = pic("display", p);
       lbImg.alt = segmentOf(p.t).title;
     }
-    for (const n of [S.visible[S.lbIndex + 1], S.visible[S.lbIndex - 1]]) if (n) new Image().src = imgUrl("display", n.id);
+    for (const n of [S.visible[S.lbIndex + 1], S.visible[S.lbIndex - 1]]) if (n && !isVid(n)) new Image().src = pic("display", n);
     $("#lb-count").textContent = `${S.lbIndex + 1} / ${S.visible.length}`;
     $("#lb-prev").hidden = S.lbIndex === 0;
     $("#lb-next").hidden = S.lbIndex === S.visible.length - 1;
@@ -897,7 +905,7 @@
   }
   async function remove(p) {
     const sure = await openSheet(() => [
-      el("img", { class: "preview", src: imgUrl("display", p.id), alt: "" }),
+      el("img", { class: "preview", src: pic("display", p), alt: "" }),
       el("p", { class: "q", text: isVid(p) ? T.delTitleVideo : T.delTitle }),
       el("p", { class: "hint", text: T.delHint }),
       el("div", { class: "sheet-foot" },
@@ -986,7 +994,7 @@
     const created = await withRetry(() => api("/api/photos", { method: "POST", json: {
       sha256: prep.sha256, takenLocal: prep.takenLocal, timeSource: prep.timeSource, camera: prep.camera,
       width: prep.width, height: prep.height, bytes: it.file.size, origType: it.file.type || null, uploaderId: S.me?.id ?? null,
-      kind: video ? "video" : "photo", duration: prep.duration ?? null, source: Object.fromEntries(SOURCES)[adminSource()],
+      kind: video ? "video" : "photo", duration: prep.duration ?? null, noStill: !!prep.noStill, source: Object.fromEntries(SOURCES)[adminSource()],
     } }), onWait);
     arrived();
     it.id = created.id;
@@ -1114,10 +1122,13 @@
     let takenLocal = meta.taken || null, timeSource = "exif";
     if (!takenLocal && fileTimeUseful(file)) { takenLocal = isoLocal(new Date(file.lastModified + MX_OFFSET_MIN * 60000)); timeSource = "file"; }
     const sha256 = await sampleHash(file);
-    // A browser that can't play the file (a computer without the codec) still shares it,
-    // with a plain still; anyone whose browser can play it still can.
-    const still = (await videoStill(file).catch(() => null)) || (await blankStill());
-    return { sha256, takenLocal, timeSource, camera: meta.camera || null, ...still, duration: still.duration ?? meta.duration ?? null };
+    // A browser that can't play the file (a computer without the codec), or a page that isn't
+    // in front (browsers don't decode video in a background tab), still shares it, with a
+    // plain still for now. repairStills() makes the real one later, here or on an admin's
+    // computer.
+    const made = document.hidden ? null : await videoStill(file).catch(() => null);
+    const still = made || (await blankStill());
+    return { sha256, takenLocal, timeSource, camera: meta.camera || null, ...still, duration: still.duration ?? meta.duration ?? null, noStill: !made };
   }
 
   // A video can be gigabytes, too much to read into a phone's memory just to recognise it
@@ -1132,28 +1143,35 @@
   }
 
   // A frame a moment in (past any fade from black), at the size photos get.
-  async function videoStill(file) {
-    const url = URL.createObjectURL(file);
+  // From the file being shared, or from the gallery's copy (an address) to remake one.
+  async function videoStill(source) {
+    const remote = typeof source === "string";
+    const url = remote ? source : URL.createObjectURL(source);
     const v = document.createElement("video");
+    if (remote) v.crossOrigin = "anonymous"; // so the frame can be read off the canvas
     v.muted = true; v.playsInline = true; v.preload = "auto";
     v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
     // in the page but out of sight: Safari only paints frames for a video that's in the page
     v.style.cssText = "position:fixed;left:-10px;top:0;width:2px;height:2px;opacity:0;pointer-events:none";
     const wait = (ev, ms) => new Promise((resolve, reject) => {
-      const t = setTimeout(() => reject(new Error("unreadable")), ms);
-      v.addEventListener(ev, () => { clearTimeout(t); resolve(); }, { once: true });
-      v.addEventListener("error", () => { clearTimeout(t); reject(new Error("unreadable")); }, { once: true });
+      const fail = () => { clearTimeout(t); document.removeEventListener("visibilitychange", hid); reject(new Error("unreadable")); };
+      const t = setTimeout(fail, ms);
+      // a page sent to the background stops decoding: give up now rather than time out
+      const hid = () => document.hidden && fail();
+      document.addEventListener("visibilitychange", hid);
+      v.addEventListener(ev, () => { clearTimeout(t); document.removeEventListener("visibilitychange", hid); resolve(); }, { once: true });
+      v.addEventListener("error", fail, { once: true });
     });
     // the next frame actually painted, where the browser can say so
     const painted = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); v.requestVideoFrameCallback?.(() => resolve()); });
     try {
       document.body.append(v);
       v.src = url;
-      await wait("loadedmetadata", 20000);
+      await wait("loadedmetadata", remote ? 30000 : 10000);
       const duration = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : null;
       // Seeking makes even iPhone Safari, which won't load a video it isn't playing, fetch a frame.
       v.currentTime = duration ? Math.min(1, duration / 3) : 0.001;
-      await wait("seeked", 20000);
+      await wait("seeked", remote ? 30000 : 10000);
       await painted(600);
       const width = v.videoWidth, height = v.videoHeight;
       if (!width || !height) throw new Error("unreadable");
@@ -1173,7 +1191,7 @@
       v.removeAttribute("src");
       v.load();
       v.remove();
-      URL.revokeObjectURL(url);
+      if (!remote) URL.revokeObjectURL(url);
     }
   }
   // Pure black, as an undecoded frame is (even a dark dance floor has some light in it).
@@ -1341,6 +1359,7 @@
       if (queue.some((x) => x.state === "done" && !x.existing && !x.tagged) && lb.hidden && wrap.hidden) await tagBatch();
     } finally { finishing = false; }
     finishBatch();
+    setTimeout(repairStills, 1000);
     // more were added while tagging, and have finished meanwhile
     if (!active && queue.some((x) => x.state === "done" && !x.existing && !x.tagged)) batchDone();
   }
@@ -1375,7 +1394,7 @@
     for (const [n, p] of photos.entries()) {
       const chosen = await namePicker({
         title: isVid(p) ? T.whoInVideo : T.whoIn, q: p.t ? fmtWhen(p.t) : T.unknownTime, hint: T.whoInStep(n + 1, photos.length),
-        preview: imgUrl("display", p.id), multi: true, allowAdd: true, selected: new Set(p.tags),
+        preview: pic("display", p), multi: true, allowAdd: true, selected: new Set(p.tags),
         okLabel: n + 1 < photos.length ? T.next : T.done, cancelLabel: T.skipPhoto, cancelValue: () => null,
       });
       if (chosen === undefined) break;
@@ -1392,6 +1411,43 @@
   // the speeches taking over the site (speech-watch.js) wait for uploads to finish
   window.svHoldTakeover = () => queue.some((x) => x.state === "waiting" || x.state === "working");
   addEventListener("beforeunload", (e) => { if (queue.some((x) => x.state === "waiting" || x.state === "working")) { e.preventDefault(); e.returnValue = T.leaveWarn; } });
+
+  // ── video stills ──────────────────────────────────────────────────────────
+  // A video shared with the plain placeholder (from a background tab, or a browser that
+  // couldn't decode it) gets its real still here: on the phone that shared it, or on an admin's
+  // computer. One at a time, only while the page is in front and nothing is uploading. The
+  // tiles change as each is done, and the rows settle once at the end.
+  let repairing = false;
+  const cantHere = new Set(); // this browser couldn't make one: not tried again this visit
+  async function repairStills() {
+    if (repairing || document.hidden || busyNow() || finishing) return;
+    const todo = S.photos.filter((p) => isVid(p) && p.ns && isMine(p) && !cantHere.has(p.id));
+    if (!todo.length) return;
+    repairing = true;
+    let made = 0;
+    try {
+      for (const [i, p] of todo.entries()) {
+        if (document.hidden || busyNow()) break;
+        if (todo.length > 2) toast(T.makingStills(i + 1, todo.length));
+        const local = queue.find((x) => x.id === p.id)?.file;
+        const still = await videoStill(local || imgUrl("orig", p.id)).catch(() => null);
+        if (!still) { cantHere.add(p.id); continue; }
+        try {
+          await withRetry(() => api(`/api/photos/${p.id}/display`, { method: "PUT", body: still.display }));
+          await withRetry(() => api(`/api/photos/${p.id}/thumb`, { method: "PUT", body: still.thumb }));
+          const r = await withRetry(() => api(`/api/photos/${p.id}`, { method: "PATCH", json: { still: { width: still.width, height: still.height } } }));
+          Object.assign(p, { ns: undefined, sv: r.still, w: still.width, h: still.height });
+          made++;
+          grid.querySelectorAll(`.tile[data-id="${p.id}"] img`).forEach((img) => (img.src = pic("thumb", p)));
+        } catch { cantHere.add(p.id); }
+      }
+    } finally { repairing = false; }
+    if (made) {
+      if (todo.length > 2) toast(T.stillsDone(made));
+      if (lb.hidden) render(); else pendingRender = true;
+    }
+  }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) setTimeout(repairStills, 1500); });
 
   // ── new photos from everyone else ─────────────────────────────────────────
   let pendingRender = false;
@@ -1501,6 +1557,7 @@
       history.replaceState(null, "", location.pathname + location.search);
       openById(id);
     }
+    setTimeout(repairStills, 2500);
     // Someone arriving from a shared photo sees the photo first; "Who are you?" can wait.
     if (!shared && !S.me && !store.get("wedding-gallery-skipped-who", "")) {
       const picked = await pickWho();
